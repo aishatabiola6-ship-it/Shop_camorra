@@ -1,23 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Camorra</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VELORA — The Sienna Slingback</title>
+  <meta name="description" content="VELORA — pointed slingback heels with signature gold hardware. Explore the Sienna in 3D.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.min.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Shop Camorra!</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Your one-stop shop for everything!</h2>
-            <p>Explore our exclusive deals, unique products, and more!</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Shop Camorra. All rights reserved.</p>
+  <div class="loader" aria-hidden="true"><span>VELORA</span></div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <header class="nav">
+    <a class="logo" href="#hero">VELORA</a>
+    <nav class="links" aria-label="Main">
+      <a href="#craft">Silhouette</a>
+      <a href="#detail">Hardware</a>
+      <a href="#colours">Colours</a>
+      <a href="#collection">Shop</a>
+    </nav>
+    <button class="bag" type="button" aria-label="Shopping bag">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <span id="bag-count">0</span>
+    </button>
+  </header>
+
+  <canvas id="scene" aria-label="Rotating 3D model of the Sienna slingback heel"></canvas>
+
+  <main>
+    <section id="hero" class="panel hero" data-pose="hero">
+      <h1 class="hero-title" aria-label="VELORA">
+        <span>V</span><span>E</span><span>L</span><span>O</span><span>R</span><span>A</span>
+      </h1>
+      <div class="hero-foot">
+        <p class="kicker">AW26 · The Sienna Slingback</p>
+        <p class="hero-line">Pointed toe. Gold hardware.<br>Made for the woman who's already decided.</p>
+        <a class="cta" href="#collection">Shop the Sienna <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span></span>Scroll</div>
+    </section>
+
+    <section id="craft" class="panel split left" data-pose="craft">
+      <div class="copy reveal">
+        <p class="kicker">01 — Silhouette</p>
+        <h2>A sharp<br><em>point of view.</em></h2>
+        <p>A needle-fine toe, a low-cut throat and a sling strap that holds the heel without hiding it. The Sienna is drawn in one line, from tip to heel.</p>
+        <dl class="specs">
+          <div><dt>7.5<small>cm</small></dt><dd>Flared stiletto</dd></div>
+          <div><dt>Satin</dt><dd>Brushed suede finish</dd></div>
+          <div><dt>Padded</dt><dd>Cushioned footbed</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="detail" class="panel split right" data-pose="detail">
+      <div class="copy reveal">
+        <p class="kicker">02 — Hardware</p>
+        <h2>Gold,<br><em>on purpose.</em></h2>
+        <p>The signature rectangular buckle is solid brass with a soft gold plate, set on a strap that crosses the vamp at an angle. It catches the light when you walk.</p>
+        <p class="note">Adjustable buckle on the sling strap for a close fit.</p>
+      </div>
+    </section>
+
+    <section id="colours" class="colours" data-pose="colours">
+      <div class="sticky">
+        <div class="colour-copy">
+          <p class="kicker">03 — Colours · <span id="colour-index">01</span>/04</p>
+          <h2 id="colour-name" class="colour-name">Merlot</h2>
+          <p>Four shades, all in the same satin-suede. Keep scrolling, or pick one.</p>
+          <div class="swatches" role="group" aria-label="Choose a colour">
+            <button class="swatch" style="--c:#5a0a1c" aria-pressed="true"><span></span>Merlot</button>
+            <button class="swatch" style="--c:#2e1915" aria-pressed="false"><span></span>Cacao</button>
+            <button class="swatch" style="--c:#a8835f" aria-pressed="false"><span></span>Sable</button>
+            <button class="swatch" style="--c:#121010" aria-pressed="false"><span></span>Noir</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="collection" class="collection" data-pose="collection">
+      <div class="collection-head reveal">
+        <p class="kicker">04 — Shop</p>
+        <h2>The Sienna <em>collection</em></h2>
+      </div>
+      <div class="grid">
+        <article class="card" data-name="Sienna in Merlot">
+          <div class="thumb" style="--tint:#efe3e1"><img data-thumb="0" alt="Sienna slingback in Merlot"></div>
+          <div class="card-body">
+            <div class="row"><h3>Sienna — Merlot</h3><p class="price">₦48,500</p></div>
+            <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
+            <button class="add-to-bag" type="button">Add to bag</button>
+          </div>
+        </article>
+        <article class="card" data-name="Sienna in Cacao">
+          <div class="thumb" style="--tint:#ebe3dc"><img data-thumb="1" alt="Sienna slingback in Cacao"></div>
+          <div class="card-body">
+            <div class="row"><h3>Sienna — Cacao</h3><p class="price">₦48,500</p></div>
+            <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
+            <button class="add-to-bag" type="button">Add to bag</button>
+          </div>
+        </article>
+        <article class="card" data-name="Sienna in Sable">
+          <div class="thumb" style="--tint:#f3ece3"><img data-thumb="2" alt="Sienna slingback in Sable"></div>
+          <div class="card-body">
+            <div class="row"><h3>Sienna — Sable</h3><p class="price">₦48,500</p></div>
+            <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
+            <button class="add-to-bag" type="button">Add to bag</button>
+          </div>
+        </article>
+        <article class="card" data-name="Sienna in Noir">
+          <div class="thumb" style="--tint:#e8e6e3"><img data-thumb="3" alt="Sienna slingback in Noir"></div>
+          <div class="card-body">
+            <div class="row"><h3>Sienna — Noir</h3><p class="price">₦48,500</p></div>
+            <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
+            <button class="add-to-bag" type="button">Add to bag</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-brand">VELORA</div>
+      <form id="newsletter" class="newsletter">
+        <label for="email">New drops, first.</label>
+        <div class="field">
+          <input id="email" type="email" placeholder="you@example.com" required>
+          <button type="submit">Join</button>
+        </div>
+      </form>
+      <div class="footer-meta">
+        <p>Lagos · Delivery nationwide</p>
+        <p>&copy; 2026 VELORA. All rights reserved.</p>
+      </div>
     </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
