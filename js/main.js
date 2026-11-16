@@ -1,324 +1,219 @@
-import * as THREE from 'three';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { createShoe, COLORWAYS } from './shoe.js';
+// VELORA — scroll-driven motion for real product photography.
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-const BRAND = 'VELORA';
-const canvas = document.getElementById('scene');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ---------- Floating shoes ----------
+  // One pose per section. x/y in vw/vh from screen centre, r = tilt, ry = turn (deg), s = scale, o = opacity.
+  const POSES = {
+    nude: {
+      hero:  { x: 3,   y: -2,  r: -9,  ry: 0,   s: 0.8,  o: 1 },
+      craft: { x: 21,  y: 2,   r: 5,   ry: -22, s: 0.92, o: 1 },
+      pair:  { x: -24, y: -12, r: -14, ry: 18,  s: 0.58, o: 1 },
+      gone:  { x: -32, y: -95, r: -38, ry: 35,  s: 0.5,  o: 0 },
+    },
+    noir: {
+      hero:  { x: 62,  y: 25,  r: 22,  ry: -35, s: 0.6,  o: 0 },
+      craft: { x: 58,  y: 12,  r: 16,  ry: -30, s: 0.6,  o: 0 },
+      pair:  { x: 24,  y: -9,  r: 7,   ry: -16, s: 0.62, o: 1 },
+      gone:  { x: 32,  y: -95, r: 38,  ry: -35, s: 0.5,  o: 0 },
+    },
+  };
+  const MOBILE = {
+    nude: {
+      hero:  { x: 0,   y: 0,   s: 1 },
+      craft: { x: 0,   y: -20, s: 0.85 },
+      pair:  { x: -22, y: -20, s: 0.55 },
+      gone:  { x: -20, y: -95, s: 0.4 },
+    },
+    noir: {
+      hero:  { x: 70,  y: 0,   s: 0.5 },
+      craft: { x: 70,  y: -20, s: 0.5 },
+      pair:  { x: 22,  y: -10, s: 0.55 },
+      gone:  { x: 20,  y: -95, s: 0.4 },
+    },
+  };
+  const KEYS = ['x', 'y', 'r', 'ry', 's', 'o'];
+  const floaters = {
+    nude: document.getElementById('shoe-nude'),
+    noir: document.getElementById('shoe-noir'),
+  };
+  const state = { nude: { ...POSES.nude.hero }, noir: { ...POSES.noir.hero } };
+  let keyframes = [];
+  let mobile = false;
 
-// ---------- Renderer / scene ----------
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: false });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+  const lookbook = document.getElementById('lookbook');
+  const track = lookbook.querySelector('.track');
+  const looks = [...track.children];
+  const edFrame = document.querySelector('.ed-frame');
+  const edImg = edFrame.querySelector('img');
 
-const scene = new THREE.Scene();
-const pmrem = new THREE.PMREMGenerator(renderer);
-const envMap = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-scene.environment = envMap;
-
-const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-camera.position.set(0, 0.25, 8);
-camera.lookAt(0, 0, 0);
-
-scene.add(new THREE.HemisphereLight(0xfff4ea, 0x2a1a18, 0.6));
-const key = new THREE.DirectionalLight(0xffffff, 2.2);
-key.position.set(3, 5, 4);
-scene.add(key);
-const rim = new THREE.DirectionalLight(0xffd2b0, 1.6);
-rim.position.set(-4, 2, -3);
-scene.add(rim);
-
-// rig (position/scale from scroll) > spinner (rotation) > shoe
-const rig = new THREE.Group();
-const spinner = new THREE.Group();
-rig.add(spinner);
-scene.add(rig);
-const { shoe, materials } = createShoe(BRAND);
-spinner.add(shoe);
-
-// soft contact shadow that stays flat under the shoe
-const shadowTex = (() => {
-  const c = document.createElement('canvas');
-  c.width = c.height = 256;
-  const g = c.getContext('2d');
-  const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
-  grd.addColorStop(0, 'rgba(30,10,12,0.55)');
-  grd.addColorStop(0.5, 'rgba(30,10,12,0.18)');
-  grd.addColorStop(1, 'rgba(30,10,12,0)');
-  g.fillStyle = grd;
-  g.fillRect(0, 0, 256, 256);
-  return new THREE.CanvasTexture(c);
-})();
-const shadow = new THREE.Mesh(
-  new THREE.PlaneGeometry(3.2, 1.3),
-  new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false })
-);
-shadow.rotation.x = -Math.PI / 2;
-shadow.position.y = -0.95;
-rig.add(shadow);
-
-// ---------- Scroll choreography ----------
-// One pose per section. x/y in world units, r* in radians, s = scale, sh = shadow opacity.
-const TAU = Math.PI * 2;
-const POSES = {
-  hero:        { x: 0,    y: -0.25, z: 0, rx: 0.32, ry: -0.65,          rz: 0.04,  s: 1.25, sh: 1 },
-  craft:       { x: 1.55, y: -0.1,  z: 0, rx: 0.06, ry: TAU,            rz: 0,     s: 1.3,  sh: 1 },
-  detail:      { x: -1.35, y: -0.55, z: 0, rx: 0.7, ry: TAU + 0.5,      rz: -0.12, s: 2.1,  sh: 0 },
-  colours:     { x: 0.95, y: -0.15, z: 0, rx: 0.22, ry: 2 * TAU - 0.6,  rz: 0.02,  s: 1.25, sh: 1 },
-  coloursEnd:  { x: 0.95, y: -0.15, z: 0, rx: 0.22, ry: 3 * TAU - 0.6,  rz: 0.02,  s: 1.25, sh: 1 },
-  collection:  { x: 0,    y: 3.4,   z: 0, rx: 0.9,  ry: 3 * TAU + 0.6,  rz: 0.3,   s: 0.9,  sh: 0 },
-};
-const MOBILE_POSES = {
-  hero:        { x: 0,    y: 0.05,  s: 0.78 },
-  craft:       { x: 0,    y: 0.75,  s: 0.72 },
-  detail:      { x: -0.2, y: 0.85,  s: 1.15 },
-  colours:     { x: 0,    y: 0.55,  s: 0.72 },
-  coloursEnd:  { x: 0,    y: 0.55,  s: 0.72 },
-  collection:  { x: 0,    y: 3.6,   s: 0.6 },
-};
-const KEYS = ['x', 'y', 'z', 'rx', 'ry', 'rz', 's', 'sh'];
-let keyframes = [];
-let isMobile = false;
-const coloursSection = document.getElementById('colours');
-
-function poseFor(name) {
-  const p = { ...POSES[name] };
-  if (isMobile) Object.assign(p, MOBILE_POSES[name]);
-  return p;
-}
-
-function layout() {
-  const w = window.innerWidth, h = window.innerHeight;
-  isMobile = w < 820;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-
-  keyframes = [];
-  document.querySelectorAll('[data-pose]').forEach((el) => {
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    const name = el.dataset.pose;
-    keyframes.push({ at: top, pose: poseFor(name) });
-    if (POSES[name + 'End']) keyframes.push({ at: top + el.offsetHeight - h, pose: poseFor(name + 'End') });
-  });
-  keyframes.sort((a, b) => a.at - b.at);
-}
-
-const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-function targetPose(y) {
-  if (y <= keyframes[0].at) return keyframes[0].pose;
-  for (let i = 0; i < keyframes.length - 1; i++) {
-    const a = keyframes[i], b = keyframes[i + 1];
-    if (y < b.at) {
-      const t = ease(clamp((y - a.at) / Math.max(1, b.at - a.at), 0, 1));
-      const out = {};
-      KEYS.forEach((k) => (out[k] = a.pose[k] + (b.pose[k] - a.pose[k]) * t));
-      return out;
-    }
+  function pose(id, name) {
+    const p = { ...POSES[id][name] };
+    if (mobile) Object.assign(p, MOBILE[id][name]);
+    return p;
   }
-  return keyframes[keyframes.length - 1].pose;
-}
-const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
-// ---------- Colourways ----------
-const colourTargets = COLORWAYS.map((c) => ({
-  upper: new THREE.Color(c.hex), sheen: new THREE.Color(c.sheen), lining: new THREE.Color(c.lining),
-  bg: new THREE.Color(c.bg), ink: new THREE.Color(c.ink),
-}));
-let activeColour = 0;
-const bgNow = new THREE.Color(COLORWAYS[0].bg);
-const inkNow = new THREE.Color(COLORWAYS[0].ink);
-const root = document.documentElement;
-const swatches = [...document.querySelectorAll('.swatch')];
-const colourName = document.getElementById('colour-name');
-const colourIndex = document.getElementById('colour-index');
+  function layout() {
+    mobile = window.innerWidth < 820;
+    // pinned horizontal lookbook: give the section enough height to scroll the whole track
+    const extra = Math.max(0, track.scrollWidth - window.innerWidth + 2 * parseFloat(getComputedStyle(track).paddingLeft || 0));
+    lookbook.style.height = `${window.innerHeight + extra}px`;
 
-function setColour(i) {
-  if (i === activeColour) return;
-  activeColour = i;
-  swatches.forEach((s, k) => s.setAttribute('aria-pressed', String(k === i)));
-  colourName.textContent = COLORWAYS[i].name;
-  colourName.classList.remove('swap');
-  void colourName.offsetWidth;
-  colourName.classList.add('swap');
-  colourIndex.textContent = String(i + 1).padStart(2, '0');
-}
-
-swatches.forEach((btn, i) => {
-  btn.addEventListener('click', () => {
-    // scroll to the slice of the pinned section that shows this colour
-    const top = coloursSection.getBoundingClientRect().top + window.scrollY;
-    const span = coloursSection.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: top + span * ((i + 0.5) / COLORWAYS.length), behavior: reduceMotion ? 'auto' : 'smooth' });
-  });
-});
-
-function updateColourFromScroll(y) {
-  const top = coloursSection.getBoundingClientRect().top + y;
-  const span = coloursSection.offsetHeight - window.innerHeight;
-  if (y < top - window.innerHeight * 0.5) return setColour(0);
-  const p = clamp((y - top) / span, 0, 0.9999);
-  setColour(Math.floor(p * COLORWAYS.length));
-}
-
-// ---------- Product thumbnails rendered from the same 3D model ----------
-function renderThumbnails() {
-  const size = 640;
-  const thumbRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
-  thumbRenderer.setSize(size, size, false);
-  thumbRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-  thumbRenderer.outputColorSpace = THREE.SRGBColorSpace;
-  const tScene = new THREE.Scene();
-  tScene.environment = new THREE.PMREMGenerator(thumbRenderer).fromScene(new RoomEnvironment(thumbRenderer), 0.04).texture;
-  tScene.add(new THREE.HemisphereLight(0xfff4ea, 0x2a1a18, 0.6));
-  const k = key.clone(); tScene.add(k);
-  const r = rim.clone(); tScene.add(r);
-  const cam = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
-  cam.position.set(0, 0.6, 6);
-  cam.lookAt(0, 0, 0);
-  const holder = new THREE.Group();
-  holder.rotation.set(0.38, -0.75, 0.05);
-  tScene.add(holder);
-  spinner.remove(shoe);
-  holder.add(shoe);
-  document.querySelectorAll('[data-thumb]').forEach((img) => {
-    const t = colourTargets[Number(img.dataset.thumb)];
-    materials.upper.color.copy(t.upper);
-    materials.upper.sheenColor.copy(t.sheen);
-    materials.lining.color.copy(t.lining);
-    thumbRenderer.render(tScene, cam);
-    img.src = thumbRenderer.domElement.toDataURL('image/png');
-  });
-  holder.remove(shoe);
-  spinner.add(shoe);
-  const t0 = colourTargets[0];
-  materials.upper.color.copy(t0.upper);
-  materials.upper.sheenColor.copy(t0.sheen);
-  materials.lining.color.copy(t0.lining);
-  thumbRenderer.dispose();
-  thumbRenderer.forceContextLoss();
-}
-
-// ---------- Pointer parallax ----------
-const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-window.addEventListener('pointermove', (e) => {
-  pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
-  pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
-}, { passive: true });
-
-// ---------- Loop ----------
-const current = { ...POSES.hero };
-const clock = new THREE.Clock();
-let first = true;
-
-function frame() {
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const time = clock.elapsedTime;
-  const y = window.scrollY;
-  const target = targetPose(y);
-  const k = first || reduceMotion ? 1 : 1 - Math.exp(-dt * 5.5);
-  first = false;
-  KEYS.forEach((key) => (current[key] += (target[key] - current[key]) * k));
-
-  pointer.x += (pointer.tx - pointer.x) * (1 - Math.exp(-dt * 3));
-  pointer.y += (pointer.ty - pointer.y) * (1 - Math.exp(-dt * 3));
-
-  const bob = reduceMotion ? 0 : Math.sin(time * 1.1) * 0.06;
-  rig.position.set(current.x, current.y + bob, current.z);
-  rig.scale.setScalar(current.s);
-  spinner.rotation.set(
-    current.rx + pointer.y * 0.12 + (reduceMotion ? 0 : Math.sin(time * 0.7) * 0.03),
-    current.ry + pointer.x * 0.25,
-    current.rz
-  );
-  shadow.position.y = -0.95 - bob / current.s;
-  shadow.material.opacity = clamp(current.sh, 0, 1) * (1 - bob * 2);
-
-  updateColourFromScroll(y);
-  const t = colourTargets[activeColour];
-  const ck = 1 - Math.exp(-dt * 4);
-  materials.upper.color.lerp(t.upper, ck);
-  materials.upper.sheenColor.lerp(t.sheen, ck);
-  materials.lining.color.lerp(t.lining, ck);
-  bgNow.lerp(t.bg, ck);
-  inkNow.lerp(t.ink, ck);
-  root.style.setProperty('--bg', '#' + bgNow.getHexString());
-  root.style.setProperty('--accent', '#' + inkNow.getHexString());
-
-  renderer.render(scene, camera);
-  requestAnimationFrame(frame);
-}
-
-// ---------- UI bits ----------
-function initUI() {
-  // reveal-on-scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => e.isIntersecting && e.target.classList.add('in'));
-  }, { threshold: 0.25 });
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-
-  // size chips (one group per card)
-  document.querySelectorAll('.sizes').forEach((group) => {
-    group.addEventListener('click', (e) => {
-      const b = e.target.closest('button');
-      if (!b) return;
-      group.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    keyframes = [];
+    document.querySelectorAll('[data-pose]').forEach((el) => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const name = el.dataset.pose;
+      // reach the pose a little before the section fills the screen, so the shoe is in place as text arrives
+      keyframes.push({ at: Math.max(0, top - window.innerHeight * 0.15), name });
     });
-  });
+    keyframes.sort((a, b) => a.at - b.at);
+  }
 
-  // bag counter
-  const count = document.getElementById('bag-count');
-  const toast = document.getElementById('toast');
-  let n = 0, toastTimer;
-  document.querySelectorAll('.add-to-bag').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.card');
-      const size = card.querySelector('.sizes [aria-pressed="true"]');
-      if (!size) {
-        card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-        return showToast('Pick a size first');
+  function target(id, y) {
+    const k = keyframes;
+    if (y <= k[0].at) return pose(id, k[0].name);
+    for (let i = 0; i < k.length - 1; i++) {
+      if (y < k[i + 1].at) {
+        const a = pose(id, k[i].name), b = pose(id, k[i + 1].name);
+        const t = ease(clamp((y - k[i].at) / Math.max(1, k[i + 1].at - k[i].at), 0, 1));
+        const out = {};
+        KEYS.forEach((key) => (out[key] = a[key] + (b[key] - a[key]) * t));
+        return out;
       }
-      n++;
-      count.textContent = n;
-      count.parentElement.classList.remove('bump'); void count.offsetWidth; count.parentElement.classList.add('bump');
-      showToast(`Added ${card.dataset.name}, size ${size.textContent}`);
-    });
-  });
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+    return pose(id, k[k.length - 1].name);
   }
 
-  document.getElementById('newsletter').addEventListener('submit', (e) => {
-    e.preventDefault();
-    e.target.reset();
-    showToast("You're on the list ✨");
-  });
-
-  // nav shadow after hero
-  const nav = document.querySelector('.nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
-
-  // scroll progress
-  const bar = document.querySelector('.progress span');
-  window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+  // ---------- Pointer parallax ----------
+  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  window.addEventListener('pointermove', (e) => {
+    pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
+    pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
   }, { passive: true });
-}
 
-async function start() {
-  try { await document.fonts.ready; } catch (_) { /* fonts optional */ }
-  layout();
-  renderThumbnails();
-  initUI();
-  window.addEventListener('resize', layout);
-  window.addEventListener('load', layout);
-  requestAnimationFrame(frame);
-  document.body.classList.add('ready');
-}
-start();
+  // ---------- Loop ----------
+  let last = performance.now();
+  let first = true;
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    const y = window.scrollY;
+    const vh = window.innerHeight;
+    const k = first || reduceMotion ? 1 : 1 - Math.exp(-dt * 6);
+    first = false;
+    pointer.x += (pointer.tx - pointer.x) * 0.06;
+    pointer.y += (pointer.ty - pointer.y) * 0.06;
+
+    for (const id of ['nude', 'noir']) {
+      const t = target(id, y);
+      const s = state[id];
+      KEYS.forEach((key) => (s[key] += (t[key] - s[key]) * k));
+      const el = floaters[id];
+      el.style.opacity = s.o.toFixed(3);
+      el.style.visibility = s.o < 0.01 ? 'hidden' : 'visible';
+      el.style.transform =
+        `translate(-50%, -50%) translate3d(${s.x}vw, ${s.y}vh, 0) perspective(1400px) ` +
+        `rotateY(${s.ry + pointer.x * 10}deg) rotateX(${pointer.y * -6}deg) rotateZ(${s.r}deg) scale(${s.s})`;
+    }
+
+    // editorial: frame opens up and the photo drifts as it passes
+    const er = edFrame.getBoundingClientRect();
+    const ep = clamp(1 - er.top / vh, 0, 1); // 0 when frame top hits bottom of screen, 1 when it reaches top
+    const inset = reduceMotion ? 0 : (1 - ease(ep)) * 14;
+    edFrame.style.clipPath = `inset(${inset}% ${inset * 1.4}% ${inset}% ${inset * 1.4}% round ${inset * 2}px)`;
+    if (!reduceMotion) edImg.style.transform = `translateY(${(er.top / vh) * -8}%) scale(1.15)`;
+
+    // lookbook: vertical scroll drives the track sideways
+    const lr = lookbook.getBoundingClientRect();
+    const span = lookbook.offsetHeight - vh;
+    const lp = clamp(-lr.top / Math.max(1, span), 0, 1);
+    const maxX = Math.max(0, track.scrollWidth - window.innerWidth);
+    track.style.transform = `translate3d(${-lp * maxX}px, 0, 0)`;
+    if (!reduceMotion) {
+      const mid = window.innerWidth / 2;
+      looks.forEach((fig) => {
+        const b = fig.getBoundingClientRect();
+        const d = clamp(Math.abs(b.left + b.width / 2 - mid) / window.innerWidth, 0, 1);
+        fig.style.setProperty('--focus', (1 - d).toFixed(3));
+      });
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  // ---------- UI ----------
+  function initUI() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => e.isIntersecting && e.target.classList.add('in'));
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal, .card').forEach((el) => io.observe(el));
+
+    document.querySelectorAll('.sizes').forEach((group) => {
+      group.addEventListener('click', (e) => {
+        const b = e.target.closest('button');
+        if (!b) return;
+        group.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      });
+    });
+
+    const count = document.getElementById('bag-count');
+    const toast = document.getElementById('toast');
+    let n = 0, timer;
+    const showToast = (msg) => {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(() => toast.classList.remove('show'), 2200);
+    };
+    document.querySelectorAll('.add-to-bag').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        const size = card.querySelector('.sizes [aria-pressed="true"]');
+        if (!size) {
+          card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+          return showToast('Pick a size first');
+        }
+        n++;
+        count.textContent = n;
+        const bag = count.parentElement;
+        bag.classList.remove('bump'); void bag.offsetWidth; bag.classList.add('bump');
+        showToast(`Added ${card.dataset.name}, size ${size.textContent}`);
+      });
+    });
+
+    document.getElementById('newsletter').addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.target.reset();
+      showToast("You're on the list ✨");
+    });
+
+    const nav = document.querySelector('.nav');
+    const bar = document.querySelector('.progress span');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  function start() {
+    layout();
+    initUI();
+    window.addEventListener('resize', layout);
+    window.addEventListener('load', layout);
+    document.querySelectorAll('img').forEach((img) => img.complete || img.addEventListener('load', layout, { once: true }));
+    requestAnimationFrame(frame);
+    document.body.classList.add('ready');
+  }
+
+  const heroImg = floaters.nude.querySelector('img');
+  if (heroImg.complete) start();
+  else {
+    heroImg.addEventListener('load', start, { once: true });
+    heroImg.addEventListener('error', start, { once: true });
+  }
+})();

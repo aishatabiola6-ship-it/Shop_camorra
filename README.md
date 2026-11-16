@@ -1,31 +1,33 @@
-# VELORA — 3D shoe brand site
+# VELORA — shoe brand site
 
-A one-page site for **VELORA**, a heels brand. Its first style is the **Sienna Slingback**: a pointed-toe slingback with a gold buckle.
+A one-page site for **VELORA**, a pointed-heels brand. Everything moves as you scroll:
 
-- The shoe is a real-time 3D model built entirely in code with three.js (`js/shoe.js`). There is no model file to download.
-- As you scroll, the shoe turns and moves through each section: hero → silhouette → buckle close-up → colours → shop.
-- The Colours section stays pinned while you scroll. The shoe makes a full turn and changes between Merlot, Cacao, Sable and Noir. You can also click a swatch.
-- The product photos in the shop are rendered live from the same 3D model.
+- **Hero:** a real nude pump (photo with the background removed) floats over the VELORA title. It turns and tilts as you scroll and as you move the mouse.
+- **The Pump:** the shoe glides to the right next to its details.
+- **Nude or Noir:** the black woven heel flies in to join it.
+- **Editorial:** a full-width photo opens up as you scroll.
+- **Lookbook:** scrolling down moves a row of photos sideways.
+- **Shop:** six products with real photos, size picker and an "Add to bag" counter (demo only, no checkout).
+
+No build step and no libraries. It's just HTML, CSS and JavaScript (`index.html`, `styles.css`, `js/main.js`).
 
 ## Run it locally
 
-ES modules need a web server (opening `index.html` directly from disk won't work):
-
 ```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-It also works as-is on GitHub Pages, Netlify, or Vercel (static hosting, no build step).
+Or use the VS Code "Live Server" extension. It also works as-is on GitHub Pages or Netlify.
 
 ## Customise
 
 | What | Where |
 | --- | --- |
-| Brand name | `BRAND` in `js/main.js` and the text in `index.html` |
-| Colourways | `COLORWAYS` in `js/shoe.js` (and the swatches in `index.html`) |
-| Scroll poses (position/rotation/scale per section) | `POSES` / `MOBILE_POSES` in `js/main.js` |
-| Shoe shape (toe, heel height, strap) | constants at the top of `js/shoe.js` |
-| Prices, sizes, copy | `index.html` |
+| Product names, prices, sizes, text | `index.html` |
+| How the floating shoes move per section | `POSES` / `MOBILE` in `js/main.js` |
+| Colours and fonts | top of `styles.css` |
+| Photos | `images/` (keep the same file names, or update `index.html`) |
 
-three.js r160 is vendored in `vendor/three` (MIT licence).
+## Photos
+
+All photos come from [Unsplash](https://unsplash.com) under the Unsplash License, which allows free commercial use. Photographers are credited in the footer, and `images/credits.json` lists the source of every file. When you have your own product shoot, replace these files. Your own photos will always look more on-brand.

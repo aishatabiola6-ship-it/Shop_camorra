@@ -3,20 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VELORA — The Sienna Slingback</title>
-  <meta name="description" content="VELORA — pointed slingback heels with signature gold hardware. Explore the Sienna in 3D.">
+  <title>VELORA — Pointed heels, made in Lagos</title>
+  <meta name="description" content="VELORA — pointed-toe heels in nude, noir, rouge and ivory. Delivered nationwide from Lagos.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/shoe-nude.webp">
   <link rel="stylesheet" href="styles.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "./vendor/three/three.module.min.js",
-        "three/addons/": "./vendor/three/addons/"
-      }
-    }
-  </script>
 </head>
 <body>
   <div class="loader" aria-hidden="true"><span>VELORA</span></div>
@@ -25,10 +18,10 @@
   <header class="nav">
     <a class="logo" href="#hero">VELORA</a>
     <nav class="links" aria-label="Main">
-      <a href="#craft">Silhouette</a>
-      <a href="#detail">Hardware</a>
-      <a href="#colours">Colours</a>
-      <a href="#collection">Shop</a>
+      <a href="#craft">The Pump</a>
+      <a href="#pair">Nude &amp; Noir</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#shop">Shop</a>
     </nav>
     <button class="bag" type="button" aria-label="Shopping bag">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
@@ -36,7 +29,11 @@
     </button>
   </header>
 
-  <canvas id="scene" aria-label="Rotating 3D model of the Sienna slingback heel"></canvas>
+  <!-- Floating shoes: real photos, moved and turned by scroll (js/main.js) -->
+  <div class="stage" aria-hidden="true">
+    <div class="floater" id="shoe-nude"><div class="bob"><img src="images/shoe-nude.webp" alt=""></div></div>
+    <div class="floater" id="shoe-noir"><div class="bob"><img src="images/shoe-noir.webp" alt=""></div></div>
+  </div>
 
   <main>
     <section id="hero" class="panel hero" data-pose="hero">
@@ -44,85 +41,116 @@
         <span>V</span><span>E</span><span>L</span><span>O</span><span>R</span><span>A</span>
       </h1>
       <div class="hero-foot">
-        <p class="kicker">AW26 · The Sienna Slingback</p>
-        <p class="hero-line">Pointed toe. Gold hardware.<br>Made for the woman who's already decided.</p>
-        <a class="cta" href="#collection">Shop the Sienna <span aria-hidden="true">→</span></a>
+        <p class="kicker">AW26 · The Pointed Edit</p>
+        <p class="hero-line">Pointed toes, slim heels.<br>Made for the woman who's already decided.</p>
+        <a class="cta" href="#shop">Shop the edit <span aria-hidden="true">→</span></a>
       </div>
       <div class="scroll-hint" aria-hidden="true"><span></span>Scroll</div>
     </section>
 
     <section id="craft" class="panel split left" data-pose="craft">
       <div class="copy reveal">
-        <p class="kicker">01 — Silhouette</p>
+        <p class="kicker">01 — The Pump</p>
         <h2>A sharp<br><em>point of view.</em></h2>
-        <p>A needle-fine toe, a low-cut throat and a sling strap that holds the heel without hiding it. The Sienna is drawn in one line, from tip to heel.</p>
+        <p>A needle-fine toe, a low-cut vamp and a heel that sits straight under you. One clean line from tip to heel, in soft nude leather.</p>
         <dl class="specs">
-          <div><dt>7.5<small>cm</small></dt><dd>Flared stiletto</dd></div>
-          <div><dt>Satin</dt><dd>Brushed suede finish</dd></div>
+          <div><dt>9<small>cm</small></dt><dd>Slim stiletto</dd></div>
+          <div><dt>Leather</dt><dd>Smooth nappa upper</dd></div>
           <div><dt>Padded</dt><dd>Cushioned footbed</dd></div>
         </dl>
       </div>
     </section>
 
-    <section id="detail" class="panel split right" data-pose="detail">
-      <div class="copy reveal">
-        <p class="kicker">02 — Hardware</p>
-        <h2>Gold,<br><em>on purpose.</em></h2>
-        <p>The signature rectangular buckle is solid brass with a soft gold plate, set on a strap that crosses the vamp at an angle. It catches the light when you walk.</p>
-        <p class="note">Adjustable buckle on the sling strap for a close fit.</p>
+    <section id="pair" class="panel pair" data-pose="pair">
+      <div class="copy center reveal">
+        <p class="kicker">02 — Two ways</p>
+        <h2>Nude <em>or</em> Noir.</h2>
+        <p>The nude pump lengthens the leg. The woven noir kitten heel takes you from desk to dinner. Most women end up with both.</p>
       </div>
     </section>
 
-    <section id="colours" class="colours" data-pose="colours">
+    <section id="editorial" class="editorial" data-pose="gone">
+      <figure class="ed-frame">
+        <img src="images/ed-rouge.jpg" alt="Woman in black trousers wearing red pointed pumps against a linen backdrop" loading="lazy">
+        <figcaption>
+          <p class="kicker light">The Rouge</p>
+          <blockquote>“Walk in like<br><em>it's already yours.</em>”</blockquote>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="lookbook" class="lookbook" data-pose="gone">
       <div class="sticky">
-        <div class="colour-copy">
-          <p class="kicker">03 — Colours · <span id="colour-index">01</span>/04</p>
-          <h2 id="colour-name" class="colour-name">Merlot</h2>
-          <p>Four shades, all in the same satin-suede. Keep scrolling, or pick one.</p>
-          <div class="swatches" role="group" aria-label="Choose a colour">
-            <button class="swatch" style="--c:#5a0a1c" aria-pressed="true"><span></span>Merlot</button>
-            <button class="swatch" style="--c:#2e1915" aria-pressed="false"><span></span>Cacao</button>
-            <button class="swatch" style="--c:#a8835f" aria-pressed="false"><span></span>Sable</button>
-            <button class="swatch" style="--c:#121010" aria-pressed="false"><span></span>Noir</button>
-          </div>
+        <div class="look-head">
+          <p class="kicker">03 — Lookbook</p>
+          <h2>Worn, <em>not posed.</em></h2>
+        </div>
+        <div class="track">
+          <figure class="look"><img src="images/ed-walk.jpg" alt="Woman walking on a road in black slingback heels" loading="lazy"><figcaption><span>Look 01</span>The Commute</figcaption></figure>
+          <figure class="look"><img src="images/ed-night.jpg" alt="Woman in a satin dress and heels sitting outdoors at night" loading="lazy"><figcaption><span>Look 02</span>After Hours</figcaption></figure>
+          <figure class="look"><img src="images/ed-seated.jpg" alt="Woman seated in a camel blazer and slingback heels" loading="lazy"><figcaption><span>Look 03</span>Studio Day</figcaption></figure>
+          <figure class="look"><img src="images/ed-chair.jpg" alt="Woman seated on a chair in red high heels" loading="lazy"><figcaption><span>Look 04</span>Red Hour</figcaption></figure>
+          <figure class="look"><img src="images/ed-flatlay.jpg" alt="Black heels with red soles beside makeup and a mirror" loading="lazy"><figcaption><span>Look 05</span>Getting Ready</figcaption></figure>
         </div>
       </div>
     </section>
 
-    <section id="collection" class="collection" data-pose="collection">
-      <div class="collection-head reveal">
+    <section id="shop" class="shop">
+      <div class="shop-head reveal">
         <p class="kicker">04 — Shop</p>
-        <h2>The Sienna <em>collection</em></h2>
+        <h2>The Pointed <em>Edit</em></h2>
       </div>
       <div class="grid">
-        <article class="card" data-name="Sienna in Merlot">
-          <div class="thumb" style="--tint:#efe3e1"><img data-thumb="0" alt="Sienna slingback in Merlot"></div>
+        <article class="card" data-name="The Nude Pump">
+          <div class="thumb cut" style="--tint:#f1e6dc"><img src="images/shoe-nude.webp" alt="Nude leather pointed pump" loading="lazy"></div>
           <div class="card-body">
-            <div class="row"><h3>Sienna — Merlot</h3><p class="price">₦48,500</p></div>
+            <div class="row"><h3>The Nude Pump</h3><p class="price">₦52,000</p></div>
+            <p class="sub">Nappa leather · 9 cm</p>
             <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
             <button class="add-to-bag" type="button">Add to bag</button>
           </div>
         </article>
-        <article class="card" data-name="Sienna in Cacao">
-          <div class="thumb" style="--tint:#ebe3dc"><img data-thumb="1" alt="Sienna slingback in Cacao"></div>
+        <article class="card" data-name="The Woven Kitten">
+          <div class="thumb cut" style="--tint:#ece8e4"><img src="images/shoe-noir.webp" alt="Black woven leather kitten heels" loading="lazy"></div>
           <div class="card-body">
-            <div class="row"><h3>Sienna — Cacao</h3><p class="price">₦48,500</p></div>
+            <div class="row"><h3>The Woven Kitten</h3><p class="price">₦48,500</p></div>
+            <p class="sub">Woven leather · 6 cm</p>
             <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
             <button class="add-to-bag" type="button">Add to bag</button>
           </div>
         </article>
-        <article class="card" data-name="Sienna in Sable">
-          <div class="thumb" style="--tint:#f3ece3"><img data-thumb="2" alt="Sienna slingback in Sable"></div>
+        <article class="card" data-name="The Rouge">
+          <div class="thumb"><img src="images/shoe-rouge.jpg" alt="Red patent pumps on a wooden floor" loading="lazy"></div>
           <div class="card-body">
-            <div class="row"><h3>Sienna — Sable</h3><p class="price">₦48,500</p></div>
+            <div class="row"><h3>The Rouge</h3><p class="price">₦55,000</p></div>
+            <p class="sub">Patent leather · 10 cm</p>
             <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
             <button class="add-to-bag" type="button">Add to bag</button>
           </div>
         </article>
-        <article class="card" data-name="Sienna in Noir">
-          <div class="thumb" style="--tint:#e8e6e3"><img data-thumb="3" alt="Sienna slingback in Noir"></div>
+        <article class="card" data-name="The Ivory">
+          <div class="thumb"><img src="images/shoe-ivory.jpg" alt="Ivory pebbled leather pumps" loading="lazy"></div>
           <div class="card-body">
-            <div class="row"><h3>Sienna — Noir</h3><p class="price">₦48,500</p></div>
+            <div class="row"><h3>The Ivory</h3><p class="price">₦52,000</p></div>
+            <p class="sub">Pebbled leather · 8 cm</p>
+            <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
+            <button class="add-to-bag" type="button">Add to bag</button>
+          </div>
+        </article>
+        <article class="card" data-name="The Slingback">
+          <div class="thumb"><img src="images/p-slingback.jpg" alt="Black pointed slingback flat" loading="lazy"></div>
+          <div class="card-body">
+            <div class="row"><h3>The Slingback</h3><p class="price">₦44,000</p></div>
+            <p class="sub">Leather · 2 cm</p>
+            <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
+            <button class="add-to-bag" type="button">Add to bag</button>
+          </div>
+        </article>
+        <article class="card" data-name="The Classic Noir">
+          <div class="thumb"><img src="images/p-classic.jpg" alt="Black leather stiletto pumps on a yellow surface" loading="lazy"></div>
+          <div class="card-body">
+            <div class="row"><h3>The Classic Noir</h3><p class="price">₦52,000</p></div>
+            <p class="sub">Leather · 10 cm</p>
             <div class="sizes" role="group" aria-label="Size"><button aria-pressed="false">37</button><button aria-pressed="false">38</button><button aria-pressed="false">39</button><button aria-pressed="false">40</button><button aria-pressed="false">41</button></div>
             <button class="add-to-bag" type="button">Add to bag</button>
           </div>
@@ -143,11 +171,12 @@
         <p>Lagos · Delivery nationwide</p>
         <p>&copy; 2026 VELORA. All rights reserved.</p>
       </div>
+      <p class="credits">Photography via <a href="https://unsplash.com/?utm_source=velora&amp;utm_medium=referral">Unsplash</a>: <a href="https://unsplash.com/@jonathanborba?utm_source=velora&amp;utm_medium=referral">Jonathan Borba</a>, <a href="https://unsplash.com/@pesce?utm_source=velora&amp;utm_medium=referral">Pesce Huang</a>, <a href="https://unsplash.com/@katherina_ilina?utm_source=velora&amp;utm_medium=referral">Ekaterina Ilina</a>, <a href="https://unsplash.com/@apostolosv?utm_source=velora&amp;utm_medium=referral">Apostolos Vamvouras</a>, <a href="https://unsplash.com/@alexandermassph?utm_source=velora&amp;utm_medium=referral">Alexander Mass</a>, <a href="https://unsplash.com/@fotografiaeditorial?utm_source=velora&amp;utm_medium=referral">FOTOGRAFÍA EDITORIAL</a>, <a href="https://unsplash.com/@atiyehfathi?utm_source=velora&amp;utm_medium=referral">Atiyeh Fathi</a>, <a href="https://unsplash.com/@nabiabeauty?utm_source=velora&amp;utm_medium=referral">Nabia Mohiuddin</a>, <a href="https://unsplash.com/@itscassy_wassy?utm_source=velora&amp;utm_medium=referral">Cassidy Mills</a>, <a href="https://unsplash.com/@anadventure?utm_source=velora&amp;utm_medium=referral">Emily Pottiger</a>, <a href="https://unsplash.com/@enginakyurt?utm_source=velora&amp;utm_medium=referral">engin akyurt</a>, <a href="https://unsplash.com/@laurachouette?utm_source=velora&amp;utm_medium=referral">Laura Chouette</a>.</p>
     </footer>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script type="module" src="js/main.js"></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>
