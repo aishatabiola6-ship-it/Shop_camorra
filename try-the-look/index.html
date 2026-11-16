@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAMORRA — Try the Look</title>
+  <meta name="description" content="CAMORRA menswear. Drag through the looks, see every piece, and shop the new collection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="logo" href="#top">CAMORRA</a>
+    <nav class="links" aria-label="Main">
+      <a href="#top" aria-current="page">Looks</a>
+      <a href="#collection">New Collection</a>
+      <a href="../index.html">VELORA (Women)</a>
+    </nav>
+    <button class="bag" type="button" aria-label="Bag"><span>Bag</span> <b id="bag-count">0</b></button>
+  </header>
+
+  <!-- 1. Try the Look: drag carousel of models -->
+  <section id="top" class="looks" aria-label="Try the look">
+    <div class="looks-head">
+      <div class="title-swap">
+        <div class="t-all">
+          <h1>Try the Look.</h1>
+          <p>Six looks, every piece listed. Drag to browse, tap a look to open it.</p>
+        </div>
+        <div class="t-one" aria-live="polite">
+          <button class="back" type="button">← All looks</button>
+          <p class="kicker" id="look-num">Look 01</p>
+          <h1 id="look-name">Studio Day</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="floor" aria-hidden="true"></div>
+    <div class="stage" id="stage" tabindex="0" aria-roledescription="carousel" aria-label="Looks. Use left and right arrow keys to browse, Enter to open.">
+      <!-- models are injected by app.js -->
+      <div class="cursor" aria-hidden="true"><span>Drag</span></div>
+    </div>
+
+    <aside class="panel" aria-label="In this look">
+      <p class="panel-title">In this look</p>
+      <ul id="pieces"></ul>
+      <div class="panel-foot">
+        <p class="total"><span>Full look</span> <b id="look-total">₦0</b></p>
+        <button class="btn" id="add-look" type="button">Add look to bag</button>
+      </div>
+    </aside>
+
+    <div class="looks-ui">
+      <button class="arrow" id="prev" type="button" aria-label="Previous look">←</button>
+      <p class="counter"><b id="count-now">03</b> / <span id="count-all">06</span></p>
+      <button class="arrow" id="next" type="button" aria-label="Next look">→</button>
+    </div>
+  </section>
+
+  <!-- 2. New Collection: clothes rail -->
+  <section id="collection" class="collection" aria-label="New collection">
+    <div class="coll-head">
+      <p class="kicker">New Collection</p>
+      <h2>Off the rail.</h2>
+      <p class="hint">Drag the rail. Tap anything to try it.</p>
+    </div>
+    <div class="rail-wrap" id="rail-wrap">
+      <div class="bar" aria-hidden="true"></div>
+      <div class="rail" id="rail" role="list"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div>
+      <a class="logo" href="#top">CAMORRA</a>
+      <p>Menswear · Lagos · Delivery nationwide</p>
+    </div>
+    <p class="credits">Photos from <a href="https://unsplash.com/?utm_source=camorra&amp;utm_medium=referral">Unsplash</a>, backgrounds removed: <span id="credits"></span></p>
+  </footer>
+
+  <!-- Product view -->
+  <div class="pv" id="pv" role="dialog" aria-modal="true" aria-labelledby="pv-name" hidden>
+    <button class="pv-close" type="button" aria-label="Close">×</button>
+    <div class="pv-stage" id="pv-stage">
+      <div class="spinner" id="spinner">
+        <img class="face front" alt="">
+        <img class="face backside" alt="" aria-hidden="true">
+      </div>
+      <p class="pv-hint">Drag to turn</p>
+    </div>
+    <div class="pv-info">
+      <p class="kicker">New Collection</p>
+      <h3 id="pv-name">Item</h3>
+      <p class="pv-price" id="pv-price">₦0</p>
+      <p class="pv-desc" id="pv-desc"></p>
+      <p class="label">Size</p>
+      <div class="sizes" id="pv-sizes" role="group" aria-label="Size">
+        <button type="button" aria-pressed="false">S</button><button type="button" aria-pressed="false">M</button><button type="button" aria-pressed="false">L</button><button type="button" aria-pressed="false">XL</button>
+      </div>
+      <button class="btn wide" id="pv-add" type="button">Add to bag</button>
+      <p class="pv-note">Free delivery in Lagos on orders over ₦50,000</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
