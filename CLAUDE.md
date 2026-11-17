@@ -9,7 +9,8 @@ prototypes: no backend, no real payments, no real sign-in, no real rider GPS.
 | Path | What it is |
 |---|---|
 | `index.html` | Front door: redirects to the wig store in `wigs/` (keeps `?flags` and `#hash`) |
-| `demo/` | Short link: redirects to `wigs/index.html#demo-full-backend` (app + back end auto-play) |
+| `demo/` | Short link: redirects to `wigs/index.html#demo-full` (app-only auto-play, slow scrolling) |
+| `demo-backend/` | Short link: redirects to `wigs/index.html#demo-full-backend` (app + back end split view) |
 | `lipgloss/` | Scrolling lip gloss landing page (`index.html`, `styles.css`, `script.js`; colours melt per shade, parallax, no WebGL) |
 | `app/index.html` | Lip gloss shopping app in a phone frame + live code panel. Login (Apple/Google/email code), shade swatches, Drop / On-lips views, Glossy/Shimmer, bag, checkout |
 | `app/videos/` | Rendered gloss-drop clips (`drop-<shade>[-shimmer].mp4`), made by `app/drop-studio.html`. Placeholders until real footage |
