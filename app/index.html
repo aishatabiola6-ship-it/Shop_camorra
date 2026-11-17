@@ -354,8 +354,9 @@ body.demo .play { display: none; }
 
 
 /* ---------------- Login / code / profile ---------------- */
-.login-hero { position: relative; height: 250px; border-radius: 28px; overflow: hidden; margin-bottom: 22px; background: linear-gradient(160deg, #fde3ec, #f6c3d6); }
-.login-hero svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.login-hero { position: relative; height: 250px; border-radius: 28px; overflow: hidden; margin-bottom: 22px; background: #fde3ec; }
+.login-hero svg, .login-hero video { position: absolute; inset: 0; width: 100%; height: 100%; }
+.login-hero video, .p-tile > video { object-fit: cover; }
 .login-hero .brand { position: absolute; left: 18px; top: 16px; font-weight: 900; font-size: 22px; letter-spacing: -0.05em; color: #3a1426; z-index: 2; }
 .login-title { font-size: 28px; font-weight: 800; letter-spacing: -0.04em; }
 .login-sub { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 6px 0 20px; }
@@ -406,7 +407,7 @@ body.dark .auth.apple { background: #fff; color: #000; }
 @keyframes tw { 0%, 100% { opacity: .15; transform: scale(.6); } 50% { opacity: 1; transform: scale(1.4); } }
 
 /* ---------------- Product views: Drop + On lips ---------------- */
-.p-tile > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.p-tile > svg, .p-tile > video { position: absolute; inset: 0; width: 100%; height: 100%; }
 .p-tabs { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.75); backdrop-filter: blur(10px); z-index: 3; }
 .p-tabs button { padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #3a1426; white-space: nowrap; }
 .p-tabs button.on { background: #3a1426; color: #fff; }
@@ -605,6 +606,10 @@ function dropSVG(s, shimmer) {
     </svg>`;
 }
 
+// The real drop is a rendered video clip (videos/drop-<shade>[-shimmer].mp4, made by
+// drop-studio.html). The animated drawing sits underneath in case the video can't load.
+const dropVideo = (s, shimmer) => `${dropSVG(s, shimmer)}<video src="videos/drop-${s.id}${shimmer ? "-shimmer" : ""}.mp4" autoplay muted loop playsinline aria-label="${s.name} gloss drop"></video>`;
+
 // A wand gliding across the lips, painting the shade on
 function lipsSVG(s, shimmer) {
     const id = "l" + gid++, g = s.gloss || s.swatch, G = `url(#gl${id})`;
@@ -656,7 +661,7 @@ const bagBtn = () => `<button class="icon-btn" data-action="go" data-to="bag" ar
 const R = {
     login() {
         return `<div class="scroll">
-            <div class="login-hero"><span class="brand">camorra</span>${dropSVG(shade("fragola"), true)}</div>
+            <div class="login-hero"><span class="brand">camorra</span>${dropVideo(shade("fragola"), true)}</div>
             <h1 class="login-title">Welcome to camorra</h1>
             <p class="login-sub">Sign in to save your shades and check out in one tap.</p>
             <button class="auth apple" data-action="auth" data-p="Apple">${I.apple} Continue with Apple</button>
@@ -732,7 +737,7 @@ const R = {
 
     product() {
         const s = shade(state.product), v = state.view, shim = state.finish === "Shimmer";
-        const visual = v === "drop" ? dropSVG(s, shim) : v === "lips" ? lipsSVG(s, shim) : `<div class="glow"></div><div class="t">${tube(s.pkg)}</div>`;
+        const visual = v === "drop" ? dropVideo(s, shim) : v === "lips" ? lipsSVG(s, shim) : `<div class="glow"></div><div class="t">${tube(s.pkg)}</div>`;
         const bg = v === "lips" ? "radial-gradient(ellipse at 40% 30%, #f6d2bb, #d99c7c 75%)" : s.tile;
         return `<div class="scroll">
             <div class="topbar">
