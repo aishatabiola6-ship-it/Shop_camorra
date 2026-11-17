@@ -2,9 +2,21 @@
    Step 2 — one palette per flavour as CSS variables
    ------------------------------------------------------------ */
 :root,
+:root[data-flavour="cristallo"] {
+    --bg: rgb(239, 241, 246);
+    --ink: rgb(58, 64, 84);
+}
 :root[data-flavour="fragola"] {
     --bg: rgb(253, 231, 238);
     --ink: rgb(184, 42, 100);
+}
+:root[data-flavour="pesca"] {
+    --bg: rgb(254, 234, 224);
+    --ink: rgb(170, 70, 44);
+}
+:root[data-flavour="malva"] {
+    --bg: rgb(242, 228, 235);
+    --ink: rgb(110, 56, 82);
 }
 :root[data-flavour="caramello"] {
     --bg: rgb(244, 231, 220);
@@ -49,7 +61,7 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: -0.03em;
     text-transform: none;
 }
-.nav-links { display: flex; gap: clamp(14px, 3vw, 36px); font-weight: 500; }
+.nav-links { display: flex; gap: clamp(12px, 2vw, 28px); font-weight: 500; }
 .nav-links a { opacity: 0.6; transition: opacity 200ms; }
 .nav-links a:hover,
 .nav-links a.active { opacity: 1; }
@@ -106,9 +118,7 @@ a { color: inherit; text-decoration: none; }
     transform: scale(0.92);
     transition: opacity 600ms ease, transform 600ms ease;
 }
-:root[data-flavour="fragola"] .pkg[data-pkg="fragola"],
-:root[data-flavour="caramello"] .pkg[data-pkg="caramello"],
-:root[data-flavour="lampone"] .pkg[data-pkg="lampone"] {
+.pkg.active {
     opacity: 1;
     transform: none;
 }
