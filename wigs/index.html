@@ -343,8 +343,10 @@ function unitPrice(w, o) {
 
 // n8n automations: paste the Production URL of each Webhook node
 const N8N = {
-    signup: "",   // e.g. https://YOUR-N8N/webhook/camorra-hair-signup
-    order: "",    // e.g. https://YOUR-N8N/webhook/camorra-hair-order
+    // TEST URLs: only work while "Listen for test event" is on in n8n. When the workflow is
+    // Active, change "/webhook-test/" to "/webhook/" in both.
+    signup: "https://ige12.app.n8n.cloud/webhook-test/camorra-hair-signup",
+    order: "https://ige12.app.n8n.cloud/webhook-test/camorra-hair-order",
 };
 function notify(kind, data) {
     if (!N8N[kind] || params.has("demo")) return;
