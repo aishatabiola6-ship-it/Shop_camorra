@@ -1,5 +1,5 @@
 {
-  "name": "Camorra Hair — sign-ups & Flutterwave orders",
+  "name": "Camorra Hair — sign-in codes, sign-ups & Flutterwave orders",
   "nodes": [
     {
       "parameters": {
@@ -391,6 +391,210 @@
         760,
         820
       ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "camorra-hair-code",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "78ab9e91-d16d-4229-8e91-7ff0d8d16263",
+      "name": "Send Code Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1040
+      ],
+      "webhookId": "2b8fdd5e-581c-4b9f-b08f-7d0b70140ef0"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Make a 6-digit code that expires in 10 minutes\nconst email = String($json.body.email || '').trim().toLowerCase();\nif (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) throw new Error('Invalid email');\nconst code = String(Math.floor(100000 + Math.random() * 900000));\nconst exp = Date.now() + 10 * 60 * 1000;\nreturn [{ json: { email, code, exp, toSign: `${email}|${code}|${exp}` } }];"
+      },
+      "id": "a0be45d0-11db-4aa5-8f69-8912708bb305",
+      "name": "Make Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.toSign }}",
+        "dataPropertyName": "sig",
+        "secret": "CHANGE_ME_to_a_long_random_secret"
+      },
+      "id": "7dc0f591-326a-43db-8661-ab2cad2183b5",
+      "name": "Sign Code",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        440,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Your Camorra Hair code: {{ $json.code }}",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:auto;color:#2e1220\"><div style=\"background:#3a1426;color:#fff;padding:24px;border-radius:16px 16px 0 0\"><div style=\"font-size:24px;font-weight:700;font-family:Georgia,serif\">camorra hair</div></div><div style=\"background:#fbf4f1;padding:24px;border-radius:0 0 16px 16px;text-align:center\"><p style=\"margin:0 0 12px\">Your sign-in code is</p><div style=\"font-size:40px;font-weight:800;letter-spacing:10px;margin:8px 0 16px\">{{ $json.code }}</div><p style=\"color:#93707e;font-size:13px;margin:0\">It expires in 10 minutes. If you didn't ask for it, you can ignore this email.</p></div></div>",
+        "options": {
+          "senderName": "Camorra Hair",
+          "appendAttribution": false
+        }
+      },
+      "id": "549640f0-ce4c-4ea0-8a1d-3a977861df08",
+      "name": "Email the Code",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, exp: $('Sign Code').item.json.exp, sig: $('Sign Code').item.json.sig }) }}",
+        "options": {}
+      },
+      "id": "cdc83849-17e9-4aa6-b83f-2aa0cac69cd5",
+      "name": "Reply: Code Sent",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "camorra-hair-verify",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "252e209e-8961-476a-901f-39649c23731c",
+      "name": "Verify Code Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1260
+      ],
+      "webhookId": "587adc0b-2818-4592-8b02-2d3e4d1f56d5"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rebuild what was signed, using the code the customer typed\nconst b = $json.body;\nconst email = String(b.email || '').trim().toLowerCase();\nconst code = String(b.code || '').trim();\nconst exp = Number(b.exp);\nreturn [{ json: { email, exp, sig: String(b.sig || ''), toSign: `${email}|${code}|${exp}` } }];"
+      },
+      "id": "5e077d14-c08c-4b65-a823-e935c7897468",
+      "name": "Read Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.toSign }}",
+        "dataPropertyName": "check",
+        "secret": "CHANGE_ME_to_a_long_random_secret"
+      },
+      "id": "8d05f742-9d23-4bcc-8fc1-5a8c62a90e9f",
+      "name": "Check Signature",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        440,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "2cdbc816-3953-4b40-80a9-b6095d080571",
+              "leftValue": "={{ $json.check }}",
+              "rightValue": "={{ $json.sig }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "4fe18206-3fdd-4dd5-823b-b33a6db64bf9",
+              "leftValue": "={{ Date.now() }}",
+              "rightValue": "={{ $json.exp }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0f839c13-5650-4e12-a2a9-47aa67a4c9f9",
+      "name": "Code correct?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        660,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true }) }}",
+        "options": {}
+      },
+      "id": "6d01fa11-f2b8-4cf3-a0c1-7e9d1c55c7b6",
+      "name": "Reply: Code OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false }) }}",
+        "options": {}
+      },
+      "id": "fa39da15-e675-44e3-82bd-b1d2e68a399d",
+      "name": "Reply: Code Wrong",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1340
+      ]
     }
   ],
   "connections": {
@@ -454,6 +658,101 @@
         [
           {
             "node": "Warn Owner: Payment Not Verified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Code Webhook": {
+      "main": [
+        [
+          {
+            "node": "Make Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Make Code": {
+      "main": [
+        [
+          {
+            "node": "Sign Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign Code": {
+      "main": [
+        [
+          {
+            "node": "Email the Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email the Code": {
+      "main": [
+        [
+          {
+            "node": "Reply: Code Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Code Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Code": {
+      "main": [
+        [
+          {
+            "node": "Check Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Signature": {
+      "main": [
+        [
+          {
+            "node": "Code correct?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code correct?": {
+      "main": [
+        [
+          {
+            "node": "Reply: Code OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply: Code Wrong",
             "type": "main",
             "index": 0
           }

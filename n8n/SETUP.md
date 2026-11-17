@@ -11,6 +11,7 @@ How an order flows:
 
 | When | What happens |
 |---|---|
+| A customer enters their email to sign in | **6-digit code** emailed to them (Gmail), valid 10 minutes; n8n checks it when they type it |
 | A customer signs up with email | **Welcome email** to the customer (Gmail) |
 | A paid order is confirmed by Flutterwave | **Order confirmation email** to the customer (Gmail) |
 | | **Telegram message** to the owner with the order details |
@@ -45,7 +46,13 @@ Until a public key is set, the app's Pay button simulates payment (that's what t
 ## 3. Connect Gmail (customer emails)
 
 1. Open **Welcome Email** → **Credential** → **Create new** → sign in with the business Gmail.
-2. Open **Order Confirmation Email** and pick the same credential.
+2. Open **Order Confirmation Email** and **Email the Code** and pick the same credential.
+
+## 3b. Set the sign-in code secret
+
+Open **Sign Code** and **Check Signature**. In both, replace `CHANGE_ME_to_a_long_random_secret`
+with the **same** long random phrase (for example 30+ random letters and numbers). This is what
+stops anyone from faking a sign-in code. Keep it only in n8n.
 
 Free Gmail can send about 500 emails a day. When the brand grows, switch these two nodes to a
 branded sender (Brevo, Resend, Mailgun) so emails come from `hello@yourbrand.com`.
@@ -74,7 +81,9 @@ and replace `PASTE_OWNER_EMAIL`.
 ## 6. Turn it on and connect the app
 
 1. Click **Active** (top right) to switch the workflow on.
-2. Open **Sign-up Webhook** → copy the **Production URL**. Do the same for **Order Webhook**.
+2. The app is already set to this workflow's **Production** URLs (`/webhook/…`, not
+   `/webhook-test/…`). Test URLs listen once at a time, so sign-in codes only work with the
+   workflow **Active**.
 3. In `wigs/index.html`, paste them into:
 
    ```js

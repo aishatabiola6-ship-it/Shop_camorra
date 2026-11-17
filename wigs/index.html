@@ -343,10 +343,11 @@ function unitPrice(w, o) {
 
 // n8n automations: paste the Production URL of each Webhook node
 const N8N = {
-    // TEST URLs: only work while "Listen for test event" is on in n8n. When the workflow is
-    // Active, change "/webhook-test/" to "/webhook/" in both.
-    signup: "https://ige12.app.n8n.cloud/webhook-test/camorra-hair-signup",
-    order: "https://ige12.app.n8n.cloud/webhook-test/camorra-hair-order",
+    // Production URLs: work while the workflow is Active in n8n
+    signup: "https://ige12.app.n8n.cloud/webhook/camorra-hair-signup",   // welcome email
+    order:  "https://ige12.app.n8n.cloud/webhook/camorra-hair-order",    // verify payment, emails, Telegram, sheet
+    code:   "https://ige12.app.n8n.cloud/webhook/camorra-hair-code",     // email a 6-digit sign-in code
+    verify: "https://ige12.app.n8n.cloud/webhook/camorra-hair-verify",   // check the code
 };
 // Sent as a plain form post: browsers deliver it to n8n without a CORS pre-check.
 // n8n reads each field into $json.body (e.g. $json.body.email).
@@ -355,6 +356,13 @@ function notify(kind, data) {
     const body = new URLSearchParams({ event: kind, ts: new Date().toISOString(), ...data });
     fetch(N8N[kind], { method: "POST", mode: "no-cors", body, keepalive: true }).catch(() => {});
 }
+// Same, but waits for n8n's JSON answer (sign-in code and its check)
+async function ask(kind, data) {
+    const res = await fetch(N8N[kind], { method: "POST", body: new URLSearchParams(data) });
+    if (!res.ok) throw new Error("n8n " + res.status);
+    return res.json();
+}
+const realCodes = () => N8N.code && N8N.verify && !params.has("demo");
 
 // Real payments: Flutterwave checkout (card, bank transfer, USSD) in naira
 const FLUTTERWAVE = { publicKey: "FLWPUBK_TEST-898a4a29e06abf6a3167fb6c45eafdb4-X" };   // FLWPUBK-…  (FLWPUBK_TEST-… while testing)
@@ -778,16 +786,30 @@ app.addEventListener("click", (e) => {
     if (action === "email") {
         const v = $("#email").value.trim();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { $("#email-err").textContent = "Enter a valid email address"; return; }
-        state.pendingEmail = v; go("code");
-        setTimeout(() => $("#otp") && $("#otp").focus({ preventScroll: true }), 500);
+        state.pendingEmail = v;
+        const toCode = () => { go("code"); setTimeout(() => $("#otp") && $("#otp").focus({ preventScroll: true }), 500); };
+        if (!realCodes()) { state.otp = null; toCode(); return; }                // demo: any 6 digits
+        el.innerHTML = spinner("Sending code…");
+        ask("code", { email: v })
+            .then((r) => { if (!r.ok) throw 0; state.otp = { exp: r.exp, sig: r.sig }; toCode(); toast("Code sent to your email", "mail"); })
+            .catch(() => { render("login"); $("#email-err").textContent = "We couldn't send the code. Check your email address and try again."; });
     }
     if (action === "verify") {
         const c = $("#otp").value;
         if (c.length < 6) { $("#otp-err").textContent = "Enter the 6-digit code"; return; }
         el.innerHTML = spinner("Verifying…");
-        setTimeout(() => signIn({ name: nameFrom(state.pendingEmail), email: state.pendingEmail, via: "email" }), 900);
+        const done = () => signIn({ name: nameFrom(state.pendingEmail), email: state.pendingEmail, via: "email" });
+        if (!state.otp) { setTimeout(done, 900); return; }                       // demo: any 6 digits
+        ask("verify", { email: state.pendingEmail, code: c, exp: state.otp.exp, sig: state.otp.sig })
+            .then((r) => (r.ok ? done() : Promise.reject()))
+            .catch(() => { render("code"); $("#otp-err").textContent = "That code isn't right or has expired. Check your email, or tap Resend code."; });
     }
-    if (action === "resend") toast("New code sent", "mail");
+    if (action === "resend") {
+        if (!realCodes()) { toast("New code sent", "mail"); return; }
+        ask("code", { email: state.pendingEmail })
+            .then((r) => { if (!r.ok) throw 0; state.otp = { exp: r.exp, sig: r.sig }; toast("New code sent", "mail"); })
+            .catch(() => toast("Couldn't send a new code. Try again.", "mail"));
+    }
     if (action === "guest") signIn({ name: "gorgeous", guest: true });
 });
 app.addEventListener("input", (e) => {
