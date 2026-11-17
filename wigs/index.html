@@ -298,6 +298,19 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .ps-row .ps-field { flex: 1; }
 .ps-pay { width: 100%; height: 52px; border-radius: 14px; background: #1f2430; color: #fff; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
 .ps-foot { text-align: center; font-size: 12px; color: #7a8090; margin-top: 14px; }
+.ps-note { font-size: 13px; color: #5d6372; margin: 0 0 12px; line-height: 1.45; }
+.ps-acct { border: 1px solid #e3e6ec; border-radius: 14px; padding: 4px 14px; margin-bottom: 12px; }
+.ps-acct div { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f1f4; font-size: 13px; color: #7a8090; }
+.ps-acct div:last-child { border: 0; }
+.ps-acct b { color: #1f2430; font-size: 15px; }
+.ps-acct .big { font: 700 19px "JetBrains Mono", monospace; letter-spacing: 1px; }
+.ps-copy { margin-left: 8px; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: #ff9b00; color: #fff; }
+.ps-timer { text-align: center; font-size: 12px; color: #b26b00; background: #fff6e5; border-radius: 10px; padding: 7px; margin-bottom: 12px; }
+.ps-steps { border: 1px solid #e3e6ec; border-radius: 14px; margin: 14px 0 6px; }
+.ps-steps div { display: flex; justify-content: space-between; align-items: center; padding: 13px 14px; font-size: 14px; border-bottom: 1px solid #f0f1f4; }
+.ps-steps div:last-child { border: 0; }
+.ps-steps .ok2 { width: 20px; height: 20px; border-radius: 50%; background: #1f9d55; color: #fff; display: grid; place-items: center; }
+.ps-steps .ok2 svg { width: 12px; height: 12px; }
 .ps-done { text-align: center; padding: 26px 0 8px; }
 .ps-done .ok { width: 72px; height: 72px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center; background: #e5f6eb; color: #1f9d55; }
 .ps-done .ok svg { width: 38px; height: 38px; }
@@ -1118,6 +1131,48 @@ function openMail(subject, html) { state.mailView = { subject, html, to: state.c
 
 function openPaySheet() {
     const t = totals(), amt = "NGN " + t.total.toLocaleString("en-NG");
+    const finish = () => {
+        $("#sheet").innerHTML = `<div class="ps-done"><div class="ok">${I.check}</div><b>Payment successful</b><span>${amt} paid to Camorra Hair</span></div><div class="ps-foot">🔒 Secured by Flutterwave</div>`;
+        setTimeout(() => {
+            $("#paysheet").classList.remove("open");
+            const ref = "CH-" + Date.now();
+            state.lastOrderMail = { name: state.contact.name, items: state.bag.map(itemLine), total: naira(t.total), ref,
+                delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow", payment: PAY_LABEL[state.pay], id: "CH-" + ref.slice(-6) };
+            toast("Payment received 🎉", "check");
+            placeOrder({ txRef: ref, transactionId: 1 });
+        }, 1600);
+    };
+    if (state.pay === "transfer") {
+        const spin = '<span class="spin" style="width:18px;height:18px;border-width:2px;color:#ff9b00"></span>';
+        $("#sheet").innerHTML = `
+            <div class="ps-head"><div class="lg">CH</div><div class="who"><b>Camorra Hair</b>Bank transfer</div><div class="amt">Pay<b>${amt}</b></div></div>
+            <div class="ps-tabs"><span>Card</span><span class="on">Bank transfer</span><span>USSD</span></div>
+            <div class="ps-timer">⏱ This account expires in <b id="ps-clock">29:59</b></div>
+            <p class="ps-note">Transfer exactly <b>${amt}</b> to the account below from any Nigerian bank app.</p>
+            <div class="ps-acct">
+                <div>Amount<b>${amt}<span class="ps-copy">COPY</span></b></div>
+                <div>Account number<b class="big">7821 0459 36<span class="ps-copy">COPY</span></b></div>
+                <div>Bank<b>Wema Bank</b></div>
+                <div>Beneficiary<b>Camorra Hair · Flutterwave</b></div>
+            </div>
+            <button class="ps-pay" id="ps-pay" style="background:#ff9b00">I've made this transfer</button>
+            <div class="ps-foot">🔒 Secured by Flutterwave · Test mode</div>`;
+        let left = 1799; const clk = setInterval(() => { left--; const c = $("#ps-clock"); if (!c) return clearInterval(clk); c.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`; }, 1000);
+        $("#paysheet").classList.add("open");
+        $("#ps-pay").addEventListener("click", () => {
+            clearInterval(clk);
+            $("#sheet").innerHTML = `
+                <div class="ps-head"><div class="lg">CH</div><div class="who"><b>Camorra Hair</b>Bank transfer</div><div class="amt">Pay<b>${amt}</b></div></div>
+                <p class="ps-note" style="text-align:center;margin-top:18px">We're confirming your transfer.<br>This usually takes a few seconds.</p>
+                <div class="ps-steps"><div>Transfer sent<span id="ps-s1">${spin}</span></div><div>Payment confirmed<span id="ps-s2">${spin}</span></div></div>
+                <div class="ps-foot">🔒 Secured by Flutterwave · Test mode</div>`;
+            const ok = `<span class="ok2">${I.check}</span>`;
+            setTimeout(() => { $("#ps-s1").innerHTML = ok; }, 1300);
+            setTimeout(() => { $("#ps-s2").innerHTML = ok; }, 2900);
+            setTimeout(finish, 3700);
+        });
+        return;
+    }
     $("#sheet").innerHTML = `
         <div class="ps-head"><div class="lg">CH</div><div class="who"><b>Camorra Hair</b>${esc(state.contact.email)}</div><div class="amt">Pay<b>${amt}</b></div></div>
         <div class="ps-tabs"><span class="on">Card</span><span>Bank transfer</span><span>USSD</span></div>
@@ -1128,17 +1183,7 @@ function openPaySheet() {
     $("#paysheet").classList.add("open");
     $("#ps-pay").addEventListener("click", () => {
         $("#ps-pay").innerHTML = spinner("Processing payment…");
-        setTimeout(() => {
-            $("#sheet").innerHTML = `<div class="ps-done"><div class="ok">${I.check}</div><b>Payment successful</b><span>${amt} paid to Camorra Hair</span></div><div class="ps-foot">🔒 Secured by Flutterwave</div>`;
-            setTimeout(() => {
-                $("#paysheet").classList.remove("open");
-                const ref = "CH-" + Date.now();
-                state.lastOrderMail = { name: state.contact.name, items: state.bag.map(itemLine), total: naira(t.total), ref,
-                    delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow", payment: PAY_LABEL[state.pay], id: "CH-" + ref.slice(-6) };
-                toast("Payment received 🎉", "check");
-                placeOrder({ txRef: ref, transactionId: 1 });
-            }, 1600);
-        }, 1800);
+        setTimeout(finish, 1800);
     });
 }
 async function typeText(el, text, gap = 60) { for (const ch of text) { el.textContent += ch; await wait(gap); } }
@@ -1171,20 +1216,40 @@ async function demoFull() {
     await typeInto("#otp", code, 170); await wait(400);
     await tap('[data-action="verify"]'); await wait(1500);
     showNotif("Camorra Hair", "Welcome to Camorra Hair, Bella 💇🏾‍♀️"); await wait(2600); hideNotif();
-    // 2. Pick a video unit and check out
-    await tap('.pin[data-id="v5"]'); await wait(3600);
+    // 2. Explore the store
+    await wait(600);
+    await scrollActive(420); await wait(500);
+    await scrollActive(520); await wait(700);
+    await scrollActive(520); await wait(700);
+    await scrollActive(-1600); await wait(500);
+    for (const f of ["Curly", "Straight", "Colour"]) { await tap(`[data-action="filter"][data-f="${f}"]`); await wait(1500); }
+    await tap('[data-action="filter"][data-f="All"]'); await wait(900);
+    await scrollActive(330); await wait(400);
+    await tap('.pin[data-id="v1"] .heart'); await wait(600);
+    await tap('.pin[data-id="v6"] .heart'); await wait(700);
+    // a photo unit
+    await tap('.pin[data-id="w1"]'); await wait(2300);
+    await scrollActive(320); await wait(900);
+    await tap('[data-action="back"]'); await wait(900);
+    // a video unit, fully customised
+    await tap('.pin[data-id="v5"]'); await wait(3800);
     await tap('[data-opt="len"][data-v="30"]'); await wait(600);
-    await tap('[data-opt="lace"][data-v="2"]'); await wait(700);
-    await tap('[data-action="add"]'); await wait(1200);
-    await tap('[data-to="bag"]'); await wait(1500);
+    await tap('[data-opt="lace"][data-v="2"]'); await wait(600);
+    await tap('[data-opt="dens"][data-v="1"]'); await wait(600);
+    await tap('[data-opt="install"]'); await wait(700);
+    await tap('[data-action="add"]'); await wait(1300);
+    await tap('[data-action="back"]'); await wait(900);
+    // a second video unit
+    await tap('.pin[data-id="v6"]'); await wait(3400);
+    await tap('[data-action="add"]'); await wait(1300);
+    await tap('[data-to="bag"]'); await wait(1900);
     await tap('[data-to="checkout"]'); await wait(1200);
     await tap('#co-name'); await typeInto("#co-name", " Rossi", 90); await wait(300);
-    await tap('[data-action="ship"][data-x="1"]'); await wait(800);
-    // 3. Pay with Flutterwave
-    await tap('[data-action="pay"]'); await wait(1300);
-    await typeText($("#ps-num"), "5531 8866 5214 2950", 55); await wait(200);
-    await typeText($("#ps-exp"), "09/32", 80); await typeText($("#ps-cvv"), "564", 90); await wait(500);
-    await tap($("#ps-pay")); await wait(4300);
+    await tap('[data-action="ship"][data-x="1"]'); await wait(700);
+    await tap('[data-action="pay-m"][data-m="transfer"]'); await wait(800);
+    // 3. Pay by bank transfer with Flutterwave
+    await tap('[data-action="pay"]'); await wait(3600);
+    await tap($("#ps-pay")); await wait(5600);
     // 4. Receipt email arrives on Track Order
     await wait(BE.on ? 3600 : 1500);
     const o = state.lastOrderMail;
