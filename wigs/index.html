@@ -90,7 +90,7 @@ body.dark .splash { background: radial-gradient(circle at 50% 45%, #3a1a2a 0%, v
 
 /* Login */
 .login-hero { position: relative; height: 270px; border-radius: 28px; overflow: hidden; margin-bottom: 22px; background: #e9dcd6; }
-.login-hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; animation: kb 9s ease-in-out infinite alternate; }
+.login-hero video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
 .login-hero .brand { position: absolute; left: 18px; bottom: 16px; color: #fff; font-size: 26px; font-weight: 700; text-shadow: 0 2px 16px rgba(0,0,0,.35); }
 .login-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(40,10,25,.55), transparent 55%); }
 .login-hero .brand { z-index: 2; }
@@ -133,8 +133,8 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .pin { break-inside: avoid; margin-bottom: 14px; cursor: pointer; animation: rise 400ms both; }
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
 .pin .ph { position: relative; border-radius: 18px; overflow: hidden; background: var(--surface-2); }
-.pin img { width: 100%; height: auto; transition: transform 400ms; }
-.pin:active img { transform: scale(1.04); }
+.pin img, .pin video { display: block; width: 100%; height: auto; transition: transform 400ms; }
+.pin:active img, .pin:active video { transform: scale(1.04); }
 .vtag { position: absolute; left: 10px; bottom: 10px; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: rgba(0,0,0,.5); color: #fff; }
 .heart { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.8); color: #2e1220; z-index: 2; }
 .heart svg { width: 16px; height: 16px; }
@@ -149,7 +149,7 @@ body.dark .auth.apple { background: #fff; color: #000; }
 
 /* Product */
 .media { position: relative; height: 430px; border-radius: 28px; overflow: hidden; margin-bottom: 18px; background: var(--surface-2); }
-.media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+.media img, .media video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
 .media.video img { animation: kb 7s ease-in-out infinite alternate; }
 .media.video::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.28) 50%, transparent 62%); background-size: 260% 100%; animation: sweep 3.5s ease-in-out infinite; pointer-events: none; }
 @keyframes kb { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.16) translate(-2.5%, -3%); } }
@@ -313,6 +313,14 @@ body.dark .auth.apple { background: #fff; color: #000; }
 // <code-view>
 // Camorra Hair — wig shop with live order tracking
 const WIGS = [
+    // Video units: real clips play in the feed and on the product page
+    { id: "v5", name: "Plum Wine Curls",    style: "Loose deep wave", tags: ["Curly", "Colour"],     len: 26, price: 395000, video: "vid/v5.mp4", img: "vid/v5.jpg", dur: "0:05" },
+    { id: "v1", name: "Chocolate Layers",   style: "Layered body wave", tags: ["Body wave", "Colour"], len: 20, price: 345000, video: "vid/v1.mp4", img: "vid/v1.jpg", dur: "0:08" },
+    { id: "v3", name: "Jet Silk Straight",  style: "Bone straight", tags: ["Straight"],            len: 30, price: 430000, video: "vid/v3.mp4", img: "vid/v3.jpg", dur: "0:07" },
+    { id: "v4", name: "Kinky Curly Bob",    style: "Kinky curly",   tags: ["Curly", "Bob"],        len: 14, price: 210000, video: "vid/v4.mp4", img: "vid/v4.jpg", dur: "0:05" },
+    { id: "v6", name: "Burgundy Ombré",     style: "Straight ombré", tags: ["Straight", "Colour"], len: 28, price: 380000, video: "vid/v6.mp4", img: "vid/v6.jpg", dur: "0:06" },
+    { id: "v2", name: "Cocoa Blunt Bob",    style: "Blunt bob",     tags: ["Bob", "Colour"],       len: 10, price: 155000, video: "vid/v2.mp4", img: "vid/v2.jpg", dur: "0:02" },
+    // Photo units
     { id: "w1", name: "Honey Blonde 613",   style: "Body wave",     tags: ["Body wave", "Colour"], len: 22, price: 385000, img: "img/w1.jpg" },
     { id: "w2", name: "Bouncy Curled Bob",  style: "Bob",           tags: ["Bob"],                 len: 12, price: 165000, img: "img/w2.jpg" },
     { id: "w3", name: "Copper Cinnamon",    style: "Body wave",     tags: ["Body wave", "Colour"], len: 24, price: 298000, img: "img/w3.jpg" },
@@ -353,7 +361,7 @@ const params = (() => {
 const wig = (id) => WIGS.find((w) => w.id === id);
 const naira = (n) => "₦" + Math.round(n).toLocaleString("en-NG");
 const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
-const state = { user: null, product: "w3", opts: null, view: "photo", qty: 1, bag: [], orders: 0,
+const state = { user: null, product: "v5", opts: null, qty: 1, bag: [], orders: 0,
                 liked: new Set(["w7"]), filter: "All", express: true, pay: "card", tracking: null };
 
 function totals() {
@@ -419,7 +427,7 @@ function mapSVG() {
 const R = {
     login() {
         return `<div class="scroll">
-            <div class="login-hero"><img src="${wig("w5").img}" alt=""><span class="brand serif">camorra hair</span></div>
+            <div class="login-hero"><video src="${wig("v1").video}" poster="${wig("v1").img}" autoplay muted loop playsinline aria-hidden="true"></video><span class="brand serif">camorra hair</span></div>
             <h1 class="login-title serif">Welcome, gorgeous</h1>
             <p class="login-sub">Sign in to save your units and track every delivery live.</p>
             <button class="auth apple" data-action="auth" data-p="Apple">${I.apple} Continue with Apple</button>
@@ -443,8 +451,10 @@ const R = {
         </div>`;
     },
     home() {
-        const cats = ["All", "Body wave", "Straight", "Bob", "Colour"];
-        const list = WIGS.filter((w) => state.filter === "All" || w.tags.includes(state.filter));
+        const cats = ["All", "Curly", "Body wave", "Straight", "Bob", "Colour"];
+        const vids = WIGS.filter((w) => w.video), pics = WIGS.filter((w) => !w.video), mixed = [];
+        for (let i = 0; i < Math.max(vids.length, pics.length); i++) { if (vids[i]) mixed.push(vids[i]); if (pics[i]) mixed.push(pics[i]); }
+        const list = mixed.filter((w) => state.filter === "All" || w.tags.includes(state.filter));
         return `<div class="scroll">
             <div class="topbar">
                 <div><div class="title-sm">Hi ${esc(state.user ? state.user.name : "gorgeous")} ✨</div><div class="title-lg serif">Find your unit</div></div>
@@ -459,7 +469,7 @@ const R = {
             <div class="chips">${cats.map((c) => `<button class="chip ${state.filter === c ? "on" : ""}" data-action="filter" data-f="${c}">${c}</button>`).join("")}</div>
             <div class="masonry">${list.map((w, i) => `
                 <div class="pin" data-action="open" data-id="${w.id}" style="animation-delay:${i * 50}ms">
-                    <div class="ph"><img src="${w.img}" alt="${esc(w.name)}" loading="lazy"><span class="vtag">▶ 0:07</span>
+                    <div class="ph">${w.video ? `<video src="${w.video}" poster="${w.img}" autoplay muted loop playsinline aria-label="${esc(w.name)}"></video><span class="vtag">▶ ${w.dur}</span>` : `<img src="${w.img}" alt="${esc(w.name)}" loading="lazy">`}
                         <button class="heart ${state.liked.has(w.id) ? "on" : ""}" data-action="like" data-id="${w.id}" aria-label="Save">${I.heart}</button></div>
                     <div class="meta"><span>${w.name}</span></div>
                     <div class="sub">${w.len}" · ${w.style} · <b style="color:var(--text)">${naira(w.price)}</b></div>
@@ -468,15 +478,13 @@ const R = {
         <nav class="tabbar"><button class="on" aria-label="Home">${I.home}</button><button aria-label="Shop">${I.grid}</button><button aria-label="Saved">${I.heart}</button><button aria-label="Profile">${I.user}</button></nav>`;
     },
     product() {
-        const w = wig(state.product), o = state.opts, v = state.view;
+        const w = wig(state.product), o = state.opts;
         const lens = [w.len - 4, w.len, w.len + 4];
         const price = unitPrice(w, o);
         return `<div class="scroll">
             <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen serif" style="text-align:center">Unit details</div>${bagBtn()}</div>
-            <div class="media ${v === "video" ? "video" : ""}">
-                <img src="${w.img}" alt="${esc(w.name)}">
-                ${v === "video" ? `<span class="live"><i></i>VIDEO</span><div class="vbar"><i></i></div>` : ""}
-                <div class="m-tabs">${[["photo", "Photo"], ["video", "▶ Video"]].map(([k, l]) => `<button class="${v === k ? "on" : ""}" data-action="view" data-view="${k}">${l}</button>`).join("")}</div>
+            <div class="media">
+                ${w.video ? `<video src="${w.video}" poster="${w.img}" autoplay muted loop playsinline aria-label="${esc(w.name)} video"></video><span class="live">▶ VIDEO</span>` : `<img src="${w.img}" alt="${esc(w.name)}">`}
             </div>
             <div class="p-head"><div class="p-name serif">${w.name}</div><div class="p-price">${naira(price)}</div></div>
             <div class="rating"><b>★★★★★</b> 4.9 · 318 reviews · 100% human hair</div>
@@ -659,12 +667,11 @@ app.addEventListener("click", (e) => {
     const el = e.target.closest("[data-action]");
     if (!el) return;
     const { action, id } = el.dataset;
-    if (action === "open") { state.product = id; state.opts = defaultOpts(wig(id)); state.qty = 1; state.view = "photo"; go("product"); }
+    if (action === "open") { state.product = id; state.opts = defaultOpts(wig(id)); state.qty = 1; go("product"); }
     if (action === "go") go(el.dataset.to);
     if (action === "back") back();
     if (action === "filter") { state.filter = el.dataset.f; render("home"); }
     if (action === "like") { state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id); el.classList.toggle("on"); }
-    if (action === "view") { state.view = el.dataset.view; render("product"); }
     if (action === "opt") {
         const k = el.dataset.opt;
         if (k === "install") state.opts.install = !state.opts.install; else state.opts[k] = +el.dataset.v;
@@ -786,9 +793,8 @@ async function demo() {
     $("#splash").classList.add("hide"); await wait(1400);
     await tap('[data-action="auth"][data-p="Google"]'); await wait(2200);
     await scrollActive(420); await scrollActive(-200);
-    await tap('.pin[data-id="w3"]'); await wait(1400);
-    await tap('[data-view="video"]'); await wait(3600);
-    await tap('[data-opt="len"][data-v="28"]'); await wait(700);
+    await tap('.pin[data-id="v5"]'); await wait(4200);
+    await tap('[data-opt="len"][data-v="30"]'); await wait(700);
     await tap('[data-opt="lace"][data-v="2"]'); await wait(700);
     await tap('[data-opt="install"]'); await wait(800);
     await tap('[data-action="add"]'); await wait(1300);
