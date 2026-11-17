@@ -1,0 +1,317 @@
+{
+  "name": "Camorra Hair — sign-ups & orders",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "camorra-hair-signup",
+        "responseMode": "onReceived",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "6d2e3983-df36-4bc5-b75a-476b54205bec",
+      "name": "Sign-up Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "b08a870a-9e9a-4d3c-8bcf-6d810eb4b899"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.email }}",
+        "subject": "=Welcome to Camorra Hair, {{ $json.body.name }} 💇🏾‍♀️",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;color:#2e1220\"><div style=\"background:#3a1426;color:#fff;padding:28px 24px;border-radius:16px 16px 0 0\"><div style=\"font-size:26px;font-weight:700;font-family:Georgia,serif\">camorra hair</div></div><div style=\"background:#fbf4f1;padding:24px;border-radius:0 0 16px 16px\"><h2 style=\"margin:0 0 12px\">Welcome, {{ $json.body.name }} 💇🏾‍♀️</h2><p style=\"line-height:1.6;margin:0 0 12px\">Thank you for joining Camorra Hair. You can now save your favourite units, check out in seconds and track every delivery live, right to your door.</p><p style=\"line-height:1.6;margin:0 0 20px\">Use code <b>WELCOME10</b> for 10% off your first unit.</p><a href=\"#\" style=\"display:inline-block;background:#b8436f;color:#fff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700\">Shop new units</a><p style=\"color:#93707e;font-size:12px;margin-top:24px\">Camorra Hair · Lekki, Lagos</p></div></div>",
+        "options": {
+          "senderName": "Camorra Hair",
+          "appendAttribution": false
+        }
+      },
+      "id": "3ec9e470-a790-4ee8-adb4-05bd1d794f48",
+      "name": "Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "camorra-hair-order",
+        "responseMode": "onReceived",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "0bc96024-3f52-465a-a656-648a949c5897",
+      "name": "Order Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        320
+      ],
+      "webhookId": "4db0288f-b83e-4d74-8a76-d11dc273b089"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.email }}",
+        "subject": "=Your Camorra Hair order #{{ $json.body.orderId }} is confirmed ✓",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;color:#2e1220\"><div style=\"background:#3a1426;color:#fff;padding:28px 24px;border-radius:16px 16px 0 0\"><div style=\"font-size:26px;font-weight:700;font-family:Georgia,serif\">camorra hair</div><div style=\"opacity:.8;margin-top:6px\">Order #{{ $json.body.orderId }} is confirmed ✓</div></div><div style=\"background:#fbf4f1;padding:24px;border-radius:0 0 16px 16px\"><h2 style=\"margin:0 0 12px\">Thank you, {{ $json.body.name }}!</h2><p style=\"line-height:1.6;margin:0 0 16px\">We have received your payment. Your unit is being styled and packed, and you can watch your rider live in the app once it is on the way.</p><div style=\"background:#fff;border:1px solid #efdde2;border-radius:12px;padding:16px;line-height:1.7\">{{ $json.body.itemsText.split(\"\\n\").join(\"<br>\") }}<hr style=\"border:0;border-top:1px dashed #efdde2;margin:12px 0\">Delivery: {{ $json.body.delivery }}<br>Payment: {{ $json.body.payment }}<br><b style=\"font-size:18px\">Total: {{ $json.body.totalText }}</b></div><p style=\"color:#93707e;font-size:12px;margin-top:24px\">Questions? Just reply to this email. · Camorra Hair, Lekki, Lagos</p></div></div>",
+        "options": {
+          "senderName": "Camorra Hair",
+          "appendAttribution": false
+        }
+      },
+      "id": "d0decef7-a286-44cb-86a0-988d8a58982d",
+      "name": "Order Confirmation Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        300,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "PASTE_YOUR_TELEGRAM_CHAT_ID",
+        "text": "=🛍️ New order #{{ $json.body.orderId }}\n👤 {{ $json.body.name }} ({{ $json.body.email }})\n\n{{ $json.body.itemsText }}\n\n🚚 {{ $json.body.delivery }}\n💳 {{ $json.body.payment }}\n💰 Total: {{ $json.body.totalText }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "0e1733f3-7461-4765-a0e5-58e5889e667e",
+      "name": "Notify Owner (Telegram)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "PASTE_YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Orders",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.body.ts }}",
+            "Order ID": "={{ $json.body.orderId }}",
+            "Customer": "={{ $json.body.name }}",
+            "Email": "={{ $json.body.email }}",
+            "Items": "={{ $json.body.itemsText }}",
+            "Units": "={{ $json.body.units }}",
+            "Subtotal": "={{ $json.body.subtotal }}",
+            "Delivery fee": "={{ $json.body.deliveryFee }}",
+            "Total": "={{ $json.body.total }}",
+            "Delivery": "={{ $json.body.delivery }}",
+            "Payment": "={{ $json.body.payment }}",
+            "Status": "Paid"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Order ID",
+              "displayName": "Order ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer",
+              "displayName": "Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Items",
+              "displayName": "Items",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Units",
+              "displayName": "Units",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Subtotal",
+              "displayName": "Subtotal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Delivery fee",
+              "displayName": "Delivery fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Delivery",
+              "displayName": "Delivery",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment",
+              "displayName": "Payment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9551d40b-cae7-4781-b01a-c197dc35415e",
+      "name": "Log Order to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        300,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "PASTE_OWNER_EMAIL",
+        "subject": "=New order #{{ $json.body.orderId }} · {{ $json.body.totalText }}",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:Arial,sans-serif;color:#2e1220\"><h2>New order #{{ $json.body.orderId }}</h2><p><b>{{ $json.body.name }}</b> · {{ $json.body.email }}</p><p>{{ $json.body.itemsText.split(\"\\n\").join(\"<br>\") }}</p><p>{{ $json.body.delivery }} · {{ $json.body.payment }}<br><b>Total: {{ $json.body.totalText }}</b></p></div>",
+        "options": {
+          "senderName": "Camorra Hair orders",
+          "appendAttribution": false
+        }
+      },
+      "id": "b0f514cd-7180-47d1-9d50-bcd66160f2d2",
+      "name": "Notify Owner (Gmail) — optional",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        300,
+        680
+      ],
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Sign-up Webhook": {
+      "main": [
+        [
+          {
+            "node": "Welcome Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Order Webhook": {
+      "main": [
+        [
+          {
+            "node": "Order Confirmation Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Owner (Telegram)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Order to Google Sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Owner (Gmail) — optional",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

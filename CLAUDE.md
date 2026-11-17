@@ -15,6 +15,8 @@ prototypes: no backend, no real payments, no real sign-in, no real rider GPS.
 | `wigs/index.html` | **Camorra Hair** wig shop app (concept brand). Login, masonry feed, product photo/video view, length/lace/density/install options, bag, checkout. After payment, **Track Order is the only screen**: rider moves on a map with live ETA until delivered |
 | `wigs/img/` | Wig photos `w1.jpg`–`w8.jpg` (placeholders from the owner's inspiration; replace with owned/licensed photos before public posts) |
 | `tools/record-demo.js` | Records an app's auto-play demo to MP4 |
+| `wigs/vid/` | Six real wig video units (`v1`–`v6`, mp4 + poster jpg); photo units stay photos |
+| `n8n/` | n8n workflow (welcome email, order email, Telegram alert, Google Sheet row) + `SETUP.md` |
 
 Each app is one self-contained HTML file (inline CSS + JS, Google Fonts only). No build step.
 
@@ -48,6 +50,13 @@ composited with ffmpeg overlays on the vertical recording.
 - Lip gloss shades: `const SHADES` in `app/index.html` (and palettes in `styles.css` for the landing page)
 - Theme colours: the CSS variables on `body` / `body.dark` at the top of each app
 - The code panel shows the real source between `// <code-view>` and `// </code-view>`
+
+## n8n automations (wig app)
+
+`const N8N = { signup, order }` near the top of `wigs/index.html` holds the webhook URLs (empty =
+off). `notify()` posts a `signup` event after the email-code sign-in and an `order` event in
+`placeOrder()`. Nothing is sent in `?demo` mode. Checkout collects the customer's name and email.
+Setup steps and payload shapes: `n8n/SETUP.md`.
 
 ## Notes for posts
 

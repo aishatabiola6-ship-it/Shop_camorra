@@ -340,11 +340,26 @@ function unitPrice(w, o) {
     return Math.round(total / 500) * 500;
 }
 
-// Once an order is confirmed, Track Order is the only screen
+// n8n automations: paste the Production URL of each Webhook node
+const N8N = {
+    signup: "",   // e.g. https://YOUR-N8N/webhook/camorra-hair-signup
+    order: "",    // e.g. https://YOUR-N8N/webhook/camorra-hair-order
+};
+function notify(kind, data) {
+    if (!N8N[kind] || params.has("demo")) return;
+    fetch(N8N[kind], { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: kind, ts: new Date().toISOString(), ...data }) }).catch(() => {});
+}
+
+// Once an order is paid: email + Telegram + Google Sheet (via n8n), then Track Order is the only screen
 function placeOrder() {
     const t = totals();
     state.tracking = { id: "CH-" + (20481 + state.orders), items: state.bag.slice(), total: t.total,
                        express: state.express, start: Date.now() };
+    notify("order", { orderId: state.tracking.id, name: state.contact.name, email: state.contact.email,
+        itemsText: state.bag.map(itemLine).join("\n"), units: t.units, subtotal: t.sub, deliveryFee: t.delivery,
+        total: t.total, totalText: naira(t.total), payment: state.pay === "card" ? "Card" : "Bank transfer",
+        delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow" });
     state.bag = []; state.orders += 1;
     saveTracking();
     goRoot("track");
@@ -362,7 +377,10 @@ const wig = (id) => WIGS.find((w) => w.id === id);
 const naira = (n) => "₦" + Math.round(n).toLocaleString("en-NG");
 const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 const state = { user: null, product: "v5", opts: null, qty: 1, bag: [], orders: 0,
-                liked: new Set(["w7"]), filter: "All", express: true, pay: "card", tracking: null };
+                liked: new Set(["w7"]), filter: "All", express: true, pay: "card", tracking: null,
+                contact: { name: "", email: "" } };
+const itemLine = (i) => { const w = wig(i.id), o = i.opts;
+    return `${w.name} · ${o.len}" · ${LACE[o.lace].name} · ${DENSITY[o.dens].name}${o.install ? " + install" : ""} × ${i.qty} — ${naira(i.price * i.qty)}`; };
 
 function totals() {
     const sub = state.bag.reduce((s, i) => s + i.price * i.qty, 0);
@@ -527,6 +545,11 @@ const R = {
         const t = totals();
         return `<div class="scroll">
             <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen serif" style="text-align:center">Checkout</div><div style="width:42px"></div></div>
+            <div class="label" style="margin-top:0">Contact</div>
+            <label class="field"><input id="co-name" autocomplete="name" placeholder="Full name" value="${esc(state.contact.name)}"></label>
+            <div style="height:8px"></div>
+            <label class="field"><input id="co-email" type="email" inputmode="email" autocomplete="email" placeholder="Email for your receipt" value="${esc(state.contact.email)}"></label>
+            <div class="err" id="co-err"></div>
             <div class="card-box"><div class="lbl">Deliver to</div><b>Home</b><div style="color:var(--muted);margin-top:4px">14 Admiralty Way, Lekki Phase 1, Lagos</div></div>
             <div class="label">Delivery</div>
             <button class="opt ${state.express ? "on" : ""}" data-action="ship" data-x="1"><span class="radio"></span><span class="grow">Express<small>Today, 3–6 PM</small></span><b>₦5,000</b></button>
@@ -658,7 +681,12 @@ function toast(msg, icon = "bag") {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
 }
-function signIn(user) { state.user = user; goRoot("home"); toast(user.via ? `Signed in with ${user.via}` : `Welcome, ${user.name}`, "check"); }
+function signIn(user) {
+    state.user = user;
+    if (user.via === "email") { state.contact = { name: user.name, email: user.email }; notify("signup", { name: user.name, email: user.email }); }
+    goRoot("home");
+    toast(user.via ? `Signed in with ${user.via}` : `Welcome, ${user.name}`, "check");
+}
 const nameFrom = (email) => { const n = email.split("@")[0].split(/[._\-+0-9]/)[0] || "gorgeous"; return n[0].toUpperCase() + n.slice(1).toLowerCase(); };
 const defaultOpts = (w) => ({ len: w.len, lace: 1, dens: 0, install: false });
 
@@ -692,6 +720,11 @@ app.addEventListener("click", (e) => {
     if (action === "ship") { state.express = el.dataset.x === "1"; render("checkout"); }
     if (action === "pay-m") { state.pay = el.dataset.m; render("checkout"); }
     if (action === "pay") {
+        const c = state.contact;
+        if (!c.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email.trim())) {
+            $("#co-err").textContent = "Add your name and a valid email for your receipt";
+            $("#checkout .scroll").scrollTop = 0; return;
+        }
         el.innerHTML = spinner("Confirming payment…");
         setTimeout(() => { toast("Order confirmed 🎉", "check"); placeOrder(); }, 1500);
     }
@@ -725,6 +758,10 @@ app.addEventListener("input", (e) => {
         $("#otp-err").textContent = "";
     }
     if (e.target.id === "email") $("#email-err").textContent = "";
+    if (e.target.id === "co-name" || e.target.id === "co-email") {
+        state.contact[e.target.id === "co-name" ? "name" : "email"] = e.target.value;
+        $("#co-err").textContent = "";
+    }
 });
 app.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
@@ -787,7 +824,8 @@ async function demo() {
     if (demoRunning) return;
     demoRunning = true;
     document.body.classList.add("demo");
-    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null });
+    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null,
+                           contact: { name: "Bella Rossi", email: "bella@example.com" } });
     goRoot("login");
     $("#splash").classList.remove("hide"); await wait(1800);
     $("#splash").classList.add("hide"); await wait(1400);
