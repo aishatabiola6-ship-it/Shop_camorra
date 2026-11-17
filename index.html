@@ -1,23 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-flavour="ciliegia">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Camorra</title>
+    <title>Shop Camorra — Lip Gloss</title>
+    <meta name="description" content="Shop Camorra lip gloss in three flavours: Ciliegia, Miele and Mora.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to Shop Camorra!</h1>
+    <!-- Fixed nav: uses --ink so it always matches the flavour on screen -->
+    <header class="nav">
+        <a href="#top" class="logo">camorra</a>
+        <nav class="nav-links">
+            <a href="#ciliegia">Ciliegia</a>
+            <a href="#miele">Miele</a>
+            <a href="#mora">Mora</a>
+        </nav>
+        <button class="bag" type="button" aria-label="Shopping bag">Bag <span class="bag-count">0</span></button>
     </header>
-    <main>
-        <section>
-            <h2>Your one-stop shop for everything!</h2>
-            <p>Explore our exclusive deals, unique products, and more!</p>
+
+    <!-- Floating gloss tube. It rotates on scroll and its gloss colour follows the flavour -->
+    <div class="tube-wrap" aria-hidden="true">
+        <svg class="tube" viewBox="0 0 120 420" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="bodyShine" x1="0" x2="1">
+                    <stop offset="0" stop-color="#fff" stop-opacity=".0"/>
+                    <stop offset=".25" stop-color="#fff" stop-opacity=".55"/>
+                    <stop offset=".45" stop-color="#fff" stop-opacity=".05"/>
+                    <stop offset="1" stop-color="#000" stop-opacity=".18"/>
+                </linearGradient>
+            </defs>
+            <!-- cap -->
+            <rect class="tube-cap" x="22" y="4" width="76" height="140" rx="14"/>
+            <rect x="22" y="4" width="76" height="140" rx="14" fill="url(#bodyShine)"/>
+            <!-- clear body with gloss inside -->
+            <rect class="tube-body" x="18" y="140" width="84" height="270" rx="20"/>
+            <rect class="tube-gloss" x="28" y="150" width="64" height="250" rx="14"/>
+            <rect x="18" y="140" width="84" height="270" rx="20" fill="url(#bodyShine)"/>
+            <text class="tube-label" x="60" y="275" transform="rotate(90 60 275)" text-anchor="middle">camorra</text>
+        </svg>
+    </div>
+
+    <main id="top">
+        <!-- Hero -->
+        <section class="hero" id="hero" data-flavour-section="ciliegia">
+            <h1 class="hero-word" aria-label="Camorra">camorra</h1>
+            <div class="hero-copy">
+                <p class="eyebrow">Lip gloss · 3 flavours</p>
+                <p class="hero-line">High shine. Zero stick.<br>Tastes like something you shouldn't.</p>
+                <a href="#ciliegia" class="btn btn-ghost">Scroll to taste ↓</a>
+            </div>
+            <div class="floaters" data-set="ciliegia"></div>
+        </section>
+
+        <!-- Flavour sections: the ids drive the colour switch -->
+        <section class="flavour" id="ciliegia">
+            <div class="floaters" data-set="ciliegia"></div>
+            <div class="flavour-copy">
+                <p class="eyebrow">01 / 03 · Cherry</p>
+                <h2 class="flavour-title">Ciliegia</h2>
+                <p class="flavour-desc">A glassy black-cherry gloss with a sheer red tint that deepens the longer you wear it.</p>
+                <ul class="tags">
+                    <li>Cherry seed oil</li>
+                    <li>Hyaluronic acid</li>
+                    <li>Vitamin E</li>
+                </ul>
+                <div class="buy">
+                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="flavour" id="miele">
+            <div class="floaters" data-set="miele"></div>
+            <div class="flavour-copy">
+                <p class="eyebrow">02 / 03 · Honey</p>
+                <h2 class="flavour-title">Miele</h2>
+                <p class="flavour-desc">Warm golden honey shine with a soft shimmer, like sunlight caught in a jar.</p>
+                <ul class="tags">
+                    <li>Manuka honey</li>
+                    <li>Shea butter</li>
+                    <li>Gold pearl</li>
+                </ul>
+                <div class="buy">
+                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="flavour" id="mora">
+            <div class="floaters" data-set="mora"></div>
+            <div class="flavour-copy">
+                <p class="eyebrow">03 / 03 · Blackberry</p>
+                <h2 class="flavour-title">Mora</h2>
+                <p class="flavour-desc">A moody plum-berry gloss with a cool violet sheen. Made for after dark.</p>
+                <ul class="tags">
+                    <li>Blackberry extract</li>
+                    <li>Jojoba oil</li>
+                    <li>Peptides</li>
+                </ul>
+                <div class="buy">
+                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
+                </div>
+            </div>
         </section>
     </main>
-    <footer>
+
+    <footer class="footer">
         <p>&copy; 2026 Shop Camorra. All rights reserved.</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

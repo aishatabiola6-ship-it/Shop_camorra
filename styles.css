@@ -1,0 +1,227 @@
+/* ------------------------------------------------------------
+   Step 2 — one palette per flavour as CSS variables
+   ------------------------------------------------------------ */
+:root,
+:root[data-flavour="ciliegia"] {
+    --bg: rgb(252, 230, 230);
+    --ink: rgb(150, 20, 42);
+    --gloss: rgba(196, 18, 52, 0.85);
+}
+:root[data-flavour="miele"] {
+    --bg: rgb(253, 240, 214);
+    --ink: rgb(140, 84, 14);
+    --gloss: rgba(232, 160, 40, 0.85);
+}
+:root[data-flavour="mora"] {
+    --bg: rgb(236, 228, 243);
+    --ink: rgb(70, 28, 92);
+    --gloss: rgba(110, 36, 120, 0.85);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+/* Step 5 — the page melts from one flavour to the next */
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    transition: background-color 600ms ease, color 600ms ease;
+    overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------------- Nav ---------------- */
+.nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px clamp(16px, 4vw, 48px);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.logo {
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    text-transform: none;
+}
+.nav-links { display: flex; gap: clamp(14px, 3vw, 36px); font-weight: 500; }
+.nav-links a { opacity: 0.6; transition: opacity 200ms; }
+.nav-links a:hover,
+.nav-links a.active { opacity: 1; }
+.bag {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    background: none;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: border-color 600ms, color 600ms;
+}
+.bag-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    margin-left: 4px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 11px;
+    transition: background-color 600ms, color 600ms, transform 200ms;
+}
+.bag-count.bump { transform: scale(1.35); }
+
+/* ---------------- Tube ---------------- */
+.tube-wrap {
+    position: fixed;
+    top: 50%;
+    right: clamp(24px, 12vw, 220px);
+    z-index: 20;
+    width: clamp(90px, 10vw, 140px);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+.tube {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.18));
+    will-change: transform;
+}
+.tube-cap { fill: var(--ink); transition: fill 600ms; }
+.tube-body { fill: rgba(255, 255, 255, 0.55); stroke: rgba(0, 0, 0, 0.08); }
+.tube-gloss { fill: var(--gloss); transition: fill 600ms; }
+.tube-label {
+    font-family: "Inter", sans-serif;
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -1px;
+    fill: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------------- Sections ---------------- */
+section {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 120px clamp(16px, 6vw, 96px) 80px;
+}
+
+.hero { flex-direction: column; justify-content: center; align-items: flex-start; }
+.hero-word {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(90px, 24vw, 380px);
+    font-weight: 900;
+    letter-spacing: -0.07em;
+    line-height: 1;
+    opacity: 0.12;
+    white-space: nowrap;
+    user-select: none;
+}
+.hero-copy { position: relative; z-index: 5; max-width: 440px; }
+.hero-line {
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 12px 0 28px;
+}
+
+.eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.flavour-copy { position: relative; z-index: 5; max-width: 520px; }
+.flavour-title {
+    font-size: clamp(72px, 13vw, 200px);
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    margin: 10px 0 20px;
+}
+.flavour-desc { font-size: 17px; line-height: 1.55; max-width: 400px; opacity: 0.85; }
+
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 32px; }
+.tags li {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    opacity: 0.8;
+}
+
+/* ---------------- Buttons ---------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font: 500 15px/1 "Inter", sans-serif;
+    padding: 16px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 600ms, color 600ms, border-color 600ms, transform 150ms;
+}
+.btn:active { transform: scale(0.97); }
+.btn-ghost { border: 1.5px solid var(--ink); }
+
+/* Step 8 — Add to bag uses --ink so it always matches the flavour */
+.btn-ink { background: var(--ink); color: var(--bg); border: none; }
+.btn-ink .price {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 13px;
+    transition: background-color 600ms, color 600ms;
+}
+.btn-ink.added { animation: pop 400ms ease; }
+@keyframes pop { 50% { transform: scale(1.06); } }
+
+/* ---------------- Floating ingredients (Steps 6 & 7) ---------------- */
+.floaters { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.floater {
+    position: absolute;
+    will-change: transform;
+}
+.floater svg { width: 100%; height: auto; display: block; }
+.floater.far { filter: blur(2px); opacity: 0.75; }
+.floater.near { filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.15)); z-index: 3; }
+
+/* ---------------- Footer ---------------- */
+.footer { padding: 40px clamp(16px, 6vw, 96px); font-size: 13px; opacity: 0.7; }
+
+/* ---------------- Mobile ---------------- */
+@media (max-width: 760px) {
+    .nav-links { display: none; }
+    .tube-wrap { right: 16px; top: auto; bottom: 24px; transform: none; width: 64px; opacity: 0.9; }
+    .floater.far { filter: blur(1px); }
+    .floater.mobile-hide { display: none; }
+    .flavour-desc { font-size: 16px; }
+}
+
+/* ---------------- Reduced motion: keep only the colour fade ---------------- */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .floater, .tube { transform: none !important; }
+}
