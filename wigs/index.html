@@ -254,6 +254,29 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .rider .call svg { width: 20px; height: 20px; }
 .rider .btn-main { flex: none; height: 44px; padding: 0 16px; font-size: 14px; background: #fff; color: #3a1426; }
 
+/* Login modes, order placed, active-order banner */
+.login-hero.small { height: 190px; }
+.pw { position: relative; display: block; margin-top: 10px; }
+.pw button { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: 600; color: var(--muted); }
+.row2 { display: flex; justify-content: flex-end; margin: 4px 2px 12px; }
+.switch-mode { text-align: center; font-size: 14px; color: var(--muted); margin-top: 16px; }
+.done-wrap { text-align: center; padding-top: 30px; }
+.done-check { width: 96px; height: 96px; margin: 0 auto 18px; }
+.done-check circle { stroke-dasharray: 280; stroke-dashoffset: 280; animation: draw 700ms ease forwards; }
+.done-check path { stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw 400ms 500ms ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.done-wrap h2 { font-size: 30px; }
+.done-wrap p { color: var(--muted); font-size: 14px; margin-top: 8px; line-height: 1.5; }
+.done-card { display: flex; gap: 12px; align-items: center; text-align: left; margin: 24px 0 18px; padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.done-card .info { flex: 1; }
+.done-card b { display: block; font-size: 15px; }
+.done-card span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+.live-order { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px 14px; border-radius: 18px; background: #3a1426; color: #fff; margin-bottom: 16px; }
+.live-order .dotlive { width: 10px; height: 10px; border-radius: 50%; background: #ff6d8f; animation: blink 1.2s infinite; flex: none; }
+.live-order b { display: block; font-size: 14px; }
+.live-order span { display: block; font-size: 12px; opacity: .75; }
+.live-order .go2 { margin-left: auto; font-size: 13px; font-weight: 700; padding: 8px 12px; border-radius: 999px; background: #fff; color: #3a1426; white-space: nowrap; }
+
 /* Toast + demo tap */
 .toast { position: absolute; left: 50%; top: 64px; z-index: 45; transform: translate(-50%, -30px); opacity: 0; padding: 10px 16px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font-size: 13px; font-weight: 600; display: flex; gap: 8px; align-items: center; white-space: nowrap; transition: all 300ms; }
 .toast.show { transform: translate(-50%, 0); opacity: 1; }
@@ -410,6 +433,7 @@ body.be-mode .device-slot { grid-area: phone; align-self: center; }
                 <section class="screen" id="product"></section>
                 <section class="screen" id="bag"></section>
                 <section class="screen" id="checkout"></section>
+                <section class="screen" id="placed"></section>
                 <section class="screen" id="track"></section>
 
                 <section class="screen mailapp" id="mail"></section>
@@ -544,7 +568,7 @@ function placeOrder(pay = {}) {
         delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow" });
     state.bag = []; state.orders += 1;
     saveTracking();
-    goRoot("track");
+    goRoot("placed");
 }
 // </code-view>
 
@@ -626,16 +650,21 @@ function mapSVG() {
 // ---------- Screens ----------
 const R = {
     login() {
+        const isNew = state.authMode === "signup";
         return `<div class="scroll">
-            <div class="login-hero"><video src="${wig("v1").video}" poster="${wig("v1").img}" autoplay muted loop playsinline aria-hidden="true"></video><span class="brand serif">camorra hair</span></div>
-            <h1 class="login-title serif">Welcome, gorgeous</h1>
-            <p class="login-sub">Sign in to save your units and track every delivery live.</p>
+            <div class="login-hero small"><video src="${wig("v1").video}" poster="${wig("v1").img}" autoplay muted loop playsinline aria-hidden="true"></video><span class="brand serif">camorra hair</span></div>
+            <h1 class="login-title serif">${isNew ? "Create your account" : "Welcome back"}</h1>
+            <p class="login-sub">${isNew ? "We'll email you a 6-digit code to confirm it's you." : "Log in to shop and track your orders."}</p>
+            <label class="field"><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" value="${esc(state.pendingEmail || "")}"></label>
+            <label class="field pw"><input id="password" type="password" autocomplete="${isNew ? "new-password" : "current-password"}" placeholder="${isNew ? "Create a password (6+ characters)" : "Password"}"><button type="button" data-action="showpw">Show</button></label>
+            ${isNew ? "" : `<div class="row2"><button class="link" data-action="forgot">Forgot password?</button></div>`}
+            <div class="err" id="email-err"></div>
+            <button class="btn-main pink full" data-action="${isNew ? "email" : "login"}">${isNew ? "Create account" : "Log in"}</button>
+            <div class="or">or</div>
             <button class="auth apple" data-action="auth" data-p="Apple">${I.apple} Continue with Apple</button>
             <button class="auth google" data-action="auth" data-p="Google">${I.google} Continue with Google</button>
-            <div class="or">or</div>
-            <label class="field"><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" value="${esc(state.pendingEmail || "")}"></label>
-            <div class="err" id="email-err"></div>
-            <button class="btn-main pink full" data-action="email">Continue with email</button>
+            <p class="switch-mode">${isNew ? `Already have an account? <button class="link" data-action="mode" data-m="login">Log in</button>`
+                                           : `New to Camorra Hair? <button class="link" data-action="mode" data-m="signup">Create an account</button>`}</p>
             <button class="skip" data-action="guest">Skip for now</button>
         </div>`;
     },
@@ -660,6 +689,7 @@ const R = {
                 <div><div class="title-sm">Hi ${esc(state.user ? state.user.name : "gorgeous")} ✨</div><div class="title-lg serif">Find your unit</div></div>
                 ${bagBtn()}
             </div>
+            ${state.tracking ? `<button class="live-order" data-action="track"><span class="dotlive"></span><span><b>Order #${state.tracking.id}</b><span>Your units are on the way</span></span><span class="go2">Track order</span></button>` : ""}
             <div class="search">${I.search} Search units, lengths, colours…</div>
             <div class="hero">
                 <img src="${wig("w7").img}" alt="">
@@ -675,7 +705,7 @@ const R = {
                     <div class="sub">${w.len}" · ${w.style} · <b style="color:var(--text)">${naira(w.price)}</b></div>
                 </div>`).join("")}</div>
         </div>
-        <nav class="tabbar"><button class="on" aria-label="Home">${I.home}</button><button aria-label="Shop">${I.grid}</button><button aria-label="Saved">${I.heart}</button><button aria-label="Profile">${I.user}</button></nav>`;
+        <nav class="tabbar"><button class="on" aria-label="Home">${I.home}</button><button ${state.tracking ? 'data-action="track"' : ""} aria-label="Orders">${I.bag}</button><button aria-label="Saved">${I.heart}</button><button aria-label="Profile">${I.user}</button></nav>`;
     },
     product() {
         const w = wig(state.product), o = state.opts;
@@ -754,12 +784,24 @@ const R = {
             <div class="mail-body">${m.html}</div>
         </div>`;
     },
+    placed() {
+        const tr = state.tracking, units = tr.items.reduce((n, i) => n + i.qty, 0);
+        return `<div class="scroll"><div class="done-wrap">
+            <svg class="done-check" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" style="stroke:var(--accent)" stroke-width="6"/><path d="M30 52 l14 14 l26 -30" fill="none" style="stroke:var(--accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h2 class="serif">Order placed!</h2>
+            <p>Payment received. We've emailed your receipt to<br><b>${esc(state.contact.email || "your inbox")}</b></p>
+            <div class="done-card"><div class="stack">${tr.items.slice(0, 3).map((i) => thumb(wig(i.id))).join("")}</div>
+                <div class="info"><b>Order #${tr.id}</b><span>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</span><span>${tr.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow"}</span></div></div>
+            <button class="btn-main pink full" data-action="track">Track order</button>
+            <button class="btn-ghost" data-action="shop">Back to shop</button>
+        </div></div>`;
+    },
     track() {
         const tr = state.tracking;
         const units = tr.items.reduce((n, i) => n + i.qty, 0);
         const imgs = tr.items.slice(0, 3).map((i) => thumb(wig(i.id))).join("");
         return `<div class="scroll" style="padding-bottom:150px">
-            <div class="topbar"><div class="h-screen serif">Track Order<small>#${tr.id}</small></div></div>
+            <div class="topbar"><button class="icon-btn" data-action="shop" aria-label="Back to shop">${I.back}</button><div class="h-screen serif">Track Order<small>#${tr.id}</small></div></div>
             <div class="order-card"><div class="stack">${imgs}</div>
                 <div class="info"><b>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</b><span>${tr.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow"}</span></div>
                 <span class="status" id="tr-status">Confirmed</span></div>
@@ -846,6 +888,7 @@ function go(name) {
     const sc = next.querySelector(".scroll"); if (sc) sc.scrollTop = 0;
     requestAnimationFrame(() => { cur.classList.remove("active"); cur.classList.add("prev"); next.classList.add("active"); });
     stack.push(name);
+    if (name === "track") setTimeout(() => { trackStage = -1; requestAnimationFrame(trackTick); }, 60);
 }
 function back() {
     if (stack.length < 2) return;
@@ -875,11 +918,30 @@ function toast(msg, icon = "bag") {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
 }
+// Accounts are kept on this device (password stored as a SHA-256 hash). Real cross-device
+// accounts need an auth service such as Firebase Auth or Supabase Auth.
+async function hashPw(email, pw) {
+    const data = new TextEncoder().encode(email.toLowerCase() + "|" + pw);
+    const buf = await crypto.subtle.digest("SHA-256", data);
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+function accounts() { try { return JSON.parse(localStorage.getItem("camorraHair.accounts") || "{}"); } catch (e) { return {}; } }
+async function saveAccount(email, pw) {
+    if (!pw || params.has("demo")) return;
+    const a = accounts(); a[email.toLowerCase()] = await hashPw(email, pw);
+    try { localStorage.setItem("camorraHair.accounts", JSON.stringify(a)); } catch (e) {}
+}
+async function checkAccount(email, pw) {
+    const h = accounts()[email.toLowerCase()];
+    if (!h) return "none";
+    return h === (await hashPw(email, pw)) ? "ok" : "wrong";
+}
 function signIn(user) {
     state.user = user;
     if (user.via === "email") { state.contact = { name: user.name, email: user.email }; notify("signup", { name: user.name, email: user.email }); }
     goRoot("home");
-    toast(user.via ? `Signed in with ${user.via}` : `Welcome, ${user.name}`, "check");
+    if (user.via === "password") state.contact = { name: user.name, email: user.email };
+    toast(user.via === "password" ? `Welcome back, ${user.name} 💕` : user.via ? `Signed in with ${user.via}` : `Welcome, ${user.name}`, "check");
 }
 const nameFrom = (email) => { const n = email.split("@")[0].split(/[._\-+0-9]/)[0] || "gorgeous"; return n[0].toUpperCase() + n.slice(1).toLowerCase(); };
 const defaultOpts = (w) => ({ len: w.len, lace: 1, dens: 0, install: false });
@@ -925,16 +987,40 @@ app.addEventListener("click", (e) => {
         else setTimeout(() => { toast("Order confirmed 🎉", "check"); placeOrder(); }, 1500);   // demo / no key yet
     }
     if (action === "call") toast("Calling Tunde…", "phone");
-    if (action === "done") { clearTracking(); goRoot("home"); }
+    if (action === "done") { clearTracking(); goRoot("home"); toast("Enjoy your new unit 💕", "check"); }
+    if (action === "track") { if (state.tracking) go("track"); }
+    if (action === "shop") goRoot("home");
+    if (action === "mode") { state.authMode = el.dataset.m; state.pendingEmail = ($("#email") || {}).value || ""; render("login"); }
+    if (action === "showpw") { const pw = $("#password"); pw.type = pw.type === "password" ? "text" : "password"; el.textContent = pw.type === "password" ? "Show" : "Hide"; }
+    if (action === "forgot") {
+        const v = $("#email").value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { $("#email-err").textContent = "Enter your email first, then tap Forgot password"; return; }
+        state.authMode = "signup"; state.pendingEmail = v; render("login");
+        $("#email-err").textContent = "Set a new password below. We'll email you a code to confirm.";
+    }
+    if (action === "login") {
+        const v = $("#email").value.trim(), pw = $("#password").value;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { $("#email-err").textContent = "Enter a valid email address"; return; }
+        if (pw.length < 6) { $("#email-err").textContent = "Enter your password (6+ characters)"; return; }
+        el.innerHTML = spinner("Logging in…");
+        const ok = () => setTimeout(() => signIn({ name: nameFrom(v), email: v, via: "password" }), 700);
+        if (params.has("demo")) return ok();
+        checkAccount(v, pw).then((r) => {
+            if (r === "ok") return ok();
+            render("login"); $("#email").value = v;
+            $("#email-err").textContent = r === "none" ? "No account for this email on this device yet. Tap Create an account." : "That password isn't right. Try again or tap Forgot password.";
+        });
+    }
     if (action === "auth") {
         const p = el.dataset.p;
         el.innerHTML = spinner("Signing in…");
         setTimeout(() => signIn({ name: "Bella", email: p === "Apple" ? "bella@icloud.com" : "bella@gmail.com", via: p }), 1100);
     }
     if (action === "email") {
-        const v = $("#email").value.trim();
+        const v = $("#email").value.trim(), pw = $("#password") ? $("#password").value : "";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { $("#email-err").textContent = "Enter a valid email address"; return; }
-        state.pendingEmail = v;
+        if (pw.length < 6) { $("#email-err").textContent = "Create a password with at least 6 characters"; return; }
+        state.pendingEmail = v; state.pendingPw = pw;
         const toCode = () => { go("code"); setTimeout(() => $("#otp") && $("#otp").focus({ preventScroll: true }), 500); };
         if (!realCodes()) { state.otp = null; toCode(); return; }                // demo: any 6 digits
         el.innerHTML = spinner("Sending code…");
@@ -946,7 +1032,7 @@ app.addEventListener("click", (e) => {
         const c = $("#otp").value;
         if (c.length < 6) { $("#otp-err").textContent = "Enter the 6-digit code"; return; }
         el.innerHTML = spinner("Verifying…");
-        const done = () => signIn({ name: nameFrom(state.pendingEmail), email: state.pendingEmail, via: "email" });
+        const done = () => { saveAccount(state.pendingEmail, state.pendingPw || ""); signIn({ name: nameFrom(state.pendingEmail), email: state.pendingEmail, via: "email" }); };
         if (!state.otp) { setTimeout(done, 900); return; }                       // demo: any 6 digits
         ask("verify", { email: state.pendingEmail, code: c, exp: state.otp.exp, sig: state.otp.sig })
             .then((r) => (r.ok ? done() : Promise.reject()))
@@ -1092,7 +1178,7 @@ addEventListener("resize", fit); fit();
 if (params.has("dark")) document.body.classList.add("dark");
 let saved = null;
 if (!params.has("demo")) { try { saved = JSON.parse(localStorage.getItem("camorraHair.track") || "null"); } catch (e) {} }
-if (saved) { state.tracking = saved; state.user = { name: "gorgeous" }; goRoot("track"); }   // an order is live: only Track Order
+if (saved) { state.tracking = saved; state.user = { name: "gorgeous" }; goRoot("home"); }   // live order: banner + Orders tab open tracking
 else render("login");
 setTimeout(() => $("#splash").classList.add("hide"), 1600);
 
@@ -1220,20 +1306,11 @@ async function demoFull() {
     goRoot("login");
     $("#splash").classList.remove("hide"); await wait(1800);
     $("#splash").classList.add("hide"); await wait(1300);
-    // 1. Sign in with email → code arrives by mail
-    await tap("#email"); await typeInto("#email", "bella.rossi@example.com"); await wait(400);
-    await tap('[data-action="email"]');
-    if (BE.on) BE.code();
-    await wait(BE.on ? 2100 : 1600);
-    const code = "482913";
-    notifTap = () => openMail("Your Camorra Hair code: " + code, MAIL.code(code));
-    showNotif("Camorra Hair", "Your Camorra Hair code: " + code); await wait(1600);
-    await tap($("#notif")); await wait(700);
-    await wait(2800);
-    await tap('[data-action="back"]'); await wait(900);
-    await typeInto("#otp", code, 170); await wait(400);
-    await tap('[data-action="verify"]'); await wait(1500);
-    showNotif("Camorra Hair", "Welcome to Camorra Hair, Bella 💇🏾‍♀️"); await wait(2600); hideNotif();
+    // 1. Returning customer logs in with email + password
+    state.authMode = "login"; render("login");
+    await tap("#email"); await typeInto("#email", "bella.rossi@example.com"); await wait(300);
+    await tap("#password"); await typeInto("#password", "camorra2026", 90); await wait(400);
+    await tap('[data-action="login"]'); await wait(2200);
     // 2. Explore the store
     await wait(600);
     await scrollActive(420); await wait(500);
@@ -1268,16 +1345,18 @@ async function demoFull() {
     // 3. Pay by bank transfer with Flutterwave
     await tap('[data-action="pay"]'); await wait(3600);
     await tap($("#ps-pay")); await wait(5600);
-    // 4. Receipt email arrives on Track Order
-    await wait(BE.on ? 3600 : 1500);
+    // 4. Order placed: the receipt lands in her inbox
+    await wait(1800);
     const o = state.lastOrderMail;
     notifTap = () => openMail(`Your Camorra Hair order #${o.id} is confirmed ✓`, MAIL.order(o));
     showNotif("Camorra Hair", `Your Camorra Hair order #${o.id} is confirmed ✓`); await wait(1700);
-    await tap($("#notif")); await wait(1200);
-    $("#mail .scroll").scrollBy({ top: 260, behavior: "smooth" }); await wait(3200);
-    await tap('[data-action="back"]'); await wait(800);
-    // 5. Rider rides in, delivered
-    await wait(Math.max(0, state.tracking.start + PHASE.out + PHASE.ride + PHASE.drop + 1500 - Date.now()));
+    await tap($("#notif")); await wait(1500);
+    await glide($("#mail .scroll"), 300); await wait(2600);
+    await tap('[data-action="back"]'); await wait(1200);
+    // 5. Track the order until it's received, then close it
+    await tap('.btn-main[data-action="track"]'); await wait(1000);
+    await wait(Math.max(0, state.tracking.start + PHASE.out + PHASE.ride + PHASE.drop + 1800 - Date.now()));
+    await tap('[data-action="done"]'); await wait(2200);
     state.demoFull = false;
     if (!params.has("demo")) document.body.classList.remove("demo");
     document.body.classList.add("demo-done");
