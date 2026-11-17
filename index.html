@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-flavour="ciliegia">
+<html lang="en" data-flavour="fragola">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Camorra — Lip Gloss</title>
-    <meta name="description" content="Shop Camorra lip gloss in three flavours: Ciliegia, Miele and Mora.">
+    <meta name="description" content="Shop Camorra lip gloss in three flavours: Fragola, Caramello and Lampone.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -15,92 +15,138 @@
     <header class="nav">
         <a href="#top" class="logo">camorra</a>
         <nav class="nav-links">
-            <a href="#ciliegia">Ciliegia</a>
-            <a href="#miele">Miele</a>
-            <a href="#mora">Mora</a>
+            <a href="#fragola">Fragola</a>
+            <a href="#caramello">Caramello</a>
+            <a href="#lampone">Lampone</a>
         </nav>
         <button class="bag" type="button" aria-label="Shopping bag">Bag <span class="bag-count">0</span></button>
     </header>
 
-    <!-- Floating gloss tube. It rotates on scroll and its gloss colour follows the flavour -->
+    <!-- Floating product. Each flavour has its own packaging; the one matching
+         the current flavour fades in. -->
     <div class="tube-wrap" aria-hidden="true">
-        <svg class="tube" viewBox="0 0 120 420" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="bodyShine" x1="0" x2="1">
-                    <stop offset="0" stop-color="#fff" stop-opacity=".0"/>
-                    <stop offset=".25" stop-color="#fff" stop-opacity=".55"/>
-                    <stop offset=".45" stop-color="#fff" stop-opacity=".05"/>
-                    <stop offset="1" stop-color="#000" stop-opacity=".18"/>
-                </linearGradient>
-            </defs>
-            <!-- cap -->
-            <rect class="tube-cap" x="22" y="4" width="76" height="140" rx="14"/>
-            <rect x="22" y="4" width="76" height="140" rx="14" fill="url(#bodyShine)"/>
-            <!-- clear body with gloss inside -->
-            <rect class="tube-body" x="18" y="140" width="84" height="270" rx="20"/>
-            <rect class="tube-gloss" x="28" y="150" width="64" height="250" rx="14"/>
-            <rect x="18" y="140" width="84" height="270" rx="20" fill="url(#bodyShine)"/>
-            <text class="tube-label" x="60" y="275" transform="rotate(90 60 275)" text-anchor="middle">camorra</text>
-        </svg>
+        <div class="tube">
+            <svg class="pkg" data-pkg="fragola" viewBox="0 0 120 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="shine" x1="0" x2="1">
+                        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                        <stop offset=".22" stop-color="#fff" stop-opacity=".6"/>
+                        <stop offset=".42" stop-color="#fff" stop-opacity=".05"/>
+                        <stop offset="1" stop-color="#000" stop-opacity=".16"/>
+                    </linearGradient>
+                </defs>
+                <!-- glossy squeeze tube: crimped end, body, white cap -->
+                <rect x="14" y="6" width="92" height="34" rx="4" fill="#e04f86"/>
+                <g stroke="#c43a70" stroke-width="2"><line x1="14" y1="16" x2="106" y2="16"/><line x1="14" y1="24" x2="106" y2="24"/><line x1="14" y1="32" x2="106" y2="32"/></g>
+                <path d="M16 40 H104 L98 320 H22 Z" fill="#f478a8"/>
+                <rect x="22" y="318" width="76" height="96" rx="10" fill="#fbf7f2"/>
+                <path d="M16 40 H104 L98 320 H22 Z" fill="url(#shine)"/>
+                <rect x="22" y="318" width="76" height="96" rx="10" fill="url(#shine)"/>
+                <text class="pkg-label" x="60" y="180" transform="rotate(90 60 180)" text-anchor="middle" fill="#fff">camorra</text>
+            </svg>
+
+            <svg class="pkg" data-pkg="caramello" viewBox="0 0 120 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="shine2" x1="0" x2="1">
+                        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                        <stop offset=".22" stop-color="#fff" stop-opacity=".45"/>
+                        <stop offset=".42" stop-color="#fff" stop-opacity=".05"/>
+                        <stop offset="1" stop-color="#000" stop-opacity=".16"/>
+                    </linearGradient>
+                </defs>
+                <!-- frosted bottle with a cream cap -->
+                <rect x="24" y="4" width="72" height="150" rx="12" fill="#efe5d4"/>
+                <rect x="24" y="4" width="72" height="150" rx="12" fill="url(#shine2)"/>
+                <rect x="16" y="150" width="88" height="262" rx="18" fill="#a8684c"/>
+                <rect x="16" y="150" width="88" height="262" rx="18" fill="#fff" opacity=".18"/>
+                <rect x="16" y="150" width="88" height="262" rx="18" fill="url(#shine2)"/>
+                <text class="pkg-label" x="60" y="282" transform="rotate(90 60 282)" text-anchor="middle" fill="#f6ebe0">camorra</text>
+            </svg>
+
+            <svg class="pkg" data-pkg="lampone" viewBox="0 0 120 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="chrome" x1="0" x2="1">
+                        <stop offset="0" stop-color="#8a8a8e"/>
+                        <stop offset=".2" stop-color="#f7f7f9"/>
+                        <stop offset=".45" stop-color="#b9b9be"/>
+                        <stop offset=".7" stop-color="#ffffff"/>
+                        <stop offset="1" stop-color="#76767b"/>
+                    </linearGradient>
+                    <linearGradient id="shine3" x1="0" x2="1">
+                        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                        <stop offset=".22" stop-color="#fff" stop-opacity=".55"/>
+                        <stop offset=".42" stop-color="#fff" stop-opacity=".05"/>
+                        <stop offset="1" stop-color="#000" stop-opacity=".18"/>
+                    </linearGradient>
+                </defs>
+                <!-- clear bottle with a chrome dome cap -->
+                <path d="M26 150 V60 A34 34 0 0 1 94 60 V150 Z" fill="url(#chrome)"/>
+                <rect x="20" y="148" width="80" height="22" rx="4" fill="url(#chrome)"/>
+                <path d="M18 170 H102 V360 A42 42 0 0 1 18 360 Z" fill="#fff" opacity=".6"/>
+                <path d="M28 178 H92 V356 A32 32 0 0 1 28 356 Z" fill="#9e2a50"/>
+                <path d="M18 170 H102 V360 A42 42 0 0 1 18 360 Z" fill="url(#shine3)"/>
+                <text class="pkg-label" x="60" y="290" transform="rotate(90 60 290)" text-anchor="middle" fill="#fff">camorra</text>
+            </svg>
+        </div>
     </div>
 
     <main id="top">
         <!-- Hero -->
-        <section class="hero" id="hero" data-flavour-section="ciliegia">
+        <section class="hero" id="hero" data-flavour-section="fragola">
             <h1 class="hero-word" aria-label="Camorra">camorra</h1>
             <div class="hero-copy">
                 <p class="eyebrow">Lip gloss · 3 flavours</p>
                 <p class="hero-line">High shine. Zero stick.<br>Tastes like something you shouldn't.</p>
-                <a href="#ciliegia" class="btn btn-ghost">Scroll to taste ↓</a>
+                <a href="#fragola" class="btn btn-ghost">Scroll to taste ↓</a>
             </div>
-            <div class="floaters" data-set="ciliegia"></div>
+            <div class="floaters" data-set="fragola"></div>
         </section>
 
         <!-- Flavour sections: the ids drive the colour switch -->
-        <section class="flavour" id="ciliegia">
-            <div class="floaters" data-set="ciliegia"></div>
+        <section class="flavour" id="fragola">
+            <div class="floaters" data-set="fragola"></div>
             <div class="flavour-copy">
-                <p class="eyebrow">01 / 03 · Cherry</p>
-                <h2 class="flavour-title">Ciliegia</h2>
-                <p class="flavour-desc">A glassy black-cherry gloss with a sheer red tint that deepens the longer you wear it.</p>
+                <p class="eyebrow">01 / 03 · Strawberry</p>
+                <h2 class="flavour-title">Fragola</h2>
+                <p class="flavour-desc">A candy-pink squeeze gloss with a juicy, glassy finish. Sweet, sheer and easy to wear every day.</p>
                 <ul class="tags">
-                    <li>Cherry seed oil</li>
-                    <li>Hyaluronic acid</li>
-                    <li>Vitamin E</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="miele">
-            <div class="floaters" data-set="miele"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">02 / 03 · Honey</p>
-                <h2 class="flavour-title">Miele</h2>
-                <p class="flavour-desc">Warm golden honey shine with a soft shimmer, like sunlight caught in a jar.</p>
-                <ul class="tags">
-                    <li>Manuka honey</li>
-                    <li>Shea butter</li>
-                    <li>Gold pearl</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="mora">
-            <div class="floaters" data-set="mora"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">03 / 03 · Blackberry</p>
-                <h2 class="flavour-title">Mora</h2>
-                <p class="flavour-desc">A moody plum-berry gloss with a cool violet sheen. Made for after dark.</p>
-                <ul class="tags">
-                    <li>Blackberry extract</li>
-                    <li>Jojoba oil</li>
+                    <li>Strawberry extract</li>
                     <li>Peptides</li>
+                    <li>Shea butter</li>
+                </ul>
+                <div class="buy">
+                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="flavour" id="caramello">
+            <div class="floaters" data-set="caramello"></div>
+            <div class="flavour-copy">
+                <p class="eyebrow">02 / 03 · Caramel</p>
+                <h2 class="flavour-title">Caramello</h2>
+                <p class="flavour-desc">A warm caramel-nude gloss that sits soft on the lips. Your lips, but better, with a hint of vanilla.</p>
+                <ul class="tags">
+                    <li>Vanilla oil</li>
+                    <li>Hyaluronic acid</li>
+                    <li>Jojoba</li>
+                </ul>
+                <div class="buy">
+                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="flavour" id="lampone">
+            <div class="floaters" data-set="lampone"></div>
+            <div class="flavour-copy">
+                <p class="eyebrow">03 / 03 · Raspberry</p>
+                <h2 class="flavour-title">Lampone</h2>
+                <p class="flavour-desc">A deep raspberry-rose gloss with a high-shine, plumping feel. Made for after dark.</p>
+                <ul class="tags">
+                    <li>Raspberry seed oil</li>
+                    <li>Vitamin E</li>
+                    <li>Plumping complex</li>
                 </ul>
                 <div class="buy">
                     <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>

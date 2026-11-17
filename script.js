@@ -1,50 +1,50 @@
 // ------------------------------------------------------------
 // Placeholder ingredient art (inline SVG). Swap these for real
-// transparent PNGs later, e.g. <img src="assets/ciliegia/cherry.png">
+// transparent PNGs later, e.g. <img src="assets/fragola/strawberry.png">
 // ------------------------------------------------------------
 const ART = {
-    cherry: `<svg viewBox="0 0 100 110"><path d="M50 8 C46 30 34 46 28 62 M50 8 C56 32 66 46 72 60" stroke="#4f6b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M50 8 C62 2 76 6 82 14 C70 18 58 16 50 8Z" fill="#6f9a3a"/><circle cx="28" cy="78" r="22" fill="#a3122e"/><circle cx="72" cy="76" r="22" fill="#c2183a"/><circle cx="21" cy="70" r="5" fill="#fff" opacity=".5"/><circle cx="65" cy="68" r="5" fill="#fff" opacity=".5"/></svg>`,
-    cherryHalf: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#8f0f28"/><circle cx="50" cy="50" r="36" fill="#d0304e"/><ellipse cx="50" cy="52" rx="12" ry="15" fill="#f2c9a6"/></svg>`,
+    strawberry: `<svg viewBox="0 0 100 110"><path d="M50 30 C80 22 98 44 90 70 C82 94 62 108 50 108 C38 108 18 94 10 70 C2 44 20 22 50 30Z" fill="#e8355a"/><g fill="#ffd36b">${[[34,50],[50,46],[66,50],[28,66],[44,64],[58,64],[72,66],[38,80],[52,82],[64,80],[48,96]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="2" ry="3"/>`).join("")}</g><path d="M50 32 L34 18 L46 24 L50 8 L54 24 L66 18 Z" fill="#5f9a3a"/><ellipse cx="30" cy="50" rx="6" ry="10" fill="#fff" opacity=".35"/></svg>`,
+    strawberryHalf: `<svg viewBox="0 0 100 100"><path d="M50 8 C82 8 96 36 88 62 C80 86 62 96 50 96 C38 96 20 86 12 62 C4 36 18 8 50 8Z" fill="#e8355a"/><path d="M50 18 C74 18 84 40 78 60 C72 78 60 86 50 86 C40 86 28 78 22 60 C16 40 26 18 50 18Z" fill="#ff98a8"/><path d="M50 22 C56 40 56 64 50 80 C44 64 44 40 50 22Z" fill="#fff" opacity=".7"/></svg>`,
+    raspberry: `<svg viewBox="0 0 100 110"><path d="M50 22 L36 10 M50 22 L64 10 M50 22 L50 4" stroke="#5f9a3a" stroke-width="5" stroke-linecap="round"/><g fill="#b8234f">${[[50,36],[36,44],[64,44],[50,52],[28,60],[72,60],[42,66],[58,66],[34,80],[66,80],[50,82],[42,96],[58,96]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="11"/>`).join("")}</g><g fill="#fff" opacity=".35">${[[46,32],[32,40],[60,40],[46,48],[24,56],[38,62]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3"/>`).join("")}</g></svg>`,
+    raspberrySmall: `<svg viewBox="0 0 60 60"><g fill="#c43a64">${[[30,16],[18,26],[42,26],[30,34],[22,44],[38,44]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9"/>`).join("")}</g></svg>`,
+    caramel: `<svg viewBox="0 0 100 100"><path d="M50 8 L90 28 L50 48 L10 28Z" fill="#e0a36a"/><path d="M10 28 L50 48 L50 92 L10 72Z" fill="#b8743c"/><path d="M90 28 L50 48 L50 92 L90 72Z" fill="#9a5a2a"/><path d="M28 22 L50 14" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/></svg>`,
+    vanilla: `<svg viewBox="0 0 40 160"><path d="M20 4 C30 40 30 120 18 156 C12 120 10 40 20 4Z" fill="#4a2a1c"/><path d="M20 12 C24 50 24 110 18 148" stroke="#6e4430" stroke-width="2" fill="none"/></svg>`,
     leaf: (c = "#6f9a3a") => `<svg viewBox="0 0 100 60"><path d="M4 30 C30 -4 76 -4 96 30 C76 64 30 64 4 30Z" fill="${c}"/><path d="M4 30 L96 30" stroke="#fff" stroke-opacity=".35" stroke-width="2"/></svg>`,
     drop: (c) => `<svg viewBox="0 0 60 80"><path d="M30 2 C30 2 4 38 4 52 A26 26 0 0 0 56 52 C56 38 30 2 30 2Z" fill="${c}"/><ellipse cx="20" cy="50" rx="5" ry="9" fill="#fff" opacity=".45"/></svg>`,
-    honeycomb: `<svg viewBox="0 0 120 104"><g fill="#e8a028" stroke="#b97510" stroke-width="3"><path d="M30 2 L58 2 L72 26 L58 50 L30 50 L16 26Z"/><path d="M72 28 L100 28 L114 52 L100 76 L72 76 L58 52Z"/><path d="M30 54 L58 54 L72 78 L58 102 L30 102 L16 78Z"/></g></svg>`,
-    dipper: `<svg viewBox="0 0 60 160"><rect x="26" y="0" width="8" height="90" rx="4" fill="#b5875a"/><g fill="#c99a68"><rect x="10" y="88" width="40" height="12" rx="6"/><rect x="12" y="104" width="36" height="12" rx="6"/><rect x="14" y="120" width="32" height="12" rx="6"/><rect x="18" y="136" width="24" height="12" rx="6"/></g><path d="M30 148 C30 150 26 158 30 160 C34 158 30 150 30 148Z" fill="#e8a028"/></svg>`,
-    flower: `<svg viewBox="0 0 100 100"><g fill="#fff6dc"><circle cx="50" cy="22" r="18"/><circle cx="78" cy="50" r="18"/><circle cx="50" cy="78" r="18"/><circle cx="22" cy="50" r="18"/></g><circle cx="50" cy="50" r="14" fill="#e8a028"/></svg>`,
-    blackberry: `<svg viewBox="0 0 100 110"><path d="M50 4 L50 22" stroke="#4f6b2a" stroke-width="4" stroke-linecap="round"/><path d="M50 18 L34 10 M50 18 L66 10" stroke="#6f9a3a" stroke-width="5" stroke-linecap="round"/><g fill="#3d1450">${[[50,34],[36,44],[64,44],[50,52],[30,62],[70,62],[44,68],[58,68],[38,84],[62,84],[50,96],[50,80]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="11"/>`).join("")}</g><g fill="#fff" opacity=".35">${[[46,30],[32,40],[60,40],[46,48],[26,58]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3"/>`).join("")}</g></svg>`,
-    berrySmall: `<svg viewBox="0 0 60 60"><g fill="#5a1f6e">${[[30,16],[18,26],[42,26],[30,34],[22,44],[38,44]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9"/>`).join("")}</g></svg>`,
+    flower: (petal = "#fff6dc", mid = "#e8a028") => `<svg viewBox="0 0 100 100"><g fill="${petal}"><circle cx="50" cy="22" r="18"/><circle cx="78" cy="50" r="18"/><circle cx="50" cy="78" r="18"/><circle cx="22" cy="50" r="18"/></g><circle cx="50" cy="50" r="14" fill="${mid}"/></svg>`,
 };
 
 // 6–8 ingredients per flavour. size = % of viewport width,
 // x/y = position inside the section, speed = 0.2–0.6 × scroll.
 // Small → slow + blurred (far away). Big → fast + sharp (close up).
 const SETS = {
-    ciliegia: [
-        { art: ART.cherry, size: 16, x: 58, y: 12, speed: 0.55 },
-        { art: ART.cherryHalf, size: 10, x: 80, y: 62, speed: 0.48 },
-        { art: ART.leaf(), size: 9, x: 44, y: 70, speed: 0.4 },
-        { art: ART.drop("#c2183a"), size: 4, x: 70, y: 30, speed: 0.25 },
-        { art: ART.cherry, size: 5, x: 88, y: 18, speed: 0.22, mobileHide: true },
-        { art: ART.drop("#e04060"), size: 3, x: 52, y: 48, speed: 0.2, mobileHide: true },
-        { art: ART.cherryHalf, size: 4, x: 92, y: 86, speed: 0.3 },
+    fragola: [
+        { art: ART.strawberry, size: 14, x: 58, y: 12, speed: 0.55 },
+        { art: ART.strawberryHalf, size: 10, x: 80, y: 62, speed: 0.48 },
+        { art: ART.leaf(), size: 8, x: 46, y: 72, speed: 0.4 },
+        { art: ART.drop("#f478a8"), size: 4, x: 70, y: 30, speed: 0.25 },
+        { art: ART.strawberry, size: 5, x: 88, y: 16, speed: 0.22, mobileHide: true },
+        { art: ART.flower("#ffd6e2", "#f478a8"), size: 4, x: 52, y: 48, speed: 0.2, mobileHide: true },
+        { art: ART.strawberryHalf, size: 4, x: 92, y: 86, speed: 0.3 },
     ],
-    miele: [
-        { art: ART.honeycomb, size: 15, x: 60, y: 60, speed: 0.55 },
-        { art: ART.dipper, size: 7, x: 86, y: 6, speed: 0.5 },
-        { art: ART.drop("#e8a028"), size: 6, x: 48, y: 18, speed: 0.42 },
-        { art: ART.flower, size: 4, x: 74, y: 30, speed: 0.24 },
-        { art: ART.drop("#f2b84a"), size: 3, x: 92, y: 70, speed: 0.2, mobileHide: true },
-        { art: ART.flower, size: 5, x: 52, y: 84, speed: 0.3, mobileHide: true },
-        { art: ART.leaf("#9bb24a"), size: 4, x: 70, y: 88, speed: 0.22 },
-        { art: ART.honeycomb, size: 4, x: 40, y: 6, speed: 0.26 },
+    caramello: [
+        { art: ART.caramel, size: 12, x: 60, y: 60, speed: 0.55 },
+        { art: ART.vanilla, size: 5, x: 86, y: 6, speed: 0.5 },
+        { art: ART.drop("#b8743c"), size: 6, x: 48, y: 18, speed: 0.42 },
+        { art: ART.flower("#fbf3e4", "#e0b46a"), size: 4, x: 74, y: 30, speed: 0.24 },
+        { art: ART.caramel, size: 3, x: 92, y: 70, speed: 0.2, mobileHide: true },
+        { art: ART.flower("#fbf3e4", "#e0b46a"), size: 5, x: 52, y: 84, speed: 0.3, mobileHide: true },
+        { art: ART.drop("#d69a62"), size: 3, x: 70, y: 88, speed: 0.22 },
+        { art: ART.caramel, size: 4, x: 40, y: 6, speed: 0.26 },
     ],
-    mora: [
-        { art: ART.blackberry, size: 15, x: 62, y: 14, speed: 0.55 },
-        { art: ART.blackberry, size: 9, x: 82, y: 64, speed: 0.46 },
-        { art: ART.leaf("#557a2e"), size: 10, x: 46, y: 72, speed: 0.42 },
-        { art: ART.berrySmall, size: 4, x: 86, y: 26, speed: 0.22 },
-        { art: ART.drop("#6e2478"), size: 3, x: 54, y: 46, speed: 0.2, mobileHide: true },
-        { art: ART.berrySmall, size: 3, x: 72, y: 90, speed: 0.25, mobileHide: true },
-        { art: ART.drop("#8a3aa0"), size: 4, x: 94, y: 48, speed: 0.3 },
+    lampone: [
+        { art: ART.raspberry, size: 14, x: 62, y: 14, speed: 0.55 },
+        { art: ART.raspberry, size: 9, x: 82, y: 64, speed: 0.46 },
+        { art: ART.leaf("#557a2e"), size: 9, x: 46, y: 72, speed: 0.42 },
+        { art: ART.raspberrySmall, size: 4, x: 86, y: 26, speed: 0.22 },
+        { art: ART.drop("#9e2a50"), size: 3, x: 54, y: 46, speed: 0.2, mobileHide: true },
+        { art: ART.raspberrySmall, size: 3, x: 72, y: 90, speed: 0.25, mobileHide: true },
+        { art: ART.drop("#c43a64"), size: 4, x: 94, y: 48, speed: 0.3 },
     ],
 };
 
@@ -84,7 +84,7 @@ const observer = new IntersectionObserver(
     },
     { rootMargin: "-50% 0px -50% 0px" }
 );
-document.querySelectorAll("#hero, #ciliegia, #miele, #mora").forEach((s) => observer.observe(s));
+document.querySelectorAll("#hero, #fragola, #caramello, #lampone").forEach((s) => observer.observe(s));
 
 // ---------- Steps 6 & 7: parallax at 0.2–0.6 × scroll ----------
 const floaters = [...document.querySelectorAll(".floater")];

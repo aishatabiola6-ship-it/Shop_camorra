@@ -2,20 +2,17 @@
    Step 2 — one palette per flavour as CSS variables
    ------------------------------------------------------------ */
 :root,
-:root[data-flavour="ciliegia"] {
-    --bg: rgb(252, 230, 230);
-    --ink: rgb(150, 20, 42);
-    --gloss: rgba(196, 18, 52, 0.85);
+:root[data-flavour="fragola"] {
+    --bg: rgb(253, 231, 238);
+    --ink: rgb(184, 42, 100);
 }
-:root[data-flavour="miele"] {
-    --bg: rgb(253, 240, 214);
-    --ink: rgb(140, 84, 14);
-    --gloss: rgba(232, 160, 40, 0.85);
+:root[data-flavour="caramello"] {
+    --bg: rgb(244, 231, 220);
+    --ink: rgb(104, 60, 44);
 }
-:root[data-flavour="mora"] {
-    --bg: rgb(236, 228, 243);
-    --ink: rgb(70, 28, 92);
-    --gloss: rgba(110, 36, 120, 0.85);
+:root[data-flavour="lampone"] {
+    --bg: rgb(246, 225, 231);
+    --ink: rgb(126, 26, 60);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -93,21 +90,33 @@ a { color: inherit; text-decoration: none; }
     pointer-events: none;
 }
 .tube {
+    position: relative;
     width: 100%;
-    height: auto;
-    display: block;
+    aspect-ratio: 120 / 420;
     filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.18));
     will-change: transform;
 }
-.tube-cap { fill: var(--ink); transition: fill 600ms; }
-.tube-body { fill: rgba(255, 255, 255, 0.55); stroke: rgba(0, 0, 0, 0.08); }
-.tube-gloss { fill: var(--gloss); transition: fill 600ms; }
-.tube-label {
+/* One packaging per flavour, crossfading with the colours */
+.pkg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 600ms ease, transform 600ms ease;
+}
+:root[data-flavour="fragola"] .pkg[data-pkg="fragola"],
+:root[data-flavour="caramello"] .pkg[data-pkg="caramello"],
+:root[data-flavour="lampone"] .pkg[data-pkg="lampone"] {
+    opacity: 1;
+    transform: none;
+}
+.pkg-label {
     font-family: "Inter", sans-serif;
     font-weight: 900;
     font-size: 30px;
     letter-spacing: -1px;
-    fill: rgba(255, 255, 255, 0.9);
 }
 
 /* ---------------- Sections ---------------- */
