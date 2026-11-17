@@ -89,6 +89,10 @@ and replace `PASTE_OWNER_EMAIL`.
 
 ## What the app sends
 
+The app sends each event as a simple form post (`application/x-www-form-urlencoded`), so the
+browser delivers it without a CORS pre-check. n8n puts every field in `$json.body`; numbers arrive
+as text (for example `"215000"`), which the workflow's checks handle.
+
 Sign-up (`POST …/camorra-hair-signup`):
 
 ```json

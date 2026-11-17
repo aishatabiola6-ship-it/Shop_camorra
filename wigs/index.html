@@ -348,10 +348,12 @@ const N8N = {
     signup: "https://ige12.app.n8n.cloud/webhook-test/camorra-hair-signup",
     order: "https://ige12.app.n8n.cloud/webhook-test/camorra-hair-order",
 };
+// Sent as a plain form post: browsers deliver it to n8n without a CORS pre-check.
+// n8n reads each field into $json.body (e.g. $json.body.email).
 function notify(kind, data) {
     if (!N8N[kind] || params.has("demo")) return;
-    fetch(N8N[kind], { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event: kind, ts: new Date().toISOString(), ...data }) }).catch(() => {});
+    const body = new URLSearchParams({ event: kind, ts: new Date().toISOString(), ...data });
+    fetch(N8N[kind], { method: "POST", mode: "no-cors", body, keepalive: true }).catch(() => {});
 }
 
 // Real payments: Flutterwave checkout (card, bank transfer, USSD) in naira
