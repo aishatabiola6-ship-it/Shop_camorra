@@ -64,7 +64,14 @@
         "url": "=https://api.flutterwave.com/v3/transactions/{{ $json.body.transactionId || 0 }}/verify",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
-        "options": {}
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
       },
       "id": "28c8f8cd-30db-404b-a802-9bbb1eea5b92",
       "name": "Verify Payment (Flutterwave)",
@@ -87,7 +94,7 @@
           "conditions": [
             {
               "id": "8568ca80-3bb6-48a8-b524-bc9b0a85d167",
-              "leftValue": "={{ $json.data ? $json.data.status : '' }}",
+              "leftValue": "={{ ($json.body && $json.body.data) ? $json.body.data.status : '' }}",
               "rightValue": "successful",
               "operator": {
                 "type": "string",
@@ -96,7 +103,7 @@
             },
             {
               "id": "fe8d1732-f59e-4052-86f1-71e60ca683f2",
-              "leftValue": "={{ $json.data ? $json.data.currency : '' }}",
+              "leftValue": "={{ ($json.body && $json.body.data) ? $json.body.data.currency : '' }}",
               "rightValue": "NGN",
               "operator": {
                 "type": "string",
@@ -105,7 +112,7 @@
             },
             {
               "id": "681b8146-61e4-457f-b2f6-902f754a444f",
-              "leftValue": "={{ $json.data ? $json.data.amount : 0 }}",
+              "leftValue": "={{ ($json.body && $json.body.data) ? $json.body.data.amount : 0 }}",
               "rightValue": "={{ $('Order Webhook').item.json.body.total }}",
               "operator": {
                 "type": "number",
@@ -114,7 +121,7 @@
             },
             {
               "id": "fedfb235-28a2-4985-baf3-bc8f3e4b6ff9",
-              "leftValue": "={{ $json.data ? $json.data.tx_ref : '' }}",
+              "leftValue": "={{ ($json.body && $json.body.data) ? $json.body.data.tx_ref : '' }}",
               "rightValue": "={{ $('Order Webhook').item.json.body.txRef }}",
               "operator": {
                 "type": "string",
@@ -140,7 +147,7 @@
         "sendTo": "={{ $('Order Webhook').item.json.body.email }}",
         "subject": "=Your Camorra Hair order #{{ $('Order Webhook').item.json.body.orderId }} is confirmed ✓",
         "emailType": "html",
-        "message": "=<div style=\"font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;color:#2e1220\"><div style=\"background:#3a1426;color:#fff;padding:28px 24px;border-radius:16px 16px 0 0\"><div style=\"font-size:26px;font-weight:700;font-family:Georgia,serif\">camorra hair</div><div style=\"opacity:.8;margin-top:6px\">Order #{{ $('Order Webhook').item.json.body.orderId }} is confirmed ✓</div></div><div style=\"background:#fbf4f1;padding:24px;border-radius:0 0 16px 16px\"><h2 style=\"margin:0 0 12px\">Thank you, {{ $('Order Webhook').item.json.body.name }}!</h2><p style=\"line-height:1.6;margin:0 0 16px\">We have received your payment. Your unit is being styled and packed, and you can watch your rider live in the app once it is on the way.</p><div style=\"background:#fff;border:1px solid #efdde2;border-radius:12px;padding:16px;line-height:1.7\">{{ $('Order Webhook').item.json.body.itemsText.split(\"\\n\").join(\"<br>\") }}<hr style=\"border:0;border-top:1px dashed #efdde2;margin:12px 0\">Delivery: {{ $('Order Webhook').item.json.body.delivery }}<br>Payment: {{ $('Order Webhook').item.json.body.payment }} · Ref {{ $('Verify Payment (Flutterwave)').item.json.data.tx_ref }}<br><b style=\"font-size:18px\">Paid: ₦{{ Number($('Verify Payment (Flutterwave)').item.json.data.amount).toLocaleString(\"en-NG\") }}</b></div><p style=\"color:#93707e;font-size:12px;margin-top:24px\">Questions? Just reply to this email. · Camorra Hair, Lekki, Lagos</p></div></div>",
+        "message": "=<div style=\"font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;color:#2e1220\"><div style=\"background:#3a1426;color:#fff;padding:28px 24px;border-radius:16px 16px 0 0\"><div style=\"font-size:26px;font-weight:700;font-family:Georgia,serif\">camorra hair</div><div style=\"opacity:.8;margin-top:6px\">Order #{{ $('Order Webhook').item.json.body.orderId }} is confirmed ✓</div></div><div style=\"background:#fbf4f1;padding:24px;border-radius:0 0 16px 16px\"><h2 style=\"margin:0 0 12px\">Thank you, {{ $('Order Webhook').item.json.body.name }}!</h2><p style=\"line-height:1.6;margin:0 0 16px\">We have received your payment. Your unit is being styled and packed, and you can watch your rider live in the app once it is on the way.</p><div style=\"background:#fff;border:1px solid #efdde2;border-radius:12px;padding:16px;line-height:1.7\">{{ $('Order Webhook').item.json.body.itemsText.split(\"\\n\").join(\"<br>\") }}<hr style=\"border:0;border-top:1px dashed #efdde2;margin:12px 0\">Delivery: {{ $('Order Webhook').item.json.body.delivery }}<br>Payment: {{ $('Order Webhook').item.json.body.payment }} · Ref {{ $('Verify Payment (Flutterwave)').item.json.body.data.tx_ref }}<br><b style=\"font-size:18px\">Paid: ₦{{ Number($('Verify Payment (Flutterwave)').item.json.body.data.amount).toLocaleString(\"en-NG\") }}</b></div><p style=\"color:#93707e;font-size:12px;margin-top:24px\">Questions? Just reply to this email. · Camorra Hair, Lekki, Lagos</p></div></div>",
         "options": {
           "senderName": "Camorra Hair",
           "appendAttribution": false
@@ -158,7 +165,7 @@
     {
       "parameters": {
         "chatId": "PASTE_YOUR_TELEGRAM_CHAT_ID",
-        "text": "=🛍️ New PAID order #{{ $('Order Webhook').item.json.body.orderId }}\n👤 {{ $('Order Webhook').item.json.body.name }} ({{ $('Order Webhook').item.json.body.email }})\n\n{{ $('Order Webhook').item.json.body.itemsText }}\n\n🚚 {{ $('Order Webhook').item.json.body.delivery }}\n💳 {{ $('Order Webhook').item.json.body.payment }} via Flutterwave · ref {{ $('Verify Payment (Flutterwave)').item.json.data.tx_ref }}\n💰 Paid: ₦{{ Number($('Verify Payment (Flutterwave)').item.json.data.amount).toLocaleString(\"en-NG\") }} (order total {{ $('Order Webhook').item.json.body.totalText }})",
+        "text": "=🛍️ New PAID order #{{ $('Order Webhook').item.json.body.orderId }}\n👤 {{ $('Order Webhook').item.json.body.name }} ({{ $('Order Webhook').item.json.body.email }})\n\n{{ $('Order Webhook').item.json.body.itemsText }}\n\n🚚 {{ $('Order Webhook').item.json.body.delivery }}\n💳 {{ $('Order Webhook').item.json.body.payment }} via Flutterwave · ref {{ $('Verify Payment (Flutterwave)').item.json.body.data.tx_ref }}\n💰 Paid: ₦{{ Number($('Verify Payment (Flutterwave)').item.json.body.data.amount).toLocaleString(\"en-NG\") }} (order total {{ $('Order Webhook').item.json.body.totalText }})",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -197,11 +204,11 @@
             "Subtotal": "={{ $('Order Webhook').item.json.body.subtotal }}",
             "Delivery fee": "={{ $('Order Webhook').item.json.body.deliveryFee }}",
             "Total": "={{ $('Order Webhook').item.json.body.total }}",
-            "Paid": "={{ $('Verify Payment (Flutterwave)').item.json.data.amount }}",
+            "Paid": "={{ $('Verify Payment (Flutterwave)').item.json.body.data.amount }}",
             "Delivery": "={{ $('Order Webhook').item.json.body.delivery }}",
             "Payment": "={{ $('Order Webhook').item.json.body.payment }}",
-            "Flutterwave ref": "={{ $('Verify Payment (Flutterwave)').item.json.data.tx_ref }}",
-            "Transaction ID": "={{ $('Verify Payment (Flutterwave)').item.json.data.id }}",
+            "Flutterwave ref": "={{ $('Verify Payment (Flutterwave)').item.json.body.data.tx_ref }}",
+            "Transaction ID": "={{ $('Verify Payment (Flutterwave)').item.json.body.data.id }}",
             "Status": "Paid"
           },
           "matchingColumns": [],
@@ -359,7 +366,7 @@
         "sendTo": "PASTE_OWNER_EMAIL",
         "subject": "=New paid order #{{ $('Order Webhook').item.json.body.orderId }} · {{ $('Order Webhook').item.json.body.totalText }}",
         "emailType": "html",
-        "message": "=<div style=\"font-family:Arial,sans-serif;color:#2e1220\"><h2>New paid order #{{ $('Order Webhook').item.json.body.orderId }}</h2><p><b>{{ $('Order Webhook').item.json.body.name }}</b> · {{ $('Order Webhook').item.json.body.email }}</p><p>{{ $('Order Webhook').item.json.body.itemsText.split(\"\\n\").join(\"<br>\") }}</p><p>{{ $('Order Webhook').item.json.body.delivery }} · {{ $('Order Webhook').item.json.body.payment }}<br><b>Paid: ₦{{ Number($('Verify Payment (Flutterwave)').item.json.data.amount).toLocaleString(\"en-NG\") }}</b></p></div>",
+        "message": "=<div style=\"font-family:Arial,sans-serif;color:#2e1220\"><h2>New paid order #{{ $('Order Webhook').item.json.body.orderId }}</h2><p><b>{{ $('Order Webhook').item.json.body.name }}</b> · {{ $('Order Webhook').item.json.body.email }}</p><p>{{ $('Order Webhook').item.json.body.itemsText.split(\"\\n\").join(\"<br>\") }}</p><p>{{ $('Order Webhook').item.json.body.delivery }} · {{ $('Order Webhook').item.json.body.payment }}<br><b>Paid: ₦{{ Number($('Verify Payment (Flutterwave)').item.json.body.data.amount).toLocaleString(\"en-NG\") }}</b></p></div>",
         "options": {
           "senderName": "Camorra Hair orders",
           "appendAttribution": false
@@ -378,7 +385,7 @@
     {
       "parameters": {
         "chatId": "PASTE_YOUR_TELEGRAM_CHAT_ID",
-        "text": "=⚠️ Payment NOT verified for order #{{ $('Order Webhook').item.json.body.orderId }}\n👤 {{ $('Order Webhook').item.json.body.name }} ({{ $('Order Webhook').item.json.body.email }})\nExpected {{ $('Order Webhook').item.json.body.totalText }} · ref {{ $('Order Webhook').item.json.body.txRef || \"none\" }}\nFlutterwave says: {{ $json.data ? ($json.data.status + \" · \" + $json.data.currency + \" \" + $json.data.amount + \" · ref \" + $json.data.tx_ref) : ($json.message || ($json.error ? (($json.error.message || \"\") + \" \" + ($json.error.description || \"\")).trim() : \"no reply\")) }}\nTransaction ID sent: {{ $('Order Webhook').item.json.body.transactionId || \"none\" }}\nDo not ship until you confirm the payment in your Flutterwave dashboard.",
+        "text": "=⚠️ Payment NOT verified for order #{{ $('Order Webhook').item.json.body.orderId }}\n👤 {{ $('Order Webhook').item.json.body.name }} ({{ $('Order Webhook').item.json.body.email }})\nExpected {{ $('Order Webhook').item.json.body.totalText }} · ref {{ $('Order Webhook').item.json.body.txRef || 'none' }} · transaction {{ $('Order Webhook').item.json.body.transactionId || 'none' }}\n\nWhy: {{ (function () { var r = $json, b = r.body || {}, d = b.data; if (d) return d.status + ' · ' + d.currency + ' ' + d.amount + ' · ref ' + d.tx_ref + (d.status !== 'successful' ? ' → payment not successful' : ' → amount, currency or reference does not match the order'); if (r.error) return 'n8n could not call Flutterwave: ' + (r.error.message || 'unknown error') + ' → open \"Verify Payment (Flutterwave)\" and select a Header Auth credential.'; var code = r.statusCode, msg = b.message || ''; if (code === 401) return '401 ' + msg + ' → secret key missing or wrong. In the Header Auth credential use Name: Authorization, Value: Bearer FLWSECK_TEST-… (TEST key, with the word Bearer and a space).'; return (code || '') + ' ' + msg + ' → use the TEST secret key (same mode as the FLWPUBK_TEST public key) and check the payment shows Successful in Flutterwave (Test mode).'; })() }}\n\nDo not ship until you confirm the payment in your Flutterwave dashboard.",
         "additionalFields": {
           "appendAttribution": false
         }
