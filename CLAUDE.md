@@ -28,6 +28,7 @@ Each app is one self-contained HTML file (inline CSS + JS, Google Fonts only). N
   - `?demo` — plays the whole flow automatically (for screen recording)
   - `?big` — scales the phone up to fill the window (crisp recordings)
   - `?dark` — black theme (default is blush pink)
+  - `?demo&full` / `#demo-full` (wig app) — full automation demo: email code arrives as a mail notification, order, Flutterwave payment sheet (lookalike), order-confirmation email, live tracking
 - On a real phone (< 500px wide) the app goes fullscreen without the phone frame.
 
 ## Recording post videos

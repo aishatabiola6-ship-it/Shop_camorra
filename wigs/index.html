@@ -259,6 +259,50 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .tap { position: absolute; z-index: 55; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(255,255,255,.35); border: 2px solid rgba(255,255,255,.9); box-shadow: 0 0 0 1px rgba(0,0,0,.15); pointer-events: none; animation: tap 600ms ease forwards; }
 @keyframes tap { 0% { transform: scale(.4); opacity: 0; } 30% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
 
+/* ---------------- Full demo: phone notifications, mail app, payment sheet ---------------- */
+.notif { position: absolute; left: 10px; right: 10px; top: 54px; z-index: 58; display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 22px; background: rgba(250,250,252,.94); color: #111; backdrop-filter: blur(20px); box-shadow: 0 12px 40px rgba(0,0,0,.22); transform: translateY(calc(-100% - 80px)); transition: transform 450ms cubic-bezier(.2,.9,.2,1.1); cursor: pointer; font-family: -apple-system, "Inter", sans-serif; }
+.notif.show { transform: none; }
+.notif .ic { width: 38px; height: 38px; flex: none; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(#3aa0ff, #1677ff); color: #fff; }
+.notif .ic svg { width: 22px; height: 22px; }
+.notif .tx { flex: 1; min-width: 0; font-size: 13px; line-height: 1.3; }
+.notif .tx b { display: block; font-size: 14px; }
+.notif .tx span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notif .when { align-self: flex-start; font-size: 11px; color: #888; }
+.mailapp { background: #fff; color: #111; font-family: -apple-system, "Inter", sans-serif; }
+.mailapp .scroll { padding-left: 0; padding-right: 0; }
+.mail-top { display: flex; align-items: center; gap: 6px; padding: 0 16px 10px; color: #1677ff; font-size: 16px; }
+.mail-top svg { width: 20px; height: 20px; }
+.mail-subj { padding: 0 16px; font-size: 21px; font-weight: 700; line-height: 1.25; }
+.mail-from { display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-bottom: 1px solid #eee; font-size: 13px; color: #666; }
+.mail-from .av { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #3a1426; color: #fff; font-weight: 700; }
+.mail-from b { color: #111; font-size: 15px; display: block; }
+.mail-body { padding: 16px; }
+.paysheet { position: absolute; inset: 0; z-index: 57; display: flex; align-items: flex-end; background: rgba(0,0,0,0); transition: background 300ms; pointer-events: none; font-family: "Inter", sans-serif; }
+.paysheet.open { background: rgba(0,0,0,.45); pointer-events: auto; }
+.paysheet .sheet { width: 100%; background: #fff; color: #1f2430; border-radius: 26px 26px 0 0; padding: 18px 20px 40px; transform: translateY(100%); transition: transform 450ms cubic-bezier(.2,.8,.2,1); }
+.paysheet.open .sheet { transform: none; }
+.ps-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #eef0f4; }
+.ps-head .lg { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: #3a1426; color: #fff; font-weight: 800; font-size: 14px; }
+.ps-head .who { flex: 1; font-size: 12px; color: #7a8090; }
+.ps-head .who b { display: block; font-size: 15px; color: #1f2430; }
+.ps-head .amt { text-align: right; font-size: 12px; color: #7a8090; }
+.ps-head .amt b { display: block; font-size: 18px; color: #1f2430; }
+.ps-tabs { display: flex; gap: 6px; margin: 16px 0 14px; }
+.ps-tabs span { flex: 1; text-align: center; padding: 9px 4px; border-radius: 10px; background: #f3f4f7; font-size: 12px; font-weight: 600; color: #7a8090; }
+.ps-tabs span.on { background: #1f2430; color: #fff; }
+.ps-field { border: 1px solid #e3e6ec; border-radius: 12px; padding: 9px 12px; margin-bottom: 10px; }
+.ps-field small { display: block; font-size: 11px; color: #7a8090; }
+.ps-field div { min-height: 20px; font: 600 15px "JetBrains Mono", monospace; letter-spacing: 1px; }
+.ps-row { display: flex; gap: 10px; }
+.ps-row .ps-field { flex: 1; }
+.ps-pay { width: 100%; height: 52px; border-radius: 14px; background: #1f2430; color: #fff; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
+.ps-foot { text-align: center; font-size: 12px; color: #7a8090; margin-top: 14px; }
+.ps-done { text-align: center; padding: 26px 0 8px; }
+.ps-done .ok { width: 72px; height: 72px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center; background: #e5f6eb; color: #1f9d55; }
+.ps-done .ok svg { width: 38px; height: 38px; }
+.ps-done b { display: block; font-size: 20px; margin-bottom: 6px; }
+.ps-done span { color: #7a8090; font-size: 14px; }
+
 /* Real phone: fullscreen, no frame */
 @media (max-width: 500px) {
     .stage { padding: 0; }
@@ -295,6 +339,9 @@ body.dark .auth.apple { background: #fff; color: #000; }
                 <section class="screen" id="checkout"></section>
                 <section class="screen" id="track"></section>
 
+                <section class="screen mailapp" id="mail"></section>
+                <div class="notif" id="notif"></div>
+                <div class="paysheet" id="paysheet"><div class="sheet" id="sheet"></div></div>
                 <div class="toast" id="toast"></div>
                 <div class="home-indicator"></div>
             </div>
@@ -608,6 +655,15 @@ const R = {
         </div>
         <div class="cta-bar"><button class="btn-main pink" data-action="pay">Pay ${naira(t.total)}</button></div>`;
     },
+    mail() {
+        const m = state.mailView;
+        return `<div class="scroll" style="padding-bottom:40px">
+            <div class="mail-top"><button data-action="back" style="display:flex;align-items:center;gap:2px;color:inherit">${I.back} Inbox</button></div>
+            <div class="mail-subj">${esc(m.subject)}</div>
+            <div class="mail-from"><div class="av">C</div><div style="flex:1"><b>Camorra Hair</b>to ${esc(m.to)}</div><span>now</span></div>
+            <div class="mail-body">${m.html}</div>
+        </div>`;
+    },
     track() {
         const tr = state.tracking;
         const units = tr.items.reduce((n, i) => n + i.qty, 0);
@@ -706,6 +762,7 @@ function back() {
     const cur = $("#" + stack.pop()), prev = $("#" + stack[stack.length - 1]);
     render(prev.id);
     cur.classList.remove("active"); prev.classList.remove("prev"); prev.classList.add("active");
+    if (prev.id === "track") { trackStage = -1; requestAnimationFrame(trackTick); }
 }
 function goRoot(name) {
     document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active", "prev"));
@@ -772,6 +829,7 @@ app.addEventListener("click", (e) => {
             $("#co-err").textContent = "Add your name and a valid email for your receipt";
             $("#checkout .scroll").scrollTop = 0; return;
         }
+        if (state.demoFull) { el.innerHTML = spinner("Opening secure payment…"); setTimeout(openPaySheet, 700); return; }
         el.innerHTML = spinner(FLUTTERWAVE.publicKey && !params.has("demo") ? "Opening secure payment…" : "Confirming payment…");
         if (FLUTTERWAVE.publicKey && !params.has("demo")) payWithFlutterwave();
         else setTimeout(() => { toast("Order confirmed 🎉", "check"); placeOrder(); }, 1500);   // demo / no key yet
@@ -881,6 +939,108 @@ async function tap(sel) {
 }
 async function scrollActive(px) { $(".screen.active .scroll").scrollBy({ top: px, behavior: "smooth" }); await wait(1000); }
 
+// ---------- Full demo pieces: the customer's mail app and the Flutterwave step ----------
+// Emails match the n8n templates (n8n/camorra-hair-workflow.json).
+const MAIL = {
+    shell: (inner, sub) => `<div style="font-family:Arial,Helvetica,sans-serif;color:#2e1220"><div style="background:#3a1426;color:#fff;padding:24px;border-radius:16px 16px 0 0"><div style="font-size:24px;font-weight:700;font-family:Georgia,serif">camorra hair</div>${sub ? `<div style="opacity:.8;margin-top:6px">${sub}</div>` : ""}</div><div style="background:#fbf4f1;padding:22px;border-radius:0 0 16px 16px">${inner}</div></div>`,
+    code: (code) => MAIL.shell(`<div style="text-align:center"><p style="margin:0 0 12px">Your sign-in code is</p><div style="font-size:40px;font-weight:800;letter-spacing:10px;margin:8px 0 16px">${code}</div><p style="color:#93707e;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask for it, you can ignore this email.</p></div>`),
+    welcome: (name) => MAIL.shell(`<h2 style="margin:0 0 12px">Welcome, ${esc(name)} 💇🏾‍♀️</h2><p style="line-height:1.6;margin:0 0 12px">Thank you for joining Camorra Hair. You can now save your favourite units, check out in seconds and track every delivery live, right to your door.</p><p style="line-height:1.6;margin:0">Use code <b>WELCOME10</b> for 10% off your first unit.</p>`),
+    order: (o) => MAIL.shell(`<h2 style="margin:0 0 12px">Thank you, ${esc(o.name)}!</h2><p style="line-height:1.6;margin:0 0 16px">We have received your payment. Your unit is being styled and packed, and you can watch your rider live in the app once it is on the way.</p><div style="background:#fff;border:1px solid #efdde2;border-radius:12px;padding:14px;line-height:1.7;font-size:14px">${o.items.map(esc).join("<br>")}<hr style="border:0;border-top:1px dashed #efdde2;margin:10px 0">Delivery: ${o.delivery}<br>Payment: ${o.payment} · Ref ${o.ref}<br><b style="font-size:17px">Paid: ${o.total}</b></div>`, `Order #${o.id} is confirmed ✓`),
+};
+let notifTap = null;
+function showNotif(title, line) {
+    const n = $("#notif");
+    n.innerHTML = `<span class="ic">${I.mail}</span><div class="tx"><b>${esc(title)}</b><span>${esc(line)}</span></div><span class="when">now</span>`;
+    requestAnimationFrame(() => n.classList.add("show"));
+    return n;
+}
+const hideNotif = () => $("#notif").classList.remove("show");
+$("#notif").addEventListener("click", () => { hideNotif(); if (notifTap) { const f = notifTap; notifTap = null; f(); } });
+function openMail(subject, html) { state.mailView = { subject, html, to: state.contact.email || state.pendingEmail }; go("mail"); }
+
+function openPaySheet() {
+    const t = totals(), amt = "NGN " + t.total.toLocaleString("en-NG");
+    $("#sheet").innerHTML = `
+        <div class="ps-head"><div class="lg">CH</div><div class="who"><b>Camorra Hair</b>${esc(state.contact.email)}</div><div class="amt">Pay<b>${amt}</b></div></div>
+        <div class="ps-tabs"><span class="on">Card</span><span>Bank transfer</span><span>USSD</span></div>
+        <div class="ps-field"><small>Card number</small><div id="ps-num"></div></div>
+        <div class="ps-row"><div class="ps-field"><small>Expiry</small><div id="ps-exp"></div></div><div class="ps-field"><small>CVV</small><div id="ps-cvv"></div></div></div>
+        <button class="ps-pay" id="ps-pay">Pay ${amt}</button>
+        <div class="ps-foot">🔒 Secured by Flutterwave · Test mode</div>`;
+    $("#paysheet").classList.add("open");
+    $("#ps-pay").addEventListener("click", () => {
+        $("#ps-pay").innerHTML = spinner("Processing payment…");
+        setTimeout(() => {
+            $("#sheet").innerHTML = `<div class="ps-done"><div class="ok">${I.check}</div><b>Payment successful</b><span>${amt} paid to Camorra Hair</span></div><div class="ps-foot">🔒 Secured by Flutterwave</div>`;
+            setTimeout(() => {
+                $("#paysheet").classList.remove("open");
+                const ref = "CH-" + Date.now();
+                state.lastOrderMail = { name: state.contact.name, items: state.bag.map(itemLine), total: naira(t.total), ref,
+                    delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow", payment: PAY_LABEL[state.pay], id: "CH-" + ref.slice(-6) };
+                toast("Payment received 🎉", "check");
+                placeOrder({ txRef: ref, transactionId: 1 });
+            }, 1600);
+        }, 1800);
+    });
+}
+async function typeText(el, text, gap = 60) { for (const ch of text) { el.textContent += ch; await wait(gap); } }
+async function typeInto(sel, text, gap = 75) {
+    const el = $(".screen.active " + sel);
+    for (const ch of text) { el.value += ch; el.dispatchEvent(new Event("input", { bubbles: true })); await wait(gap + rnd(-25, 25)); }
+}
+
+// #demo-full: email code → order → Flutterwave → receipt email → live tracking
+async function demoFull() {
+    if (demoRunning) return;
+    demoRunning = true;
+    document.body.classList.add("demo");
+    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null, demoFull: true, pay: "card",
+                           contact: { name: "", email: "" }, pendingEmail: "" });
+    goRoot("login");
+    $("#splash").classList.remove("hide"); await wait(1800);
+    $("#splash").classList.add("hide"); await wait(1300);
+    // 1. Sign in with email → code arrives by mail
+    await tap("#email"); await typeInto("#email", "bella.rossi@example.com"); await wait(400);
+    await tap('[data-action="email"]'); await wait(1600);
+    const code = "482913";
+    notifTap = () => openMail("Your Camorra Hair code: " + code, MAIL.code(code));
+    showNotif("Camorra Hair", "Your Camorra Hair code: " + code); await wait(1600);
+    await tap($("#notif")); await wait(700);
+    await wait(2800);
+    await tap('[data-action="back"]'); await wait(900);
+    await typeInto("#otp", code, 170); await wait(400);
+    await tap('[data-action="verify"]'); await wait(1500);
+    showNotif("Camorra Hair", "Welcome to Camorra Hair, Bella 💇🏾‍♀️"); await wait(2600); hideNotif();
+    // 2. Pick a video unit and check out
+    await tap('.pin[data-id="v5"]'); await wait(3600);
+    await tap('[data-opt="len"][data-v="30"]'); await wait(600);
+    await tap('[data-opt="lace"][data-v="2"]'); await wait(700);
+    await tap('[data-action="add"]'); await wait(1200);
+    await tap('[data-to="bag"]'); await wait(1500);
+    await tap('[data-to="checkout"]'); await wait(1200);
+    await tap('#co-name'); await typeInto("#co-name", " Rossi", 90); await wait(300);
+    await tap('[data-action="ship"][data-x="1"]'); await wait(800);
+    // 3. Pay with Flutterwave
+    await tap('[data-action="pay"]'); await wait(1300);
+    await typeText($("#ps-num"), "5531 8866 5214 2950", 55); await wait(200);
+    await typeText($("#ps-exp"), "09/32", 80); await typeText($("#ps-cvv"), "564", 90); await wait(500);
+    await tap($("#ps-pay")); await wait(4300);
+    // 4. Receipt email arrives on Track Order
+    await wait(1500);
+    const o = state.lastOrderMail;
+    notifTap = () => openMail(`Your Camorra Hair order #${o.id} is confirmed ✓`, MAIL.order(o));
+    showNotif("Camorra Hair", `Your Camorra Hair order #${o.id} is confirmed ✓`); await wait(1700);
+    await tap($("#notif")); await wait(1200);
+    $("#mail .scroll").scrollBy({ top: 260, behavior: "smooth" }); await wait(3200);
+    await tap('[data-action="back"]'); await wait(800);
+    // 5. Rider rides in, delivered
+    await wait(Math.max(0, state.tracking.start + PHASE.out + PHASE.ride + PHASE.drop + 1500 - Date.now()));
+    state.demoFull = false;
+    if (!params.has("demo")) document.body.classList.remove("demo");
+    document.body.classList.add("demo-done");
+    demoRunning = false;
+}
+
 let demoRunning = false;
 async function demo() {
     if (demoRunning) return;
@@ -914,7 +1074,7 @@ async function demo() {
     demoRunning = false;
 }
 $("#play").addEventListener("click", demo);
-if (params.has("demo")) setTimeout(demo, 300);
+if (params.has("demo")) setTimeout(params.has("full") ? demoFull : demo, 300);
 </script>
 </body>
 </html>
