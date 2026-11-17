@@ -8,7 +8,8 @@ prototypes: no backend, no real payments, no real sign-in, no real rider GPS.
 
 | Path | What it is |
 |---|---|
-| `index.html`, `styles.css`, `script.js` | Scrolling lip gloss landing page (colours melt per shade, parallax ingredients, no WebGL) |
+| `index.html` | Front door: redirects to the wig store in `wigs/` (keeps `?flags` and `#hash`) |
+| `lipgloss/` | Scrolling lip gloss landing page (`index.html`, `styles.css`, `script.js`; colours melt per shade, parallax, no WebGL) |
 | `app/index.html` | Lip gloss shopping app in a phone frame + live code panel. Login (Apple/Google/email code), shade swatches, Drop / On-lips views, Glossy/Shimmer, bag, checkout |
 | `app/videos/` | Rendered gloss-drop clips (`drop-<shade>[-shimmer].mp4`), made by `app/drop-studio.html`. Placeholders until real footage |
 | `app/drop-studio.html` | Renders the gloss-drop clips frame by frame (particle liquid + SVG gooey/specular filter) |
@@ -47,7 +48,7 @@ composited with ffmpeg overlays on the vertical recording.
 ## Editing pointers
 
 - Wig products, prices (₦), lace/density options: `const WIGS`, `LACE`, `DENSITY` in `wigs/index.html`
-- Lip gloss shades: `const SHADES` in `app/index.html` (and palettes in `styles.css` for the landing page)
+- Lip gloss shades: `const SHADES` in `app/index.html` (and palettes in `lipgloss/styles.css` for the landing page)
 - Theme colours: the CSS variables on `body` / `body.dark` at the top of each app
 - The code panel shows the real source between `// <code-view>` and `// </code-view>`
 

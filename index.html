@@ -1,156 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" data-flavour="cristallo">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Camorra — Lip Gloss</title>
-    <meta name="description" content="Shop Camorra lip gloss in six shades: Cristallo, Fragola, Pesca, Caramello, Malva and Lampone.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camorra Hair</title>
+<meta name="description" content="Camorra Hair — luxury wig units in Lagos. Shop, pay and track your delivery live.">
+<meta name="theme-color" content="#fbf4f1">
+<!-- The store lives in /wigs/. Send visitors straight there (keeping any #demo or ?flags). -->
+<meta http-equiv="refresh" content="0; url=wigs/index.html">
+<script>location.replace("wigs/index.html" + location.search + location.hash);</script>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #fbf4f1; color: #2e1220; font-family: Georgia, serif; }
+  a { color: #b8436f; }
+</style>
 </head>
 <body>
-    <!-- Fixed nav: uses --ink so it always matches the flavour on screen -->
-    <header class="nav">
-        <a href="#top" class="logo">camorra</a>
-        <nav class="nav-links">
-            <a href="#cristallo">Cristallo</a>
-            <a href="#fragola">Fragola</a>
-            <a href="#pesca">Pesca</a>
-            <a href="#caramello">Caramello</a>
-            <a href="#malva">Malva</a>
-            <a href="#lampone">Lampone</a>
-        </nav>
-        <button class="bag" type="button" aria-label="Shopping bag">Bag <span class="bag-count">0</span></button>
-    </header>
-
-    <!-- Floating product. script.js draws one packaging per shade; the one
-         matching the current shade fades in. -->
-    <div class="tube-wrap" aria-hidden="true">
-        <div class="tube"></div>
-    </div>
-
-    <main id="top">
-        <!-- Hero -->
-        <section class="hero" id="hero" data-flavour-section="cristallo">
-            <h1 class="hero-word" aria-label="Camorra">camorra</h1>
-            <div class="hero-copy">
-                <p class="eyebrow">Lip gloss · 6 shades</p>
-                <p class="hero-line">High shine. Zero stick.<br>Tastes like something you shouldn't.</p>
-                <a href="#cristallo" class="btn btn-ghost">Scroll to taste ↓</a>
-            </div>
-            <div class="floaters" data-set="cristallo"></div>
-        </section>
-
-        <!-- Shade sections: the ids drive the colour switch -->
-        <section class="flavour" id="cristallo">
-            <div class="floaters" data-set="cristallo"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">01 / 06 · Clear</p>
-                <h2 class="flavour-title">Cristallo</h2>
-                <p class="flavour-desc">Crystal-clear, mirror-shine gloss. Wear it alone for glass lips or layer it over any shade.</p>
-                <ul class="tags">
-                    <li>Squalane</li>
-                    <li>Hyaluronic acid</li>
-                    <li>Light-reflecting pearl</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£12</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="fragola">
-            <div class="floaters" data-set="fragola"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">02 / 06 · Strawberry</p>
-                <h2 class="flavour-title">Fragola</h2>
-                <p class="flavour-desc">A candy-pink squeeze gloss with a juicy, glassy finish. Sweet, sheer and easy to wear every day.</p>
-                <ul class="tags">
-                    <li>Strawberry extract</li>
-                    <li>Peptides</li>
-                    <li>Shea butter</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="pesca">
-            <div class="floaters" data-set="pesca"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">03 / 06 · Peach</p>
-                <h2 class="flavour-title">Pesca</h2>
-                <p class="flavour-desc">A sun-warm peachy coral with a dewy finish. Like a summer evening on your lips.</p>
-                <ul class="tags">
-                    <li>Peach kernel oil</li>
-                    <li>Vitamin C</li>
-                    <li>Aloe</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="caramello">
-            <div class="floaters" data-set="caramello"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">04 / 06 · Caramel</p>
-                <h2 class="flavour-title">Caramello</h2>
-                <p class="flavour-desc">A warm caramel-nude gloss that sits soft on the lips. Your lips, but better, with a hint of vanilla.</p>
-                <ul class="tags">
-                    <li>Vanilla oil</li>
-                    <li>Hyaluronic acid</li>
-                    <li>Jojoba</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="malva">
-            <div class="floaters" data-set="malva"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">05 / 06 · Mauve</p>
-                <h2 class="flavour-title">Malva</h2>
-                <p class="flavour-desc">A dusty rose-mauve with a soft-focus shine. The everyday "my lips but moodier" shade.</p>
-                <ul class="tags">
-                    <li>Rose hip oil</li>
-                    <li>Ceramides</li>
-                    <li>Vitamin E</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-
-        <section class="flavour" id="lampone">
-            <div class="floaters" data-set="lampone"></div>
-            <div class="flavour-copy">
-                <p class="eyebrow">06 / 06 · Raspberry</p>
-                <h2 class="flavour-title">Lampone</h2>
-                <p class="flavour-desc">A deep raspberry-rose gloss with a high-shine, plumping feel. Made for after dark.</p>
-                <ul class="tags">
-                    <li>Raspberry seed oil</li>
-                    <li>Vitamin E</li>
-                    <li>Plumping complex</li>
-                </ul>
-                <div class="buy">
-                    <button class="btn btn-ink add" type="button">Add to bag <span class="price">£14</span></button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <p>&copy; 2026 Shop Camorra. All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <p>Opening <a href="wigs/index.html">Camorra Hair</a>…</p>
 </body>
 </html>
