@@ -345,7 +345,11 @@ function placeOrder() {
 
 const $ = (s, r = document) => r.querySelector(s);
 const app = $("#app");
-const params = new URLSearchParams(location.search);
+// Flags come from ?demo&big or from #demo / #demo-dark (shared links only keep a #hash)
+const params = (() => {
+    const q = new URLSearchParams(location.search), h = location.hash.slice(1).split("-").filter(Boolean);
+    return { has: (k) => q.has(k) || h.includes(k) };
+})();
 const wig = (id) => WIGS.find((w) => w.id === id);
 const naira = (n) => "₦" + Math.round(n).toLocaleString("en-NG");
 const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");

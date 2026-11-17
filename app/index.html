@@ -531,6 +531,10 @@ function totals() {
 }
 // </code-view>
 
+// Flags come from ?demo&big or from #demo / #demo-dark (shared links only keep a #hash)
+const FLAGS = new Set([...new URLSearchParams(location.search).keys(), ...location.hash.slice(1).split("-").filter(Boolean)]);
+const flag = (k) => FLAGS.has(k);
+
 const $ = (s, r = document) => r.querySelector(s);
 const app = $("#app");
 const shade = (id) => SHADES.find((s) => s.id === id);
@@ -947,7 +951,7 @@ app.addEventListener("keydown", (e) => {
 // ---------- Fit the phone to the window ----------
 function fit() {
     // ?big lets the phone grow past real size (for crisp video recording)
-    const cap = new URLSearchParams(location.search).has("big") ? Infinity : 1;
+    const cap = flag("big") ? Infinity : 1;
     const s = Math.min(cap, (window.innerHeight - 40) / 868, (window.innerWidth - 40) / 414);
     document.documentElement.style.setProperty("--s", s);
     const slot = $(".device-slot");
@@ -969,7 +973,7 @@ fit();
 })();
 
 // ---------- Start ----------
-if (new URLSearchParams(location.search).has("dark")) document.body.classList.add("dark");
+if (flag("dark")) document.body.classList.add("dark");
 render("login");
 setTimeout(() => $("#splash").classList.add("hide"), 1600);
 
@@ -1041,12 +1045,12 @@ async function demo() {
     await tap('[data-to="checkout"]'); await wait(1300);
     await tap('[data-action="pay"]'); await wait(4000);
     // Opened with ?demo (recording): keep the Play button hidden
-    if (!new URLSearchParams(location.search).has("demo")) document.body.classList.remove("demo");
+    if (!flag("demo")) document.body.classList.remove("demo");
     document.body.classList.add("demo-done");
     demoRunning = false;
 }
 $("#play").addEventListener("click", demo);
-if (new URLSearchParams(location.search).has("demo")) setTimeout(demo, 300);
+if (flag("demo")) setTimeout(demo, 300);
 </script>
 </body>
 </html>
