@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e0d10">
+<title>Camorra App</title>
+<meta name="description" content="Clickable Shop Camorra lip gloss shopping app prototype.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0e0d10;
+    --surface: #19171c;
+    --surface-2: #232026;
+    --line: #2c2930;
+    --text: #f6efe9;
+    --muted: #9b939e;
+    --accent: #f478a8;
+    --s: 1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+    font-family: "Inter", system-ui, sans-serif;
+    background: radial-gradient(ellipse at 30% 20%, #221a22 0%, #0a090b 60%) fixed, #0a090b;
+    color: var(--text);
+    overflow: hidden;
+}
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+/* ---------------- Stage: phone + code ---------------- */
+.stage {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    padding: 20px;
+}
+.device-slot { flex: none; position: relative; }
+.device {
+    position: absolute;
+    left: 0; top: 0;
+    width: 414px;
+    height: 868px;
+    border-radius: 64px;
+    padding: 12px;
+    background: #1b1a1d;
+    box-shadow: 0 0 0 2px #3a383d, 0 40px 120px rgba(0,0,0,.6), inset 0 0 0 2px #000;
+    transform: scale(var(--s));
+    transform-origin: 0 0;
+}
+.island {
+    position: absolute;
+    top: 24px; left: 50%;
+    width: 120px; height: 34px;
+    transform: translateX(-50%);
+    background: #000;
+    border-radius: 20px;
+    z-index: 60;
+}
+.app {
+    position: relative;
+    width: 100%; height: 100%;
+    border-radius: 52px;
+    overflow: hidden;
+    background: var(--bg);
+    isolation: isolate;
+}
+.statusbar {
+    position: absolute; inset: 0 0 auto 0;
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 34px 0 40px;
+    font-size: 15px; font-weight: 600;
+    z-index: 50;
+    pointer-events: none;
+}
+.statusbar .icons { display: flex; gap: 6px; align-items: center; }
+.home-indicator {
+    position: absolute; bottom: 8px; left: 50%;
+    width: 134px; height: 5px; border-radius: 3px;
+    background: rgba(255,255,255,.85);
+    transform: translateX(-50%);
+    z-index: 50; pointer-events: none;
+}
+
+/* ---------------- Code panel ---------------- */
+.editor {
+    width: 540px;
+    max-height: calc(100vh - 80px);
+    background: #141317;
+    border: 1px solid #2a282d;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+}
+.editor-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid #2a282d; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.tab { margin-left: 14px; font: 500 12px "JetBrains Mono", monospace; color: #cfc7d2; background: #1d1b20; padding: 6px 12px; border-radius: 6px; }
+.code {
+    flex: 1; overflow: hidden;
+    font: 12.5px/1.65 "JetBrains Mono", monospace;
+    color: #d8d2db;
+    padding: 14px 0;
+    counter-reset: ln;
+}
+.code .l { display: block; white-space: pre; padding-right: 16px; }
+.code .l::before { counter-increment: ln; content: counter(ln); display: inline-block; width: 44px; padding-right: 16px; text-align: right; color: #55505a; }
+.tk-k { color: #ff7ab2; } .tk-s { color: #f6c177; } .tk-n { color: #9ccfd8; } .tk-c { color: #6e6a76; font-style: italic; } .tk-p { color: #c4a7e7; }
+@media (max-width: 1100px) { .editor { display: none; } }
+
+/* Play demo button (outside the phone) */
+.play {
+    position: fixed; left: 20px; bottom: 20px;
+    padding: 10px 16px; border-radius: 999px;
+    background: #fff; color: #111; font-weight: 600; font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    z-index: 100;
+}
+body.demo .play { display: none; }
+
+/* ---------------- Screens ---------------- */
+.screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    background: var(--bg);
+    transform: translateX(100%);
+    transition: transform 450ms cubic-bezier(.2,.8,.2,1), opacity 450ms;
+    z-index: 1;
+}
+.screen.active { transform: none; z-index: 3; }
+.screen.prev { transform: translateX(-25%); opacity: .5; z-index: 2; }
+.scroll { flex: 1; overflow-y: auto; padding: 60px 18px 130px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.icon-btn {
+    position: relative;
+    width: 42px; height: 42px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+}
+.icon-btn svg { width: 20px; height: 20px; }
+.badge {
+    position: absolute; top: -3px; right: -3px;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    border-radius: 9px; background: var(--accent); color: #2a0b18;
+    font-size: 11px; font-weight: 700; display: grid; place-items: center;
+    transition: transform 200ms;
+}
+.badge:empty { display: none; }
+.badge.bump { transform: scale(1.4); }
+.title-sm { font-size: 13px; color: var(--muted); }
+.title-lg { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+.h-screen { font-size: 17px; font-weight: 600; }
+
+/* Splash */
+.splash {
+    position: absolute; inset: 0; z-index: 40;
+    display: grid; place-items: center; text-align: center;
+    background: radial-gradient(circle at 50% 45%, #3a1a2a 0%, var(--bg) 65%);
+    transition: opacity 600ms, visibility 600ms;
+}
+.splash.hide { opacity: 0; visibility: hidden; }
+.logo { font-size: 46px; font-weight: 900; letter-spacing: -0.06em; }
+.logo i { display: inline-block; width: 12px; height: 16px; margin-left: 2px; background: var(--accent); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: drip 1.6s ease-in-out infinite; }
+@keyframes drip { 50% { transform: translateY(6px) scaleY(1.15); } }
+.splash p { margin-top: 8px; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+
+/* Home */
+.search { display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+.hero {
+    position: relative; height: 168px; border-radius: 24px; overflow: hidden;
+    padding: 20px;
+    background: linear-gradient(135deg, #f478a8 0%, #a86a86 55%, #5a2140 100%);
+    margin-bottom: 20px;
+}
+.pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.22); backdrop-filter: blur(6px); }
+.hero h3 { margin-top: 12px; font-size: 24px; line-height: 1.05; letter-spacing: -0.03em; max-width: 170px; }
+.hero .go { position: absolute; left: 20px; bottom: 18px; width: 38px; height: 38px; border-radius: 50%; background: #fff; color: #111; display: grid; place-items: center; }
+.hero .tubes { position: absolute; right: 8px; top: 8px; bottom: -40px; width: 170px; }
+.hero .tubes > div { position: absolute; height: 170px; }
+.hero .tubes > div svg { height: 100%; width: auto; filter: drop-shadow(0 12px 18px rgba(0,0,0,.3)); }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; scrollbar-width: none; }
+.chip { flex: none; padding: 9px 15px; border-radius: 999px; font-size: 13px; font-weight: 500; background: var(--surface); border: 1px solid var(--line); color: var(--muted); transition: all 200ms; }
+.chip.on { background: var(--text); color: #111; border-color: var(--text); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card { position: relative; cursor: pointer; animation: rise 400ms both; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+.tile { position: relative; height: 190px; border-radius: 20px; display: grid; place-items: center; overflow: hidden; }
+.tile .t { height: 80%; transform: rotate(-16deg); transition: transform 300ms; }
+.tile .t svg { height: 100%; width: auto; filter: drop-shadow(0 14px 18px rgba(0,0,0,.18)); }
+.card:active .tile .t { transform: rotate(-10deg) scale(.96); }
+.heart { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.7); color: #2b1a22; z-index: 2; }
+.heart svg { width: 16px; height: 16px; }
+.heart.on { color: #e0356f; }
+.heart.on svg path { fill: currentColor; }
+.meta { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; font-weight: 600; }
+.sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.tabbar {
+    position: absolute; left: 14px; right: 14px; bottom: 26px;
+    height: 64px; border-radius: 32px;
+    display: flex; justify-content: space-around; align-items: center;
+    background: rgba(30,28,33,.85); backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    z-index: 5;
+}
+.tabbar span { color: var(--muted); display: grid; place-items: center; }
+.tabbar span.on { color: var(--text); }
+.tabbar svg { width: 22px; height: 22px; }
+
+/* Product */
+.p-tile { position: relative; height: 340px; border-radius: 28px; display: grid; place-items: center; overflow: hidden; margin-bottom: 20px; transition: background-color 400ms; }
+.p-tile .glow { position: absolute; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,.45); filter: blur(10px); }
+.p-tile .t { position: relative; height: 82%; transform: rotate(-14deg); animation: floaty 4s ease-in-out infinite; }
+.p-tile .t svg { height: 100%; width: auto; filter: drop-shadow(0 24px 30px rgba(0,0,0,.22)); }
+@keyframes floaty { 50% { transform: rotate(-10deg) translateY(-8px); } }
+.p-head { display: flex; justify-content: space-between; align-items: baseline; }
+.p-name { font-size: 32px; font-weight: 800; letter-spacing: -0.04em; }
+.p-price { font-size: 20px; font-weight: 700; }
+.p-desc { margin: 10px 0 20px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.label { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 10px; }
+.swatches { display: flex; gap: 10px; margin-bottom: 20px; }
+.sw { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; padding: 3px; transition: border-color 200ms; }
+.sw i { display: block; width: 100%; height: 100%; border-radius: 50%; box-shadow: inset 0 -6px 10px rgba(0,0,0,.15), inset 0 4px 8px rgba(255,255,255,.5); }
+.sw.on { border-color: var(--text); }
+.rating { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); margin-top: 4px; }
+.rating b { color: #f6c177; letter-spacing: 1px; }
+
+.cta-bar {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 14px 18px 34px;
+    display: flex; gap: 12px; align-items: center;
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    z-index: 5;
+}
+.qty { display: flex; align-items: center; gap: 14px; height: 54px; padding: 0 14px; border-radius: 27px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; }
+.qty button { width: 24px; height: 24px; font-size: 18px; color: var(--muted); }
+.btn-main {
+    flex: 1; height: 54px; border-radius: 27px;
+    background: var(--text); color: #111;
+    font-weight: 700; font-size: 15px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: transform 150ms;
+}
+.btn-main:active { transform: scale(.97); }
+.btn-main.pink { background: var(--accent); color: #2a0b18; }
+
+/* Bag / checkout */
+.row { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 10px; }
+.thumb { width: 72px; height: 80px; flex: none; border-radius: 14px; display: grid; place-items: center; overflow: hidden; }
+.thumb .t { height: 78%; transform: rotate(-14deg); }
+.thumb .t svg { height: 100%; width: auto; }
+.row .info { flex: 1; }
+.row .info b { display: block; font-size: 15px; }
+.row .info span { font-size: 12px; color: var(--muted); }
+.row .qty { height: 36px; padding: 0 10px; gap: 10px; font-size: 14px; }
+.summary { margin-top: 16px; padding: 16px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; }
+.summary div { display: flex; justify-content: space-between; padding: 6px 0; color: var(--muted); }
+.summary .total { color: var(--text); font-weight: 700; font-size: 17px; border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 12px; }
+.promo { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-radius: 16px; border: 1px dashed #4a3a44; font-size: 13px; color: var(--muted); }
+.promo b { color: var(--accent); }
+.empty { text-align: center; padding-top: 120px; color: var(--muted); }
+
+.card-box { padding: 16px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 12px; font-size: 14px; }
+.card-box .lbl { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 8px; width: 100%; text-align: left; transition: border-color 200ms; }
+.opt .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); display: grid; place-items: center; }
+.opt.on { border-color: var(--accent); }
+.opt.on .radio { border-color: var(--accent); }
+.opt.on .radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.opt .grow { flex: 1; }
+.opt small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.paycard {
+    height: 150px; border-radius: 20px; padding: 18px; margin-bottom: 12px;
+    background: linear-gradient(135deg, #2a1a24, #5a2140 60%, #a86a86);
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+}
+.paycard::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,.08); }
+.paycard .num { font: 500 17px "JetBrains Mono", monospace; letter-spacing: 2px; }
+.paycard .bottom { display: flex; justify-content: space-between; font-size: 12px; opacity: .8; }
+.mini-thumbs { display: flex; gap: 8px; }
+.mini-thumbs .thumb { width: 52px; height: 58px; border-radius: 12px; }
+.spin { width: 20px; height: 20px; border-radius: 50%; border: 3px solid rgba(0,0,0,.2); border-top-color: #2a0b18; animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Success */
+.success { text-align: center; padding-top: 30px; }
+.check { width: 96px; height: 96px; margin: 0 auto 18px; }
+.check circle { stroke-dasharray: 280; stroke-dashoffset: 280; animation: draw 700ms ease forwards; }
+.check path { stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw 400ms 500ms ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.success h2 { font-size: 28px; letter-spacing: -0.03em; }
+.success p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+.order-card { text-align: left; margin-top: 26px; padding: 18px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); }
+.order-card .top { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.track { display: flex; gap: 6px; margin-top: 16px; }
+.track i { flex: 1; height: 4px; border-radius: 2px; background: var(--line); }
+.track i.on { background: var(--accent); }
+.track-lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 8px; }
+.btn-ghost { width: 100%; height: 50px; border-radius: 25px; border: 1px solid var(--line); margin-top: 10px; font-weight: 600; }
+
+/* Toast + demo tap */
+.toast {
+    position: absolute; left: 50%; top: 64px; z-index: 45;
+    transform: translate(-50%, -30px); opacity: 0;
+    padding: 10px 16px; border-radius: 999px;
+    background: var(--text); color: #111; font-size: 13px; font-weight: 600;
+    display: flex; gap: 8px; align-items: center;
+    white-space: nowrap;
+    transition: all 300ms;
+}
+.toast.show { transform: translate(-50%, 0); opacity: 1; }
+.tap {
+    position: absolute; z-index: 55; width: 44px; height: 44px; margin: -22px 0 0 -22px;
+    border-radius: 50%; background: rgba(255,255,255,.35); border: 2px solid rgba(255,255,255,.8);
+    pointer-events: none; animation: tap 600ms ease forwards;
+}
+@keyframes tap { 0% { transform: scale(.4); opacity: 0; } 30% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+/* ---------------- Real phone: go fullscreen, no frame ---------------- */
+@media (max-width: 500px) {
+    .stage { padding: 0; }
+    .device-slot { width: 100vw !important; height: 100dvh !important; }
+    .device { position: static; width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none; background: var(--bg); }
+    .island, .statusbar, .home-indicator, .play { display: none; }
+    .app { border-radius: 0; }
+    .scroll { padding-top: calc(env(safe-area-inset-top) + 16px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="stage">
+    <div class="device-slot">
+        <div class="device">
+            <div class="island"></div>
+            <div class="app" id="app">
+                <div class="statusbar">
+                    <span>9:41</span>
+                    <span class="icons">
+                        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.5c2.3 0 4.4.9 6 2.4l1.2-1.2A10.3 10.3 0 0 0 8 .8 10.3 10.3 0 0 0 .8 3.7L2 4.9a8.6 8.6 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A7 7 0 0 0 8 4.2a7 7 0 0 0-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c.5 0 1 .2 1.3.5L8 11 6.7 9.7c.3-.3.8-.5 1.3-.5Z"/></svg>
+                        <svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".4"/></svg>
+                    </span>
+                </div>
+
+                <div class="splash" id="splash">
+                    <div><div class="logo">camorra<i></i></div><p>Lip gloss studio</p></div>
+                </div>
+
+                <section class="screen active" id="home"></section>
+                <section class="screen" id="product"></section>
+                <section class="screen" id="bag"></section>
+                <section class="screen" id="checkout"></section>
+                <section class="screen" id="success"></section>
+
+                <div class="toast" id="toast"></div>
+                <div class="home-indicator"></div>
+            </div>
+        </div>
+    </div>
+
+    <aside class="editor" aria-hidden="true">
+        <div class="editor-top">
+            <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+            <span class="tab">camorra_app.js</span>
+        </div>
+        <div class="code" id="code"></div>
+    </aside>
+</div>
+
+<button class="play" id="play" type="button">▶ Play demo</button>
+
+<script id="app-js">
+// <code-view>
+// Camorra — lip gloss shopping app
+const SHADES = [
+    { id: "cristallo", name: "Cristallo", note: "Clear",      tag: "Clear",  price: 12,
+      tile: "#e9edf5", swatch: "#efe9f2", pkg: { type: "dome", body: "#e9e4ec", label: "#8a90a6" },
+      desc: "Crystal-clear, mirror-shine gloss. Wear it alone for glass lips or layer it over any shade." },
+    { id: "fragola",   name: "Fragola",   note: "Strawberry", tag: "Glossy", price: 14,
+      tile: "#fde3ec", swatch: "#f478a8", pkg: { type: "squeeze", crimp: "#e04f86", body: "#f478a8", cap: "#fbf7f2", label: "#fff" },
+      desc: "A candy-pink squeeze gloss with a juicy, glassy finish. Sweet, sheer and easy every day." },
+    { id: "pesca",     name: "Pesca",     note: "Peach",      tag: "Glossy", price: 14,
+      tile: "#fee6da", swatch: "#f9a986", pkg: { type: "squeeze", crimp: "#ec8a66", body: "#f9a986", cap: "#fbf7f2", label: "#fff" },
+      desc: "A sun-warm peachy coral with a dewy finish. Like a summer evening on your lips." },
+    { id: "caramello", name: "Caramello", note: "Caramel",    tag: "Nude",   price: 14,
+      tile: "#f1e2d6", swatch: "#a8684c", pkg: { type: "frosted", cap: "#efe5d4", body: "#a8684c", label: "#f6ebe0" },
+      desc: "A warm caramel-nude that sits soft on the lips. Your lips, but better, with a hint of vanilla." },
+    { id: "malva",     name: "Malva",     note: "Mauve",      tag: "Nude",   price: 14,
+      tile: "#f0dfe7", swatch: "#a86a86", pkg: { type: "frosted", cap: "#efe5d4", body: "#a86a86", label: "#f8eaf0" },
+      desc: "A dusty rose-mauve with a soft-focus shine. The everyday 'my lips but moodier' shade." },
+    { id: "lampone",   name: "Lampone",   note: "Raspberry",  tag: "Berry",  price: 14,
+      tile: "#f4dbe3", swatch: "#9e2a50", pkg: { type: "dome", body: "#9e2a50", label: "#fff" },
+      desc: "A deep raspberry-rose gloss with a high-shine, plumping feel. Made for after dark." },
+];
+
+const state = { product: "fragola", qty: 1, bag: [], liked: new Set(["lampone"]), filter: "All", express: false };
+
+function addToBag(id, qty) {
+    const item = state.bag.find((i) => i.id === id);
+    item ? (item.qty += qty) : state.bag.push({ id, qty });
+    updateBadge(true);
+    toast(`${shade(id).name} added to bag`);
+}
+
+function totals() {
+    const sub = state.bag.reduce((s, i) => s + shade(i.id).price * i.qty, 0);
+    const delivery = state.express ? 4.99 : sub >= 30 ? 0 : 3.5;
+    return { sub, delivery, total: sub + delivery };
+}
+// </code-view>
+
+const $ = (s, r = document) => r.querySelector(s);
+const app = $("#app");
+const shade = (id) => SHADES.find((s) => s.id === id);
+const money = (n) => "£" + (Number.isInteger(n) ? n : n.toFixed(2));
+
+// ---------- Icons ----------
+const I = {
+    bag: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>`,
+    heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>`,
+    back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>`,
+    arrow: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>`,
+    search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
+    home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4v-9Z"/></svg>`,
+    grid: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>`,
+    user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>`,
+};
+
+// ---------- Packaging drawings ----------
+let gid = 0;
+function tube(p) {
+    const id = "g" + gid++;
+    const S = `url(#s${id})`, C = `url(#c${id})`;
+    const defs = `<defs><linearGradient id="s${id}" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".22" stop-color="#fff" stop-opacity=".55"/><stop offset=".42" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient><linearGradient id="c${id}" x1="0" x2="1"><stop offset="0" stop-color="#8a8a8e"/><stop offset=".2" stop-color="#f7f7f9"/><stop offset=".45" stop-color="#b9b9be"/><stop offset=".7" stop-color="#fff"/><stop offset="1" stop-color="#76767b"/></linearGradient></defs>`;
+    const label = (y) => `<text x="60" y="${y}" transform="rotate(90 60 ${y})" text-anchor="middle" fill="${p.label}" font-family="Inter" font-weight="900" font-size="30" letter-spacing="-1">camorra</text>`;
+    let b;
+    if (p.type === "squeeze") {
+        b = `<rect x="14" y="6" width="92" height="34" rx="4" fill="${p.crimp}"/><g stroke="#000" stroke-opacity=".12" stroke-width="2"><line x1="14" y1="16" x2="106" y2="16"/><line x1="14" y1="24" x2="106" y2="24"/><line x1="14" y1="32" x2="106" y2="32"/></g><path d="M16 40 H104 L98 320 H22 Z" fill="${p.body}"/><rect x="22" y="318" width="76" height="96" rx="10" fill="${p.cap}"/><path d="M16 40 H104 L98 320 H22 Z" fill="${S}"/><rect x="22" y="318" width="76" height="96" rx="10" fill="${S}"/>${label(180)}`;
+    } else if (p.type === "frosted") {
+        b = `<rect x="24" y="4" width="72" height="150" rx="12" fill="${p.cap}"/><rect x="24" y="4" width="72" height="150" rx="12" fill="${S}"/><rect x="16" y="150" width="88" height="262" rx="18" fill="${p.body}"/><rect x="16" y="150" width="88" height="262" rx="18" fill="#fff" opacity=".18"/><rect x="16" y="150" width="88" height="262" rx="18" fill="${S}"/>${label(282)}`;
+    } else {
+        b = `<path d="M26 150 V60 A34 34 0 0 1 94 60 V150 Z" fill="${C}"/><rect x="20" y="148" width="80" height="22" rx="4" fill="${C}"/><path d="M18 170 H102 V360 A42 42 0 0 1 18 360 Z" fill="#fff" opacity=".6"/><path d="M28 178 H92 V356 A32 32 0 0 1 28 356 Z" fill="${p.body}"/><path d="M18 170 H102 V360 A42 42 0 0 1 18 360 Z" fill="${S}"/>${label(290)}`;
+    }
+    return `<svg viewBox="0 0 120 420" xmlns="http://www.w3.org/2000/svg">${defs}${b}</svg>`;
+}
+const thumb = (s, cls = "thumb") => `<div class="${cls}" style="background:${s.tile}"><div class="t">${tube(s.pkg)}</div></div>`;
+const bagCount = () => state.bag.reduce((n, i) => n + i.qty, 0) || "";
+const bagBtn = () => `<button class="icon-btn" data-action="go" data-to="bag" aria-label="Bag">${I.bag}<span class="badge">${bagCount()}</span></button>`;
+
+// ---------- Screens ----------
+const R = {
+    home() {
+        const list = SHADES.filter((s) => state.filter === "All" || s.tag === state.filter);
+        const heroTubes = ["fragola", "malva", "lampone"].map((id, i) =>
+            `<div style="left:${i * 46}px;top:${[18, 0, 24][i]}px;transform:rotate(${[-22, -6, 12][i]}deg)">${tube(shade(id).pkg)}</div>`).join("");
+        return `<div class="scroll">
+            <div class="topbar">
+                <div><div class="title-sm">Ciao, bella ✨</div><div class="title-lg">Find your shine</div></div>
+                ${bagBtn()}
+            </div>
+            <div class="search">${I.search} Search shades, finishes…</div>
+            <div class="hero">
+                <span class="pill">New drop</span>
+                <h3>Six shades, just in</h3>
+                <button class="go" data-action="open" data-id="cristallo" aria-label="Shop new drop">${I.arrow}</button>
+                <div class="tubes">${heroTubes}</div>
+            </div>
+            <div class="chips">${["All", "Clear", "Glossy", "Nude", "Berry"].map((c) =>
+                `<button class="chip ${state.filter === c ? "on" : ""}" data-action="filter" data-f="${c}">${c}</button>`).join("")}</div>
+            <div class="grid">${list.map((s, i) => `
+                <div class="card" data-action="open" data-id="${s.id}" style="animation-delay:${i * 60}ms">
+                    <div class="tile" style="background:${s.tile}"><div class="t">${tube(s.pkg)}</div></div>
+                    <button class="heart ${state.liked.has(s.id) ? "on" : ""}" data-action="like" data-id="${s.id}" aria-label="Save">${I.heart}</button>
+                    <div class="meta"><span>${s.name}</span><span>${money(s.price)}</span></div>
+                    <div class="sub">${s.tag} · ${s.note}</div>
+                </div>`).join("")}</div>
+        </div>
+        <nav class="tabbar"><span class="on">${I.home}</span><span>${I.grid}</span><span>${I.heart}</span><span>${I.user}</span></nav>`;
+    },
+
+    product() {
+        const s = shade(state.product);
+        return `<div class="scroll">
+            <div class="topbar">
+                <button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button>
+                <div class="h-screen">Lip gloss</div>
+                ${bagBtn()}
+            </div>
+            <div class="p-tile" style="background:${s.tile}"><div class="glow"></div><div class="t">${tube(s.pkg)}</div></div>
+            <div class="p-head"><div class="p-name">${s.name}</div><div class="p-price">${money(s.price)}</div></div>
+            <div class="rating"><b>★★★★★</b> 4.9 · 1.2k reviews</div>
+            <p class="p-desc">${s.desc}</p>
+            <div class="label">Shade · ${s.note}</div>
+            <div class="swatches">${SHADES.map((x) =>
+                `<button class="sw ${x.id === s.id ? "on" : ""}" data-action="shade" data-id="${x.id}" aria-label="${x.name}"><i style="background:${x.swatch}"></i></button>`).join("")}</div>
+        </div>
+        <div class="cta-bar">
+            <div class="qty"><button data-action="qty" data-d="-1">−</button><span>${state.qty}</span><button data-action="qty" data-d="1">+</button></div>
+            <button class="btn-main pink" data-action="add">Add to bag · ${money(s.price * state.qty)}</button>
+        </div>`;
+    },
+
+    bag() {
+        const t = totals();
+        const items = state.bag.map((i) => {
+            const s = shade(i.id);
+            return `<div class="row">${thumb(s)}
+                <div class="info"><b>${s.name}</b><span>${s.tag} · ${s.note}</span><div style="margin-top:6px;font-weight:600">${money(s.price * i.qty)}</div></div>
+                <div class="qty"><button data-action="bagqty" data-id="${s.id}" data-d="-1">−</button><span>${i.qty}</span><button data-action="bagqty" data-id="${s.id}" data-d="1">+</button></div>
+            </div>`;
+        }).join("");
+        return `<div class="scroll">
+            <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen">Your bag</div><div style="width:42px"></div></div>
+            ${state.bag.length ? `${items}
+            <div class="promo"><span>Free delivery over £30</span><b>${t.sub >= 30 ? "Unlocked ✓" : money(30 - t.sub) + " to go"}</b></div>
+            <div class="summary">
+                <div><span>Subtotal</span><span>${money(t.sub)}</span></div>
+                <div><span>Delivery</span><span>${t.delivery ? money(t.delivery) : "Free"}</span></div>
+                <div class="total"><span>Total</span><span>${money(t.total)}</span></div>
+            </div>` : `<div class="empty">Your bag is empty.<br>Go find your shine ✨</div>`}
+        </div>
+        ${state.bag.length ? `<div class="cta-bar"><button class="btn-main" data-action="go" data-to="checkout">Checkout · ${money(t.total)}</button></div>` : ""}`;
+    },
+
+    checkout() {
+        const t = totals();
+        return `<div class="scroll">
+            <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen">Checkout</div><div style="width:42px"></div></div>
+            <div class="card-box"><div class="lbl">Deliver to</div><b>Home</b><div style="color:var(--muted);margin-top:4px">14 Via Rosa, Flat 3 · London</div></div>
+            <div class="label" style="margin-top:18px">Delivery</div>
+            <button class="opt ${state.express ? "" : "on"}" data-action="ship" data-x="0"><span class="radio"></span><span class="grow">Standard<small>2–3 days</small></span><b>${t.sub >= 30 ? "Free" : "£3.50"}</b></button>
+            <button class="opt ${state.express ? "on" : ""}" data-action="ship" data-x="1"><span class="radio"></span><span class="grow">Express<small>Tomorrow</small></span><b>£4.99</b></button>
+            <div class="label" style="margin-top:18px">Payment</div>
+            <div class="paycard"><div style="font-weight:900;letter-spacing:-.04em">camorra</div><div class="num">•••• •••• •••• 4242</div><div class="bottom"><span>BELLA ROSSI</span><span>09/29</span></div></div>
+            <div class="card-box" style="display:flex;justify-content:space-between;align-items:center">
+                <div class="mini-thumbs">${state.bag.slice(0, 4).map((i) => thumb(shade(i.id))).join("")}</div>
+                <div style="text-align:right"><div class="lbl">Total</div><b style="font-size:20px">${money(t.total)}</b></div>
+            </div>
+        </div>
+        <div class="cta-bar"><button class="btn-main pink" data-action="pay">Pay ${money(t.total)}</button></div>`;
+    },
+
+    success() {
+        const d = new Date();
+        d.setDate(d.getDate() + (state.express ? 1 : 2));
+        const when = d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+        return `<div class="scroll"><div class="success">
+            <svg class="check" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#f478a8" stroke-width="6"/><path d="M30 52 l14 14 l26 -30" fill="none" stroke="#f478a8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h2>Order placed!</h2>
+            <p>Arriving ${when}. We'll text you when it ships.</p>
+            <div class="order-card">
+                <div class="top"><span>Order #CMR-${2040 + state.bag.length * 7}</span><span>${money(totals().total)}</span></div>
+                <div class="mini-thumbs">${state.bag.slice(0, 5).map((i) => thumb(shade(i.id))).join("")}</div>
+                <div class="track"><i class="on"></i><i></i><i></i></div>
+                <div class="track-lbl"><span>Confirmed</span><span>Shipped</span><span>Delivered</span></div>
+            </div>
+            <button class="btn-main" style="width:100%;margin-top:22px;flex:none" data-action="restart">Back to shop</button>
+            <button class="btn-ghost">Track order</button>
+        </div></div>`;
+    },
+};
+
+// ---------- Navigation ----------
+let stack = ["home"];
+function render(name) { $("#" + name).innerHTML = R[name](); }
+
+function go(name) {
+    render(name);
+    const cur = $("#" + stack[stack.length - 1]);
+    const next = $("#" + name);
+    next.classList.remove("prev");
+    next.querySelector(".scroll").scrollTop = 0;
+    requestAnimationFrame(() => {
+        cur.classList.remove("active"); cur.classList.add("prev");
+        next.classList.add("active");
+    });
+    stack.push(name);
+}
+function back() {
+    if (stack.length < 2) return;
+    const cur = $("#" + stack.pop());
+    const prev = $("#" + stack[stack.length - 1]);
+    render(prev.id);
+    cur.classList.remove("active");
+    prev.classList.remove("prev"); prev.classList.add("active");
+}
+function goHome() {
+    document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active", "prev"));
+    stack = ["home"];
+    render("home");
+    $("#home").classList.add("active");
+}
+
+function updateBadge(bump) {
+    document.querySelectorAll(".badge").forEach((b) => {
+        b.textContent = bagCount();
+        if (bump) { b.classList.add("bump"); setTimeout(() => b.classList.remove("bump"), 200); }
+    });
+}
+let toastTimer;
+function toast(msg) {
+    const t = $("#toast");
+    t.innerHTML = `${I.bag.replace("<svg", '<svg width="16" height="16"')} ${msg}`;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1600);
+}
+
+// ---------- Taps ----------
+app.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-action]");
+    if (!el) return;
+    const { action, id } = el.dataset;
+    if (action === "open") { state.product = id; state.qty = 1; go("product"); }
+    if (action === "go") go(el.dataset.to);
+    if (action === "back") back();
+    if (action === "filter") { state.filter = el.dataset.f; render("home"); }
+    if (action === "like") { state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id); el.classList.toggle("on"); }
+    if (action === "shade") { state.product = id; render("product"); }
+    if (action === "qty") { state.qty = Math.max(1, state.qty + +el.dataset.d); render("product"); }
+    if (action === "add") addToBag(state.product, state.qty);
+    if (action === "bagqty") {
+        const item = state.bag.find((i) => i.id === id);
+        item.qty += +el.dataset.d;
+        if (item.qty <= 0) state.bag = state.bag.filter((i) => i !== item);
+        render("bag"); updateBadge();
+    }
+    if (action === "ship") { state.express = el.dataset.x === "1"; render("checkout"); }
+    if (action === "pay") {
+        el.innerHTML = `<span class="spin"></span> Processing…`;
+        setTimeout(() => go("success"), 1400);
+    }
+    if (action === "restart") { state.bag = []; state.express = false; goHome(); }
+});
+
+// ---------- Fit the phone to the window ----------
+function fit() {
+    // ?big lets the phone grow past real size (for crisp video recording)
+    const cap = new URLSearchParams(location.search).has("big") ? Infinity : 1;
+    const s = Math.min(cap, (window.innerHeight - 40) / 868, (window.innerWidth - 40) / 414);
+    document.documentElement.style.setProperty("--s", s);
+    const slot = $(".device-slot");
+    slot.style.width = 414 * s + "px";
+    slot.style.height = 868 * s + "px";
+}
+window.addEventListener("resize", fit);
+fit();
+
+// ---------- Code panel: shows this app's real source ----------
+(function codeView() {
+    const src = $("#app-js").textContent;
+    const part = src.slice(src.indexOf("// <code-view>") + 15, src.indexOf("// </code-view>")).trimEnd();
+    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const re = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`|'(?:[^'\\]|\\.)*')|\b(const|let|function|return|new|if|else)\b|\b(\d+(?:\.\d+)?)\b|\b(state|SHADES|shade|toast|updateBadge)\b/gm;
+    $("#code").innerHTML = part.split("\n").map((line) =>
+        `<span class="l">${esc(line).replace(re, (m, c, s, k, n, p) =>
+            c ? `<span class="tk-c">${m}</span>` : s ? `<span class="tk-s">${m}</span>` : k ? `<span class="tk-k">${m}</span>` : n ? `<span class="tk-n">${m}</span>` : `<span class="tk-p">${m}</span>`)}</span>`).join("");
+})();
+
+// ---------- Start ----------
+render("home");
+setTimeout(() => $("#splash").classList.add("hide"), 1600);
+
+// ---------- Auto demo (for screen recording) ----------
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+async function tap(sel) {
+    const el = typeof sel === "string" ? $(".screen.active " + sel) || $(sel) : sel;
+    if (!el) return;
+    const sc = el.closest(".scroll");
+    if (sc) {
+        const r = el.getBoundingClientRect(), a = sc.getBoundingClientRect();
+        if (r.bottom > a.bottom - 120 || r.top < a.top + 60) {
+            sc.scrollBy({ top: r.top - a.top - sc.clientHeight / 3, behavior: "smooth" });
+            await wait(700);
+        }
+    }
+    const r = el.getBoundingClientRect(), a = app.getBoundingClientRect();
+    const k = a.width / app.offsetWidth;
+    const dot = document.createElement("div");
+    dot.className = "tap";
+    dot.style.left = (r.left + r.width / 2 - a.left) / k + "px";
+    dot.style.top = (r.top + r.height / 2 - a.top) / k + "px";
+    app.appendChild(dot);
+    setTimeout(() => dot.remove(), 700);
+    await wait(220);
+    el.click();
+}
+async function scrollActive(px) {
+    $(".screen.active .scroll").scrollBy({ top: px, behavior: "smooth" });
+    await wait(900);
+}
+
+let demoRunning = false;
+async function demo() {
+    if (demoRunning) return;
+    demoRunning = true;
+    document.body.classList.add("demo");
+    state.bag = []; state.express = false; state.filter = "All";
+    goHome();
+    $("#splash").classList.remove("hide");
+    await wait(1800);
+    $("#splash").classList.add("hide");
+    await wait(1000);
+    await scrollActive(300);
+    await scrollActive(-300);
+    await tap('[data-f="Nude"]'); await wait(900);
+    await tap('[data-f="All"]'); await wait(900);
+    await tap('.card[data-id="fragola"]'); await wait(1300);
+    await tap('[data-action="shade"][data-id="malva"]'); await wait(1000);
+    await tap('[data-action="shade"][data-id="lampone"]'); await wait(1000);
+    await tap('[data-action="qty"][data-d="1"]'); await wait(600);
+    await tap('[data-action="add"]'); await wait(1200);
+    await tap('[data-action="shade"][data-id="cristallo"]'); await wait(900);
+    await tap('[data-action="qty"][data-d="-1"]'); await wait(400);
+    await tap('[data-action="add"]'); await wait(1200);
+    await tap('[data-to="bag"]'); await wait(1500);
+    await tap('[data-to="checkout"]'); await wait(1300);
+    await tap('[data-action="ship"][data-x="1"]'); await wait(1000);
+    await tap('[data-action="pay"]'); await wait(4000);
+    // Opened with ?demo (recording): keep the Play button hidden
+    if (!new URLSearchParams(location.search).has("demo")) document.body.classList.remove("demo");
+    document.body.classList.add("demo-done");
+    demoRunning = false;
+}
+$("#play").addEventListener("click", demo);
+if (new URLSearchParams(location.search).has("demo")) setTimeout(demo, 300);
+</script>
+</body>
+</html>
