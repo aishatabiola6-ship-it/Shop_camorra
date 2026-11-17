@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fbf4f1">
+<title>Camorra Hair</title>
+<meta name="description" content="Clickable wig shop app prototype with live order tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --s: 1; }
+body {
+    --bg: #fbf4f1;
+    --surface: #ffffff;
+    --surface-2: #f6e9ec;
+    --line: #efdde2;
+    --text: #2e1220;
+    --muted: #93707e;
+    --accent: #b8436f;
+    --accent-soft: #f7dfe8;
+    --accent-fg: #ffffff;
+    --btn-bg: #3a1426;
+    --btn-fg: #fff6f2;
+    --tabbar: rgba(255, 255, 255, .88);
+    --indicator: rgba(46, 18, 32, .8);
+    --stage: radial-gradient(ellipse at 30% 20%, #fbe6ec 0%, #e9c3cf 100%);
+}
+body.dark {
+    --bg: #120d10; --surface: #1c161a; --surface-2: #261d22; --line: #31262c;
+    --text: #f6ece8; --muted: #a2909a; --accent: #e07aa0; --accent-soft: #3a1e2b; --accent-fg: #2a0b18;
+    --btn-bg: #f6ece8; --btn-fg: #160c11; --tabbar: rgba(30, 24, 28, .88); --indicator: rgba(255,255,255,.85);
+    --stage: radial-gradient(ellipse at 30% 20%, #2a1a22 0%, #0a0809 60%);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body { font-family: "Inter", system-ui, sans-serif; background: var(--stage) fixed; color: var(--text); overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { display: block; }
+.serif { font-family: "Playfair Display", Georgia, serif; }
+
+/* ---------------- Stage: phone + code ---------------- */
+.stage { height: 100%; display: flex; align-items: center; justify-content: center; gap: 48px; padding: 20px; }
+.device-slot { flex: none; position: relative; }
+.device { position: absolute; left: 0; top: 0; width: 414px; height: 868px; border-radius: 64px; padding: 12px; background: #1b1a1d; box-shadow: 0 0 0 2px #3a383d, 0 40px 120px rgba(0,0,0,.45), inset 0 0 0 2px #000; transform: scale(var(--s)); transform-origin: 0 0; }
+.island { position: absolute; top: 24px; left: 50%; width: 120px; height: 34px; transform: translateX(-50%); background: #000; border-radius: 20px; z-index: 60; }
+.app { position: relative; width: 100%; height: 100%; border-radius: 52px; overflow: hidden; background: var(--bg); isolation: isolate; }
+.statusbar { position: absolute; inset: 0 0 auto 0; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 6px 34px 0 40px; font-size: 15px; font-weight: 600; z-index: 50; pointer-events: none; background: linear-gradient(var(--bg) 70%, transparent); }
+.statusbar .icons { display: flex; gap: 6px; align-items: center; }
+.home-indicator { position: absolute; bottom: 8px; left: 50%; width: 134px; height: 5px; border-radius: 3px; background: var(--indicator); transform: translateX(-50%); z-index: 50; pointer-events: none; }
+
+.editor { width: 540px; max-height: calc(100vh - 80px); background: #141317; border: 1px solid #2a282d; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 30px 80px rgba(0,0,0,.4); }
+.editor-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid #2a282d; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.tab { margin-left: 14px; font: 500 12px "JetBrains Mono", monospace; color: #cfc7d2; background: #1d1b20; padding: 6px 12px; border-radius: 6px; }
+.code { flex: 1; overflow: hidden; font: 12px/1.65 "JetBrains Mono", monospace; color: #d8d2db; padding: 14px 0; counter-reset: ln; }
+.code .l { display: block; white-space: pre; padding-right: 16px; }
+.code .l::before { counter-increment: ln; content: counter(ln); display: inline-block; width: 44px; padding-right: 16px; text-align: right; color: #55505a; }
+.tk-k { color: #ff7ab2; } .tk-s { color: #f6c177; } .tk-n { color: #9ccfd8; } .tk-c { color: #6e6a76; font-style: italic; } .tk-p { color: #c4a7e7; }
+@media (max-width: 1100px) { .editor { display: none; } }
+.play { position: fixed; left: 20px; bottom: 20px; padding: 10px 16px; border-radius: 999px; background: #fff; color: #111; font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.3); z-index: 100; }
+body.demo .play { display: none; }
+
+/* ---------------- Screens ---------------- */
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg); transform: translateX(100%); transition: transform 450ms cubic-bezier(.2,.8,.2,1), opacity 450ms; z-index: 1; }
+.screen.active { transform: none; z-index: 3; }
+.screen.prev { transform: translateX(-25%); opacity: .5; z-index: 2; }
+.scroll { flex: 1; overflow-y: auto; padding: 60px 18px 130px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 12px; }
+.icon-btn { position: relative; flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); }
+.icon-btn svg { width: 20px; height: 20px; }
+.badge { position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--accent); color: var(--accent-fg); font-size: 11px; font-weight: 700; display: grid; place-items: center; transition: transform 200ms; }
+.badge:empty { display: none; }
+.badge.bump { transform: scale(1.4); }
+.title-sm { font-size: 13px; color: var(--muted); }
+.title-lg { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+.h-screen { font-size: 22px; font-weight: 600; flex: 1; }
+.h-screen small { display: block; font: 500 12px "Inter", sans-serif; color: var(--muted); margin-top: 2px; }
+.label { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin: 18px 0 10px; }
+
+/* Splash */
+.splash { position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; text-align: center; background: radial-gradient(circle at 50% 45%, #f6d3df 0%, var(--bg) 70%); transition: opacity 600ms, visibility 600ms; }
+body.dark .splash { background: radial-gradient(circle at 50% 45%, #3a1a2a 0%, var(--bg) 65%); }
+.splash.hide { opacity: 0; visibility: hidden; }
+.logo { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; }
+.logo em { font-style: italic; color: var(--accent); }
+.splash p { margin-top: 8px; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+
+/* Login */
+.login-hero { position: relative; height: 270px; border-radius: 28px; overflow: hidden; margin-bottom: 22px; background: #e9dcd6; }
+.login-hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; animation: kb 9s ease-in-out infinite alternate; }
+.login-hero .brand { position: absolute; left: 18px; bottom: 16px; color: #fff; font-size: 26px; font-weight: 700; text-shadow: 0 2px 16px rgba(0,0,0,.35); }
+.login-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(40,10,25,.55), transparent 55%); }
+.login-hero .brand { z-index: 2; }
+.login-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.login-sub { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 6px 0 20px; }
+.login-sub b { color: var(--text); }
+.auth { width: 100%; height: 52px; border-radius: 26px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 15px; margin-bottom: 10px; transition: transform 150ms; }
+.auth:active { transform: scale(.97); }
+.auth svg { width: 20px; height: 20px; }
+.auth.apple { background: #000; color: #fff; }
+body.dark .auth.apple { background: #fff; color: #000; }
+.auth.google { background: #fff; color: #1f1f1f; border: 1px solid var(--line); }
+.or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; margin: 8px 0 14px; }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.field input { width: 100%; height: 52px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 0 16px; font: 16px "Inter", sans-serif; outline: none; transition: border-color 200ms; }
+.field input:focus { border-color: var(--accent); }
+.err { color: #d33a5f; font-size: 12px; min-height: 18px; margin: 6px 2px; }
+.skip { display: block; margin: 14px auto 0; color: var(--muted); font-size: 14px; font-weight: 500; }
+.otp { position: relative; display: block; }
+.otp input { position: absolute; inset: 0; opacity: 0; font-size: 16px; width: 100%; }
+.boxes { display: flex; gap: 8px; }
+.boxes span { flex: 1; height: 58px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; font-size: 22px; font-weight: 700; transition: border-color 200ms; }
+.boxes span.on { border-color: var(--accent); }
+.link { color: var(--accent); font-weight: 600; font-size: 14px; }
+
+/* Home */
+.search { display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+.hero { position: relative; height: 190px; border-radius: 24px; overflow: hidden; margin-bottom: 18px; background: #3a1426; color: #fff; }
+.hero img { position: absolute; right: -10px; top: 0; height: 100%; width: 58%; object-fit: cover; object-position: 50% 15%; animation: kb 9s ease-in-out infinite alternate; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #3a1426 38%, rgba(58,20,38,.0) 75%); }
+.hero .txt { position: relative; z-index: 2; padding: 20px; max-width: 62%; }
+.pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.18); }
+.hero h3 { margin-top: 12px; font-size: 24px; line-height: 1.08; font-weight: 600; }
+.hero .cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 9px 14px; border-radius: 999px; background: #fff; color: #2e1220; font-size: 13px; font-weight: 600; }
+.chips { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; scrollbar-width: none; }
+.chip { flex: none; padding: 9px 15px; border-radius: 999px; font-size: 13px; font-weight: 500; background: var(--surface); border: 1px solid var(--line); color: var(--muted); transition: all 200ms; }
+.chip.on { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
+.chip small { opacity: .7; margin-left: 4px; }
+.masonry { columns: 2; column-gap: 12px; }
+.pin { break-inside: avoid; margin-bottom: 14px; cursor: pointer; animation: rise 400ms both; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+.pin .ph { position: relative; border-radius: 18px; overflow: hidden; background: var(--surface-2); }
+.pin img { width: 100%; height: auto; transition: transform 400ms; }
+.pin:active img { transform: scale(1.04); }
+.vtag { position: absolute; left: 10px; bottom: 10px; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: rgba(0,0,0,.5); color: #fff; }
+.heart { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.8); color: #2e1220; z-index: 2; }
+.heart svg { width: 16px; height: 16px; }
+.heart.on { color: #d6336c; }
+.heart.on svg path { fill: currentColor; }
+.meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 14px; font-weight: 600; }
+.sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tabbar { position: absolute; left: 14px; right: 14px; bottom: 26px; height: 64px; border-radius: 32px; display: flex; justify-content: space-around; align-items: center; background: var(--tabbar); backdrop-filter: blur(16px); border: 1px solid var(--line); z-index: 5; }
+.tabbar button { color: var(--muted); display: grid; place-items: center; width: 44px; height: 44px; }
+.tabbar button.on { color: var(--text); }
+.tabbar svg { width: 22px; height: 22px; }
+
+/* Product */
+.media { position: relative; height: 430px; border-radius: 28px; overflow: hidden; margin-bottom: 18px; background: var(--surface-2); }
+.media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+.media.video img { animation: kb 7s ease-in-out infinite alternate; }
+.media.video::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.28) 50%, transparent 62%); background-size: 260% 100%; animation: sweep 3.5s ease-in-out infinite; pointer-events: none; }
+@keyframes kb { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.16) translate(-2.5%, -3%); } }
+@keyframes sweep { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+.vbar { position: absolute; left: 16px; right: 16px; bottom: 64px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.4); overflow: hidden; z-index: 2; }
+.vbar i { display: block; height: 100%; background: #fff; animation: prog 7s linear infinite; }
+@keyframes prog { from { width: 0; } to { width: 100%; } }
+.live { position: absolute; top: 14px; left: 14px; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: rgba(0,0,0,.45); color: #fff; z-index: 3; letter-spacing: .04em; }
+.live i { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: #ff4d6d; animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+.m-tabs { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.8); backdrop-filter: blur(10px); z-index: 3; }
+.m-tabs button { padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #2e1220; white-space: nowrap; }
+.m-tabs button.on { background: #3a1426; color: #fff; }
+.p-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.p-name { font-size: 28px; font-weight: 600; line-height: 1.1; }
+.p-price { font-size: 19px; font-weight: 700; white-space: nowrap; }
+.rating { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); margin-top: 6px; }
+.rating b { color: #e3a33b; letter-spacing: 1px; }
+.p-desc { margin: 10px 0 4px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt-btn { padding: 10px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; transition: all 200ms; text-align: left; }
+.opt-btn small { display: block; font-weight: 500; color: var(--muted); font-size: 11px; margin-top: 2px; }
+.opt-btn.on { border-color: var(--accent); background: var(--accent-soft); }
+.toggle { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); text-align: left; margin-top: 4px; }
+.toggle .grow { flex: 1; font-weight: 600; font-size: 14px; }
+.toggle .grow small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.switch { width: 46px; height: 28px; border-radius: 14px; background: var(--line); position: relative; transition: background 200ms; flex: none; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform 200ms; }
+.toggle.on .switch { background: var(--accent); }
+.toggle.on .switch::after { transform: translateX(18px); }
+
+.cta-bar { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 18px 34px; display: flex; gap: 12px; align-items: center; background: linear-gradient(to top, var(--bg) 70%, transparent); z-index: 5; }
+.qty { display: flex; align-items: center; gap: 14px; height: 54px; padding: 0 14px; border-radius: 27px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; }
+.qty button { width: 24px; height: 24px; font-size: 18px; color: var(--muted); }
+.btn-main { flex: 1; height: 54px; border-radius: 27px; background: var(--btn-bg); color: var(--btn-fg); font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 150ms; }
+.btn-main:active { transform: scale(.97); }
+.btn-main.pink { background: var(--accent); color: var(--accent-fg); }
+.full { width: 100%; flex: none; }
+.btn-ghost { width: 100%; height: 50px; border-radius: 25px; border: 1px solid var(--line); margin-top: 10px; font-weight: 600; }
+.spin { width: 20px; height: 20px; border-radius: 50%; border: 3px solid rgba(127,127,127,.3); border-top-color: currentColor; animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Bag / checkout */
+.row { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 10px; }
+.thumb { width: 66px; height: 84px; flex: none; border-radius: 14px; overflow: hidden; background: var(--surface-2); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; }
+.row .info { flex: 1; min-width: 0; }
+.row .info b { display: block; font-size: 15px; }
+.row .info span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.row .qty { height: 36px; padding: 0 10px; gap: 10px; font-size: 14px; }
+.summary { margin-top: 16px; padding: 16px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; }
+.summary div { display: flex; justify-content: space-between; padding: 6px 0; color: var(--muted); }
+.summary .total { color: var(--text); font-weight: 700; font-size: 17px; border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 12px; }
+.empty { text-align: center; padding-top: 120px; color: var(--muted); }
+.card-box { padding: 16px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 12px; font-size: 14px; }
+.card-box .lbl { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 8px; width: 100%; text-align: left; transition: border-color 200ms; }
+.opt .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); display: grid; place-items: center; flex: none; }
+.opt.on { border-color: var(--accent); }
+.opt.on .radio { border-color: var(--accent); }
+.opt.on .radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.opt .grow { flex: 1; }
+.opt small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+/* ---------------- Track order ---------------- */
+.order-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 14px; }
+.stack { display: flex; flex: none; }
+.stack .thumb { width: 46px; height: 58px; border-radius: 12px; border: 2px solid var(--surface); }
+.stack .thumb + .thumb { margin-left: -14px; }
+.order-card .info { flex: 1; min-width: 0; }
+.order-card b { display: block; font-size: 15px; }
+.order-card span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+.status { flex: none; font-size: 11px; font-weight: 700; padding: 6px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.status.done { background: #dff3e4; color: #1f7a3d; }
+.map-wrap { position: relative; border-radius: 24px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 16px; }
+.map { display: block; width: 100%; height: auto; }
+.eta { position: absolute; left: 12px; top: 12px; padding: 8px 12px; border-radius: 14px; background: var(--surface); box-shadow: 0 6px 20px rgba(46,18,32,.12); font-size: 12px; color: var(--muted); }
+.eta b { display: block; font-size: 16px; color: var(--text); }
+.pulse { transform-box: fill-box; transform-origin: center; animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse { from { transform: scale(.6); opacity: .6; } to { transform: scale(2.4); opacity: 0; } }
+.steps { list-style: none; padding: 4px 4px 0; }
+.steps li { position: relative; display: flex; gap: 14px; padding-bottom: 20px; }
+.steps li::before { content: ""; position: absolute; left: 12px; top: 26px; bottom: 0; width: 2px; background: var(--line); }
+.steps li:last-child::before { display: none; }
+.steps li.done::before { background: var(--accent); }
+.steps .dot2 { width: 26px; height: 26px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); border: 2px solid var(--line); color: #fff; transition: all 300ms; }
+.steps .dot2 svg { width: 14px; height: 14px; opacity: 0; }
+.steps li.done .dot2 { background: var(--accent); border-color: var(--accent); }
+.steps li.done .dot2 svg { opacity: 1; }
+.steps li.now .dot2 { border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
+.steps b { display: block; font-size: 15px; font-weight: 600; }
+.steps span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+.steps li:not(.done):not(.now) b { color: var(--muted); font-weight: 500; }
+.rider { position: absolute; left: 14px; right: 14px; bottom: 26px; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 24px; background: #3a1426; color: #fff; box-shadow: 0 16px 40px rgba(58,20,38,.35); }
+.rider .av { width: 46px; height: 46px; flex: none; border-radius: 50%; display: grid; place-items: center; background: #f2c6b4; color: #3a1426; font-weight: 800; }
+.rider .info { flex: 1; }
+.rider b { display: block; font-size: 15px; }
+.rider span { display: block; font-size: 12px; opacity: .75; margin-top: 3px; }
+.rider .call { width: 44px; height: 44px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; }
+.rider .call svg { width: 20px; height: 20px; }
+.rider .btn-main { flex: none; height: 44px; padding: 0 16px; font-size: 14px; background: #fff; color: #3a1426; }
+
+/* Toast + demo tap */
+.toast { position: absolute; left: 50%; top: 64px; z-index: 45; transform: translate(-50%, -30px); opacity: 0; padding: 10px 16px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font-size: 13px; font-weight: 600; display: flex; gap: 8px; align-items: center; white-space: nowrap; transition: all 300ms; }
+.toast.show { transform: translate(-50%, 0); opacity: 1; }
+.tap { position: absolute; z-index: 55; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(255,255,255,.35); border: 2px solid rgba(255,255,255,.9); box-shadow: 0 0 0 1px rgba(0,0,0,.15); pointer-events: none; animation: tap 600ms ease forwards; }
+@keyframes tap { 0% { transform: scale(.4); opacity: 0; } 30% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+/* Real phone: fullscreen, no frame */
+@media (max-width: 500px) {
+    .stage { padding: 0; }
+    .device-slot { width: 100vw !important; height: 100dvh !important; }
+    .device { position: static; width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none; background: var(--bg); }
+    .island, .statusbar, .home-indicator, .play { display: none; }
+    .app { border-radius: 0; }
+    .scroll { padding-top: calc(env(safe-area-inset-top) + 16px); }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; } }
+</style>
+</head>
+<body>
+<div class="stage">
+    <div class="device-slot">
+        <div class="device">
+            <div class="island"></div>
+            <div class="app" id="app">
+                <div class="statusbar">
+                    <span>9:41</span>
+                    <span class="icons">
+                        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.5c2.3 0 4.4.9 6 2.4l1.2-1.2A10.3 10.3 0 0 0 8 .8 10.3 10.3 0 0 0 .8 3.7L2 4.9a8.6 8.6 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A7 7 0 0 0 8 4.2a7 7 0 0 0-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c.5 0 1 .2 1.3.5L8 11 6.7 9.7c.3-.3.8-.5 1.3-.5Z"/></svg>
+                        <svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".4"/></svg>
+                    </span>
+                </div>
+                <div class="splash" id="splash"><div><div class="logo serif">camorra <em>hair</em></div><p>Luxury units · Lagos</p></div></div>
+
+                <section class="screen active" id="login"></section>
+                <section class="screen" id="code"></section>
+                <section class="screen" id="home"></section>
+                <section class="screen" id="product"></section>
+                <section class="screen" id="bag"></section>
+                <section class="screen" id="checkout"></section>
+                <section class="screen" id="track"></section>
+
+                <div class="toast" id="toast"></div>
+                <div class="home-indicator"></div>
+            </div>
+        </div>
+    </div>
+    <aside class="editor" aria-hidden="true">
+        <div class="editor-top">
+            <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+            <span class="tab">camorra_hair.js</span>
+        </div>
+        <div class="code" id="code-view"></div>
+    </aside>
+</div>
+<button class="play" id="play" type="button">▶ Play demo</button>
+
+<script id="app-js">
+// <code-view>
+// Camorra Hair — wig shop with live order tracking
+const WIGS = [
+    { id: "w1", name: "Honey Blonde 613",   style: "Body wave",     tags: ["Body wave", "Colour"], len: 22, price: 385000, img: "img/w1.jpg" },
+    { id: "w2", name: "Bouncy Curled Bob",  style: "Bob",           tags: ["Bob"],                 len: 12, price: 165000, img: "img/w2.jpg" },
+    { id: "w3", name: "Copper Cinnamon",    style: "Body wave",     tags: ["Body wave", "Colour"], len: 24, price: 298000, img: "img/w3.jpg" },
+    { id: "w4", name: "Bone Straight",      style: "Straight",      tags: ["Straight"],            len: 30, price: 420000, img: "img/w4.jpg" },
+    { id: "w5", name: "Classic Body Wave",  style: "Body wave",     tags: ["Body wave"],           len: 26, price: 310000, img: "img/w5.jpg" },
+    { id: "w6", name: "Side-Swept Glam",    style: "Body wave",     tags: ["Body wave"],           len: 24, price: 289000, img: "img/w6.jpg" },
+    { id: "w7", name: "Ginger Glam",        style: "Body wave",     tags: ["Body wave", "Colour"], len: 32, price: 455000, img: "img/w7.jpg" },
+    { id: "w8", name: "Silk Straight",      style: "Straight",      tags: ["Straight"],            len: 34, price: 510000, img: "img/w8.jpg" },
+];
+const LACE = [{ name: "5x5 Closure", add: -25000 }, { name: "13x4 Frontal", add: 0 }, { name: "13x6 HD Frontal", add: 45000 }];
+const DENSITY = [{ name: "180%", add: 0 }, { name: "250%", add: 60000 }];
+const INSTALL = 25000;
+
+function unitPrice(w, o) {
+    const byLength = w.price * (1 + ((o.len - w.len) / 4) * 0.14);
+    const total = byLength + LACE[o.lace].add + DENSITY[o.dens].add + (o.install ? INSTALL : 0);
+    return Math.round(total / 500) * 500;
+}
+
+// Once an order is confirmed, Track Order is the only screen
+function placeOrder() {
+    const t = totals();
+    state.tracking = { id: "CH-" + (20481 + state.orders), items: state.bag.slice(), total: t.total,
+                       express: state.express, start: Date.now() };
+    state.bag = []; state.orders += 1;
+    saveTracking();
+    goRoot("track");
+}
+// </code-view>
+
+const $ = (s, r = document) => r.querySelector(s);
+const app = $("#app");
+const params = new URLSearchParams(location.search);
+const wig = (id) => WIGS.find((w) => w.id === id);
+const naira = (n) => "₦" + Math.round(n).toLocaleString("en-NG");
+const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+const state = { user: null, product: "w3", opts: null, view: "photo", qty: 1, bag: [], orders: 0,
+                liked: new Set(["w7"]), filter: "All", express: true, pay: "card", tracking: null };
+
+function totals() {
+    const sub = state.bag.reduce((s, i) => s + i.price * i.qty, 0);
+    const delivery = state.express ? 5000 : 2500;
+    return { sub, delivery, total: sub + delivery, units: state.bag.reduce((n, i) => n + i.qty, 0) };
+}
+
+// ---------- Icons ----------
+const I = {
+    bag: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>`,
+    heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>`,
+    back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>`,
+    search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
+    home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4v-9Z"/></svg>`,
+    grid: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>`,
+    user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>`,
+    check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,
+    phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>`,
+    mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>`,
+    arrow: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
+    apple: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.72-1.35-.14-2.64.8-3.33.8-.69 0-1.74-.78-2.86-.76-1.47.02-2.83.86-3.59 2.17-1.53 2.65-.39 6.58 1.1 8.73.73 1.05 1.6 2.23 2.73 2.19 1.1-.04 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.07 2.65-2.12.84-1.22 1.18-2.4 1.2-2.46-.03-.01-2.29-.88-2.3-3.5zM14.2 6.13c.6-.73 1.01-1.75.9-2.76-.87.04-1.92.58-2.54 1.31-.56.64-1.05 1.67-.92 2.66.97.08 1.96-.49 2.56-1.21z"/></svg>`,
+    google: `<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`,
+};
+
+const thumb = (w) => `<div class="thumb"><img src="${w.img}" alt=""></div>`;
+const bagCount = () => state.bag.reduce((n, i) => n + i.qty, 0) || "";
+const bagBtn = () => `<button class="icon-btn" data-action="go" data-to="bag" aria-label="Bag">${I.bag}<span class="badge">${bagCount()}</span></button>`;
+const spinner = (label) => `<span class="spin"></span> ${label}`;
+const clock = (ms) => new Date(ms).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+
+// ---------- Map (stylised Lagos streets) ----------
+const ROUTE = "M40 186 L150 186 L150 120 L250 120 L250 52 L302 52";
+function mapSVG() {
+    return `<svg class="map" viewBox="0 0 330 214" xmlns="http://www.w3.org/2000/svg">
+        <rect width="330" height="214" fill="#f6e6ec"/>
+        <path d="M196 214 L196 188 Q240 168 290 178 T330 170 L330 214 Z" fill="#d4e6f2"/>
+        <rect x="52" y="64" width="86" height="44" rx="10" fill="#d8ead3"/>
+        <rect x="162" y="133" width="76" height="40" rx="10" fill="#d8ead3"/>
+        <rect x="262" y="64" width="56" height="44" rx="10" fill="#fbeff3"/>
+        <rect x="52" y="132" width="86" height="42" rx="10" fill="#fbeff3"/>
+        <rect x="162" y="64" width="76" height="44" rx="10" fill="#fbeff3"/>
+        <g stroke="#fff" stroke-width="13" stroke-linecap="round">
+            <path d="M0 52 H330 M0 120 H330 M0 186 H190 M40 0 V214 M150 0 V214 M250 0 V170 M302 0 V120"/>
+        </g>
+        <text x="214" y="207" font-family="Inter" font-size="8" fill="#7ea3bf" letter-spacing="1">LAGOON</text>
+        <path d="${ROUTE}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round"/>
+        <path id="route-done" d="${ROUTE}" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+        <g transform="translate(40 186)"><rect x="-9" y="-9" width="18" height="18" rx="5" fill="#3a1426"/><path d="M-4 -1 h8 v5 h-8z M-5 -1 l5 -4 l5 4" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></g>
+        <text x="54" y="204" font-family="Inter" font-size="8.5" font-weight="600" fill="#3a1426">Camorra studio</text>
+        <g transform="translate(302 52)"><circle class="pulse" r="9" fill="var(--accent)"/><circle r="9" fill="var(--accent)" stroke="#fff" stroke-width="3"/><circle r="3" fill="#fff"/></g>
+        <text x="270" y="36" font-family="Inter" font-size="8.5" font-weight="600" fill="#3a1426">You · Lekki</text>
+        <g id="rider-dot" transform="translate(40 186)">
+            <circle r="15" fill="#fff" stroke="var(--accent)" stroke-width="2.5"/>
+            <g fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="-5.5" cy="4" r="2.8"/><circle cx="5.5" cy="4" r="2.8"/><path d="M-5.5 4 L-1 -1 H3 L5.5 4 M3 -1 L1.5 -5 H-1.5"/>
+            </g>
+        </g>
+    </svg>`;
+}
+
+// ---------- Screens ----------
+const R = {
+    login() {
+        return `<div class="scroll">
+            <div class="login-hero"><img src="${wig("w5").img}" alt=""><span class="brand serif">camorra hair</span></div>
+            <h1 class="login-title serif">Welcome, gorgeous</h1>
+            <p class="login-sub">Sign in to save your units and track every delivery live.</p>
+            <button class="auth apple" data-action="auth" data-p="Apple">${I.apple} Continue with Apple</button>
+            <button class="auth google" data-action="auth" data-p="Google">${I.google} Continue with Google</button>
+            <div class="or">or</div>
+            <label class="field"><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" value="${esc(state.pendingEmail || "")}"></label>
+            <div class="err" id="email-err"></div>
+            <button class="btn-main pink full" data-action="email">Continue with email</button>
+            <button class="skip" data-action="guest">Skip for now</button>
+        </div>`;
+    },
+    code() {
+        return `<div class="scroll">
+            <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div></div><div style="width:42px"></div></div>
+            <h1 class="login-title serif">Check your inbox 💌</h1>
+            <p class="login-sub">We sent a 6-digit code to <b>${esc(state.pendingEmail)}</b></p>
+            <label class="otp"><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="6-digit code"><div class="boxes">${"<span></span>".repeat(6)}</div></label>
+            <div class="err" id="otp-err"></div>
+            <button class="btn-main pink full" data-action="verify">Verify</button>
+            <p class="login-sub" style="text-align:center;margin-top:16px">Didn't get it? <button class="link" data-action="resend">Resend code</button></p>
+        </div>`;
+    },
+    home() {
+        const cats = ["All", "Body wave", "Straight", "Bob", "Colour"];
+        const list = WIGS.filter((w) => state.filter === "All" || w.tags.includes(state.filter));
+        return `<div class="scroll">
+            <div class="topbar">
+                <div><div class="title-sm">Hi ${esc(state.user ? state.user.name : "gorgeous")} ✨</div><div class="title-lg serif">Find your unit</div></div>
+                ${bagBtn()}
+            </div>
+            <div class="search">${I.search} Search units, lengths, colours…</div>
+            <div class="hero">
+                <img src="${wig("w7").img}" alt="">
+                <div class="txt"><span class="pill">New in</span><h3 class="serif">Ginger season is here</h3>
+                <button class="cta" data-action="open" data-id="w7">Shop now ${I.arrow}</button></div>
+            </div>
+            <div class="chips">${cats.map((c) => `<button class="chip ${state.filter === c ? "on" : ""}" data-action="filter" data-f="${c}">${c}</button>`).join("")}</div>
+            <div class="masonry">${list.map((w, i) => `
+                <div class="pin" data-action="open" data-id="${w.id}" style="animation-delay:${i * 50}ms">
+                    <div class="ph"><img src="${w.img}" alt="${esc(w.name)}" loading="lazy"><span class="vtag">▶ 0:07</span>
+                        <button class="heart ${state.liked.has(w.id) ? "on" : ""}" data-action="like" data-id="${w.id}" aria-label="Save">${I.heart}</button></div>
+                    <div class="meta"><span>${w.name}</span></div>
+                    <div class="sub">${w.len}" · ${w.style} · <b style="color:var(--text)">${naira(w.price)}</b></div>
+                </div>`).join("")}</div>
+        </div>
+        <nav class="tabbar"><button class="on" aria-label="Home">${I.home}</button><button aria-label="Shop">${I.grid}</button><button aria-label="Saved">${I.heart}</button><button aria-label="Profile">${I.user}</button></nav>`;
+    },
+    product() {
+        const w = wig(state.product), o = state.opts, v = state.view;
+        const lens = [w.len - 4, w.len, w.len + 4];
+        const price = unitPrice(w, o);
+        return `<div class="scroll">
+            <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen serif" style="text-align:center">Unit details</div>${bagBtn()}</div>
+            <div class="media ${v === "video" ? "video" : ""}">
+                <img src="${w.img}" alt="${esc(w.name)}">
+                ${v === "video" ? `<span class="live"><i></i>VIDEO</span><div class="vbar"><i></i></div>` : ""}
+                <div class="m-tabs">${[["photo", "Photo"], ["video", "▶ Video"]].map(([k, l]) => `<button class="${v === k ? "on" : ""}" data-action="view" data-view="${k}">${l}</button>`).join("")}</div>
+            </div>
+            <div class="p-head"><div class="p-name serif">${w.name}</div><div class="p-price">${naira(price)}</div></div>
+            <div class="rating"><b>★★★★★</b> 4.9 · 318 reviews · 100% human hair</div>
+            <p class="p-desc">${w.style} unit with pre-plucked hairline and bleached knots. Glueless-ready and customised in our Lagos studio.</p>
+            <div class="label">Length</div>
+            <div class="opts">${lens.map((L) => `<button class="opt-btn ${o.len === L ? "on" : ""}" data-action="opt" data-opt="len" data-v="${L}">${L}"</button>`).join("")}</div>
+            <div class="label">Lace</div>
+            <div class="opts">${LACE.map((l, i) => `<button class="opt-btn ${o.lace === i ? "on" : ""}" data-action="opt" data-opt="lace" data-v="${i}">${l.name}<small>${l.add ? (l.add > 0 ? "+" : "−") + naira(Math.abs(l.add)) : "Included"}</small></button>`).join("")}</div>
+            <div class="label">Density</div>
+            <div class="opts">${DENSITY.map((d, i) => `<button class="opt-btn ${o.dens === i ? "on" : ""}" data-action="opt" data-opt="dens" data-v="${i}">${d.name}<small>${d.add ? "+" + naira(d.add) : "Natural"}</small></button>`).join("")}</div>
+            <div class="label">Add-on</div>
+            <button class="toggle ${o.install ? "on" : ""}" data-action="opt" data-opt="install"><span class="grow">Install &amp; styling<small>Our stylist installs it for you · +${naira(INSTALL)}</small></span><span class="switch"></span></button>
+        </div>
+        <div class="cta-bar">
+            <div class="qty"><button data-action="qty" data-d="-1">−</button><span>${state.qty}</span><button data-action="qty" data-d="1">+</button></div>
+            <button class="btn-main pink" data-action="add">Add to bag · ${naira(price * state.qty)}</button>
+        </div>`;
+    },
+    bag() {
+        const t = totals();
+        const items = state.bag.map((i, n) => {
+            const w = wig(i.id);
+            return `<div class="row">${thumb(w)}
+                <div class="info"><b>${w.name}</b><span>${i.opts.len}" · ${LACE[i.opts.lace].name} · ${DENSITY[i.opts.dens].name}</span>${i.opts.install ? `<span>+ Install &amp; styling</span>` : ""}<div style="margin-top:6px;font-weight:700">${naira(i.price * i.qty)}</div></div>
+                <div class="qty"><button data-action="bagqty" data-i="${n}" data-d="-1">−</button><span>${i.qty}</span><button data-action="bagqty" data-i="${n}" data-d="1">+</button></div>
+            </div>`;
+        }).join("");
+        return `<div class="scroll">
+            <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen serif" style="text-align:center">Your bag</div><div style="width:42px"></div></div>
+            ${state.bag.length ? `${items}
+            <div class="summary">
+                <div><span>Subtotal · ${t.units} unit${t.units > 1 ? "s" : ""}</span><span>${naira(t.sub)}</span></div>
+                <div><span>Delivery</span><span>${naira(t.delivery)}</span></div>
+                <div class="total"><span>Total</span><span>${naira(t.total)}</span></div>
+            </div>` : `<div class="empty">Your bag is empty.<br>Go find your unit ✨</div>`}
+        </div>
+        ${state.bag.length ? `<div class="cta-bar"><button class="btn-main" data-action="go" data-to="checkout">Checkout · ${naira(t.total)}</button></div>` : ""}`;
+    },
+    checkout() {
+        const t = totals();
+        return `<div class="scroll">
+            <div class="topbar"><button class="icon-btn" data-action="back" aria-label="Back">${I.back}</button><div class="h-screen serif" style="text-align:center">Checkout</div><div style="width:42px"></div></div>
+            <div class="card-box"><div class="lbl">Deliver to</div><b>Home</b><div style="color:var(--muted);margin-top:4px">14 Admiralty Way, Lekki Phase 1, Lagos</div></div>
+            <div class="label">Delivery</div>
+            <button class="opt ${state.express ? "on" : ""}" data-action="ship" data-x="1"><span class="radio"></span><span class="grow">Express<small>Today, 3–6 PM</small></span><b>₦5,000</b></button>
+            <button class="opt ${state.express ? "" : "on"}" data-action="ship" data-x="0"><span class="radio"></span><span class="grow">Standard<small>Tomorrow</small></span><b>₦2,500</b></button>
+            <div class="label">Payment</div>
+            <button class="opt ${state.pay === "card" ? "on" : ""}" data-action="pay-m" data-m="card"><span class="radio"></span><span class="grow">Card<small>•••• 4242</small></span></button>
+            <button class="opt ${state.pay === "transfer" ? "on" : ""}" data-action="pay-m" data-m="transfer"><span class="radio"></span><span class="grow">Bank transfer<small>Instant confirmation</small></span></button>
+            <div class="summary"><div class="total" style="border:0;margin:0;padding:0"><span>Total</span><span>${naira(t.total)}</span></div></div>
+        </div>
+        <div class="cta-bar"><button class="btn-main pink" data-action="pay">Pay ${naira(t.total)}</button></div>`;
+    },
+    track() {
+        const tr = state.tracking;
+        const units = tr.items.reduce((n, i) => n + i.qty, 0);
+        const imgs = tr.items.slice(0, 3).map((i) => thumb(wig(i.id))).join("");
+        return `<div class="scroll" style="padding-bottom:150px">
+            <div class="topbar"><div class="h-screen serif">Track Order<small>#${tr.id}</small></div></div>
+            <div class="order-card"><div class="stack">${imgs}</div>
+                <div class="info"><b>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</b><span>${tr.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow"}</span></div>
+                <span class="status" id="tr-status">Confirmed</span></div>
+            <div class="map-wrap">${mapSVG()}<div class="eta" id="tr-eta"><b>Preparing</b>Your unit is being styled</div></div>
+            <ol class="steps" id="tr-steps"></ol>
+        </div>
+        <div class="rider" id="tr-rider"></div>`;
+    },
+};
+
+// ---------- Live tracking ----------
+// Prototype timing (compressed): packed → out for delivery → rider rides to you → delivered
+const PHASE = params.has("demo") ? { pack: 2500, out: 5000, ride: 15000, drop: 2200 } : { pack: 5000, out: 10000, ride: 45000, drop: 3000 };
+const ROUTE_KM = 4.2, ROUTE_MIN = 18;
+let trackStage = -1, routeEl, doneEl, riderEl, routeLen;
+
+function saveTracking() {
+    if (params.has("demo")) return;
+    try { localStorage.setItem("camorraHair.track", JSON.stringify(state.tracking)); } catch (e) {}
+}
+function clearTracking() {
+    try { localStorage.removeItem("camorraHair.track"); } catch (e) {}
+    state.tracking = null;
+}
+
+function stepsHTML(stage, tr) {
+    const t0 = tr.start, min = 60000;
+    const rows = [
+        ["Order confirmed", clock(t0)],
+        ["Unit styled & packed", stage >= 1 ? clock(t0 + 13 * min) : "Your stylist is on it"],
+        ["Out for delivery", stage >= 2 ? (stage >= 3 ? "Rider has arrived" : `<span id="tr-away">Rider is on the way</span>`) : "Waiting for pickup"],
+        ["Delivered", stage >= 4 ? clock(t0 + 58 * min) : tr.express ? "Today, 3 – 6 PM" : "Tomorrow"],
+    ];
+    const done = [true, stage >= 1, stage >= 3, stage >= 4];
+    return rows.map(([b, s], i) => `<li class="${done[i] ? "done" : (i === stage + 1 || (i === 2 && stage === 2)) ? "now" : ""}"><span class="dot2">${I.check}</span><div><b>${b}</b><span>${s}</span></div></li>`).join("");
+}
+function riderHTML(stage) {
+    if (stage >= 4) return `<div class="av">✓</div><div class="info"><b>Delivered — enjoy your unit!</b><span>Tunde A. · ★ 4.9 · Lagos Express</span></div><button class="btn-main" data-action="done">Back to shop</button>`;
+    return `<div class="av">TA</div><div class="info"><b>Tunde A. · Your rider</b><span>★ 4.9 · Lagos Express</span></div><button class="call" data-action="call" aria-label="Call rider">${I.phone}</button>`;
+}
+
+function trackTick() {
+    const tr = state.tracking;
+    if (!tr || !$("#track").classList.contains("active")) { trackStage = -1; return; }
+    const t = Date.now() - tr.start;
+    const stage = t < PHASE.pack ? 0 : t < PHASE.out ? 1 : t < PHASE.out + PHASE.ride ? 2 : t < PHASE.out + PHASE.ride + PHASE.drop ? 3 : 4;
+    if (stage !== trackStage) {
+        if (trackStage === 2 && stage === 3) toast("Tunde has arrived 🎉", "check");
+        trackStage = stage;
+        $("#tr-steps").innerHTML = stepsHTML(stage, tr);
+        $("#tr-rider").innerHTML = riderHTML(stage);
+        const st = $("#tr-status");
+        st.textContent = ["Confirmed", "Packed", "On the way", "Arrived", "Delivered"][stage];
+        st.classList.toggle("done", stage >= 3);
+        routeEl = $("#track .map path[stroke-dasharray]"); doneEl = $("#route-done"); riderEl = $("#rider-dot");
+        routeLen = routeEl.getTotalLength();
+        doneEl.style.strokeDasharray = routeLen;
+    }
+    // rider position along the route (eases in and out like real traffic)
+    const raw = Math.min(1, Math.max(0, (t - PHASE.out) / PHASE.ride));
+    const p = raw < .5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+    const pt = routeEl.getPointAtLength(routeLen * p);
+    riderEl.setAttribute("transform", `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`);
+    doneEl.style.strokeDashoffset = routeLen * (1 - p);
+    const km = ROUTE_KM * (1 - p), mins = Math.max(1, Math.ceil(ROUTE_MIN * (1 - p)));
+    const eta = $("#tr-eta");
+    if (stage === 0) eta.innerHTML = `<b>Preparing</b>Your unit is being styled`;
+    else if (stage === 1) eta.innerHTML = `<b>Packed ✓</b>Rider picking up soon`;
+    else if (stage === 2) eta.innerHTML = `<b>${mins} min away</b>${km.toFixed(1)} km · Tunde is riding to you`;
+    else if (stage === 3) eta.innerHTML = `<b>Arrived 🎉</b>Tunde is at your door`;
+    else eta.innerHTML = `<b>Delivered</b>Thank you for shopping with us`;
+    const away = $("#tr-away");
+    if (away) away.textContent = `Rider is ${mins} min${mins > 1 ? "s" : ""} away`;
+    requestAnimationFrame(trackTick);
+}
+
+// ---------- Navigation ----------
+let stack = ["login"];
+function render(name) { $("#" + name).innerHTML = R[name](); }
+function go(name) {
+    render(name);
+    const cur = $("#" + stack[stack.length - 1]), next = $("#" + name);
+    next.classList.remove("prev");
+    const sc = next.querySelector(".scroll"); if (sc) sc.scrollTop = 0;
+    requestAnimationFrame(() => { cur.classList.remove("active"); cur.classList.add("prev"); next.classList.add("active"); });
+    stack.push(name);
+}
+function back() {
+    if (stack.length < 2) return;
+    const cur = $("#" + stack.pop()), prev = $("#" + stack[stack.length - 1]);
+    render(prev.id);
+    cur.classList.remove("active"); prev.classList.remove("prev"); prev.classList.add("active");
+}
+function goRoot(name) {
+    document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active", "prev"));
+    stack = [name];
+    render(name);
+    $("#" + name).classList.add("active");
+    if (name === "track") { trackStage = -1; requestAnimationFrame(trackTick); }
+}
+function updateBadge(bump) {
+    document.querySelectorAll(".badge").forEach((b) => {
+        b.textContent = bagCount();
+        if (bump) { b.classList.add("bump"); setTimeout(() => b.classList.remove("bump"), 200); }
+    });
+}
+let toastTimer;
+function toast(msg, icon = "bag") {
+    const t = $("#toast");
+    t.innerHTML = `${I[icon].replace("<svg", '<svg width="16" height="16"')} ${esc(msg)}`;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+function signIn(user) { state.user = user; goRoot("home"); toast(user.via ? `Signed in with ${user.via}` : `Welcome, ${user.name}`, "check"); }
+const nameFrom = (email) => { const n = email.split("@")[0].split(/[._\-+0-9]/)[0] || "gorgeous"; return n[0].toUpperCase() + n.slice(1).toLowerCase(); };
+const defaultOpts = (w) => ({ len: w.len, lace: 1, dens: 0, install: false });
+
+// ---------- Taps ----------
+app.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-action]");
+    if (!el) return;
+    const { action, id } = el.dataset;
+    if (action === "open") { state.product = id; state.opts = defaultOpts(wig(id)); state.qty = 1; state.view = "photo"; go("product"); }
+    if (action === "go") go(el.dataset.to);
+    if (action === "back") back();
+    if (action === "filter") { state.filter = el.dataset.f; render("home"); }
+    if (action === "like") { state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id); el.classList.toggle("on"); }
+    if (action === "view") { state.view = el.dataset.view; render("product"); }
+    if (action === "opt") {
+        const k = el.dataset.opt;
+        if (k === "install") state.opts.install = !state.opts.install; else state.opts[k] = +el.dataset.v;
+        const sc = $("#product .scroll").scrollTop; render("product"); $("#product .scroll").scrollTop = sc;
+    }
+    if (action === "qty") { state.qty = Math.max(1, state.qty + +el.dataset.d); const sc = $("#product .scroll").scrollTop; render("product"); $("#product .scroll").scrollTop = sc; }
+    if (action === "add") {
+        const w = wig(state.product);
+        state.bag.push({ id: w.id, opts: { ...state.opts }, qty: state.qty, price: unitPrice(w, state.opts) });
+        updateBadge(true); toast(`${w.name} added to bag`);
+    }
+    if (action === "bagqty") {
+        const item = state.bag[+el.dataset.i];
+        item.qty += +el.dataset.d;
+        if (item.qty <= 0) state.bag.splice(+el.dataset.i, 1);
+        render("bag"); updateBadge();
+    }
+    if (action === "ship") { state.express = el.dataset.x === "1"; render("checkout"); }
+    if (action === "pay-m") { state.pay = el.dataset.m; render("checkout"); }
+    if (action === "pay") {
+        el.innerHTML = spinner("Confirming payment…");
+        setTimeout(() => { toast("Order confirmed 🎉", "check"); placeOrder(); }, 1500);
+    }
+    if (action === "call") toast("Calling Tunde…", "phone");
+    if (action === "done") { clearTracking(); goRoot("home"); }
+    if (action === "auth") {
+        const p = el.dataset.p;
+        el.innerHTML = spinner("Signing in…");
+        setTimeout(() => signIn({ name: "Bella", email: p === "Apple" ? "bella@icloud.com" : "bella@gmail.com", via: p }), 1100);
+    }
+    if (action === "email") {
+        const v = $("#email").value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { $("#email-err").textContent = "Enter a valid email address"; return; }
+        state.pendingEmail = v; go("code");
+        setTimeout(() => $("#otp") && $("#otp").focus({ preventScroll: true }), 500);
+    }
+    if (action === "verify") {
+        const c = $("#otp").value;
+        if (c.length < 6) { $("#otp-err").textContent = "Enter the 6-digit code"; return; }
+        el.innerHTML = spinner("Verifying…");
+        setTimeout(() => signIn({ name: nameFrom(state.pendingEmail), email: state.pendingEmail, via: "email" }), 900);
+    }
+    if (action === "resend") toast("New code sent", "mail");
+    if (action === "guest") signIn({ name: "gorgeous", guest: true });
+});
+app.addEventListener("input", (e) => {
+    if (e.target.id === "otp") {
+        const v = e.target.value.replace(/\D/g, "").slice(0, 6);
+        e.target.value = v;
+        document.querySelectorAll("#code .boxes span").forEach((b, i) => { b.textContent = v[i] || ""; b.classList.toggle("on", i === Math.min(v.length, 5)); });
+        $("#otp-err").textContent = "";
+    }
+    if (e.target.id === "email") $("#email-err").textContent = "";
+});
+app.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    if (e.target.id === "email") $('[data-action="email"]').click();
+    if (e.target.id === "otp") $('[data-action="verify"]').click();
+});
+
+// ---------- Fit the phone to the window ----------
+function fit() {
+    const cap = params.has("big") ? Infinity : 1;
+    const s = Math.min(cap, (innerHeight - 40) / 868, (innerWidth - 40) / 414);
+    document.documentElement.style.setProperty("--s", s);
+    const slot = $(".device-slot");
+    slot.style.width = 414 * s + "px"; slot.style.height = 868 * s + "px";
+}
+addEventListener("resize", fit); fit();
+
+// ---------- Code panel: this app's real source ----------
+(function codeView() {
+    const src = $("#app-js").textContent;
+    const part = src.slice(src.indexOf("// <code-view>") + 15, src.indexOf("// </code-view>")).trimEnd();
+    const e = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const re = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\b(const|let|function|return|new|if|else)\b|\b(\d+(?:\.\d+)?)\b|\b(state|WIGS|LACE|DENSITY|totals|goRoot|saveTracking|Math)\b/gm;
+    $("#code-view").innerHTML = part.split("\n").map((line) => `<span class="l">${e(line).replace(re, (m, c, s, k, n) =>
+        c ? `<span class="tk-c">${m}</span>` : s ? `<span class="tk-s">${m}</span>` : k ? `<span class="tk-k">${m}</span>` : n ? `<span class="tk-n">${m}</span>` : `<span class="tk-p">${m}</span>`)}</span>`).join("");
+})();
+
+// ---------- Start ----------
+if (params.has("dark")) document.body.classList.add("dark");
+let saved = null;
+if (!params.has("demo")) { try { saved = JSON.parse(localStorage.getItem("camorraHair.track") || "null"); } catch (e) {} }
+if (saved) { state.tracking = saved; state.user = { name: "gorgeous" }; goRoot("track"); }   // an order is live: only Track Order
+else render("login");
+setTimeout(() => $("#splash").classList.add("hide"), 1600);
+
+// ---------- Auto demo (for screen recording) ----------
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const rnd = (a, b) => a + Math.random() * (b - a);
+async function tap(sel) {
+    const el = typeof sel === "string" ? $(".screen.active " + sel) : sel;
+    if (!el) { console.warn("demo: missing", sel); return; }
+    const sc = el.closest(".scroll");
+    if (sc) {
+        const r = el.getBoundingClientRect(), a = sc.getBoundingClientRect();
+        if (r.bottom > a.bottom - 120 || r.top < a.top + 60) { sc.scrollBy({ top: r.top - a.top - sc.clientHeight / 3, behavior: "smooth" }); await wait(750); }
+    }
+    const r = el.getBoundingClientRect(), a = app.getBoundingClientRect(), k = a.width / app.offsetWidth;
+    const dot = document.createElement("div");
+    dot.className = "tap";
+    dot.style.left = (r.left + r.width / 2 - a.left) / k + "px";
+    dot.style.top = (r.top + r.height / 2 - a.top) / k + "px";
+    app.appendChild(dot); setTimeout(() => dot.remove(), 700);
+    await wait(220);
+    el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+}
+async function scrollActive(px) { $(".screen.active .scroll").scrollBy({ top: px, behavior: "smooth" }); await wait(1000); }
+
+let demoRunning = false;
+async function demo() {
+    if (demoRunning) return;
+    demoRunning = true;
+    document.body.classList.add("demo");
+    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null });
+    goRoot("login");
+    $("#splash").classList.remove("hide"); await wait(1800);
+    $("#splash").classList.add("hide"); await wait(1400);
+    await tap('[data-action="auth"][data-p="Google"]'); await wait(2200);
+    await scrollActive(420); await scrollActive(-200);
+    await tap('.pin[data-id="w3"]'); await wait(1400);
+    await tap('[data-view="video"]'); await wait(3600);
+    await tap('[data-opt="len"][data-v="28"]'); await wait(700);
+    await tap('[data-opt="lace"][data-v="2"]'); await wait(700);
+    await tap('[data-opt="install"]'); await wait(800);
+    await tap('[data-action="add"]'); await wait(1300);
+    await tap('[data-action="back"]'); await wait(900);
+    await tap('.pin[data-id="w4"]'); await wait(1300);
+    await tap('[data-action="add"]'); await wait(1300);
+    await tap('[data-to="bag"]'); await wait(1700);
+    await tap('[data-to="checkout"]'); await wait(1300);
+    await tap('[data-action="ship"][data-x="1"]'); await wait(900);
+    await tap('[data-action="pay"]'); await wait(2400);
+    await wait(PHASE.out + 3500);
+    await tap('[data-action="call"]');
+    await wait(PHASE.ride + PHASE.drop - 2000);
+    await wait(2500);
+    if (!params.has("demo")) document.body.classList.remove("demo");
+    document.body.classList.add("demo-done");
+    demoRunning = false;
+}
+$("#play").addEventListener("click", demo);
+if (params.has("demo")) setTimeout(demo, 300);
+</script>
+</body>
+</html>
