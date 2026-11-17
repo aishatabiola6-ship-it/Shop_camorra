@@ -378,7 +378,7 @@
     {
       "parameters": {
         "chatId": "PASTE_YOUR_TELEGRAM_CHAT_ID",
-        "text": "=⚠️ Payment NOT verified for order #{{ $('Order Webhook').item.json.body.orderId }}\n👤 {{ $('Order Webhook').item.json.body.name }} ({{ $('Order Webhook').item.json.body.email }})\nExpected {{ $('Order Webhook').item.json.body.totalText }} · ref {{ $('Order Webhook').item.json.body.txRef || \"none\" }}\nFlutterwave says: {{ $json.data ? $json.data.status + \" · \" + $json.data.currency + \" \" + $json.data.amount : ($json.message || \"no transaction found\") }}\nDo not ship until you confirm the payment in your Flutterwave dashboard.",
+        "text": "=⚠️ Payment NOT verified for order #{{ $('Order Webhook').item.json.body.orderId }}\n👤 {{ $('Order Webhook').item.json.body.name }} ({{ $('Order Webhook').item.json.body.email }})\nExpected {{ $('Order Webhook').item.json.body.totalText }} · ref {{ $('Order Webhook').item.json.body.txRef || \"none\" }}\nFlutterwave says: {{ $json.data ? ($json.data.status + \" · \" + $json.data.currency + \" \" + $json.data.amount + \" · ref \" + $json.data.tx_ref) : ($json.message || ($json.error ? (($json.error.message || \"\") + \" \" + ($json.error.description || \"\")).trim() : \"no reply\")) }}\nTransaction ID sent: {{ $('Order Webhook').item.json.body.transactionId || \"none\" }}\nDo not ship until you confirm the payment in your Flutterwave dashboard.",
         "additionalFields": {
           "appendAttribution": false
         }
