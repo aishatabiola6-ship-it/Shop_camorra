@@ -213,6 +213,7 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .opt.on .radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 .opt .grow { flex: 1; }
 .opt small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.secure { text-align: center; font-size: 12px; color: var(--muted); margin: 6px 0 4px; }
 
 /* ---------------- Track order ---------------- */
 .order-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 14px; }
@@ -351,14 +352,46 @@ function notify(kind, data) {
         body: JSON.stringify({ event: kind, ts: new Date().toISOString(), ...data }) }).catch(() => {});
 }
 
-// Once an order is paid: email + Telegram + Google Sheet (via n8n), then Track Order is the only screen
-function placeOrder() {
+// Real payments: Flutterwave checkout (card, bank transfer, USSD) in naira
+const FLUTTERWAVE = { publicKey: "" };   // FLWPUBK-…  (FLWPUBK_TEST-… while testing)
+const PAY_LABEL = { card: "Card", transfer: "Bank transfer", ussd: "USSD" };
+
+function loadFlutterwave() {
+    return window.FlutterwaveCheckout ? Promise.resolve() : new Promise((ok, fail) => {
+        const s = document.createElement("script");
+        s.src = "https://checkout.flutterwave.com/v3.js"; s.onload = ok; s.onerror = fail;
+        document.head.appendChild(s);
+    });
+}
+async function payWithFlutterwave() {
+    const t = totals(), txRef = "CH-" + Date.now();
+    try { await loadFlutterwave(); } catch (e) { toast("Couldn't open payment. Check your connection."); render("checkout"); return; }
+    const modal = FlutterwaveCheckout({
+        public_key: FLUTTERWAVE.publicKey, tx_ref: txRef, amount: t.total, currency: "NGN",
+        payment_options: { card: "card", transfer: "banktransfer", ussd: "ussd" }[state.pay],
+        customer: { email: state.contact.email, name: state.contact.name },
+        customizations: { title: "Camorra Hair", description: `${t.units} unit${t.units > 1 ? "s" : ""} · ${naira(t.total)}` },
+        callback: (res) => {
+            modal.close();
+            if (res.status === "successful" || res.status === "completed") {
+                toast("Payment received 🎉", "check");
+                placeOrder({ txRef, transactionId: res.transaction_id });
+            } else { toast("Payment was not completed"); render("checkout"); }
+        },
+        onclose: (incomplete) => { if (incomplete) render("checkout"); },
+    });
+}
+
+// Once paid: n8n verifies with Flutterwave, then emails + Telegram + Google Sheet.
+// Track Order becomes the only screen.
+function placeOrder(pay = {}) {
     const t = totals();
-    state.tracking = { id: "CH-" + (20481 + state.orders), items: state.bag.slice(), total: t.total,
-                       express: state.express, start: Date.now() };
-    notify("order", { orderId: state.tracking.id, name: state.contact.name, email: state.contact.email,
+    state.tracking = { id: pay.txRef ? "CH-" + pay.txRef.slice(-6) : "CH-" + (20481 + state.orders),
+                       items: state.bag.slice(), total: t.total, express: state.express, start: Date.now() };
+    notify("order", { orderId: state.tracking.id, txRef: pay.txRef || "", transactionId: pay.transactionId || "",
+        name: state.contact.name, email: state.contact.email,
         itemsText: state.bag.map(itemLine).join("\n"), units: t.units, subtotal: t.sub, deliveryFee: t.delivery,
-        total: t.total, totalText: naira(t.total), payment: state.pay === "card" ? "Card" : "Bank transfer",
+        total: t.total, totalText: naira(t.total), payment: PAY_LABEL[state.pay],
         delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow" });
     state.bag = []; state.orders += 1;
     saveTracking();
@@ -555,8 +588,10 @@ const R = {
             <button class="opt ${state.express ? "on" : ""}" data-action="ship" data-x="1"><span class="radio"></span><span class="grow">Express<small>Today, 3–6 PM</small></span><b>₦5,000</b></button>
             <button class="opt ${state.express ? "" : "on"}" data-action="ship" data-x="0"><span class="radio"></span><span class="grow">Standard<small>Tomorrow</small></span><b>₦2,500</b></button>
             <div class="label">Payment</div>
-            <button class="opt ${state.pay === "card" ? "on" : ""}" data-action="pay-m" data-m="card"><span class="radio"></span><span class="grow">Card<small>•••• 4242</small></span></button>
+            <button class="opt ${state.pay === "card" ? "on" : ""}" data-action="pay-m" data-m="card"><span class="radio"></span><span class="grow">Card<small>Visa, Mastercard, Verve</small></span></button>
             <button class="opt ${state.pay === "transfer" ? "on" : ""}" data-action="pay-m" data-m="transfer"><span class="radio"></span><span class="grow">Bank transfer<small>Instant confirmation</small></span></button>
+            <button class="opt ${state.pay === "ussd" ? "on" : ""}" data-action="pay-m" data-m="ussd"><span class="radio"></span><span class="grow">USSD<small>Pay from any Nigerian bank</small></span></button>
+            <p class="secure">🔒 Payments secured by Flutterwave</p>
             <div class="summary"><div class="total" style="border:0;margin:0;padding:0"><span>Total</span><span>${naira(t.total)}</span></div></div>
         </div>
         <div class="cta-bar"><button class="btn-main pink" data-action="pay">Pay ${naira(t.total)}</button></div>`;
@@ -725,8 +760,9 @@ app.addEventListener("click", (e) => {
             $("#co-err").textContent = "Add your name and a valid email for your receipt";
             $("#checkout .scroll").scrollTop = 0; return;
         }
-        el.innerHTML = spinner("Confirming payment…");
-        setTimeout(() => { toast("Order confirmed 🎉", "check"); placeOrder(); }, 1500);
+        el.innerHTML = spinner(FLUTTERWAVE.publicKey && !params.has("demo") ? "Opening secure payment…" : "Confirming payment…");
+        if (FLUTTERWAVE.publicKey && !params.has("demo")) payWithFlutterwave();
+        else setTimeout(() => { toast("Order confirmed 🎉", "check"); placeOrder(); }, 1500);   // demo / no key yet
     }
     if (action === "call") toast("Calling Tunde…", "phone");
     if (action === "done") { clearTracking(); goRoot("home"); }

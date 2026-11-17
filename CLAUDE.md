@@ -56,6 +56,10 @@ composited with ffmpeg overlays on the vertical recording.
 `const N8N = { signup, order }` near the top of `wigs/index.html` holds the webhook URLs (empty =
 off). `notify()` posts a `signup` event after the email-code sign-in and an `order` event in
 `placeOrder()`. Nothing is sent in `?demo` mode. Checkout collects the customer's name and email.
+Payments: `const FLUTTERWAVE = { publicKey }` (empty = simulated payment, as in the demo).
+With a key, Pay opens Flutterwave Inline (card / bank transfer / USSD, NGN); on success the order
+event carries `txRef` + `transactionId`, and n8n verifies the transaction with Flutterwave's API
+(secret key lives only in n8n) before emailing, alerting and logging.
 Setup steps and payload shapes: `n8n/SETUP.md`.
 
 ## Notes for posts
