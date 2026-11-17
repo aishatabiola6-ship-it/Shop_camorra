@@ -377,12 +377,12 @@ body.be-mode .device-slot { grid-area: phone; align-self: center; }
 
 /* Real phone: fullscreen, no frame */
 @media (max-width: 500px) {
-    .stage { padding: 0; }
-    .device-slot { width: 100vw !important; height: 100dvh !important; }
-    .device { position: static; width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none; background: var(--bg); }
-    .island, .statusbar, .home-indicator, .play { display: none; }
-    .app { border-radius: 0; }
-    .scroll { padding-top: calc(env(safe-area-inset-top) + 16px); }
+    body:not(.be-mode) .stage { padding: 0; }
+    body:not(.be-mode) .device-slot { width: 100vw !important; height: 100dvh !important; }
+    body:not(.be-mode) .device { position: static; width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none; background: var(--bg); }
+    body:not(.be-mode) .island, body:not(.be-mode) .statusbar, body:not(.be-mode) .home-indicator, body:not(.be-mode) .play { display: none; }
+    body:not(.be-mode) .app { border-radius: 0; }
+    body:not(.be-mode) .scroll { padding-top: calc(env(safe-area-inset-top) + 16px); }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; } }
 </style>
@@ -1058,10 +1058,18 @@ function fit() {
     const cap = params.has("big") ? Infinity : 1, slot = $(".device-slot");
     let s, top = 0;
     if (BE.on) {
-        const portrait = innerHeight > innerWidth;
+        // Small screens: lay the split view out at video size and scale it down as one picture
+        const portrait = innerHeight > innerWidth, small = innerWidth < 1000 && !params.has("big"), st = $(".stage");
+        const W = small ? (portrait ? 1080 : 1920) : innerWidth, H = small ? (portrait ? 1920 : 1080) : innerHeight;
+        if (small) {
+            const k = Math.min(innerWidth / W, innerHeight / H);
+            Object.assign(st.style, { position: "absolute", width: W + "px", height: H + "px", transformOrigin: "0 0",
+                transform: `scale(${k})`, left: (innerWidth - W * k) / 2 + "px", top: (innerHeight - H * k) / 2 + "px" });
+        } else st.removeAttribute("style");
+        const c = small ? Infinity : cap;
         top = 34;
-        s = portrait ? Math.min(cap, (innerHeight * 0.56) / 868, (innerWidth * 0.5) / 414)
-                     : Math.min(cap, (innerHeight - 40 - top) / 868, (innerWidth * 0.34) / 414);
+        s = portrait ? Math.min(c, (H * 0.56) / 868, (W * 0.5) / 414)
+                     : Math.min(c, (H - 40 - top) / 868, (W * 0.34) / 414);
     } else s = Math.min(cap, (innerHeight - 40) / 868, (innerWidth - 40) / 414);
     document.documentElement.style.setProperty("--s", s);
     $(".device").style.top = top + "px";
