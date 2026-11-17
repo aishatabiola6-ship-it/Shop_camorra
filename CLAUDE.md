@@ -28,6 +28,7 @@ Each app is one self-contained HTML file (inline CSS + JS, Google Fonts only). N
   - `?demo` — plays the whole flow automatically (for screen recording)
   - `?big` — scales the phone up to fill the window (crisp recordings)
   - `?dark` — black theme (default is blush pink)
+  - `?backend` / `#backend` (wig app) — split screen: FRONT END phone + BACK END panel (n8n canvas nodes light up, owner's Telegram, Google Sheet rows), driven by `notify()` via `BE.event()`; adapts to portrait (TikTok) and landscape. Combine: `?demo&full&backend`
   - `?demo&full` / `#demo-full` (wig app) — full automation demo: email code arrives as a mail notification, order, Flutterwave payment sheet (lookalike), order-confirmation email, live tracking
 - On a real phone (< 500px wide) the app goes fullscreen without the phone frame.
 

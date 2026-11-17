@@ -65,6 +65,7 @@ body.demo .play { display: none; }
 /* ---------------- Screens ---------------- */
 .screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg); transform: translateX(100%); transition: transform 450ms cubic-bezier(.2,.8,.2,1), opacity 450ms; z-index: 1; }
 .screen.active { transform: none; z-index: 3; }
+.screen:not(.active):not(.prev) { visibility: hidden; transition: transform 450ms cubic-bezier(.2,.8,.2,1), opacity 450ms, visibility 0s 450ms; }
 .screen.prev { transform: translateX(-25%); opacity: .5; z-index: 2; }
 .scroll { flex: 1; overflow-y: auto; padding: 60px 18px 130px; scrollbar-width: none; }
 .scroll::-webkit-scrollbar { display: none; }
@@ -303,6 +304,64 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .ps-done b { display: block; font-size: 20px; margin-bottom: 6px; }
 .ps-done span { color: #7a8090; font-size: 14px; }
 
+/* ---------------- Back-end view (?backend): phone + live n8n, Telegram, Google Sheets ---------------- */
+.be, .fe-tag { display: none; }
+body.be-mode { background: #0d0b0e; }
+body.be-mode .editor, body.be-mode .play { display: none; }
+body.be-mode .stage { display: grid; gap: 16px; padding: 20px; height: 100%; align-items: stretch; justify-content: stretch; }
+body.be-mode .be { display: contents; }
+body.be-mode .fe-tag { display: block; }
+body.be-mode .device-slot { grid-area: phone; align-self: center; }
+@media (orientation: landscape) { body.be-mode .stage { grid-template-columns: auto 1fr .78fr; grid-template-rows: 1.05fr 1fr; grid-template-areas: "phone flow flow" "phone sheet tg"; } }
+@media (orientation: portrait)  { body.be-mode .stage { grid-template-columns: auto 1fr; grid-template-rows: auto 1fr .82fr; grid-template-areas: "phone tg" "flow flow" "sheet sheet"; } }
+.fe-tag, .be-h { font: 700 15px "Inter", sans-serif; letter-spacing: .04em; }
+.fe-tag { position: absolute; left: 0; right: 0; top: 0; text-align: center; color: #f7c9da; }
+.tag { display: inline-block; padding: 4px 10px; border-radius: 999px; margin-right: 8px; font-size: 12px; letter-spacing: .12em; }
+.tag.fe { background: #b8436f; color: #fff; }
+.tag.bk { background: #ff6d5a; color: #1b0f0c; }
+.be-card { min-width: 0; min-height: 0; overflow: hidden; border-radius: 18px; display: flex; flex-direction: column; }
+.be-h { display: flex; align-items: center; gap: 8px; padding: 12px 16px; flex: none; }
+.be-h .sp { flex: 1; }
+.be-flow { grid-area: flow; background: #1e1c22; border: 1px solid #2f2c35; color: #eae6ee; }
+.be-flow .be-h { border-bottom: 1px solid #2f2c35; }
+.be-live { font: 600 12px "Inter"; color: #8be0a4; letter-spacing: 0; }
+.be-live i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2bb673; margin-right: 6px; animation: blink 1.4s infinite; }
+.be-exec { font: 500 12px "JetBrains Mono", monospace; color: #a59fae; letter-spacing: 0; }
+.be-flow svg { flex: 1; width: 100%; min-height: 0; background-image: radial-gradient(#2c2931 1px, transparent 1px); background-size: 18px 18px; }
+.bn rect.box { fill: #2a2730; stroke: #3d3943; stroke-width: 2; transition: stroke 200ms, fill 200ms; }
+.bn text { font-family: "Inter", sans-serif; fill: #eae6ee; }
+.bn .ttl { font-size: 13px; font-weight: 600; }
+.bn .sub { font-size: 10px; fill: #a59fae; }
+.bn .badge { opacity: 0; transition: opacity 200ms; }
+.bn.run rect.box { stroke: #ff9f43; fill: #332b25; animation: nodepulse .6s ease-in-out infinite alternate; }
+.bn.ok rect.box { stroke: #2bb673; }
+.bn.ok .badge { opacity: 1; }
+@keyframes nodepulse { to { stroke-width: 4; } }
+.be-edge { fill: none; stroke: #4a4652; stroke-width: 2; }
+.be-edge.on { stroke: #ff6d5a; stroke-width: 3; stroke-dasharray: 8 6; animation: flow .5s linear infinite; }
+.be-edge.done { stroke: #2bb673; stroke-dasharray: none; animation: none; }
+@keyframes flow { to { stroke-dashoffset: -14; } }
+.be-tg { grid-area: tg; background: #0e1621; color: #fff; border: 1px solid #1d2a38; }
+.be-tg .be-h { background: #17212b; }
+.tg-av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(#5fb0f0, #3a7fd5); font-weight: 800; }
+.tg-name { font: 600 15px "Inter"; letter-spacing: 0; }
+.tg-name small { display: block; font-weight: 400; font-size: 12px; color: #7f91a4; }
+.tg-msgs { flex: 1; overflow: hidden; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; background: #0e1621 radial-gradient(circle at 30% 20%, #142131, transparent 60%); }
+.tg-day { align-self: center; font: 600 12px "Inter"; background: rgba(255,255,255,.08); padding: 4px 10px; border-radius: 999px; color: #c9d6e3; }
+.tg-msg { align-self: flex-start; max-width: 92%; background: #182533; border-radius: 14px 14px 14px 4px; padding: 10px 12px 18px; font: 15px/1.42 "Inter", sans-serif; white-space: pre-wrap; position: relative; animation: pop .35s cubic-bezier(.2,.9,.2,1.2) both; }
+.tg-msg .tm { position: absolute; right: 10px; bottom: 4px; font-size: 11px; color: #6d8196; }
+@keyframes pop { from { transform: scale(.85) translateY(12px); opacity: 0; } }
+.be-sheet { grid-area: sheet; background: #fff; color: #202124; border: 1px solid #dadce0; }
+.be-sheet .be-h { background: #0f9d58; color: #fff; }
+.gs-wrap { flex: 1; overflow: hidden; }
+.gs { width: 100%; border-collapse: collapse; font: 13px "Inter", sans-serif; table-layout: fixed; }
+.gs th { background: #f1f3f4; font-weight: 600; text-align: left; padding: 8px 10px; border: 1px solid #e0e0e0; color: #444; }
+.gs td { padding: 9px 10px; border: 1px solid #e8eaed; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gs td.n { color: #888; text-align: center; background: #f8f9fa; width: 28px; }
+.gs tr.new td { animation: rowflash 2.4s ease-out; }
+@keyframes rowflash { 0%, 30% { background: #ceead6; } 100% { background: transparent; } }
+.paid { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #e6f4ea; color: #137333; font-weight: 600; font-size: 12px; }
+
 /* Real phone: fullscreen, no frame */
 @media (max-width: 500px) {
     .stage { padding: 0; }
@@ -318,6 +377,7 @@ body.dark .auth.apple { background: #fff; color: #000; }
 <body>
 <div class="stage">
     <div class="device-slot">
+        <div class="fe-tag"><span class="tag fe">FRONT END</span>Customer app</div>
         <div class="device">
             <div class="island"></div>
             <div class="app" id="app">
@@ -354,6 +414,22 @@ body.dark .auth.apple { background: #fff; color: #000; }
         </div>
         <div class="code" id="code-view"></div>
     </aside>
+    <div class="be" id="be">
+        <section class="be-card be-flow">
+            <div class="be-h"><span class="tag bk">BACK END</span>n8n workflow<span class="sp"></span><span class="be-exec" id="be-exec">Waiting for events…</span><span class="be-live"><i></i>Active</span></div>
+            <svg id="be-svg" viewBox="0 0 790 366" preserveAspectRatio="xMidYMid meet"></svg>
+        </section>
+        <section class="be-card be-tg">
+            <div class="be-h"><div class="tg-av">C</div><div class="tg-name">Camorra Orders<small>bot · owner's Telegram</small></div></div>
+            <div class="tg-msgs" id="tg-msgs"><span class="tg-day">Today</span></div>
+        </section>
+        <section class="be-card be-sheet">
+            <div class="be-h">▦ Google Sheets · Camorra Hair Orders</div>
+            <div class="gs-wrap"><table class="gs"><colgroup><col style="width:34px"><col style="width:12%"><col style="width:15%"><col style="width:17%"><col><col style="width:13%"><col style="width:10%"></colgroup>
+                <thead><tr><th></th><th>Time</th><th>Order ID</th><th>Customer</th><th>Items</th><th>Paid</th><th>Status</th></tr></thead>
+                <tbody id="gs-body"></tbody></table></div>
+        </section>
+    </div>
 </div>
 <button class="play" id="play" type="button">▶ Play demo</button>
 
@@ -399,6 +475,7 @@ const N8N = {
 // Sent as a plain form post: browsers deliver it to n8n without a CORS pre-check.
 // n8n reads each field into $json.body (e.g. $json.body.email).
 function notify(kind, data) {
+    if (BE.on) BE.event(kind, data);
     if (!N8N[kind] || params.has("demo")) return;
     const body = new URLSearchParams({ event: kind, ts: new Date().toISOString(), ...data });
     fetch(N8N[kind], { method: "POST", mode: "no-cors", body, keepalive: true }).catch(() => {});
@@ -889,14 +966,95 @@ app.addEventListener("keydown", (e) => {
     if (e.target.id === "otp") $('[data-action="verify"]').click();
 });
 
+// ---------- Back-end view: n8n canvas, owner's Telegram, Google Sheet ----------
+const BE = {
+    on: false, runs: 0,
+    nodes: {
+        ch: [16, 20, "⚡", "#ff6d5a", "Code Webhook", "POST · sign-in code"],
+        cm: [214, 20, "🔐", "#7a5af8", "Make + Sign Code", "6 digits · 10 min"],
+        cg: [412, 20, "✉️", "#ea4335", "Gmail", "Send sign-in code"],
+        sh: [16, 108, "⚡", "#ff6d5a", "Sign-up Webhook", "POST · new customer"],
+        sg: [214, 108, "✉️", "#ea4335", "Gmail", "Welcome email"],
+        oh: [16, 254, "⚡", "#ff6d5a", "Order Webhook", "POST · paid order"],
+        ov: [214, 254, "💳", "#f5a623", "Flutterwave", "Verify payment"],
+        oi: [412, 254, "🔀", "#2bb673", "Paid?", "NGN · amount · ref"],
+        og: [612, 192, "✉️", "#ea4335", "Gmail", "Order receipt"],
+        ot: [612, 254, "✈️", "#29a9eb", "Telegram", "Alert the owner"],
+        os: [612, 316, "▦", "#0f9d58", "Google Sheets", "Append order row"],
+    },
+    edges: [["ch", "cm"], ["cm", "cg"], ["sh", "sg"], ["oh", "ov"], ["ov", "oi"], ["oi", "og"], ["oi", "ot"], ["oi", "os"]],
+    init() {
+        this.on = true;
+        document.body.classList.add("be-mode");
+        const W = 166, H = 44;
+        const edge = ([a, b]) => { const [x1, y1] = this.nodes[a], [x2, y2] = this.nodes[b];
+            const sx = x1 + W, sy = y1 + H / 2, ex = x2, ey = y2 + H / 2, m = (sx + ex) / 2;
+            return `<path class="be-edge" id="e-${a}-${b}" d="M${sx} ${sy} C${m} ${sy} ${m} ${ey} ${ex} ${ey}"/>`; };
+        const node = ([id, [x, y, ic, c, t, sub]]) => `<g class="bn" id="n-${id}" transform="translate(${x} ${y})">
+            <rect class="box" width="${W}" height="${H}" rx="10"/><circle cx="22" cy="22" r="14" fill="${c}"/>
+            <text x="22" y="27" text-anchor="middle" font-size="14">${ic}</text>
+            <text class="ttl" x="42" y="20">${t}</text><text class="sub" x="42" y="34">${sub}</text>
+            <g class="badge" transform="translate(${W - 4} 0)"><circle r="9" fill="#2bb673"/><path d="M-4 0 l3 3 l5 -6" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></g></g>`;
+        const lane = (y, t) => `<text x="16" y="${y}" font-family="Inter" font-size="10" font-weight="700" fill="#6f6878" letter-spacing="1.5">${t}</text>`;
+        $("#be-svg").innerHTML = lane(13, "SIGN-IN CODE") + lane(101, "SIGN-UP") + lane(184, "PAID ORDER") +
+            this.edges.map(edge).join("") + Object.entries(this.nodes).map(node).join("");
+        // two earlier orders so the sheet looks lived-in (example data)
+        this.row({ time: "9:12 AM", orderId: "CH-018240", name: "Ada Obi", items: "Kinky Curly Bob · 14\" × 1", paid: "₦215,000" }, false);
+        this.row({ time: "10:47 AM", orderId: "CH-019877", name: "Tomi Adeyemi", items: "Jet Silk Straight · 30\" × 1", paid: "₦435,000" }, false);
+    },
+    setNode(id, cls) { const n = $("#n-" + id); n.classList.remove("run", "ok"); if (cls) n.classList.add(cls); },
+    setEdge(a, b, cls) { const e = $(`#e-${a}-${b}`); e.classList.remove("on", "done"); if (cls) e.classList.add(cls); },
+    async chain(ids, gap = 480) {
+        for (let k = 0; k < ids.length; k++) {
+            if (k) { this.setEdge(ids[k - 1], ids[k], "on"); await wait(260); this.setEdge(ids[k - 1], ids[k], "done"); }
+            this.setNode(ids[k], "run"); await wait(gap); this.setNode(ids[k], "ok");
+        }
+    },
+    exec(label, t0) { this.runs += 1; $("#be-exec").textContent = `Executions: ${this.runs} · ${label} ✓ ${((performance.now() - t0) / 1000).toFixed(1)}s`; },
+    reset(ids) { ids.forEach((id) => this.setNode(id, null)); this.edges.forEach(([a, b]) => { if (ids.includes(a)) this.setEdge(a, b, null); }); },
+    async code() { const t0 = performance.now(); this.reset(["ch", "cm", "cg"]); await this.chain(["ch", "cm", "cg"]); this.exec("sign-in code emailed", t0); },
+    async event(kind, d) {
+        const t0 = performance.now();
+        if (kind === "signup") { this.reset(["sh", "sg"]); await this.chain(["sh", "sg"]); this.exec("welcome email sent", t0); }
+        if (kind === "order") {
+            const outs = ["og", "ot", "os"];
+            this.reset(["oh", "ov", "oi", ...outs]);
+            await this.chain(["oh", "ov", "oi"], 560);
+            outs.forEach((o) => this.setEdge("oi", o, "on")); await wait(300);
+            outs.forEach((o) => { this.setEdge("oi", o, "done"); this.setNode(o, "run"); }); await wait(520);
+            outs.forEach((o) => this.setNode(o, "ok"));
+            this.telegram(`🛍️ New PAID order #${d.orderId}\n👤 ${d.name} (${d.email})\n\n${d.itemsText}\n\n🚚 ${d.delivery}\n💳 ${d.payment} via Flutterwave\n💰 Paid: ${d.totalText}`);
+            this.row({ time: clock(Date.now()), orderId: d.orderId, name: d.name, items: d.itemsText.split("\n").map((l) => l.split(" — ")[0]).join(" + "), paid: d.totalText }, true);
+            this.exec(`order #${d.orderId} paid`, t0);
+        }
+    },
+    telegram(text) {
+        const m = document.createElement("div");
+        m.className = "tg-msg"; m.textContent = text;
+        m.insertAdjacentHTML("beforeend", `<span class="tm">${clock(Date.now())}</span>`);
+        $("#tg-msgs").appendChild(m);
+    },
+    row(r, fresh) {
+        const body = $("#gs-body"), n = body.children.length + 2;
+        body.insertAdjacentHTML("beforeend", `<tr class="${fresh ? "new" : ""}"><td class="n">${n}</td><td>${r.time}</td><td>${esc(r.orderId)}</td><td>${esc(r.name)}</td><td>${esc(r.items)}</td><td>${esc(r.paid)}</td><td><span class="paid">Paid</span></td></tr>`);
+    },
+};
+
 // ---------- Fit the phone to the window ----------
 function fit() {
-    const cap = params.has("big") ? Infinity : 1;
-    const s = Math.min(cap, (innerHeight - 40) / 868, (innerWidth - 40) / 414);
+    const cap = params.has("big") ? Infinity : 1, slot = $(".device-slot");
+    let s, top = 0;
+    if (BE.on) {
+        const portrait = innerHeight > innerWidth;
+        top = 34;
+        s = portrait ? Math.min(cap, (innerHeight * 0.56) / 868, (innerWidth * 0.5) / 414)
+                     : Math.min(cap, (innerHeight - 40 - top) / 868, (innerWidth * 0.34) / 414);
+    } else s = Math.min(cap, (innerHeight - 40) / 868, (innerWidth - 40) / 414);
     document.documentElement.style.setProperty("--s", s);
-    const slot = $(".device-slot");
-    slot.style.width = 414 * s + "px"; slot.style.height = 868 * s + "px";
+    $(".device").style.top = top + "px";
+    slot.style.width = 414 * s + "px"; slot.style.height = 868 * s + top + "px";
 }
+if (params.has("backend")) BE.init();
 addEventListener("resize", fit); fit();
 
 // ---------- Code panel: this app's real source ----------
@@ -1001,7 +1159,9 @@ async function demoFull() {
     $("#splash").classList.add("hide"); await wait(1300);
     // 1. Sign in with email → code arrives by mail
     await tap("#email"); await typeInto("#email", "bella.rossi@example.com"); await wait(400);
-    await tap('[data-action="email"]'); await wait(1600);
+    await tap('[data-action="email"]');
+    if (BE.on) BE.code();
+    await wait(BE.on ? 2100 : 1600);
     const code = "482913";
     notifTap = () => openMail("Your Camorra Hair code: " + code, MAIL.code(code));
     showNotif("Camorra Hair", "Your Camorra Hair code: " + code); await wait(1600);
@@ -1026,7 +1186,7 @@ async function demoFull() {
     await typeText($("#ps-exp"), "09/32", 80); await typeText($("#ps-cvv"), "564", 90); await wait(500);
     await tap($("#ps-pay")); await wait(4300);
     // 4. Receipt email arrives on Track Order
-    await wait(1500);
+    await wait(BE.on ? 3600 : 1500);
     const o = state.lastOrderMail;
     notifTap = () => openMail(`Your Camorra Hair order #${o.id} is confirmed ✓`, MAIL.order(o));
     showNotif("Camorra Hair", `Your Camorra Hair order #${o.id} is confirmed ✓`); await wait(1700);
