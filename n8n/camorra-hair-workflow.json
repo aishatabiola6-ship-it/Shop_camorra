@@ -61,7 +61,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.flutterwave.com/v3/transactions/{{ $json.body.transactionId || 0 }}/verify",
+        "url": "=https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref={{ encodeURIComponent($json.body.txRef || 'none') }}",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "options": {
