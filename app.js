@@ -330,7 +330,9 @@
       <div class="success-badge">✓</div>
       <h1>Thank you, ${esc(o.name.split(" ")[0])}!</h1>
       <div class="panel left-text">
-        <p>Your order <strong>${esc(o.txRef)}</strong> is confirmed.</p>
+        ${o.verified === false
+          ? `<p class="warn">We couldn't confirm your payment automatically yet. Please tap the WhatsApp button below so we can check it for you – your order ref is <strong>${esc(o.txRef)}</strong>.</p>`
+          : `<p>Your order <strong>${esc(o.txRef)}</strong> is confirmed.${o.verified ? ` <span class="verified">✓ Payment verified</span>` : ""}</p>`}
         <p>📦 Your <strong>delivery date</strong> and <strong>delivery fee</strong> will be communicated to you on WhatsApp at <strong>${esc(o.whatsapp)}</strong>.</p>
         <p class="muted small">Your parcel will be packed discreetly with no product names on it.</p>
       </div>
@@ -673,11 +675,28 @@
 
     if (route === "delivery") {
       const f = document.getElementById("deliveryForm");
-      if (f) f.addEventListener("submit", (e) => {
+      if (f) f.addEventListener("submit", async (e) => {
         e.preventDefault();
+        const btn = f.querySelector("button[type=submit]");
+        btn.disabled = true; btn.textContent = "Confirming your payment…";
         const d = Object.fromEntries(new FormData(f));
+        const u = auth.current() || {};
         const o = { ...store.get("paid_order", {}), name: d.name.trim(), whatsapp: d.whatsapp.trim(),
-          address: d.address.trim(), note: d.note.trim(), detailsAt: new Date().toISOString() };
+          address: d.address.trim(), note: d.note.trim(), detailsAt: new Date().toISOString(), verified: null };
+
+        // Send to the Netlify automation: it checks the payment with Flutterwave,
+        // saves the order to Google Sheets and emails Preshy.
+        if (!PAY_DEMO) {
+          try {
+            const res = await fetch("/.netlify/functions/submit-order", {
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ txRef: o.txRef, transactionId: o.transactionId, items: o.items,
+                name: o.name, whatsapp: o.whatsapp, address: o.address, note: o.note, email: o.email || u.email })
+            });
+            if (res.ok) { const r = await res.json(); o.verified = !!r.verified; }
+          } catch (err) { /* automation not reachable – WhatsApp button is the backup */ }
+        }
+
         const orders = store.get("orders", []); orders.push(o); store.set("orders", orders);
         store.del("paid_order");
         notifyOrderByEmail(o);

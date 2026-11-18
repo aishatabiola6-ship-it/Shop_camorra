@@ -30,6 +30,10 @@ A static website (plain HTML/CSS/JS, no build step). You can host it for free on
 
 Until a key is added, checkout runs in demo mode (payment is simulated).
 
+## Order automation (Netlify Functions + Google Sheets)
+After payment the site checks the payment with Flutterwave, saves the order to a Google Sheet and emails the shop.
+Code: `netlify/functions/`, `automation/google-apps-script.gs`. Setup steps: **[automation/SETUP.md](automation/SETUP.md)**.
+
 ## Sending real verification emails
 Until it's set up, the site runs in **demo mode** and shows the code on screen.
 1. Create a free account at https://www.emailjs.com and connect a Gmail service.
