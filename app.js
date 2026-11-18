@@ -6,6 +6,7 @@
   const PRODUCTS = window.PRODUCTS;
   const app = document.getElementById("app");
   const PAY_DEMO = !(CFG.flutterwave && CFG.flutterwave.publicKey);
+  const TEST_MODE = PAY_DEMO || /_TEST-/.test(CFG.flutterwave.publicKey);
   const WA = CFG.whatsapp;
   const WA_DISPLAY = "+" + WA.replace(/^(\d{3})(\d{3})(\d{3})(\d+)$/, "$1 $2 $3 $4");
   const waLink = (text) => "https://wa.me/" + WA + (text ? "?text=" + encodeURIComponent(text) : "");
@@ -572,6 +573,9 @@
       default: html = viewShop(params);
     }
     if (html === "") return;
+    if (TEST_MODE) {
+      html = `<div class="test-banner">Test mode – payments are not real. Use a Flutterwave test card.</div>` + html;
+    }
     if (store.get("paid_order", null) && route !== "delivery") {
       html = `<a class="pending-banner" href="#/delivery">✓ Payment received – tap here to add your delivery details</a>` + html;
     }
