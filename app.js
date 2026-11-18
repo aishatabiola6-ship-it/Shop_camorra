@@ -192,8 +192,8 @@
         <p class="tagline">Pleasure, wellness &amp; intimacy – delivered discreetly.</p>
       </div>
       <div class="age-box">
-        <h2>Welcome 💕</h2>
-        <p>This store sells adult products. You must be <strong>18 or older</strong> to enter.</p>
+        <h2>Come in, take your time 💕</h2>
+        <p>Your private pleasure boutique. Everything here is discreet – from browsing to the parcel at your door. You must be <strong>18 or older</strong> to enter.</p>
         <button class="btn primary" id="enterBtn">I'm 18+ · Enter</button>
         <a class="leave" href="https://www.google.com">I'm under 18 – leave</a>
       </div>
@@ -223,33 +223,42 @@
       (active === "All" || p.category === active) &&
       (!q || (p.name + " " + p.description + " " + p.category).toLowerCase().includes(q)));
     const me = auth.current();
-    const feature = findProduct("rose-izumi");
+    const slides = (CFG.featured || []).map((f) => ({ ...f, p: findProduct(f.id) })).filter((f) => f.p);
+    const home = active === "All" && !q;
     return `
     <section class="container">
       <div class="home-head">
         <div>
-          <p class="hello">${me && me.name ? "Hi " + esc(me.name.split(" ")[0]) + " ✨" : "Welcome ✨"}</p>
-          <h1>Find your favourite</h1>
+          <p class="hello">${me && me.name ? "Hi " + esc(me.name.split(" ")[0]) + " ✨" : "Welcome, gorgeous ✨"}</p>
+          <h1>What are you <em>in the mood</em> for?</h1>
         </div>
       </div>
       <label class="search">
         <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="search" type="search" placeholder="Search toys, games, lingerie…" value="${esc(params.q || "")}" aria-label="Search">
       </label>
-      ${active === "All" && !q && feature ? `
-      <a class="banner" href="#/product/${feature.id}">
-        <div class="b-text">
-          <span class="pill">Best seller</span>
-          <h2>The Rose is here 🌹</h2>
-          <span class="b-btn">Shop now →</span>
+      ${home && slides.length ? `
+      <div class="hot" aria-roledescription="carousel" aria-label="Hot right now">
+        <div class="hot-track" id="hotTrack">
+          ${slides.map((f) => `
+          <a class="banner" href="#/product/${f.p.id}" draggable="false">
+            <div class="b-text">
+              <span class="pill">${esc(f.tag)}</span>
+              <h2>${esc(f.title)}</h2>
+              <p class="b-line">${esc(f.line || "")}</p>
+              <span class="b-btn">Shop now →</span>
+            </div>
+            <div class="b-img"><img src="${esc(f.p.images[0])}" alt="${esc(f.p.name)}" draggable="false"></div>
+          </a>`).join("")}
         </div>
-        <div class="b-img"><img src="${esc(feature.images[0])}" alt=""></div>
-      </a>` : ""}
+        ${slides.length > 1 ? `<div class="hot-dots">${slides.map((_, i) => `<button class="dot ${i === 0 ? "on" : ""}" data-dot="${i}" aria-label="Show slide ${i + 1}"></button>`).join("")}</div>` : ""}
+      </div>
+      <div class="promise"><span>🤫 Discreet packaging</span><span>🔒 Private checkout</span><span>💬 WhatsApp support</span></div>` : ""}
       <div class="chips">
         ${cats.map((c) => `<a class="chip ${c === active ? "on" : ""}" href="#/shop?cat=${encodeURIComponent(c)}">${esc(c)}</a>`).join("")}
       </div>
       <div class="grid">
-        ${list.length ? list.map(productCard).join("") : `<p class="muted">No products match your search.</p>`}
+        ${list.length ? list.map((p, i) => productCard(p).replace('<article class="card">', `<article class="card rise" style="--d:${Math.min(i, 8) * 45}ms">`)).join("") : `<p class="muted">Nothing matches that yet – try another word.</p>`}
       </div>
     </section>`;
   }
@@ -293,7 +302,7 @@
               `<button type="button" class="opt ${i === 0 ? "on" : ""}" data-opt="${esc(v)}">${esc(v)}</button>`).join("")}</div>
           </div>` : ""}
 
-          <h2 class="section-title">Highlights</h2>
+          <h2 class="section-title">Why you'll love it</h2>
           <ul class="features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
 
           <h2 class="section-title">How it works</h2>
@@ -647,6 +656,7 @@
     if (store.get("paid_order", null) && route !== "delivery") {
       html = `<a class="pending-banner" href="#/delivery">✓ Payment received – tap here to add your delivery details</a>` + html;
     }
+    clearInterval(hotTimer);
     app.innerHTML = html;
     window.scrollTo(0, 0);
     bind(route);
@@ -666,6 +676,68 @@
     location.hash = next || "#/shop";
   }
 
+  /* ---------------- "hot right now" carousel ----------------
+     Swipe or drag left/right; after the last slide it loops back to the first. Auto-advances every 5s. */
+  let hotTimer = null, hotAbort = null;
+  function setupCarousel() {
+    clearInterval(hotTimer);
+    if (hotAbort) hotAbort.abort();
+    hotAbort = new AbortController();
+    const sig = { signal: hotAbort.signal };
+    const track = document.getElementById("hotTrack");
+    if (!track) return;
+    const real = [...track.children];
+    const n = real.length;
+    const dots = [...app.querySelectorAll("[data-dot]")];
+    if (n < 2) return;
+    // clones at both ends make the loop seamless: [last] 1 2 3 [first]
+    track.insertBefore(real[n - 1].cloneNode(true), real[0]);
+    track.appendChild(real[0].cloneNode(true));
+    let i = 1, startX = 0, startY = 0, dx = 0, dragging = false, moved = false, horizontal = null;
+    const go = (to, animate = true) => {
+      i = to;
+      track.style.transition = animate ? "transform .5s cubic-bezier(.22,.8,.3,1)" : "none";
+      track.style.transform = `translateX(${-i * 100}%)`;
+      const real = (i - 1 + n) % n;
+      dots.forEach((d, k) => d.classList.toggle("on", k === real));
+    };
+    go(1, false);
+    track.addEventListener("transitionend", () => {
+      if (i === 0) go(n, false);
+      if (i === n + 1) go(1, false);
+    });
+    const next = () => go(i + 1), prev = () => go(i - 1);
+    const auto = () => { clearInterval(hotTimer); hotTimer = setInterval(() => { if (!document.hidden) next(); }, 5000); };
+    track.addEventListener("pointerdown", (e) => {
+      dragging = true; moved = false; horizontal = null; startX = e.clientX; startY = e.clientY; dx = 0;
+      clearInterval(hotTimer);
+      track.style.transition = "none";
+    });
+    window.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (horizontal === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) horizontal = Math.abs(dx) > Math.abs(dy);
+      if (!horizontal) return;
+      moved = true;
+      track.style.transform = `translate3d(calc(${-i * 100}% + ${dx}px), 0, 0)`;
+    }, sig);
+    const end = () => {
+      if (!dragging) return;
+      dragging = false;
+      if (horizontal && dx < -40) next();
+      else if (horizontal && dx > 40) prev();
+      else go(i);
+      auto();
+    };
+    window.addEventListener("pointerup", end, sig);
+    window.addEventListener("pointercancel", end, sig);
+    // a swipe shouldn't open the product; a tap should
+    track.addEventListener("click", (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+    dots.forEach((d) => d.addEventListener("click", () => { go(Number(d.dataset.dot) + 1); auto(); }));
+    auto();
+  }
+
   /* ---------------- event wiring ---------------- */
   function bind(route) {
     // Add-to-cart buttons on cards
@@ -682,6 +754,7 @@
     }
 
     if (route === "shop") {
+      setupCarousel();
       const s = document.getElementById("search");
       s.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {

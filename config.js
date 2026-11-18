@@ -15,6 +15,14 @@ window.STORE_CONFIG = {
   whatsapp: "2348133284978",
   tiktok: "https://www.tiktok.com/@delta_intimacyhubng",
 
+  // "Hot right now" carousel on the home page (swipe; loops back to the first).
+  // Use product ids from products.js – add or remove slides freely.
+  featured: [
+    { id: "rose-izumi", tag: "Best seller", title: "The Rose is here", line: "Touch-free pulses, made for slow nights." },
+    { id: "lipstick-vibrator", tag: "Hidden in plain sight", title: "Secret Lipstick", line: "Looks like makeup. Feels like a secret." },
+    { id: "app-wearable-vibrator", tag: "Play together", title: "Control it from anywhere", line: "Hand your partner the app." }
+  ],
+
   /*
    * Flutterwave payments.
    * Get your PUBLIC key from https://app.flutterwave.com -> Settings -> API Keys.
