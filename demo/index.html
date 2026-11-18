@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="See how the Preshy Emporium shop works – browsing, checkout, and the emails customers and the shop receive.">
+<title>Preshy Emporium Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf3f6;--surface:#fff;--line:#efdfe6;--text:#2b1724;--muted:#8c7382;--rose:#9c2a56;--rose-2:#c4457a;--rose-soft:#f9e1ea;--plum:#2a1026;--shadow:0 10px 30px rgba(92,30,62,.10)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(560px 460px at 0% 0%,rgba(232,150,182,.35),transparent 70%),radial-gradient(560px 560px at 100% 30%,rgba(196,69,122,.15),transparent 70%),radial-gradient(640px 520px at 30% 100%,rgba(247,205,180,.32),transparent 70%)}
+a{color:var(--rose)}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15;margin:0 0 .4em}
+h1 em,h2 em{color:var(--rose);font-style:italic}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:999px;font-weight:600;text-decoration:none;border:1px solid transparent;transition:transform .12s,box-shadow .2s;font-size:.98rem}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--rose);color:#fff;box-shadow:0 10px 24px rgba(156,42,86,.28)}
+.btn.ghost{background:var(--surface);color:var(--text);border-color:var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-weight:700;color:var(--rose-2);margin:0 0 10px}
+.muted{color:var(--muted)}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:rgba(251,243,246,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{font-family:"Playfair Display",serif;font-weight:700;font-size:1.25rem;color:var(--text);text-decoration:none}
+.brand span{color:var(--rose);font-style:italic}
+header.top .btn{padding:9px 16px;font-size:.88rem}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:center;padding:56px 0 40px}
+.hero h1{font-size:clamp(2.1rem,5vw,3.4rem)}
+.hero p.lead{font-size:1.08rem;color:#5a4352;max-width:520px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0 14px}
+.test{display:inline-block;font-size:.8rem;color:#7a5513;background:#fff1d6;border:1px solid #f1d9ad;padding:6px 12px;border-radius:999px}
+.phone{position:relative;width:min(330px,82vw);margin:0 auto;aspect-ratio:9/19.2;border-radius:46px;background:#1b0d18;padding:12px;box-shadow:0 30px 60px rgba(42,16,38,.35),inset 0 0 0 2px #3a2234}
+.phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:999px;background:#000;z-index:2}
+.phone video{width:100%;height:100%;object-fit:cover;border-radius:36px;display:block;background:#fbf3f6}
+.sound{display:block;text-align:center;margin-top:12px;font-size:.8rem;color:var(--muted)}
+
+/* sections */
+section.block{padding:56px 0}
+.sec-head{max-width:640px;margin-bottom:28px}
+.sec-head h2{font-size:clamp(1.7rem,4vw,2.4rem)}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);position:relative}
+.step .n{width:34px;height:34px;border-radius:50%;background:var(--rose);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.9rem;margin-bottom:12px}
+.step h3{font-family:Inter,sans-serif;font-size:1.02rem;margin:0 0 6px}
+.step p{margin:0;color:#5a4352;font-size:.93rem}
+
+/* emails */
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:10px 16px;border-radius:999px;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+.tab small{display:block;font-weight:500;font-size:.72rem;color:var(--muted)}
+.tab.on{background:var(--plum);border-color:var(--plum);color:#fff}
+.tab.on small{color:#e8c9da}
+.mail{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;max-width:720px}
+.mail-head{padding:16px 20px;border-bottom:1px solid var(--line)}
+.mail-head .subj{font-weight:700;font-size:1.08rem;margin-bottom:8px;line-height:1.35}
+.mail-head .meta{display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--muted)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--plum);color:#ff9cc0;display:grid;place-items:center;font-weight:700;font-family:Georgia,serif;flex:none}
+.meta b{color:var(--text)}
+.mail iframe{width:100%;border:0;display:block;min-height:420px;background:#f6eef3}
+.mail pre{margin:0;padding:22px;font:500 .9rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;background:#fff;color:#2b1724}
+.mail-note{font-size:.86rem;color:var(--muted);margin:12px 4px 0;max-width:720px}
+
+/* behind the scenes */
+.two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:20px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.card h3{font-family:Inter,sans-serif;font-size:1rem;padding:16px 18px 0;margin:0}
+.card .sub{padding:2px 18px 12px;margin:0;font-size:.85rem;color:var(--muted)}
+.sheet{overflow-x:auto}
+.sheet table{border-collapse:collapse;font-size:.8rem;min-width:900px;width:100%}
+.sheet th,.sheet td{border:1px solid #e6e6e6;padding:8px 10px;text-align:left;vertical-align:top;white-space:pre-line}
+.sheet th{background:#f3f3f3;font-weight:700}
+.sheet td.ok{color:#1e9e57;font-weight:700}
+.wa{background:#efe7de;padding:14px 12px;display:flex;flex-direction:column;gap:8px}
+.wa-top{background:#075e54;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;font-weight:600}
+.bubble{max-width:88%;padding:8px 10px 16px;border-radius:10px;font-size:.84rem;line-height:1.4;white-space:pre-line;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.1)}
+.bubble i{position:absolute;right:8px;bottom:3px;font-size:.66rem;color:#667;font-style:normal}
+.out{align-self:flex-end;background:#d9fdd3}.in{align-self:flex-start;background:#fff}
+
+/* features */
+.feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.feat{background:rgba(255,255,255,.75);border:1px solid var(--line);border-radius:18px;padding:18px}
+.feat .ic{font-size:1.4rem}
+.feat h3{font-family:Inter,sans-serif;font-size:.95rem;margin:8px 0 4px}
+.feat p{margin:0;font-size:.85rem;color:#5a4352}
+
+/* final cta */
+.final{margin:20px 0 60px;border-radius:28px;padding:44px 28px;text-align:center;color:#fff;background:radial-gradient(circle at 20% 0%,rgba(255,140,180,.4),transparent 55%),linear-gradient(135deg,#5a1745,var(--plum));box-shadow:0 24px 50px rgba(42,16,38,.3)}
+.final h2{color:#fff;font-size:clamp(1.8rem,4.5vw,2.6rem)}
+.final h2 em{color:#ff9cc0}
+.final p{color:#f0d4e1;margin:0 auto 22px;max-width:520px}
+.final .btn.primary{background:#fff;color:var(--plum);box-shadow:none}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 20px 40px}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:minmax(0,1fr);padding:34px 0 20px;gap:30px;text-align:center}
+  .hero p.lead{margin:0 auto}
+  .hero .cta{justify-content:center}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .feats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  section.block{padding:40px 0}
+}
+@media (max-width:420px){.feats{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/">Preshy <span>Emporium</span></a>
+  <a class="btn primary" href="/">Visit the shop</a>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Demo · How it works</p>
+      <h1>A private pleasure boutique, <em>made for the phone</em></h1>
+      <p class="lead">Customers browse discreetly, learn how every product works, pay securely with Flutterwave and get their delivery date on WhatsApp. Every step sends the right email automatically.</p>
+      <div class="cta">
+        <a class="btn primary" href="/">Open the live shop →</a>
+        <a class="btn ghost" href="#emails">See the emails</a>
+      </div>
+      <span class="test">Test mode – payments in this demo aren't real</span>
+    </div>
+    <div>
+      <div class="phone">
+        <video src="/media/demo.mp4" poster="poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Walkthrough of the Preshy Emporium shop"></video>
+      </div>
+      <span class="sound">Tap the video to pause</span>
+    </div>
+  </section>
+
+  <section class="block reveal" id="how">
+    <div class="sec-head">
+      <p class="eyebrow">The customer journey</p>
+      <h2>From first swipe to <em>front door</em></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Explore &amp; swipe</h3><p>An 18+ welcome, then swipe through hot picks, browse by mood and save favourites with a ♡.</p></div>
+      <div class="step"><div class="n">2</div><h3>Sign in your way</h3><p>Google, Apple or email. A 6-digit code arrives by email, and customers can create a password for next time.</p></div>
+      <div class="step"><div class="n">3</div><h3>Learn how it works</h3><p>Every product page explains how to use it, step by step – then pick a colour or size and add to bag.</p></div>
+      <div class="step"><div class="n">4</div><h3>Pay securely</h3><p>Card, bank transfer or USSD through Flutterwave. The payment is double-checked with Flutterwave automatically.</p></div>
+      <div class="step"><div class="n">5</div><h3>Add delivery details</h3><p>Name, WhatsApp number and address. The order is saved to the shop's Google Sheet instantly.</p></div>
+      <div class="step"><div class="n">6</div><h3>Delivery on WhatsApp</h3><p>The customer gets an order confirmation email, and the delivery date and fee are sent on WhatsApp.</p></div>
+    </div>
+  </section>
+
+  <section class="block reveal" id="emails">
+    <div class="sec-head">
+      <p class="eyebrow">Automatic emails</p>
+      <h2>The emails people <em>actually receive</em></h2>
+      <p class="muted">These are the real emails the website sends, shown with example details. Tap through them.</p>
+    </div>
+    <div class="tabs" role="tablist" id="mailTabs"></div>
+    <div class="mail">
+      <div class="mail-head">
+        <div class="subj" id="mailSubj"></div>
+        <div class="meta"><div class="av">P</div><div><b id="mailFrom">Preshy Emporium</b><br><span id="mailTo"></span></div><span style="margin-left:auto">now</span></div>
+      </div>
+      <iframe id="mailFrame" title="Email preview" loading="lazy"></iframe>
+      <pre id="mailText" hidden></pre>
+    </div>
+    <p class="mail-note" id="mailNote"></p>
+  </section>
+
+  <section class="block reveal" id="behind">
+    <div class="sec-head">
+      <p class="eyebrow">Behind the scenes</p>
+      <h2>Orders land <em>neatly organised</em></h2>
+      <p class="muted">Each paid order becomes a row in the shop's private Google Sheet, with a one-tap link to message the customer.</p>
+    </div>
+    <div class="two">
+      <div class="card"><h3>📊 Google Sheet · Orders</h3><p class="sub">Updated automatically – only the shop owner can see it</p><div class="sheet"><table id="sheet"></table></div></div>
+      <div class="card"><h3>💬 WhatsApp</h3><p class="sub">Delivery date &amp; fee (example)</p>
+        <div class="wa-top"><div class="av" style="width:30px;height:30px;font-size:.75rem">PE</div>Preshy Emporium</div>
+        <div class="wa">
+          <div class="bubble out">Hello Preshy Emporium, I just paid for an order 🙌🏽
+Order ref: <span class="ref"></span>
+Address: 12 Uni Road, Site 3, Abraka
+Please send me the delivery date and fee 🙏🏽<i>17:26 ✓✓</i></div>
+          <div class="bubble in">Hi Ada 💕 Thank you for your order!
+🚚 Delivery: tomorrow, 12pm – 4pm
+💳 Delivery fee: ₦1,500
+Your parcel is packed discreetly 🤫<i>17:27</i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="sec-head"><p class="eyebrow">What's inside</p><h2>Everything a <em>discreet shop</em> needs</h2></div>
+    <div class="feats">
+      <div class="feat"><div class="ic">🌹</div><h3>32 products</h3><p>Photos, prices, and “how it works” for every item.</p></div>
+      <div class="feat"><div class="ic">🎨</div><h3>Colours &amp; sizes</h3><p>Customers pick options; they show on every order.</p></div>
+      <div class="feat"><div class="ic">♡</div><h3>Saved items</h3><p>Hearts to save favourites for later.</p></div>
+      <div class="feat"><div class="ic">👜</div><h3>Unlimited bag</h3><p>Add as many products as they like.</p></div>
+      <div class="feat"><div class="ic">🔐</div><h3>Easy sign-in</h3><p>Google, Apple or email code, plus passwords.</p></div>
+      <div class="feat"><div class="ic">💳</div><h3>Flutterwave</h3><p>Card, transfer or USSD – verified automatically.</p></div>
+      <div class="feat"><div class="ic">📧</div><h3>Auto emails</h3><p>Codes, welcome, sign-in alerts and receipts.</p></div>
+      <div class="feat"><div class="ic">🤫</div><h3>Discreet</h3><p>18+ gate, private checkout, plain packaging.</p></div>
+    </div>
+  </section>
+
+  <section class="final reveal">
+    <h2>Take a <em>look around</em></h2>
+    <p>The shop is live in test mode – explore it on your phone.</p>
+    <a class="btn primary" href="/">Open Preshy Emporium →</a>
+  </section>
+</main>
+<footer>Preshy Emporium · Strictly 18+ · WhatsApp <a href="https://wa.me/2348133284978" target="_blank" rel="noopener">+234 813 328 4978</a> · TikTok <a href="https://www.tiktok.com/@delta_intimacyhubng" target="_blank" rel="noopener">@delta_intimacyhubng</a></footer>
+
+<script>
+const DATA = {"emails": {"code": {"subject": "807377 is your Preshy Emporium sign-in code", "to": "ada@gmail.com"}, "welcome": {"subject": "Welcome to Preshy Emporium!", "to": "ada@gmail.com"}, "signin": {"subject": "New sign-in to your Preshy Emporium account", "to": "ada@gmail.com"}, "order": {"subject": "Order confirmed – PE-MWMNW9EV-OPTL | Preshy Emporium", "to": "ada@gmail.com"}}, "alert": {"to": "egwuenuprecious18@gmail.com", "subject": "✅ New paid order PE-MWMNW9EV-OPTL – Ada Obi", "body": "A new order has been PAID and verified with Flutterwave.\n\nStatus: PAID ✓ – arrange delivery\nOrder ref: PE-MWMNW9EV-OPTL\nAmount paid: ₦50000   (order total ₦50000)\n\nItems:\nOrgasm Pen G-Spot Vibrator (Colour: Purple) x2 = ₦30,000\nRose Air-Pulse Stimulator (IZUMI) x1 = ₦20,000\n\nName: Ada Obi\nWhatsApp: 0803 123 4567\nAddress: 12 Uni Road, Site 3, Abraka\nNote: Please call when you arrive\n\nMessage the customer about the delivery date and fee:\nhttps://wa.me/2348031234567\n\nAll orders: https://docs.google.com/spreadsheets/d/…"}, "sheet": {"headers": ["Date", "Order ref", "Status", "Amount paid (₦)", "Order total (₦)", "Items", "Customer name", "WhatsApp", "Reply on WhatsApp", "Delivery address", "Note", "Email", "Flutterwave ID", "Payment verified"], "values": ["18 Nov 2026, 17:26", "PE-MWMNW9EV-OPTL", "PAID ✓ – arrange delivery", "50000", "50000", "Orgasm Pen G-Spot Vibrator (Colour: Purple) x2 = ₦30,000\nRose Air-Pulse Stimulator (IZUMI) x1 = ₦20,000", "Ada Obi", "0803 123 4567", "https://wa.me/2348031234567", "12 Uni Road, Site 3, Abraka", "Please call when you arrive", "ada@gmail.com", "4821077", "Yes"]}};
+const MAILS = [
+  { key: "code", label: "Sign-in code", who: "to the customer", note: "Sent when a customer signs in with Google or email. The code works for 10 minutes." },
+  { key: "welcome", label: "Welcome", who: "to the customer", note: "Sent the first time a customer signs in." },
+  { key: "signin", label: "New sign-in", who: "to the customer", note: "Sent each time a returning customer signs in, so they know their account is safe." },
+  { key: "order", label: "Order confirmed", who: "to the customer", note: "Sent only after Flutterwave confirms the payment is real and for the full amount." },
+  { key: "alert", label: "New paid order", who: "to the shop", note: "Sent to the shop owner for every paid order, with a link to message the customer on WhatsApp." }
+];
+const $ = (id) => document.getElementById(id);
+const tabs = $("mailTabs"), frame = $("mailFrame"), text = $("mailText");
+function show(i) {
+  const m = MAILS[i];
+  [...tabs.children].forEach((t, k) => { t.classList.toggle("on", k === i); t.setAttribute("aria-selected", k === i); });
+  $("mailNote").textContent = m.note;
+  if (m.key === "alert") {
+    $("mailSubj").textContent = DATA.alert.subject;
+    $("mailTo").textContent = "to " + DATA.alert.to;
+    frame.hidden = true; text.hidden = false; text.textContent = DATA.alert.body;
+  } else {
+    const e = DATA.emails[m.key];
+    $("mailSubj").textContent = e.subject;
+    $("mailTo").textContent = "to " + e.to;
+    text.hidden = true; frame.hidden = false; frame.style.height = "420px"; frame.src = "emails/" + m.key + ".html";
+  }
+}
+frame.addEventListener("load", () => {
+  try { frame.style.height = Math.max(420, frame.contentDocument.documentElement.scrollHeight) + "px"; } catch (e) {}
+});
+MAILS.forEach((m, i) => {
+  const b = document.createElement("button");
+  b.className = "tab"; b.setAttribute("role", "tab");
+  b.innerHTML = m.label + "<small>" + m.who + "</small>";
+  b.addEventListener("click", () => show(i));
+  tabs.appendChild(b);
+});
+show(0);
+
+// sheet
+const t = $("sheet");
+t.innerHTML = "<tr>" + DATA.sheet.headers.map((h) => "<th>" + h + "</th>").join("") + "</tr><tr>" +
+  DATA.sheet.values.map((v, i) => "<td" + (i === 2 || v === "Yes" ? ' class="ok"' : "") + ">" + String(v).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])) + "</td>").join("") + "</tr>";
+document.querySelectorAll(".ref").forEach((el) => (el.textContent = DATA.sheet.values[1]));
+
+// video: tap to pause / play
+const v = document.querySelector(".phone video");
+v.addEventListener("click", () => (v.paused ? v.play() : v.pause()));
+
+// reveal on scroll
+const io = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 }) : null;
+document.querySelectorAll(".reveal").forEach((el) => (io ? io.observe(el) : el.classList.add("in")));
+</script>
+</body>
+</html>
