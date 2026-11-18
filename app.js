@@ -138,7 +138,6 @@
     <section class="opening">
       <div class="opening-glow"></div>
       <div class="opening-inner">
-        <p class="eyebrow">Abraka · Delta State</p>
         <h1 class="logo">Preshy<br><span>Emporium</span></h1>
         <p class="tagline">Pleasure, wellness &amp; intimacy – delivered discreetly.</p>
         <div class="age-box">
