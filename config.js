@@ -14,9 +14,24 @@ window.STORE_CONFIG = {
   email: "egwuenuprecious18@gmail.com",
   currency: "₦",
 
+  // WhatsApp number for customer questions and order messages (international format, digits only)
+  whatsapp: "2348133284978",
+
+  /*
+   * Flutterwave payments.
+   * Get your PUBLIC key from https://app.flutterwave.com -> Settings -> API Keys.
+   * Use the TEST key (FLWPUBK_TEST-...) while testing, then switch to the LIVE key.
+   * While empty, checkout runs in DEMO MODE (payment is simulated, no money moves).
+   * Never put the SECRET key here.
+   */
+  flutterwave: {
+    publicKey: ""
+  },
+
   emailjs: {
     publicKey: "",   // e.g. "AbCdEf123..."
     serviceId: "",   // e.g. "service_xxxxx"
-    templateId: ""   // e.g. "template_xxxxx"
+    templateId: "",  // e.g. "template_xxxxx"  (verification codes)
+    orderTemplateId: "" // optional: template that emails Preshy every new paid order
   }
 };

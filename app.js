@@ -6,6 +6,10 @@
   const PRODUCTS = window.PRODUCTS;
   const app = document.getElementById("app");
   const DEMO = !(CFG.emailjs.publicKey && CFG.emailjs.serviceId && CFG.emailjs.templateId);
+  const PAY_DEMO = !(CFG.flutterwave && CFG.flutterwave.publicKey);
+  const WA = CFG.whatsapp;
+  const WA_DISPLAY = "+" + WA.replace(/^(\d{3})(\d{3})(\d{3})(\d+)$/, "$1 $2 $3 $4");
+  const waLink = (text) => "https://wa.me/" + WA + (text ? "?text=" + encodeURIComponent(text) : "");
 
   /* ---------------- storage helpers ---------------- */
   const store = {
@@ -263,11 +267,15 @@
       <div class="summary">
         <div class="row between"><span>Items</span><span>${cart.count()}</span></div>
         <div class="row between total"><span>Total</span><span>${money(cart.total())}</span></div>
-        <p class="muted small">Delivery fee is confirmed when Preshy contacts you.</p>
+        <p class="muted small">Delivery fee is not included – it will be sent to you on WhatsApp after payment.</p>
         <a class="btn primary block" href="#/checkout">Checkout</a>
         <button class="link" id="clearCart">Clear cart</button>
       </div>
     </section>`;
+  }
+
+  function cartLines(items) {
+    return Object.entries(items).map(([id, q]) => ({ p: findProduct(id), q })).filter((x) => x.p);
   }
 
   function viewCheckout() {
@@ -279,27 +287,105 @@
         <p class="muted">Create an account or sign in so we can confirm your order.</p>
         <a class="btn primary" href="#/account">Sign in</a></section>`;
     }
+    if (store.get("paid_order", null)) { location.hash = "#/delivery"; return ""; }
     if (!cart.count()) { location.hash = "#/cart"; return ""; }
+    const lines = cartLines(cart.items());
     return `
     <section class="container narrow">
       <h1>Checkout</h1>
-      <form id="checkoutForm" class="form">
-        <label>Full name<input name="name" required value="${esc(u.name || "")}"></label>
-        <label>Phone / WhatsApp<input name="phone" type="tel" required placeholder="080..."></label>
-        <label>Delivery address<textarea name="address" required rows="3" placeholder="Street, area, town (e.g. Abraka)"></textarea></label>
-        <label>Payment
-          <select name="payment">
-            <option>Pay on delivery (Abraka only)</option>
-            <option>Bank transfer</option>
-          </select>
-        </label>
-        <label>Note (optional)<textarea name="note" rows="2"></textarea></label>
-        <div class="summary">
-          <div class="row between total"><span>Total (${cart.count()} items)</span><span>${money(cart.total())}</span></div>
-        </div>
-        <button class="btn primary block" type="submit">Place order</button>
-        <p class="muted small">Your email app will open with the order details addressed to ${esc(CFG.email)} – just press send.</p>
+      <div class="summary">
+        ${lines.map(({ p, q }) => `<div class="row between line"><span>${esc(p.name)} × ${q}</span><span>${money(p.price * q)}</span></div>`).join("")}
+        <div class="row between total"><span>Total to pay now</span><span>${money(cart.total())}</span></div>
+        <p class="muted small">Delivery fee is <strong>not</strong> included. After payment you'll enter your delivery details, and we'll send your delivery date and fee to you on WhatsApp.</p>
+      </div>
+      <button class="btn primary block pay-btn" id="payBtn">Pay ${money(cart.total())} securely with Flutterwave</button>
+      <p class="muted small center-text">Card, bank transfer or USSD · Payments are processed by Flutterwave</p>
+      ${PAY_DEMO ? `<p class="demo-note">Demo mode: no Flutterwave key is set in <code>config.js</code>, so payment is simulated and no money moves.</p>` : ""}
+    </section>`;
+  }
+
+  function viewDelivery() {
+    const o = store.get("paid_order", null);
+    if (!o) { location.hash = "#/shop"; return ""; }
+    const u = auth.current() || {};
+    return `
+    <section class="container narrow">
+      <div class="success-badge">✓</div>
+      <h1 class="center-text">Payment successful!</h1>
+      <p class="center-text muted">We've received ${money(o.total)} · Ref: <strong>${esc(o.txRef)}</strong></p>
+      <h2 class="section-title">Where should we deliver?</h2>
+      <form id="deliveryForm" class="form">
+        <label>Full name<input name="name" required autocomplete="name" value="${esc(u.name || "")}"></label>
+        <label>WhatsApp number<input name="whatsapp" type="tel" required autocomplete="tel" placeholder="e.g. 0803 123 4567" pattern="[0-9+ ]{10,16}"></label>
+        <label>Delivery address<textarea name="address" required rows="3" placeholder="House number, street, area, town (e.g. Abraka) and a nearby landmark"></textarea></label>
+        <label>Anything else? (optional)<textarea name="note" rows="2" placeholder="Size, colour/design, best time to deliver…"></textarea></label>
+        <button class="btn primary block" type="submit">Submit delivery details</button>
       </form>
+    </section>`;
+  }
+
+  function viewOrderDone(o) {
+    const msg = orderMessage(o);
+    return `
+    <section class="container narrow center-text">
+      <div class="success-badge">✓</div>
+      <h1>Thank you, ${esc(o.name.split(" ")[0])}!</h1>
+      <div class="panel left-text">
+        <p>Your order <strong>${esc(o.txRef)}</strong> is confirmed.</p>
+        <p>📦 Your <strong>delivery date</strong> and <strong>delivery fee</strong> will be communicated to you on WhatsApp at <strong>${esc(o.whatsapp)}</strong>.</p>
+        <p class="muted small">Your parcel will be packed discreetly with no product names on it.</p>
+      </div>
+      <a class="btn wa block" href="${waLink(msg)}" target="_blank" rel="noopener">Send my order to Preshy on WhatsApp</a>
+      <p class="muted small">Tap above so your order arrives in our WhatsApp straight away.</p>
+      <p>Have a question or anything to say? Chat with us on WhatsApp:<br>
+        <a href="${waLink()}" target="_blank" rel="noopener"><strong>${WA_DISPLAY}</strong></a></p>
+      <a class="btn ghost" href="#/shop">Continue shopping</a>
+    </section>`;
+  }
+
+  function orderMessage(o) {
+    return [
+      "Hello Preshy Emporium, I just paid for an order.", "",
+      "Order ref: " + o.txRef,
+      o.transactionId ? "Flutterwave ID: " + o.transactionId : "",
+      "Name: " + o.name, "WhatsApp: " + o.whatsapp, "Address: " + o.address,
+      o.note ? "Note: " + o.note : "", "",
+      "Items:", ...cartLines(o.items).map(({ p, q }) => `- ${p.name} x${q} = ${money(p.price * q)}`), "",
+      "Paid: " + money(o.total), "",
+      "Please send me the delivery date and fee. Thank you!"
+    ].filter((l, i, a) => l !== "" || a[i - 1] !== "").join("\n");
+  }
+
+  async function notifyOrderByEmail(o) {
+    const E = CFG.emailjs;
+    if (!(E.publicKey && E.serviceId && E.orderTemplateId)) return;
+    try {
+      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ service_id: E.serviceId, template_id: E.orderTemplateId, user_id: E.publicKey,
+          template_params: { to_email: CFG.email, order_ref: o.txRef, customer_name: o.name, message: orderMessage(o) } })
+      });
+    } catch (e) { /* the WhatsApp message is the backup */ }
+  }
+
+  function viewPolicies() {
+    return `
+    <section class="container narrow">
+      <h1>Delivery, refunds &amp; privacy</h1>
+      <div class="panel"><h3>Delivery</h3>
+        <p>We deliver within Abraka and across Nigeria. Delivery fees depend on your location and are not included at checkout. After you pay, we'll message you on WhatsApp with your delivery date and fee.</p>
+        <p>Every parcel is packed discreetly – there are no product names or store branding on the outside.</p></div>
+      <div class="panel"><h3>Payments</h3>
+        <p>Payments are processed securely by Flutterwave (card, bank transfer or USSD). We never see or store your card details.</p></div>
+      <div class="panel"><h3>Returns &amp; refunds</h3>
+        <p>For hygiene reasons, intimate products, lingerie, creams and opened items cannot be returned unless they are faulty or we sent the wrong item.</p>
+        <p>If your item arrives faulty or wrong, message us on WhatsApp within 48 hours of delivery with a photo and your order reference, and we'll replace it or refund you.</p>
+        <p>If we can't deliver your order, you'll receive a full refund.</p></div>
+      <div class="panel"><h3>Privacy</h3>
+        <p>We only use your name, WhatsApp number and address to deliver your order and contact you about it. We never share your details or tell anyone what you bought.</p></div>
+      <div class="panel"><h3>Age</h3><p>All products are for adults aged 18 and over only.</p></div>
+      <div class="panel"><h3>Contact</h3>
+        <p>WhatsApp: <a href="${waLink()}" target="_blank" rel="noopener">${WA_DISPLAY}</a><br>Email: <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a><br>${esc(CFG.location)}</p></div>
     </section>`;
   }
 
@@ -424,6 +510,7 @@
       </div>
       <div class="panel">
         <h3>Contact</h3>
+        <p>WhatsApp: <a href="${waLink()}" target="_blank" rel="noopener">${WA_DISPLAY}</a></p>
         <p>Email: <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a></p>
         <p>Location: ${esc(CFG.location)}</p>
       </div>
@@ -448,6 +535,7 @@
     const chrome = route !== "";
     document.getElementById("topbar").classList.toggle("hidden", !chrome);
     document.getElementById("footer").classList.toggle("hidden", !chrome);
+    document.getElementById("waFloat").classList.toggle("hidden", !chrome);
 
     let html;
     switch (route) {
@@ -462,9 +550,14 @@
       case "set-password": html = viewSetPassword(); break;
       case "login": html = viewLogin(); break;
       case "about": html = viewAbout(); break;
+      case "delivery": html = viewDelivery(); break;
+      case "policies": html = viewPolicies(); break;
       default: html = viewShop(params);
     }
     if (html === "") return;
+    if (store.get("paid_order", null) && route !== "delivery") {
+      html = `<a class="pending-banner" href="#/delivery">✓ Payment received – tap here to add your delivery details</a>` + html;
+    }
     app.innerHTML = html;
     window.scrollTo(0, 0);
     bind(route);
@@ -537,31 +630,60 @@
     }
 
     if (route === "checkout") {
-      const f = document.getElementById("checkoutForm");
+      const btn = document.getElementById("payBtn");
+      if (btn) btn.addEventListener("click", () => {
+        const u = auth.current();
+        const order = {
+          txRef: "PE-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2, 6).toUpperCase(),
+          items: cart.items(), total: cart.total(), email: u.email, createdAt: new Date().toISOString()
+        };
+        const paid = (resp) => {
+          store.set("paid_order", { ...order, transactionId: resp && resp.transaction_id, paidAt: new Date().toISOString() });
+          cart.clear();
+          location.hash = "#/delivery";
+        };
+
+        if (PAY_DEMO) {
+          if (confirm("DEMO MODE\n\nSimulate a successful payment of " + money(order.total) + "?")) paid({ transaction_id: "DEMO" });
+          return;
+        }
+        if (typeof window.FlutterwaveCheckout !== "function") {
+          return toast("Payment couldn't load. Check your internet and try again.");
+        }
+        const modal = window.FlutterwaveCheckout({
+          public_key: CFG.flutterwave.publicKey,
+          tx_ref: order.txRef,
+          amount: order.total,
+          currency: "NGN",
+          payment_options: "card, banktransfer, ussd",
+          customer: { email: u.email, name: u.name || "" },
+          meta: { items: Object.entries(order.items).map(([id, q]) => id + " x" + q).join(", ") },
+          customizations: { title: CFG.name, description: "Order " + order.txRef },
+          callback: (resp) => {
+            if (resp && (resp.status === "successful" || resp.status === "completed")) {
+              paid(resp);
+              if (modal && modal.close) modal.close();
+            } else {
+              toast("Payment was not completed. You have not been charged.");
+            }
+          },
+          onclose: () => {}
+        });
+      });
+    }
+
+    if (route === "delivery") {
+      const f = document.getElementById("deliveryForm");
       if (f) f.addEventListener("submit", (e) => {
         e.preventDefault();
         const d = Object.fromEntries(new FormData(f));
-        const u = auth.current();
-        const lines = Object.entries(cart.items()).map(([id, q]) => {
-          const p = findProduct(id); return p ? `- ${p.name} x${q} = ${money(p.price * q)}` : "";
-        }).filter(Boolean);
-        const body = [
-          "New order from the Preshy Emporium website", "",
-          "Name: " + d.name, "Phone: " + d.phone, "Email: " + u.email,
-          "Address: " + d.address, "Payment: " + d.payment, d.note ? "Note: " + d.note : "", "",
-          "Items:", ...lines, "", "Total: " + money(cart.total())
-        ].join("\n");
-        const orders = store.get("orders", []);
-        orders.push({ at: new Date().toISOString(), email: u.email, items: cart.items(), total: cart.total() });
-        store.set("orders", orders);
-        location.href = "mailto:" + CFG.email + "?subject=" + encodeURIComponent("New order – " + d.name) +
-          "&body=" + encodeURIComponent(body);
-        cart.clear();
-        app.innerHTML = `<section class="container narrow center-text">
-          <h1>Thank you, ${esc(d.name.split(" ")[0])}!</h1>
-          <p>Your order email has been prepared – please press <strong>send</strong> in your email app.</p>
-          <p class="muted">Preshy will contact you on ${esc(d.phone)} to confirm delivery.</p>
-          <a class="btn primary" href="#/shop">Continue shopping</a></section>`;
+        const o = { ...store.get("paid_order", {}), name: d.name.trim(), whatsapp: d.whatsapp.trim(),
+          address: d.address.trim(), note: d.note.trim(), detailsAt: new Date().toISOString() };
+        const orders = store.get("orders", []); orders.push(o); store.set("orders", orders);
+        store.del("paid_order");
+        notifyOrderByEmail(o);
+        app.innerHTML = viewOrderDone(o);
+        window.scrollTo(0, 0);
       });
     }
 
