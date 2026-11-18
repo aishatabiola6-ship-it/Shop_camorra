@@ -17,7 +17,7 @@ export { clip };
 
 /** Ask Flutterwave directly whether a payment really succeeded. */
 export async function verifyTransaction({ transactionId, txRef }) {
-  const key = process.env.FLW_SECRET_KEY;
+  const key = (process.env.FLW_SECRET_KEY || "").trim();
   if (!key) return { configured: false };
   const byId = transactionId && /^\d+$/.test(String(transactionId));
   if (!byId && !txRef) return { configured: true, ok: false, reason: "no payment reference" };
@@ -72,13 +72,13 @@ export function waNumber(n) {
 
 /** Send data to the Google Apps Script (adds/updates an order row, or sends an email). */
 export async function sendToSheet(payload) {
-  const url = process.env.SHEET_WEBHOOK_URL;
+  const url = (process.env.SHEET_WEBHOOK_URL || "").trim();
   if (!url) return false;
   try {
     const r = await fetch(url, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ...payload, token: process.env.SHEET_TOKEN || "" }),
+      body: JSON.stringify({ ...payload, token: (process.env.SHEET_TOKEN || "").trim() }),
       redirect: "follow"
     });
     if (!r.ok) return false;

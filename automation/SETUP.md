@@ -65,6 +65,11 @@ Make sure the dashboard is in **Test mode** for now.
 
 3. Go to **Deploys → Trigger deploy → Deploy project** so the new settings take effect.
 
+## Check the setup
+
+Open **https://preshy-emporium.netlify.app/.netlify/functions/check-setup** in your browser.
+It shows a ✅ or ❌ for every part, and tells you how to fix anything that's red. No secret values are shown.
+
 ## Part D – Test it
 
 1. Open https://preshy-emporium.netlify.app, add something to the cart, sign in, and pay with a

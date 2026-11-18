@@ -8,8 +8,8 @@
 import { verifyTransaction, sendToSheet } from "../lib/shared.mjs";
 
 export default async (req) => {
-  const hash = process.env.FLW_WEBHOOK_HASH;
-  if (!hash || req.headers.get("verif-hash") !== hash) {
+  const hash = (process.env.FLW_WEBHOOK_HASH || "").trim();
+  if (!hash || (req.headers.get("verif-hash") || "").trim() !== hash) {
     return new Response("unauthorized", { status: 401 });
   }
 

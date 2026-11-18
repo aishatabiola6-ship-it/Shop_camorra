@@ -17,6 +17,8 @@ const TOKEN = "PASTE-YOUR-SECRET-PHRASE-HERE";
 // 2) Where new-order emails go.
 const OWNER_EMAIL = "egwuenuprecious18@gmail.com";
 
+const SCRIPT_VERSION = 2;
+
 // Name customers see as the sender of emails.
 const STORE_NAME = "Preshy Emporium";
 
@@ -31,7 +33,14 @@ const KEYS = [null, "ref", "status", "amount", "expected", "items",
 function doPost(e) {
   let d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return out({ ok: false, error: "bad json" }); }
-  if (!d || d.token !== TOKEN) return out({ ok: false, error: "unauthorized" });
+  if (!d || String(d.token || "").trim() !== String(TOKEN).trim()) {
+    return out({ ok: false, error: "unauthorized", version: SCRIPT_VERSION });
+  }
+
+  // Used by the website's setup checker.
+  if (d.action === "ping") {
+    return out({ ok: true, version: SCRIPT_VERSION, quota: MailApp.getRemainingDailyQuota() });
+  }
 
   // Customer emails (sign-in code, welcome / new sign-in, order confirmation) built by the website.
   if (d.action === "email") {

@@ -12,12 +12,12 @@ import { json, clip, loadSite, sendEmail, emailLayout, escHtml } from "../lib/sh
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 const sign = (email, code, expires) =>
-  crypto.createHmac("sha256", process.env.SHEET_TOKEN || "").update(`${email}|${code}|${expires}`).digest("hex");
+  crypto.createHmac("sha256", (process.env.SHEET_TOKEN || "").trim()).update(`${email}|${code}|${expires}`).digest("hex");
 const same = (a, b) => a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
 export default async (req) => {
   if (req.method !== "POST") return json(405, { ok: false, error: "method_not_allowed" });
-  if (!process.env.SHEET_WEBHOOK_URL || !process.env.SHEET_TOKEN) return json(503, { ok: false, error: "not_configured" });
+  if (!(process.env.SHEET_WEBHOOK_URL || "").trim() || !(process.env.SHEET_TOKEN || "").trim()) return json(503, { ok: false, error: "not_configured" });
 
   let b;
   try { b = await req.json(); } catch (e) { return json(400, { ok: false, error: "bad_request" }); }
