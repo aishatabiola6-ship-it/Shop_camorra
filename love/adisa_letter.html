@@ -160,6 +160,10 @@ body.rage #flash{animation:rage .14s steps(1) infinite}
   font:800 15px var(--ui);color:#fff;background:var(--rose);border:0;border-radius:999px;padding:11px 20px;cursor:pointer;
   box-shadow:0 4px 0 var(--rose-dark);animation:pop .5s both}
 .again:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.skip{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:7;
+  font:800 13px var(--ui);color:var(--paper);background:rgba(43,13,38,.72);border:1px solid rgba(248,201,211,.45);
+  border-radius:999px;padding:9px 15px;cursor:pointer;animation:pop .5s both}
+.skip:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .again.on-night{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:7;
   background:rgba(76,182,239,.16);color:#d8f3ff;box-shadow:0 0 0 1px rgba(120,210,255,.5),0 0 24px rgba(76,182,239,.45);backdrop-filter:blur(4px)}
 
@@ -293,6 +297,7 @@ async function openEnvelope() {
     letter.classList.remove("enter"); void letter.offsetWidth; letter.classList.add("enter");
     await wait(t, 900);
     letter.classList.remove("enter");
+    showSkip();
     await play(t);
   } catch (e) { if (e !== "stop") throw e; }
 }
@@ -306,7 +311,7 @@ function reset() {
   letter.classList.remove("quake", "enter");
   fx.innerHTML = "";
   content.innerHTML = "";
-  document.querySelectorAll(".tear,.again").forEach(n => n.remove());
+  document.querySelectorAll(".tear,.again,.skip").forEach(n => n.remove());
   letter.getAnimations().forEach(a => a.cancel());
   letter.hidden = true;
   effect = null;
@@ -913,7 +918,25 @@ function makeMagicHeart(label) {
   };
 }
 
+function showSkip() {
+  const b = document.createElement("button");
+  b.className = "skip";
+  b.id = "skip";
+  b.textContent = "Skip to the magic ✨";
+  b.addEventListener("click", async () => {
+    b.remove();
+    const t = ++run;
+    document.body.classList.remove("rage");
+    letter.classList.remove("quake");
+    fx.innerHTML = "";
+    letter.querySelectorAll(".tear").forEach(n => n.remove());
+    try { await nightShow(t); } catch (e) { if (e !== "stop") throw e; }
+  });
+  document.body.appendChild(b);
+}
+
 async function nightShow(t) {
+  document.querySelectorAll(".skip").forEach(n => n.remove());
   letter.animate([{ transform: "none", opacity: 1 }, { transform: "translateY(-40px) scale(.55) rotate(7deg)", opacity: 0 }],
                  { duration: 900, easing: "ease-in", fill: "forwards" });
   await wait(t, 900);

@@ -16,7 +16,7 @@ Scenes:
 
 Run:  python adisa_heart.py
 Needs only the Python standard library (tkinter).
-Press Esc to close, R to replay.
+Press Esc to close, R to replay, S to skip straight to the fire, lotus and magic heart.
 """
 
 import colorsys
@@ -151,6 +151,7 @@ class LoveLetter:
         self.canvas.pack(fill="both", expand=True)
         root.bind("<Escape>", lambda e: root.destroy())
         root.bind("<r>", lambda e: self.start())
+        root.bind("<s>", lambda e: self.skip_to_magic())
         self.canvas.bind("<Button-1>", lambda e: self.open_envelope())
         root.bind("<Return>", lambda e: self.open_envelope())
         root.bind("<space>", lambda e: self.open_envelope())
@@ -195,6 +196,13 @@ class LoveLetter:
         self.clear()
         self.after(200, self.scene_envelope)
 
+    def skip_to_magic(self):
+        """Press S: jump straight to the fire words, lotus and magic heart."""
+        self.gen += 1
+        self.waiting_click = False
+        self.clear()
+        self.after(100, self.scene_fire)
+
     # Scene 0: the envelope ------------------------------------------------
     def scene_envelope(self):
         c = self.canvas
@@ -229,6 +237,8 @@ class LoveLetter:
                                         font=(FONT_FAMILY, 24), tags=("env", "seal"))
         self.hint = c.create_text(WIDTH / 2, y0 + eh + 70, text="click the seal to open ♥",
                                   fill="#f8c9d3", font=(FONT_FAMILY, 14, "bold"))
+        c.create_text(WIDTH / 2, HEIGHT - 24, text="press S anytime to skip to the magic ✨",
+                      fill="#93346f", font=(FONT_FAMILY, 11, "bold"))
         self.waiting_click = True
 
         def idle(n=0):
