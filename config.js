@@ -1,12 +1,9 @@
 /*
  * Store settings.
  *
- * Email verification codes:
- *   The site is static (no server), so it cannot send email by itself.
- *   To send real codes, create a free account at https://www.emailjs.com,
- *   add an email service + a template that uses {{to_email}} and {{code}},
- *   then paste the three IDs below. While they are empty the site runs in
- *   DEMO MODE and shows the code on screen instead of emailing it.
+ * Customer emails (sign-in codes, welcome / new sign-in, order confirmation) are sent by
+ * the Netlify automation through the Google Sheet script – see automation/SETUP.md.
+ * Until that's set up, sign-in codes are shown on screen (demo mode).
  */
 window.STORE_CONFIG = {
   name: "Preshy Emporium",
@@ -27,12 +24,5 @@ window.STORE_CONFIG = {
    */
   flutterwave: {
     publicKey: "FLWPUBK_TEST-898a4a29e06abf6a3167fb6c45eafdb4-X"   // TEST key – replace with the LIVE key when going live
-  },
-
-  emailjs: {
-    publicKey: "",   // e.g. "AbCdEf123..."
-    serviceId: "",   // e.g. "service_xxxxx"
-    templateId: "",  // e.g. "template_xxxxx"  (verification codes)
-    orderTemplateId: "" // optional: template that emails Preshy every new paid order
   }
 };

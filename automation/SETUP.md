@@ -5,6 +5,11 @@ When a customer pays and submits their delivery details, the site will:
 1. **Check the payment directly with Flutterwave** (right amount, right order, really successful).
 2. **Save the order to a Google Sheet** – one row per order.
 3. **Email Preshy** at egwuenuprecious18@gmail.com with the order and a one-tap link to WhatsApp the customer.
+4. **Email the customer** an order confirmation (only when the payment is verified).
+
+Customers also get emails when they sign in: their 6-digit code, a **Welcome** email the first time,
+and a **New sign-in** notice after that. All emails are sent from the Google account that owns the sheet,
+with "Preshy Emporium" as the sender name. (A normal Gmail account can send about 100 emails a day.)
 
 If a customer pays but closes the page before giving their details, Flutterwave still tells the site,
 and the payment appears in the sheet as **"PAID – waiting for delivery details"**.
@@ -30,8 +35,10 @@ Setup takes about 20 minutes and is done once. Do it **logged in to Preshy's Goo
    - Who has access: **Anyone**
    - Click **Deploy**, then copy the **Web app URL** (it ends in `/exec`). **You'll need it in Part C.**
 
-> If you ever edit the script later: **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**
-> (the URL stays the same).
+> **Updating the script later** (e.g. when a new version of `google-apps-script.gs` is released):
+> paste the new code over the old one, put your TOKEN phrase back in, save, then
+> **Deploy → Manage deployments → ✏️ (edit) → Version: New version → Deploy**.
+> The URL stays the same, so nothing changes on Netlify. If Google asks for permission again, allow it.
 
 ## Part B – Flutterwave (about 5 min)
 

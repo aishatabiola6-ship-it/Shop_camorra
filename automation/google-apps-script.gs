@@ -3,6 +3,12 @@
  *
  * Paste this whole file into Extensions -> Apps Script of your Google Sheet.
  * Follow automation/SETUP.md for the exact steps.
+ *
+ * It does three things:
+ *   - saves every order as a row in the "Orders" tab
+ *   - emails the shop owner about each new order
+ *   - sends customer emails (sign-in codes, welcome / new sign-in, order confirmation)
+ * Emails are sent from the Google account that owns this sheet.
  */
 
 // 1) Make up a long secret phrase and put it here AND in Netlify as SHEET_TOKEN.
@@ -10,6 +16,9 @@ const TOKEN = "PASTE-YOUR-SECRET-PHRASE-HERE";
 
 // 2) Where new-order emails go.
 const OWNER_EMAIL = "egwuenuprecious18@gmail.com";
+
+// Name customers see as the sender of emails.
+const STORE_NAME = "Preshy Emporium";
 
 const SHEET_NAME = "Orders";
 const HEADERS = ["Date", "Order ref", "Status", "Amount paid (₦)", "Order total (₦)", "Items",
@@ -22,7 +31,23 @@ const KEYS = [null, "ref", "status", "amount", "expected", "items",
 function doPost(e) {
   let d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return out({ ok: false, error: "bad json" }); }
-  if (!d || d.token !== TOKEN || !d.ref) return out({ ok: false, error: "unauthorized" });
+  if (!d || d.token !== TOKEN) return out({ ok: false, error: "unauthorized" });
+
+  // Customer emails (sign-in code, welcome / new sign-in, order confirmation) built by the website.
+  if (d.action === "email") {
+    if (!d.to || !d.subject) return out({ ok: false, error: "missing to/subject" });
+    MailApp.sendEmail({
+      to: String(d.to),
+      subject: String(d.subject),
+      body: String(d.text || ""),
+      htmlBody: d.html ? String(d.html) : undefined,
+      name: STORE_NAME,
+      replyTo: OWNER_EMAIL
+    });
+    return out({ ok: true });
+  }
+
+  if (!d.ref) return out({ ok: false, error: "missing ref" });
 
   const lock = LockService.getScriptLock();
   lock.waitLock(15000);

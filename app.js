@@ -5,7 +5,6 @@
   const CFG = window.STORE_CONFIG;
   const PRODUCTS = window.PRODUCTS;
   const app = document.getElementById("app");
-  const DEMO = !(CFG.emailjs.publicKey && CFG.emailjs.serviceId && CFG.emailjs.templateId);
   const PAY_DEMO = !(CFG.flutterwave && CFG.flutterwave.publicKey);
   const WA = CFG.whatsapp;
   const WA_DISPLAY = "+" + WA.replace(/^(\d{3})(\d{3})(\d{3})(\d+)$/, "$1 $2 $3 $4");
@@ -93,33 +92,55 @@
     clear() { try { sessionStorage.removeItem("pe_pending"); } catch (e) { /* ignore */ } }
   };
 
-  async function sendCode(email, method) {
-    const code = String(Math.floor(100000 + Math.random() * 900000));
-    pending.set({ email, method, codeHash: await hash(code), expires: Date.now() + 10 * 60 * 1000 });
-
-    if (DEMO) {
-      try { sessionStorage.setItem("pe_demo_code", code); } catch (e) { /* ignore */ }
-      toast("Demo mode – your code is <b>" + code + "</b>", 9000);
-      return true;
-    }
+  // Calls a Netlify function; returns { status, body } (status 0 = network error).
+  async function callFn(name, payload) {
     try {
-      const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          service_id: CFG.emailjs.serviceId,
-          template_id: CFG.emailjs.templateId,
-          user_id: CFG.emailjs.publicKey,
-          template_params: { to_email: email, code, store_name: CFG.name }
-        })
+      const res = await fetch("/.netlify/functions/" + name, {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
       });
-      if (!res.ok) throw new Error(await res.text());
+      return { status: res.status, body: await res.json().catch(() => ({})) };
+    } catch (e) {
+      return { status: 0, body: {} };
+    }
+  }
+
+  async function sendCode(email, method, name) {
+    // 1) Real email through the Netlify automation.
+    const r = await callFn("auth-email", { action: "code", email, name });
+    if (r.status === 200 && r.body.ok) {
+      pending.set({ email, method, server: true, token: r.body.token, expires: r.body.expires });
       toast("Code sent to " + esc(email));
       return true;
-    } catch (err) {
-      toast("Couldn't send the code. Please try again.");
+    }
+    if (r.status === 502 || r.status === 400) {
+      toast("Couldn't send the code. Please check the email address and try again.");
       return false;
     }
+    // 2) Automation not set up yet (or running locally): demo mode, show the code on screen.
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    pending.set({ email, method, server: false, codeHash: await hash(code), expires: Date.now() + 10 * 60 * 1000 });
+    try { sessionStorage.setItem("pe_demo_code", code); } catch (e) { /* ignore */ }
+    toast("Demo mode – your code is <b>" + code + "</b>", 9000);
+    return true;
+  }
+
+  async function checkCode(p, code) {
+    if (Date.now() > p.expires) return "expired";
+    if (p.server) {
+      const r = await callFn("auth-email", { action: "verify", email: p.email, code, token: p.token, expires: p.expires });
+      if (r.status === 200) return r.body.ok ? "ok" : (r.body.error === "expired" ? "expired" : "wrong");
+      return "error";
+    }
+    return (await hash(code)) === p.codeHash ? "ok" : "wrong";
+  }
+
+  // "Welcome" email the first time, "New sign-in" email after that.
+  function sendLoginEmail(email, method) {
+    const u = auth.users()[email];
+    if (!u) return;
+    const first = !u.welcomed;
+    u.welcomed = true; auth.saveUser(u);
+    callFn("auth-email", { action: "login", email, name: u.name || "", method, first });
   }
 
   /* ---------------- product visuals ---------------- */
@@ -358,18 +379,6 @@
     ].filter((l, i, a) => l !== "" || a[i - 1] !== "").join("\n");
   }
 
-  async function notifyOrderByEmail(o) {
-    const E = CFG.emailjs;
-    if (!(E.publicKey && E.serviceId && E.orderTemplateId)) return;
-    try {
-      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ service_id: E.serviceId, template_id: E.orderTemplateId, user_id: E.publicKey,
-          template_params: { to_email: CFG.email, order_ref: o.txRef, customer_name: o.name, message: orderMessage(o) } })
-      });
-    } catch (e) { /* the WhatsApp message is the backup */ }
-  }
-
   function viewPolicies() {
     return `
     <section class="container narrow">
@@ -423,7 +432,6 @@
       </div>
       <div class="divider"><span>or</span></div>
       <a class="btn ghost block" href="#/login">Log in with email &amp; password</a>
-      ${DEMO ? `<p class="demo-note">Demo mode: verification codes appear on screen until email sending is set up in <code>config.js</code>.</p>` : ""}
     </section>`;
   }
 
@@ -456,7 +464,7 @@
     <section class="container auth">
       <a href="#/account" class="back">← Back</a>
       <h1>Enter your code</h1>
-      ${DEMO
+      ${!p.server
         ? `<p class="demo-note">Demo mode – emails aren't switched on yet, so here is your code: <strong class="demo-code">${esc((() => { try { return sessionStorage.getItem("pe_demo_code") || ""; } catch (e) { return ""; } })())}</strong></p>`
         : `<p class="muted">We sent a 6-digit code to <strong>${esc(p.email)}</strong>. It expires in 10 minutes. Check your spam folder too.</p>`}
       <form id="verifyForm" class="form">
@@ -702,7 +710,6 @@
 
         const orders = store.get("orders", []); orders.push(o); store.set("orders", orders);
         store.del("paid_order");
-        notifyOrderByEmail(o);
         app.innerHTML = viewOrderDone(o);
         window.scrollTo(0, 0);
       });
@@ -728,11 +735,12 @@
 
         if (method === "apple") {
           auth.signIn(email);
+          sendLoginEmail(email, "apple");
           return finishLogin("Signed in with Apple");
         }
         const btn = f.querySelector("button");
         btn.disabled = true; btn.textContent = "Sending…";
-        const ok = await sendCode(email, method);
+        const ok = await sendCode(email, method, name);
         btn.disabled = false; btn.textContent = "Send code";
         if (ok) location.hash = "#/verify";
       });
@@ -745,17 +753,25 @@
         e.preventDefault();
         const p = pending.get();
         if (!p) return (location.hash = "#/account");
-        if (Date.now() > p.expires) return toast("Code expired – tap resend for a new one");
-        if ((await hash(f.code.value.trim())) !== p.codeHash) return toast("That code is incorrect");
+        const btn = f.querySelector("button[type=submit]");
+        btn.disabled = true;
+        const result = await checkCode(p, f.code.value.trim());
+        btn.disabled = false;
+        if (result === "expired") return toast("Code expired – tap resend for a new one");
+        if (result === "wrong") return toast("That code is incorrect");
+        if (result === "error") return toast("Couldn't check the code. Please try again.");
         pending.clear();
         auth.signIn(p.email);
+        sendLoginEmail(p.email, p.method);
         const u = auth.current();
         if (u.passwordHash) return finishLogin("You're signed in");
         store.set("just_verified", true);
         location.hash = "#/set-password";
       });
       document.getElementById("resend").addEventListener("click", () => {
-        const p = pending.get(); if (p) sendCode(p.email, p.method).then(() => { if (DEMO) render(); });
+        const p = pending.get();
+        const u = p && auth.users()[p.email];
+        if (p) sendCode(p.email, p.method, u ? u.name : "").then(() => render());
       });
     }
 
@@ -786,6 +802,7 @@
         if (!u || !u.passwordHash) return toast("No password set for this email. Use a code instead.");
         if ((await hash(email + ":" + f.pw.value)) !== u.passwordHash) return toast("Incorrect password");
         auth.signIn(email);
+        sendLoginEmail(email, "password");
         finishLogin("Welcome back, " + esc(u.name || ""));
       });
     }

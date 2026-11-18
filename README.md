@@ -20,7 +20,7 @@ A static website (plain HTML/CSS/JS, no build step). You can host it for free on
 
 ## Editing
 - Products, prices and "how it works" steps: `products.js`. Photos go in `images/` and are listed in each product's `images` field (first photo = shop thumbnail)
-- Store name, email, location and email sending: `config.js`
+- Store name, email, location, WhatsApp, TikTok and Flutterwave public key: `config.js`
 
 ## Turning on Flutterwave payments
 1. Create a Flutterwave business account at https://flutterwave.com and complete the business verification (KYC).
@@ -34,11 +34,10 @@ Until a key is added, checkout runs in demo mode (payment is simulated).
 After payment the site checks the payment with Flutterwave, saves the order to a Google Sheet and emails the shop.
 Code: `netlify/functions/`, `automation/google-apps-script.gs`. Setup steps: **[automation/SETUP.md](automation/SETUP.md)**.
 
-## Sending real verification emails
-Until it's set up, the site runs in **demo mode** and shows the code on screen.
-1. Create a free account at https://www.emailjs.com and connect a Gmail service.
-2. Create a template whose "To" is `{{to_email}}` and whose body includes `{{code}}`.
-3. Paste the Public Key, Service ID and Template ID into `config.js`.
+## Customer emails
+Sign-in codes, welcome / new sign-in notices and order confirmations are sent by the Netlify automation
+through the Google Sheet script (no extra email service needed). Until it's set up, sign-in codes are
+shown on screen (demo mode). See [automation/SETUP.md](automation/SETUP.md).
 
 ## Notes for going fully live
 - Accounts are stored in each customer's browser (`localStorage`). To share accounts across devices and connect the real

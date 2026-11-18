@@ -35,13 +35,18 @@ export async function verifyTransaction({ transactionId, txRef }) {
   }
 }
 
-/** Load the real prices from the deployed products.js (so customers can't change prices in their browser). */
-export async function loadProducts(origin) {
-  const r = await fetch(origin + "/products.js");
-  if (!r.ok) throw new Error("could not load products");
+/** Load the store settings and real prices from the deployed site (customers can't change them in their browser). */
+export async function loadSite(origin) {
+  const [cfg, prods] = await Promise.all([fetch(origin + "/config.js"), fetch(origin + "/products.js")]);
+  if (!cfg.ok || !prods.ok) throw new Error("could not load site files");
   const ctx = { window: {} };
-  vm.runInNewContext(await r.text(), ctx, { timeout: 1000 });
-  return ctx.window.PRODUCTS || [];
+  vm.runInNewContext(await cfg.text(), ctx, { timeout: 1000 });
+  vm.runInNewContext(await prods.text(), ctx, { timeout: 1000 });
+  return { config: ctx.window.STORE_CONFIG || {}, products: ctx.window.PRODUCTS || [] };
+}
+
+export async function loadProducts(origin) {
+  return (await loadSite(origin)).products;
 }
 
 /** Work out the order total from product ids and quantities. */
@@ -65,7 +70,7 @@ export function waNumber(n) {
   return d;
 }
 
-/** Send a row to the Google Sheet (the Apps Script adds or updates it by order ref, and emails Preshy). */
+/** Send data to the Google Apps Script (adds/updates an order row, or sends an email). */
 export async function sendToSheet(payload) {
   const url = process.env.SHEET_WEBHOOK_URL;
   if (!url) return false;
@@ -76,8 +81,36 @@ export async function sendToSheet(payload) {
       body: JSON.stringify({ ...payload, token: process.env.SHEET_TOKEN || "" }),
       redirect: "follow"
     });
-    return r.ok;
+    if (!r.ok) return false;
+    const body = await r.json().catch(() => null);
+    return !!(body && body.ok);
   } catch (e) {
     return false;
   }
+}
+
+/** Send an email through the Google account that owns the order sheet. */
+export function sendEmail({ to, subject, html, text }) {
+  return sendToSheet({ action: "email", to, subject, html, text });
+}
+
+const escHtml = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+export { escHtml };
+
+/** Wrap email content in a simple branded layout. */
+export function emailLayout(config, title, innerHtml) {
+  const wa = config.whatsapp ? "+" + String(config.whatsapp).replace(/^(\d{3})(\d{3})(\d{3})(\d+)$/, "$1 $2 $3 $4") : "";
+  return `<!doctype html><html><body style="margin:0;background:#f6eef3;font-family:Arial,Helvetica,sans-serif;color:#2a1526">
+  <div style="max-width:560px;margin:0 auto;padding:24px 16px">
+    <div style="background:#140a12;border-radius:16px 16px 0 0;padding:22px;text-align:center">
+      <span style="font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#f6e9f1">Preshy <span style="color:#ff7aa8">Emporium</span></span>
+    </div>
+    <div style="background:#ffffff;border-radius:0 0 16px 16px;padding:26px 24px;line-height:1.6;font-size:15px">
+      <h2 style="margin:0 0 14px;font-family:Georgia,serif;color:#140a12">${escHtml(title)}</h2>
+      ${innerHtml}
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0 14px">
+      <p style="font-size:13px;color:#7a6070;margin:0">Questions? WhatsApp us on <a href="https://wa.me/${escHtml(config.whatsapp || "")}" style="color:#c2185b">${escHtml(wa)}</a>${config.tiktok ? ` · <a href="${escHtml(config.tiktok)}" style="color:#c2185b">TikTok</a>` : ""}</p>
+      <p style="font-size:12px;color:#9a8090;margin:6px 0 0">For adults 18+ only. All orders are packed discreetly.</p>
+    </div>
+  </div></body></html>`;
 }
