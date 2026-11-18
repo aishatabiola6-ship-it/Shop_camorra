@@ -66,7 +66,7 @@ window.PRODUCTS = [
     category: "For Her",
     price: 15000,
     color: "#ec407a",
-    images: ["images/orgasm-pen.jpg"],
+    images: ["images/orgasm-pen.jpg", "images/orgasm-pen-2.jpg"],
     description: "Slim, curved and elegant with a gold crown base. The flexible tip is shaped to find the G-spot or to pinpoint the clitoris. Perfect for beginners.",
     features: ["Slim, flexible curved tip", "Multiple vibration modes", "Body-safe silicone", "USB rechargeable", "Colours: pink, purple, rose, blue"],
     howItWorks: [
@@ -270,6 +270,43 @@ window.PRODUCTS = [
     ]
   },
 
+  {
+    id: "satin-blindfold",
+    name: "Satin Blindfold",
+    category: "Bondage",
+    price: 3500,
+    color: "#ad1457",
+    images: ["images/blindfold-1.jpg", "images/blindfold-2.jpg", "images/blindfold-3.jpg", "images/blindfold-4.jpg", "images/blindfold-5.jpg"],
+    description: "A soft, padded blindfold that blocks out all light. Taking away sight makes every touch, kiss and whisper feel more intense – the easiest way to add excitement to the bedroom.",
+    features: ["Soft satin / plush fabric", "Padded for comfort", "Elastic or ribbon tie strap", "Designs: plain red, black, pink, 'Be Naughty', 'DIVA', zebra, leopard, pink leopard"],
+    howItWorks: [
+      "Agree with your partner on what's okay and on a safe word before you start.",
+      "Place the padded side over the eyes and pull the elastic behind the head (or tie the ribbons in a bow).",
+      "Adjust so it's snug but comfortable and no light comes in.",
+      "Your partner can now surprise you with touches, kisses, ice, feathers or a toy – without sight, every sensation feels stronger.",
+      "Remove at any time. Hand-wash in cool water."
+    ],
+    note: "Tell us the design you want in the note at checkout."
+  },
+  {
+    id: "collar-restraint",
+    name: "Collar-to-Wrist Restraint with Ball Gag & Nipple Clamps",
+    category: "Bondage",
+    price: 14000,
+    color: "#212121",
+    images: ["images/collar-restraint-1.jpg", "images/collar-restraint-2.jpg", "images/collar-restraint-3.jpg"],
+    description: "A 3-in-1 bondage set for experienced couples: a padded collar linked by an adjustable strap to wrist cuffs behind the back, a breathable ball gag, and adjustable nipple clamps on a chain.",
+    features: ["Padded Velcro collar & wrist cuffs", "Adjustable back strap", "Breathable ball gag (with air holes)", "Adjustable nipple clamps with chain", "Quick-release Velcro"],
+    howItWorks: [
+      "Agree on limits first. Because the gag stops talking, agree on a non-verbal safe signal (e.g. dropping an object or tapping 3 times).",
+      "Fasten the collar loosely – you should easily fit two fingers underneath. It must never press on the throat.",
+      "Fasten the wrist cuffs behind the back and adjust the strap so the arms are relaxed, not pulled up.",
+      "The ball gag sits gently in the mouth; the holes let air through. Nipple clamps tighten with the small screw – start very loose.",
+      "Check in constantly. Remove nipple clamps after 10–15 minutes at most, and release everything straight away if your partner signals."
+    ],
+    note: "For experienced adults only. Never leave a restrained or gagged person alone, never restrict breathing, and remove immediately if there's numbness, pain or difficulty breathing."
+  },
+
   /* ---------------- Lingerie ---------------- */
   {
     id: "red-lingerie-set",
@@ -327,7 +364,94 @@ window.PRODUCTS = [
     note: "For external use only – never use soap inside the vagina. Stop using if you notice irritation. If you have itching, unusual discharge or odour, please see a doctor."
   },
 
+  /* ---------------- Creams & Oils ---------------- */
+  {
+    id: "butt-cream",
+    name: "Lanemay Butt Firming Cream (60ml)",
+    category: "Creams & Oils",
+    price: 8000,
+    color: "#ef6c00",
+    images: ["images/butt-cream.jpg"],
+    description: "A rich body cream with collagen boosters, made to be massaged into the buttocks and hips to moisturise the skin and leave it looking smoother and more toned.",
+    features: ["With collagen boosters", "Moisturising formula", "Non-greasy, absorbs quickly", "60ml tube"],
+    howItWorks: [
+      "Do a patch test first: apply a little to your inner arm and wait 24 hours.",
+      "After a bath, apply a generous amount to clean, dry skin on the buttocks and hips.",
+      "Massage in firm, upward circular motions for 3–5 minutes until absorbed.",
+      "Use twice a day. Results are best when combined with exercise such as squats and lunges."
+    ],
+    note: "External use only. Results vary from person to person – a cream can moisturise and smooth skin but cannot change body shape on its own. Stop if irritation occurs."
+  },
+  {
+    id: "mango-cream",
+    name: "Bioaqua Mango Extract Firming Body Cream (40g)",
+    category: "Creams & Oils",
+    price: 5000,
+    color: "#c2185b",
+    images: ["images/mango-cream.jpg"],
+    description: "A light body cream with mango extract, shea butter and hyaluronate. Massage into the tummy, waist, thighs and arms to moisturise and firm the look of the skin.",
+    features: ["Mango extract, shea butter & hyaluronate", "Firming & shaping massage cream", "Light, fresh scent", "40g tube"],
+    howItWorks: [
+      "Do a patch test on a small area of skin first.",
+      "Apply to clean skin on the tummy, waist, thighs or arms.",
+      "Massage in circles until fully absorbed – the massage itself helps circulation.",
+      "Use morning and night alongside a healthy diet and exercise for the best results."
+    ],
+    note: "External use only. Keep away from eyes and children. Results vary – no cream can remove body fat by itself. Stop if irritation occurs."
+  },
+  {
+    id: "xxxl-oil",
+    name: "XXXL Men's Massage Essential Oil (10ml)",
+    category: "Creams & Oils",
+    price: 6000,
+    color: "#3e2723",
+    images: ["images/xxxl-oil.jpg"],
+    description: "A warming massage oil for men, applied to the penis with a gentle massage. Many men use it as part of a regular massage routine to boost blood flow and confidence.",
+    features: ["Warming massage oil", "Dropper bottle", "10ml per bottle", "Discreet packaging available"],
+    howItWorks: [
+      "Test a drop on your inner wrist first and wait to check for irritation.",
+      "Put 2–3 drops in your palm and warm it between your hands.",
+      "Gently massage onto the shaft (avoid the tip/urethra) with long strokes for 5–10 minutes.",
+      "Let it absorb; wash your hands afterwards. Do not use as a lubricant or with condoms."
+    ],
+    note: "External use only. No oil or cream has been proven to permanently increase penis size. Do not use on broken skin. If you have erection problems, please see a doctor."
+  },
+  {
+    id: "xxl-gel",
+    name: "XXL Mangels Men's Massage Gel (50g)",
+    category: "Creams & Oils",
+    price: 7000,
+    color: "#f9a825",
+    images: ["images/xxl-gel.jpg"],
+    description: "A mild-formula massage gel for men. Smooth, non-sticky texture for a comfortable penis massage routine.",
+    features: ["Mild formula", "Smooth, non-sticky gel", "50g tube"],
+    howItWorks: [
+      "Test a small amount on your inner wrist first.",
+      "Squeeze a pea-sized amount onto your fingers.",
+      "Massage gently onto the shaft with slow, long strokes for 5–10 minutes until absorbed.",
+      "Use once or twice a day and wash your hands afterwards."
+    ],
+    note: "External use only. No gel or cream has been proven to permanently increase penis size. Stop if irritation occurs. If you have erection problems, please see a doctor."
+  },
+
   /* ---------------- Couples & Games ---------------- */
+  {
+    id: "tumbling-tower",
+    name: "Sexy Tumbling Tower – Couples Block Game",
+    category: "Games",
+    price: 12000,
+    color: "#a1887f",
+    images: ["images/tumbling-tower-1.jpg", "images/tumbling-tower-2.jpg"],
+    description: "The classic wooden block-stacking game with a naughty twist: every block has a flirty dare printed on it, from 'Foot massage!' and 'Give a deep passionate kiss!' to much spicier ones. Pull a block, do the dare, and don't let the tower fall!",
+    features: ["Solid wooden blocks", "Dare printed on every block", "Mild to very spicy dares", "For 2 players (couples)"],
+    howItWorks: [
+      "Build the tower: stack the blocks in layers of three, turning each layer the opposite way.",
+      "Take turns pulling out one block with one hand, from anywhere below the top layer.",
+      "Read the dare on your block out loud and do it (or let your partner choose your forfeit).",
+      "Place the block on top of the tower and pass the turn.",
+      "Whoever makes the tower fall loses – and the winner chooses the final dare!"
+    ]
+  },
   {
     id: "drunk-in-love",
     name: "Drunk in Love – Couples Card Game (X-Rated)",
