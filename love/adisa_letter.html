@@ -160,6 +160,12 @@ body.rage #flash{animation:rage .14s steps(1) infinite}
   font:800 15px var(--ui);color:#fff;background:var(--rose);border:0;border-radius:999px;padding:11px 20px;cursor:pointer;
   box-shadow:0 4px 0 var(--rose-dark);animation:pop .5s both}
 .again:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.again.on-night{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:7;
+  background:rgba(76,182,239,.16);color:#d8f3ff;box-shadow:0 0 0 1px rgba(120,210,255,.5),0 0 24px rgba(76,182,239,.45);backdrop-filter:blur(4px)}
+
+/* night show: fire words, lotus, magic heart */
+#night{position:fixed;inset:0;width:100%;height:100%;z-index:6;background:#030108;opacity:0;transition:opacity .8s ease}
+#night.show{opacity:1}
 
 @media (prefers-reduced-motion:reduce){
   #letter.quake{animation-duration:.4s}
@@ -190,6 +196,7 @@ body.rage #flash{animation:rage .14s steps(1) infinite}
 
 <div id="flash" aria-hidden="true"></div>
 <div id="fx" aria-hidden="true"></div>
+<canvas id="night" hidden aria-label="I love you Adisa, a blooming lotus and a glowing heart"></canvas>
 
 <script>
 /* ---------- words (edit freely) ---------- */
@@ -299,8 +306,12 @@ function reset() {
   letter.classList.remove("quake", "enter");
   fx.innerHTML = "";
   content.innerHTML = "";
-  letter.querySelectorAll(".tear,.again").forEach(n => n.remove());
+  document.querySelectorAll(".tear,.again").forEach(n => n.remove());
+  letter.getAnimations().forEach(a => a.cancel());
   letter.hidden = true;
+  effect = null;
+  night.classList.remove("show");
+  night.hidden = true;
   envWrap.hidden = false;
   env.classList.remove("open");
   hint.classList.remove("gone");
@@ -554,12 +565,381 @@ async function heartScene(t) {
   }
   await wait(t, 700);
   box.classList.add("beat");
-  await wait(t, 1500);
+  await wait(t, 3500);
+  await nightShow(t);
+}
+
+/* ================= night show: love in fire, lotus, magic heart ================= */
+const night = $("#night"), nctx = night.getContext("2d");
+let effect = null, NW = 0, NH = 0, lastFrame = 0;
+const nowS = () => performance.now() / 1000;
+
+function sizeNight() {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  NW = innerWidth; NH = innerHeight;
+  night.width = Math.round(NW * dpr); night.height = Math.round(NH * dpr);
+  nctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+addEventListener("resize", () => { if (!night.hidden) sizeNight(); });
+
+function nightLoop(now) {
+  const dt = Math.min(0.05, (now - lastFrame) / 1000 || 0.016);
+  lastFrame = now;
+  if (effect && !night.hidden) {
+    const T = now / 1000;
+    if (effect.t0 == null) effect.t0 = T;
+    const fade = effect.fadeAt ? Math.max(0, 1 - (T - effect.fadeAt) / 0.9) : 1;
+    effect.step(dt, T - effect.t0, fade);
+  }
+  requestAnimationFrame(nightLoop);
+}
+requestAnimationFrame(nightLoop);
+
+const glowCache = {};
+function glow(color) {
+  if (!glowCache[color]) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 64;
+    const g = c.getContext("2d");
+    const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grd.addColorStop(0, color);
+    grd.addColorStop(0.3, color.replace(/[\d.]+\)$/, "0.35)"));
+    grd.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = grd;
+    g.fillRect(0, 0, 64, 64);
+    glowCache[color] = c;
+  }
+  return glowCache[color];
+}
+function clearNight(alpha) {
+  nctx.globalCompositeOperation = "source-over";
+  nctx.globalAlpha = 1;
+  nctx.fillStyle = `rgba(3,1,8,${alpha})`;
+  nctx.fillRect(0, 0, NW, NH);
+}
+
+/* ---- 1. love in fire: words written by a spark ---- */
+function makeFire(lines) {
+  const off = document.createElement("canvas");
+  off.width = NW; off.height = NH;
+  const o = off.getContext("2d", { willReadFrequently: true });
+  const fam = '"Arial Black", "Bagel Fat One", Impact, sans-serif';
+  let size = 220;
+  const widest = () => Math.max(...lines.map(l => { o.font = `900 ${size}px ${fam}`; return o.measureText(l).width; }));
+  while (size > 20 && widest() > NW * 0.88) size -= 4;
+  size = Math.min(size, NH * 0.2);
+  const gapY = size * 1.2;
+  const y0 = NH * 0.47 - ((lines.length - 1) * gapY) / 2;
+  const step = Math.max(4, Math.round(size / 10));
+  o.font = `900 ${size}px ${fam}`;
+  o.textAlign = "center"; o.textBaseline = "middle"; o.fillStyle = "#fff";
+  const perLine = lines.map((line, li) => {
+    o.clearRect(0, 0, NW, NH);
+    o.fillText(line, NW / 2, y0 + li * gapY);
+    const data = o.getImageData(0, 0, NW, NH).data;
+    const dots = [];
+    for (let x = 0; x < NW; x += step)
+      for (let y = 0; y < NH; y += step)
+        if (data[(y * NW + x) * 4 + 3] > 140) dots.push({ x, y, ph: Math.random() * 6.28, sp: 6 + Math.random() * 10 });
+    return dots;
+  });
+  const WRITE = 2.3, PAUSE = 0.35;
+  const embers = [];
+  const eff = {
+    step(dt, T, fade) {
+      clearNight(1);
+      nctx.globalCompositeOperation = "lighter";
+      const g = glow("rgba(255,70,10,1)");
+      let spark = null;
+      perLine.forEach((dots, li) => {
+        const start = li * (WRITE + PAUSE);
+        const shown = Math.floor(Math.min(1, Math.max(0, (T - start) / WRITE)) * dots.length);
+        if (shown > 0 && shown < dots.length) spark = dots[shown - 1];
+        for (let i = 0; i < shown; i++) {
+          const d = dots[i];
+          const age = T - start - (i / dots.length) * WRITE;
+          const f = 0.55 + 0.45 * Math.sin(T * d.sp + d.ph);
+          nctx.globalAlpha = 0.22 * fade;
+          nctx.drawImage(g, d.x - step * 1.6, d.y - step * 1.6, step * 3.2, step * 3.2);
+          nctx.globalAlpha = (0.65 + 0.35 * f) * fade;
+          nctx.fillStyle = age < 0.25 ? "#fff3c4" : `hsl(${8 + f * 26},100%,${44 + f * 16}%)`;
+          nctx.fillRect(d.x - step * 0.4, d.y - step * 0.26, step * 0.8, step * 0.52);
+          if (Math.random() < 0.004) embers.push({ x: d.x, y: d.y, vx: (Math.random() - 0.5) * 20, vy: -30 - Math.random() * 50, life: 1, fall: false });
+        }
+      });
+      if (spark) {
+        for (let k = 0; k < 4; k++)
+          embers.push({ x: spark.x, y: spark.y, vx: (Math.random() - 0.5) * 220, vy: -Math.random() * 180, life: 1, fall: true });
+        nctx.globalAlpha = fade;
+        nctx.drawImage(glow("rgba(255,240,190,1)"), spark.x - 26, spark.y - 26, 52, 52);
+        nctx.drawImage(glow("rgba(255,120,30,1)"), spark.x - 50, spark.y - 50, 100, 100);
+      }
+      for (let i = embers.length - 1; i >= 0; i--) {
+        const e = embers[i];
+        e.vy += (e.fall ? 420 : -15) * dt;
+        e.x += e.vx * dt; e.y += e.vy * dt;
+        e.life -= dt * (e.fall ? 1.3 : 0.7);
+        if (e.life <= 0) { embers.splice(i, 1); continue; }
+        nctx.globalAlpha = e.life * fade;
+        nctx.fillStyle = e.life > 0.6 ? "#ffe08a" : "#ff6a1a";
+        nctx.fillRect(e.x, e.y, 2.2, 2.2);
+      }
+      nctx.globalAlpha = 1;
+    },
+  };
+  return eff;
+}
+
+/* ---- 2. lotus blooming inside a glowing orb ---- */
+function makeLotus(caption) {
+  const R = Math.min(NW * 0.34, NH * 0.24);
+  const cx = NW / 2, by = NH * 0.53;
+  const RO = Math.min(R * 1.6, NW * 0.46);
+  const ocy = by - R * 0.35;
+  const petals = [], center = [], stem = [], orb = [], stars = [];
+  const layers = [
+    { n: 7, spread: 84, L: 1.0, w: 0.28, h: 248, l: 58 },
+    { n: 5, spread: 58, L: 0.92, w: 0.31, h: 262, l: 64 },
+    { n: 3, spread: 30, L: 0.76, w: 0.35, h: 282, l: 72 },
+  ];
+  const perPetal = NW < 500 ? 150 : 230;
+  layers.forEach(ly => {
+    for (let i = 0; i < ly.n; i++) {
+      const a = (-ly.spread + (2 * ly.spread * i) / (ly.n - 1)) * Math.PI / 180;
+      for (let k = 0; k < perPetal; k++) {
+        const t = Math.pow(Math.random(), 0.75);
+        const edge = Math.random() < 0.45;
+        const s = edge ? (Math.random() < 0.5 ? -1 : 1) : Math.random() * 2 - 1;
+        const hw = ly.w * R * Math.sin(Math.PI * Math.pow(t, 0.8));
+        petals.push({
+          lx: s * hw, ly: -t * ly.L * R, a,
+          c: `hsl(${ly.h + Math.random() * 14 - 7 + t * 12},95%,${ly.l + (edge ? 14 : 0) - (1 - t) * 8}%)`,
+          ph: Math.random() * 6.28, sp: 1 + Math.random() * 3, sz: edge ? 1.9 : 1.3,
+        });
+      }
+    }
+  });
+  for (let i = 0; i < 140; i++) {
+    const a = Math.random() * 6.28, r = Math.random() * R * 0.16;
+    center.push({ x: cx + Math.cos(a) * r, y: by - R * 0.12 + Math.sin(a) * r * 0.6, ph: Math.random() * 6.28 });
+  }
+  const sx = cx + R * 0.12, sy = NH * 0.98;
+  for (let i = 0; i < 320; i++) {
+    const u = Math.random();
+    const x = (1 - u) * (1 - u) * sx + 2 * (1 - u) * u * (cx - R * 0.15) + u * u * cx;
+    const y = (1 - u) * (1 - u) * sy + 2 * (1 - u) * u * ((sy + by) / 2) + u * u * by;
+    stem.push({ x: x + (Math.random() - 0.5) * 3, y, u, ph: Math.random() * 6.28 });
+  }
+  for (let i = 0; i < 380; i++) {
+    const a = Math.random() * 6.28, r = RO + (Math.random() - 0.5) * 4;
+    orb.push({ a, r, ph: Math.random() * 6.28 });
+  }
+  for (let i = 0; i < 110; i++) {
+    const a = Math.random() * 6.28, r = Math.sqrt(Math.random()) * RO;
+    stars.push({ x: cx + Math.cos(a) * r, y: ocy + Math.sin(a) * r, ph: Math.random() * 6.28, sp: 1 + Math.random() * 3 });
+  }
+  const STEM = 1.3, BLOOM = 3.2;
+  const ease = x => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+  return {
+    step(dt, T, fade) {
+      clearNight(0.5);
+      nctx.globalCompositeOperation = "lighter";
+      const grow = ease(T / STEM), e = ease((T - STEM * 0.8) / BLOOM);
+      const burst = 1 + (1 - fade) * 1.4;
+      // orb + rings
+      const orbIn = ease(T / 1.5);
+      nctx.fillStyle = "#b9a8ff";
+      for (const p of orb) {
+        nctx.globalAlpha = (0.25 + 0.35 * Math.sin(T * 2 + p.ph) ** 2) * orbIn * fade;
+        nctx.fillRect(cx + Math.cos(p.a) * p.r * burst, ocy + Math.sin(p.a) * p.r * burst, 1.4, 1.4);
+      }
+      for (let k = 0; k < 3; k++) {
+        const rot = k * 1.05 + T * 0.25;
+        for (let i = 0; i < 90; i++) {
+          const th = (i / 90) * 6.28;
+          const x = Math.cos(th) * RO, y = Math.sin(th) * RO * 0.3;
+          nctx.globalAlpha = 0.28 * orbIn * fade;
+          nctx.fillRect(cx + (x * Math.cos(rot) - y * Math.sin(rot)) * burst, ocy + (x * Math.sin(rot) + y * Math.cos(rot)) * burst, 1.2, 1.2);
+        }
+      }
+      for (const s of stars) {
+        nctx.globalAlpha = (0.5 + 0.5 * Math.sin(T * s.sp + s.ph)) * orbIn * fade;
+        nctx.fillStyle = "#e6ddff";
+        nctx.fillRect(s.x, s.y, 1.6, 1.6);
+      }
+      // stem grows upward
+      nctx.fillStyle = "#6f8cff";
+      for (const p of stem) {
+        if (p.u > grow) continue;
+        nctx.globalAlpha = (0.55 + 0.45 * Math.sin(T * 3 + p.ph)) * fade;
+        nctx.fillRect(cx + (p.x - cx) * burst, p.y, 1.7, 1.7);
+      }
+      // petals open from a bud
+      if (T > STEM * 0.8) {
+        const scale = 0.14 + 0.86 * e, spread = 0.1 + 0.9 * e;
+        const sway = Math.sin(T * 0.8) * 0.03;
+        for (const p of petals) {
+          const a = p.a * spread + sway;
+          const lx = p.lx * scale, ly = p.ly * scale;
+          const x = cx + (lx * Math.cos(a) - ly * Math.sin(a)) * burst;
+          const y = by + (lx * Math.sin(a) + ly * Math.cos(a)) * burst;
+          nctx.globalAlpha = (0.5 + 0.5 * Math.sin(T * p.sp + p.ph)) * fade;
+          nctx.fillStyle = p.c;
+          nctx.fillRect(x, y, p.sz, p.sz);
+        }
+        nctx.globalAlpha = 0.55 * e * fade;
+        nctx.drawImage(glow("rgba(255,150,220,1)"), cx - R * 0.6, by - R * 0.75, R * 1.2, R * 1.0);
+      }
+      if (e > 0.55) {
+        nctx.fillStyle = "#ffd98a";
+        for (const c of center) {
+          nctx.globalAlpha = (e - 0.55) * 2 * (0.5 + 0.5 * Math.sin(T * 4 + c.ph)) * fade;
+          nctx.fillRect(cx + (c.x - cx) * burst, by + (c.y - by) * burst, 1.6, 1.6);
+        }
+      }
+      // caption
+      const capIn = ease((T - STEM - BLOOM + 0.4) / 1);
+      if (capIn > 0) {
+        nctx.globalCompositeOperation = "source-over";
+        nctx.globalAlpha = capIn * fade;
+        nctx.font = `700 ${Math.round(Math.min(40, NW * 0.085))}px Caveat, cursive`;
+        nctx.textAlign = "center";
+        nctx.shadowColor = "#ff8fc8"; nctx.shadowBlur = 16;
+        nctx.fillStyle = "#ffe3f1";
+        nctx.fillText(caption, cx, Math.min(ocy + RO + 46, NH - 30));
+        nctx.shadowBlur = 0;
+      }
+      nctx.globalAlpha = 1;
+    },
+  };
+}
+
+/* ---- 3. magic heart over a glowing pool: melts and rebuilds forever ---- */
+function makeMagicHeart(label) {
+  const S = Math.min((NW * 0.8) / 32, (NH * 0.46) / 29);
+  const cy = NH * 0.36 - 2.5 * S;
+  const cx = NW / 2;
+  const top = cy - 12 * S, bottom = cy + 17 * S;
+  const poolY = bottom + 4.5 * S, poolRX = 12 * S, poolRY = 2 * S;
+  const N = NW < 500 ? 1500 : 2600;
+  const parts = [];
+  const inPool = () => {
+    const a = Math.random() * 6.28, r = Math.sqrt(Math.random());
+    return [cx + Math.cos(a) * poolRX * r, poolY + Math.sin(a) * poolRY * r];
+  };
+  for (let i = 0; i < N; i++) {
+    const t = Math.random() * 6.28, r = Math.pow(Math.random(), 0.35);
+    const hx = 16 * Math.sin(t) ** 3 * r;
+    const hy = (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * r;
+    const [x, y] = inPool();
+    const homeY = cy - hy * S;
+    parts.push({
+      hx: hx * S, hy: homeY, z: (Math.random() - 0.5) * 7 * S * (1.1 - r),
+      x, y, vx: 0, vy: 0, fallen: false,
+      k: 1.6 + Math.random() * 3, delay: Math.random() * 1.1,
+      mdelay: (1 - (homeY - top) / (bottom - top)) * 1.1 + Math.random() * 0.35,
+      g: 0.6 + Math.random() * 0.8, sz: 1 + Math.random() * 1.7, ph: Math.random() * 6.28,
+      c: Math.random() < 0.18 ? "#eaffff" : `hsl(${190 + Math.random() * 25},100%,${55 + Math.random() * 25}%)`,
+    });
+  }
+  const swirl = Array.from({ length: 260 }, () => ({ a: Math.random() * 6.28, r: 0.3 + Math.random() * 0.75, sp: 0.4 + Math.random() * 1.2, ph: Math.random() * 6.28 }));
+  const risers = Array.from({ length: 70 }, () => ({ u: Math.random(), sp: 0.25 + Math.random() * 0.5, off: (Math.random() - 0.5) * 2 }));
+  const CYCLE = 10, FORM = 2.6, MELT = 6.6, REST = 8.6;
+  let lastCycle = 0;
+  return {
+    step(dt, T, fade) {
+      clearNight(0.26);
+      nctx.globalCompositeOperation = "lighter";
+      const cyc = Math.floor(T / CYCLE), ct = T % CYCLE;
+      if (cyc !== lastCycle) {
+        lastCycle = cyc;
+        for (const p of parts) { p.fallen = false; p.vy = 0; }
+      }
+      const phi = Math.sin(T * 0.7) * 0.45, cp = Math.cos(phi), sp = Math.sin(phi);
+      // pool glow
+      nctx.globalAlpha = 0.85 * fade;
+      nctx.drawImage(glow("rgba(30,160,255,1)"), cx - poolRX * 1.5, poolY - poolRY * 3, poolRX * 3, poolRY * 6);
+      nctx.globalAlpha = 0.7 * fade;
+      nctx.drawImage(glow("rgba(170,240,255,1)"), cx - poolRX * 0.9, poolY - poolRY * 1.3, poolRX * 1.8, poolRY * 2.6);
+      nctx.fillStyle = "#8fe6ff";
+      for (const s of swirl) {
+        s.a += s.sp * dt;
+        nctx.globalAlpha = (0.4 + 0.6 * Math.sin(T * 3 + s.ph) ** 2) * fade;
+        nctx.fillRect(cx + Math.cos(s.a) * poolRX * s.r, poolY + Math.sin(s.a) * poolRY * s.r, 1.6, 1.6);
+      }
+      // little sparks rising from the pool into the heart's tip
+      for (const r of risers) {
+        r.u = (r.u + r.sp * dt) % 1;
+        nctx.globalAlpha = Math.sin(r.u * Math.PI) * 0.8 * fade;
+        nctx.fillRect(cx + r.off * poolRX * 0.5 * (1 - r.u), poolY - (poolY - bottom + 2 * S) * r.u, 1.5, 1.5);
+      }
+      // soft halo when the heart is whole
+      const whole = ct > FORM && ct < MELT ? 1 : ct <= FORM ? ct / FORM : Math.max(0, 1 - (ct - MELT) / 1.2);
+      nctx.globalAlpha = 0.18 * whole * fade;
+      nctx.drawImage(glow("rgba(60,150,255,1)"), cx - 20 * S, top - 6 * S, 40 * S, 34 * S);
+      for (const p of parts) {
+        const tx = cx + p.hx * cp + p.z * sp + Math.sin(T * 2 + p.ph) * 1.2;
+        const ty = p.hy + Math.cos(T * 1.7 + p.ph) * 1.2;
+        if (ct < MELT + p.mdelay || ct > REST + 0.6) {
+          if (ct > p.delay || ct > REST) {
+            const f = Math.min(1, p.k * dt);
+            p.x += (tx - p.x) * f; p.y += (ty - p.y) * f;
+          }
+        } else if (!p.fallen) {
+          p.vy += 900 * p.g * dt;
+          p.x += Math.sin(p.ph * 7) * 25 * dt;
+          p.y += p.vy * dt;
+          if (p.y >= poolY - poolRY * 0.5) {
+            p.fallen = true;
+            const [x, y] = inPool();
+            p.x = cx + (p.x - cx) * 0.4 + (x - cx) * 0.6; p.y = y;
+          }
+        }
+        nctx.globalAlpha = (0.55 + 0.45 * Math.sin(T * 3 + p.ph)) * fade;
+        nctx.fillStyle = p.c;
+        nctx.fillRect(p.x, p.y, p.sz, p.sz);
+      }
+      // name under the pool
+      nctx.globalCompositeOperation = "source-over";
+      nctx.globalAlpha = Math.min(1, T / 2) * fade;
+      nctx.font = `700 ${Math.round(Math.min(48, NW * 0.1))}px Caveat, cursive`;
+      nctx.textAlign = "center";
+      nctx.shadowColor = "#4cc3ff"; nctx.shadowBlur = 18;
+      nctx.fillStyle = "#e4f7ff";
+      nctx.fillText(label, cx, Math.min(poolY + poolRY + 14 * Math.max(2.6, S * 0.9), NH - 90));
+      nctx.shadowBlur = 0;
+      nctx.globalAlpha = 1;
+    },
+  };
+}
+
+async function nightShow(t) {
+  letter.animate([{ transform: "none", opacity: 1 }, { transform: "translateY(-40px) scale(.55) rotate(7deg)", opacity: 0 }],
+                 { duration: 900, easing: "ease-in", fill: "forwards" });
+  await wait(t, 900);
+  sizeNight();
+  clearNight(1);
+  night.hidden = false;
+  void night.offsetWidth;
+  night.classList.add("show");
+
+  effect = makeFire(NW < 600 ? ["I LOVE", "YOU", NAME.toUpperCase()] : ["I LOVE YOU", NAME.toUpperCase()]);
+  await wait(t, 6600);
+  effect.fadeAt = nowS();
+  await wait(t, 1000);
+
+  effect = makeLotus("you make everything bloom, " + NAME);
+  await wait(t, 8200);
+  effect.fadeAt = nowS();
+  await wait(t, 1100);
+
+  effect = makeMagicHeart(NAME + " ♥");
+  await wait(t, 4000);
   const again = document.createElement("button");
-  again.className = "again";
+  again.className = "again on-night";
   again.id = "again";
   again.textContent = "Read it again ♥";
   again.addEventListener("click", reset);
-  letter.appendChild(again);
+  document.body.appendChild(again);
 }
 </script>
