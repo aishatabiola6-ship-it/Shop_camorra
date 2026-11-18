@@ -65,10 +65,11 @@ window.PRODUCTS = [
     name: "Orgasm Pen G-Spot Vibrator",
     category: "For Her",
     price: 15000,
+    options: { label: "Colour", values: ["Pink", "Purple", "Rose", "Blue"] },
     color: "#ec407a",
     images: ["images/orgasm-pen.jpg", "images/orgasm-pen-2.jpg"],
     description: "Slim, curved and elegant with a gold crown base. The flexible tip is shaped to find the G-spot or to pinpoint the clitoris. Perfect for beginners.",
-    features: ["Slim, flexible curved tip", "Multiple vibration modes", "Body-safe silicone", "USB rechargeable", "Colours: pink, purple, rose, blue"],
+    features: ["Slim, flexible curved tip", "Multiple vibration modes", "Body-safe silicone", "USB rechargeable"],
     howItWorks: [
       "Charge with the USB cable before first use.",
       "Press and hold the button to switch on; tap it to change modes.",
@@ -82,10 +83,11 @@ window.PRODUCTS = [
     name: "Mini Wand Massager",
     category: "For Her",
     price: 16000,
+    options: { label: "Colour", values: ["Red", "Pink"] },
     color: "#c2185b",
     images: ["images/mini-wand.jpg"],
     description: "A compact, rechargeable wand with a soft, flexible head and deep, rumbly vibrations. Great for intimate play and for easing sore muscles.",
-    features: ["Soft flexible head", "Multiple speeds & patterns", "Cordless, USB rechargeable", "Gold-tone accents", "Colours: red, pink"],
+    features: ["Soft flexible head", "Multiple speeds & patterns", "Cordless, USB rechargeable", "Gold-tone accents"],
     howItWorks: [
       "Charge fully with the USB cable.",
       "Press the power button to switch on; use the second button to change speed and pattern.",
@@ -116,10 +118,11 @@ window.PRODUCTS = [
     name: "Thrusting Heated Rabbit Vibrator",
     category: "For Her",
     price: 32000,
+    options: { label: "Colour", values: ["Red", "Purple"] },
     color: "#e53935",
     images: ["images/thrusting-rabbit.jpg"],
     description: "Our most advanced toy: a rabbit vibrator that thrusts in and out by itself, warms up to 42 °C for a natural feel, and has a vibrating 'bunny' for the clitoris at the same time.",
-    features: ["Automatic thrusting (stretch) shaft", "Warms to 42 °C", "12 vibration functions", "Separate clitoral 'bunny' vibrator", "Easy-grip handle, rechargeable", "Colours: red, purple"],
+    features: ["Automatic thrusting (stretch) shaft", "Warms to 42 °C", "12 vibration functions", "Separate clitoral 'bunny' vibrator", "Easy-grip handle, rechargeable"],
     howItWorks: [
       "Charge fully before first use.",
       "Hold the power button to switch on; use the separate buttons for vibration, thrusting and heating.",
@@ -221,10 +224,11 @@ window.PRODUCTS = [
     name: "Vibrating Anal Plug (Remote / App)",
     category: "Anal",
     price: 18000,
+    options: { label: "Colour", values: ["Black", "Purple", "Red", "Green", "White"] },
     color: "#8e24aa",
     images: ["images/anal-plug-1.jpg", "images/anal-plug-2.jpg"],
     description: "A smooth silicone butt plug with a built-in vibrator and a jewel-style base. Control it with the wireless remote or your phone, so you or a partner can change the vibration hands-free.",
-    features: ["Wireless remote or phone-app control", "Safe body-safe silicone", "Whisper-quiet motor", "Flared jewelled base for safety", "USB rechargeable", "Colours: black, purple, red, green, white"],
+    features: ["Wireless remote or phone-app control", "Safe body-safe silicone", "Whisper-quiet motor", "Flared jewelled base for safety", "USB rechargeable"],
     howItWorks: [
       "Charge fully before first use.",
       "Press the button on the base to switch on, then pair it with the remote or the app.",
@@ -257,10 +261,11 @@ window.PRODUCTS = [
     name: "Soft Cotton Bondage Rope (10 m)",
     category: "Bondage",
     price: 6000,
+    options: { label: "Colour", values: ["Red", "Black", "Pink", "Purple"] },
     color: "#6a1b9a",
     images: ["images/bondage-rope-1.jpg", "images/bondage-rope-2.jpg"],
     description: "Soft, braided cotton rope that's gentle on skin and holds knots well. Ideal for tying wrists, ankles or decorative body ties.",
-    features: ["10 metres long", "Soft braided cotton", "Gentle on skin", "Colours: red, black, pink, purple"],
+    features: ["10 metres long", "Soft braided cotton", "Gentle on skin"],
     howItWorks: [
       "Agree on a safe word and keep safety scissors nearby.",
       "Fold the rope in half and start with a simple, loose wrist tie.",
@@ -275,18 +280,18 @@ window.PRODUCTS = [
     name: "Satin Blindfold",
     category: "Bondage",
     price: 3500,
+    options: { label: "Design", values: ["Plain red", "Plain black", "Plain pink", "Be Naughty – red", "Be Naughty – black", "DIVA", "Zebra", "Leopard", "Pink leopard"] },
     color: "#ad1457",
     images: ["images/blindfold-1.jpg", "images/blindfold-2.jpg", "images/blindfold-3.jpg", "images/blindfold-4.jpg", "images/blindfold-5.jpg"],
     description: "A soft, padded blindfold that blocks out all light. Taking away sight makes every touch, kiss and whisper feel more intense – the easiest way to add excitement to the bedroom.",
-    features: ["Soft satin / plush fabric", "Padded for comfort", "Elastic or ribbon tie strap", "Designs: plain red, black, pink, 'Be Naughty', 'DIVA', zebra, leopard, pink leopard"],
+    features: ["Soft satin / plush fabric", "Padded for comfort", "Elastic or ribbon tie strap"],
     howItWorks: [
       "Agree with your partner on what's okay and on a safe word before you start.",
       "Place the padded side over the eyes and pull the elastic behind the head (or tie the ribbons in a bow).",
       "Adjust so it's snug but comfortable and no light comes in.",
       "Your partner can now surprise you with touches, kisses, ice, feathers or a toy – without sight, every sensation feels stronger.",
       "Remove at any time. Hand-wash in cool water."
-    ],
-    note: "Tell us the design you want in the note at checkout."
+    ]
   },
   {
     id: "collar-restraint",
@@ -313,6 +318,7 @@ window.PRODUCTS = [
     name: "Red Strappy Lingerie Set",
     category: "Lingerie",
     price: 15000,
+    options: { label: "Size", values: ["S", "M", "L", "XL"] },
     color: "#c62828",
     images: ["images/red-lingerie-set.jpg"],
     description: "A bold red set with a strappy open-cup bra, waist belt, sheer mesh mini skirt and thigh garters. Made to turn heads in the bedroom.",
@@ -323,14 +329,14 @@ window.PRODUCTS = [
       "Put on the bra, cross the neck straps and tie behind the neck.",
       "Adjust the straps for a snug, comfortable fit. Pair with nipple pasties for an extra-spicy look.",
       "Hand-wash in cool water and dry flat."
-    ],
-    note: "Please tell us your size (S, M, L, XL) in the note at checkout."
+    ]
   },
   {
     id: "nipple-pasties",
     name: "Nipple Pasties (Pair)",
     category: "Lingerie",
     price: 2500,
+    options: { label: "Design", values: ["Black cross", "Pink cross", "White cross", "Red heart", "Black heart"] },
     color: "#ad1457",
     images: ["images/nipple-pasties.jpg"],
     description: "Cheeky self-adhesive nipple covers in cross and heart shapes, with playful messages. Wear them under sheer tops or with lingerie for a teasing look.",
@@ -340,8 +346,7 @@ window.PRODUCTS = [
       "Peel off the backing paper.",
       "Centre the pasty over the nipple and press gently for a few seconds.",
       "To remove, peel slowly from the edge. Each pair is for single use."
-    ],
-    note: "Tell us the design and colour you want in the note at checkout."
+    ]
   },
 
   /* ---------------- Health & Care ---------------- */

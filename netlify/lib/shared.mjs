@@ -94,12 +94,17 @@ export async function loadProducts(origin) {
 export function priceOrder(products, items) {
   const lines = [];
   let total = 0;
-  for (const [id, qty] of Object.entries(items || {})) {
+  for (const [key, qty] of Object.entries(items || {})) {
+    const cut = key.indexOf("|");
+    const id = cut === -1 ? key : key.slice(0, cut);
+    const opt = cut === -1 ? "" : key.slice(cut + 1, cut + 61);
     const p = products.find((x) => x.id === id);
     const q = Math.floor(Number(qty));
     if (!p || !(q >= 1 && q <= 1000)) continue;
+    // only accept choices the product really offers
+    const choice = opt && p.options && p.options.values.includes(opt) ? ` (${p.options.label}: ${opt})` : "";
     total += p.price * q;
-    lines.push(`${p.name} x${q} = ₦${(p.price * q).toLocaleString("en-NG")}`);
+    lines.push(`${p.name}${choice} x${q} = ₦${(p.price * q).toLocaleString("en-NG")}`);
   }
   return { total, lines };
 }

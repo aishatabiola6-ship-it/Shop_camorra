@@ -46,6 +46,13 @@
   }
 
   /* ---------------- cart ---------------- */
+  // A cart key is the product id, plus "|<choice>" when the product has options (e.g. "orgasm-pen|Purple").
+  const lineOf = (key, q) => {
+    const i = key.indexOf("|");
+    const p = findProduct(i === -1 ? key : key.slice(0, i));
+    return p ? { key, p, opt: i === -1 ? "" : key.slice(i + 1), q } : null;
+  };
+  const optLabel = (l) => (l.opt ? ` (${l.p.options ? l.p.options.label + ": " : ""}${l.opt})` : "");
   const cart = {
     items() { return store.get("cart", {}); },
     count() { return Object.values(this.items()).reduce((a, b) => a + b, 0); },
@@ -59,8 +66,8 @@
     },
     clear() { store.set("cart", {}); updateBadge(); },
     total() {
-      return Object.entries(this.items()).reduce((sum, [id, q]) => {
-        const p = findProduct(id); return p ? sum + p.price * q : sum;
+      return Object.entries(this.items()).reduce((sum, [key, q]) => {
+        const l = lineOf(key, q); return l ? sum + l.p.price * q : sum;
       }, 0);
     }
   };
@@ -179,6 +186,12 @@
     </section>`;
   }
 
+  function addButton(p) {
+    return p.options
+      ? `<a class="btn small primary add" href="#/product/${p.id}">Choose ${esc(p.options.label.toLowerCase())}</a>`
+      : `<button class="btn small primary add" data-id="${p.id}">Add to cart</button>`;
+  }
+
   function viewShop(params) {
     const cats = ["All", ...new Set(PRODUCTS.map((p) => p.category))];
     const active = params.cat || "All";
@@ -187,8 +200,10 @@
       (active === "All" || p.category === active) &&
       (!q || (p.name + " " + p.description + " " + p.category).toLowerCase().includes(q)));
 
+    const me = auth.current();
     return `
     <section class="hero">
+      ${me && me.name ? `<p class="hello">Hi ${esc(me.name.split(" ")[0])} ✨</p>` : ""}
       <h1>Discover what feels good</h1>
       <p>Toys, games, wellness and more, hand-picked by Preshy. Discreet packaging and delivery across Nigeria.</p>
     </section>
@@ -209,7 +224,7 @@
                 <p class="price">${money(p.price)}</p>
               </div>
             </a>
-            <button class="btn small primary add" data-id="${p.id}">Add to cart</button>
+            ${addButton(p)}
           </article>`).join("") : `<p class="muted">No products match your search.</p>`}
       </div>
     </section>`;
@@ -240,6 +255,12 @@
           <ol class="steps">${p.howItWorks.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
           ${p.note ? `<div class="note"><strong>Important:</strong> ${esc(p.note)}</div>` : ""}
 
+          ${p.options ? `
+          <div class="opts">
+            <p class="opt-label">${esc(p.options.label)}: <strong id="optChosen">${esc(p.options.values[0])}</strong></p>
+            <div class="opt-row">${p.options.values.map((v, i) =>
+              `<button type="button" class="opt ${i === 0 ? "on" : ""}" data-opt="${esc(v)}">${esc(v)}</button>`).join("")}</div>
+          </div>` : ""}
           <div class="buy">
             <div class="qty">
               <button type="button" data-step="-1" aria-label="Decrease">−</button>
@@ -248,7 +269,7 @@
             </div>
             <button class="btn primary" id="addBtn" data-id="${p.id}">Add to cart</button>
           </div>
-          <p class="muted small">Packed discreetly · Pay on delivery or transfer</p>
+          <p class="muted small">Packed discreetly · Secure payment with Flutterwave (card, transfer or USSD)</p>
         </div>
       </div>
       ${related.length ? `
@@ -256,13 +277,13 @@
       <div class="grid">${related.map((r) => `
         <article class="card"><a href="#/product/${r.id}" class="card-link">${productArt(r)}
           <div class="card-body"><h3>${esc(r.name)}</h3><p class="price">${money(r.price)}</p></div></a>
-          <button class="btn small primary add" data-id="${r.id}">Add to cart</button></article>`).join("")}
+          ${addButton(r)}</article>`).join("")}
       </div>` : ""}
     </section>`;
   }
 
   function viewCart() {
-    const items = Object.entries(cart.items()).map(([id, q]) => ({ p: findProduct(id), q })).filter((x) => x.p);
+    const items = cartLines(cart.items());
     if (!items.length) {
       return `<section class="container narrow center-text">
         <h1>Your cart is empty</h1>
@@ -273,21 +294,22 @@
     <section class="container narrow">
       <h1>Your cart</h1>
       <div class="cart-list">
-        ${items.map(({ p, q }) => `
+        ${items.map(({ key, p, opt, q }) => `
         <div class="cart-row">
           <a href="#/product/${p.id}" class="thumb">${productArt(p)}</a>
           <div class="cart-info">
             <a href="#/product/${p.id}"><strong>${esc(p.name)}</strong></a>
+            ${opt ? `<span class="opt-chip">${esc(p.options ? p.options.label + ": " : "")}${esc(opt)}</span>` : ""}
             <span class="muted">${money(p.price)} each</span>
             <div class="qty sm">
-              <button data-cart="${p.id}" data-step="-1" aria-label="Decrease">−</button>
-              <input type="number" min="0" value="${q}" data-cartinput="${p.id}">
-              <button data-cart="${p.id}" data-step="1" aria-label="Increase">+</button>
+              <button data-cart="${esc(key)}" data-step="-1" aria-label="Decrease">−</button>
+              <input type="number" min="0" value="${q}" data-cartinput="${esc(key)}">
+              <button data-cart="${esc(key)}" data-step="1" aria-label="Increase">+</button>
             </div>
           </div>
           <div class="cart-right">
             <strong>${money(p.price * q)}</strong>
-            <button class="link danger" data-remove="${p.id}">Remove</button>
+            <button class="link danger" data-remove="${esc(key)}">Remove</button>
           </div>
         </div>`).join("")}
       </div>
@@ -302,7 +324,7 @@
   }
 
   function cartLines(items) {
-    return Object.entries(items).map(([id, q]) => ({ p: findProduct(id), q })).filter((x) => x.p);
+    return Object.entries(items).map(([key, q]) => lineOf(key, q)).filter(Boolean);
   }
 
   function viewCheckout() {
@@ -321,7 +343,7 @@
     <section class="container narrow">
       <h1>Checkout</h1>
       <div class="summary">
-        ${lines.map(({ p, q }) => `<div class="row between line"><span>${esc(p.name)} × ${q}</span><span>${money(p.price * q)}</span></div>`).join("")}
+        ${lines.map((l) => `<div class="row between line"><span>${esc(l.p.name + optLabel(l))} × ${l.q}</span><span>${money(l.p.price * l.q)}</span></div>`).join("")}
         <div class="row between total"><span>Total to pay now</span><span>${money(cart.total())}</span></div>
         <p class="muted small">Delivery fee is <strong>not</strong> included. After payment you'll enter your delivery details, and we'll send your delivery date and fee to you on WhatsApp.</p>
       </div>
@@ -379,7 +401,7 @@
       o.transactionId ? "Flutterwave ID: " + o.transactionId : "",
       "Name: " + o.name, "WhatsApp: " + o.whatsapp, "Address: " + o.address,
       o.note ? "Note: " + o.note : "", "",
-      "Items:", ...cartLines(o.items).map(({ p, q }) => `- ${p.name} x${q} = ${money(p.price * q)}`), "",
+      "Items:", ...cartLines(o.items).map((l) => `- ${l.p.name}${optLabel(l)} x${l.q} = ${money(l.p.price * l.q)}`), "",
       "Paid: " + money(o.total), "",
       "Please send me the delivery date and fee. Thank you!"
     ].filter((l, i, a) => l !== "" || a[i - 1] !== "").join("\n");
@@ -584,6 +606,13 @@
     bind(route);
   }
 
+  // "Welcome, Ada 💕" for new customers, "Welcome back, Ada 💕" for returning ones.
+  function greet(email, returning) {
+    const u = auth.users()[email] || {};
+    const first = (u.name || "").split(" ")[0];
+    return (returning ? "Welcome back" : "Welcome") + (first ? ", " + esc(first) : "") + " 💕";
+  }
+
   function finishLogin(msg) {
     toast(msg);
     const next = store.get("after_login", null);
@@ -594,7 +623,7 @@
   /* ---------------- event wiring ---------------- */
   function bind(route) {
     // Add-to-cart buttons on cards
-    app.querySelectorAll(".add").forEach((b) => b.addEventListener("click", () => {
+    app.querySelectorAll("button.add").forEach((b) => b.addEventListener("click", () => {
       cart.add(b.dataset.id, 1);
       toast("Added to cart · <a href='#/cart'>View cart</a>");
     }));
@@ -626,10 +655,17 @@
       app.querySelectorAll(".buy [data-step]").forEach((b) => b.addEventListener("click", () => {
         qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) + parseInt(b.dataset.step, 10));
       }));
+      let chosen = (app.querySelector(".opt.on") || {}).dataset ? app.querySelector(".opt.on").dataset.opt : "";
+      app.querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => {
+        chosen = b.dataset.opt;
+        app.querySelectorAll(".opt").forEach((x) => x.classList.toggle("on", x === b));
+        document.getElementById("optChosen").textContent = chosen;
+      }));
       document.getElementById("addBtn").addEventListener("click", (e) => {
         const n = Math.max(1, parseInt(qty.value, 10) || 1);
-        cart.add(e.target.dataset.id, n);
-        toast(n + " added to cart · <a href='#/cart'>View cart</a>");
+        const p = findProduct(e.target.dataset.id);
+        cart.add(p.options && chosen ? p.id + "|" + chosen : p.id, n);
+        toast(`${esc(p.name)}${p.options && chosen ? " (" + esc(chosen) + ")" : ""} added to cart · <a href='#/cart'>View cart</a>`);
       });
     }
 
@@ -745,7 +781,7 @@
         if (method === "apple") {
           auth.signIn(email);
           sendLoginEmail(email, "apple");
-          return finishLogin("Signed in with Apple");
+          return finishLogin(greet(email, !!(existing && existing.welcomed)));
         }
         const btn = f.querySelector("button");
         btn.disabled = true; btn.textContent = "Sending…";
@@ -773,7 +809,7 @@
         auth.signIn(p.email);
         sendLoginEmail(p.email, p.method);
         const u = auth.current();
-        if (u.passwordHash) return finishLogin("You're signed in");
+        if (u.passwordHash) return finishLogin(greet(p.email, true));
         store.set("just_verified", true);
         location.hash = "#/set-password";
       });
@@ -794,10 +830,10 @@
         const u = auth.current();
         u.passwordHash = await hash(u.email + ":" + f.pw.value);
         auth.saveUser(u);
-        done("Password saved – you're signed in");
+        done("Password saved · " + greet(u.email, false));
       });
       document.getElementById("skipPw").addEventListener("click", () => {
-        if (store.get("just_verified", false)) done("You're signed in");
+        if (store.get("just_verified", false)) done(greet(auth.current().email, false));
         else location.hash = "#/account";
       });
     }
@@ -812,7 +848,7 @@
         if ((await hash(email + ":" + f.pw.value)) !== u.passwordHash) return toast("Incorrect password");
         auth.signIn(email);
         sendLoginEmail(email, "password");
-        finishLogin("Welcome back, " + esc(u.name || ""));
+        finishLogin(greet(email, true));
       });
     }
   }
