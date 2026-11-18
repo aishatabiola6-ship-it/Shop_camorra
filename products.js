@@ -10,6 +10,125 @@
 window.PRODUCTS = [
   /* ---------------- For Her ---------------- */
   {
+    id: "rose-izumi",
+    name: "Rose Air-Pulse Stimulator (IZUMI)",
+    category: "For Her",
+    price: 20000,
+    color: "#d32f2f",
+    images: ["images/rose-izumi.jpg"],
+    description: "The famous rose toy. Shaped like a soft red rose bud, it uses gentle pulses of air instead of direct vibration for an intense, touch-free sensation. Comes with a charging base and a display dome.",
+    features: ["Air-pulse (suction) stimulation", "Several intensity levels", "Soft body-safe silicone", "USB charging base", "Display dome – looks like decor"],
+    howItWorks: [
+      "Place the rose on its base and charge with the USB cable before first use.",
+      "Press the button on the rose to switch it on at the lowest level.",
+      "Place the small opening gently over the clitoris so it forms a light seal – a little water-based lube helps.",
+      "Press again to increase the intensity; the motor pushes and pulls air through the opening, creating a sucking, pulsing feeling without rubbing.",
+      "Hold the button to switch off, wash the tip with warm soapy water and dry before returning it to its base."
+    ]
+  },
+  {
+    id: "lipstick-vibrator",
+    name: "Galaku Secret Lipstick Vibrator",
+    category: "For Her",
+    price: 14000,
+    color: "#b71c1c",
+    images: ["images/lipstick-vibrator-1.jpg", "images/lipstick-vibrator-2.jpg", "images/lipstick-vibrator-3.jpg"],
+    description: "Looks just like a lipstick – nobody will know what's in your handbag. Pull off the silver cap and a small but powerful bullet vibrator is underneath.",
+    features: ["Disguised as a lipstick", "Multiple vibration modes", "Waterproof", "Travel-friendly", "Rechargeable"],
+    howItWorks: [
+      "Charge it fully before first use.",
+      "Pull off the silver cap to reveal the vibrator.",
+      "Press the button to switch on; press again to move through the vibration modes.",
+      "Use externally on the clitoris, nipples or other sensitive areas, with a little water-based lube for comfort.",
+      "Hold the button to switch off, wash with warm soapy water, dry and replace the cap."
+    ]
+  },
+  {
+    id: "lilo-pig",
+    name: "LILO 'Lick the Pig' Tongue Vibrator",
+    category: "For Her",
+    price: 13000,
+    color: "#f8bbd0",
+    images: ["images/lilo-pig.jpg"],
+    description: "A cute little pig with a secret – its soft flicking tongue mimics oral sex. Fun design, quiet motor, and small enough to hide anywhere.",
+    features: ["Soft licking tongue", "6 frequencies", "Quiet motor for privacy", "Waterproof", "USB charging"],
+    howItWorks: [
+      "Charge with the USB cable until the light shows full.",
+      "Press the button to switch on and press again to change between the 6 licking speeds.",
+      "Hold the soft tongue gently against the clitoris or nipples – the tongue flicks back and forth like a real tongue.",
+      "Add a little water-based lube for a smoother feel.",
+      "Hold the button to switch off and wash with warm soapy water."
+    ]
+  },
+  {
+    id: "orgasm-pen",
+    name: "Orgasm Pen G-Spot Vibrator",
+    category: "For Her",
+    price: 15000,
+    color: "#ec407a",
+    images: ["images/orgasm-pen.jpg"],
+    description: "Slim, curved and elegant with a gold crown base. The flexible tip is shaped to find the G-spot or to pinpoint the clitoris. Perfect for beginners.",
+    features: ["Slim, flexible curved tip", "Multiple vibration modes", "Body-safe silicone", "USB rechargeable", "Colours: pink, purple, rose, blue"],
+    howItWorks: [
+      "Charge with the USB cable before first use.",
+      "Press and hold the button to switch on; tap it to change modes.",
+      "For external use, press the tip lightly on the clitoris.",
+      "For G-spot play, apply water-based lube, insert the curved tip and angle it towards the belly button.",
+      "Hold the button to switch off, then wash and dry."
+    ]
+  },
+  {
+    id: "mini-wand",
+    name: "Mini Wand Massager",
+    category: "For Her",
+    price: 16000,
+    color: "#c2185b",
+    images: ["images/mini-wand.jpg"],
+    description: "A compact, rechargeable wand with a soft, flexible head and deep, rumbly vibrations. Great for intimate play and for easing sore muscles.",
+    features: ["Soft flexible head", "Multiple speeds & patterns", "Cordless, USB rechargeable", "Gold-tone accents", "Colours: red, pink"],
+    howItWorks: [
+      "Charge fully with the USB cable.",
+      "Press the power button to switch on; use the second button to change speed and pattern.",
+      "Use over clothes or directly on the skin – start on the lowest setting, it's strong.",
+      "Press on the clitoris, inner thighs, or any sore muscle; move it slowly to find what feels good.",
+      "Hold power to switch off and wipe clean with a damp soapy cloth (don't submerge the base)."
+    ]
+  },
+  {
+    id: "tess-realistic-vibrator",
+    name: "Tess Realistic Vibrator",
+    category: "For Her",
+    price: 20000,
+    color: "#f48fb1",
+    images: ["images/tess-realistic-vibrator.jpg"],
+    description: "A soft, lifelike vibrator with a realistic shape and texture, plus a stylish scaled handle. Multiple vibration frequencies for deep, satisfying stimulation.",
+    features: ["Realistic shape & texture", "Multiple vibration frequencies", "Soft-touch silicone", "Easy 3-button control", "USB rechargeable"],
+    howItWorks: [
+      "Charge with the USB cable before first use.",
+      "Press the power button on the handle to switch on; use the + and mode buttons to change strength and pattern.",
+      "Apply plenty of water-based lube.",
+      "Insert slowly and move at your own pace, or use the tip externally.",
+      "Hold power to switch off and wash with warm soapy water."
+    ]
+  },
+  {
+    id: "thrusting-rabbit",
+    name: "Thrusting Heated Rabbit Vibrator",
+    category: "For Her",
+    price: 32000,
+    color: "#e53935",
+    images: ["images/thrusting-rabbit.jpg"],
+    description: "Our most advanced toy: a rabbit vibrator that thrusts in and out by itself, warms up to 42 °C for a natural feel, and has a vibrating 'bunny' for the clitoris at the same time.",
+    features: ["Automatic thrusting (stretch) shaft", "Warms to 42 °C", "12 vibration functions", "Separate clitoral 'bunny' vibrator", "Easy-grip handle, rechargeable", "Colours: red, purple"],
+    howItWorks: [
+      "Charge fully before first use.",
+      "Hold the power button to switch on; use the separate buttons for vibration, thrusting and heating.",
+      "Turn on heating a minute or two before use so the shaft is pleasantly warm.",
+      "Apply water-based lube, insert the shaft and rest the bunny ears against the clitoris.",
+      "The shaft moves in and out on its own while both parts vibrate – adjust each to taste. Switch off and wash after use."
+    ]
+  },
+  {
     id: "app-wearable-vibrator",
     name: "App-Controlled Wearable Vibrator",
     category: "For Her",
@@ -115,6 +234,99 @@ window.PRODUCTS = [
     ]
   },
 
+  /* ---------------- Bondage ---------------- */
+  {
+    id: "restraint-straps",
+    name: "Wrist & Ankle Restraint Straps",
+    category: "Bondage",
+    price: 9000,
+    color: "#212121",
+    images: ["images/restraint-straps.jpg"],
+    description: "Soft, adjustable Velcro cuffs joined by a strap that links wrists to ankles. An easy, beginner-friendly way to explore light bondage with a partner.",
+    features: ["2 wrist + 2 ankle cuffs", "Adjustable Velcro fastening", "Soft nylon webbing", "Quick release – no keys"],
+    howItWorks: [
+      "Agree on a safe word with your partner before you start.",
+      "Wrap a cuff around each wrist and ankle and fasten the Velcro – leave room to slide two fingers underneath.",
+      "The connecting strap holds the wrists and ankles close together.",
+      "Check in often; if hands or feet tingle, go cold or change colour, release straight away.",
+      "To release, simply pull the Velcro apart."
+    ]
+  },
+  {
+    id: "bondage-rope",
+    name: "Soft Cotton Bondage Rope (10 m)",
+    category: "Bondage",
+    price: 6000,
+    color: "#6a1b9a",
+    images: ["images/bondage-rope-1.jpg", "images/bondage-rope-2.jpg"],
+    description: "Soft, braided cotton rope that's gentle on skin and holds knots well. Ideal for tying wrists, ankles or decorative body ties.",
+    features: ["10 metres long", "Soft braided cotton", "Gentle on skin", "Colours: red, black, pink, purple"],
+    howItWorks: [
+      "Agree on a safe word and keep safety scissors nearby.",
+      "Fold the rope in half and start with a simple, loose wrist tie.",
+      "Never tie around the neck, and keep ties loose enough to fit two fingers underneath.",
+      "Watch for numbness, tingling or cold skin – untie straight away if they appear.",
+      "Hand-wash in cool water and air-dry."
+    ]
+  },
+
+  /* ---------------- Lingerie ---------------- */
+  {
+    id: "red-lingerie-set",
+    name: "Red Strappy Lingerie Set",
+    category: "Lingerie",
+    price: 15000,
+    color: "#c62828",
+    images: ["images/red-lingerie-set.jpg"],
+    description: "A bold red set with a strappy open-cup bra, waist belt, sheer mesh mini skirt and thigh garters. Made to turn heads in the bedroom.",
+    features: ["Open-cup strappy bra", "Waist belt with ring detail", "Sheer mesh mini skirt", "Thigh garters", "Stretchy, adjustable fit"],
+    howItWorks: [
+      "Put on the skirt first, then fasten the waist belt.",
+      "Step into the thigh garters and slide them up to mid-thigh.",
+      "Put on the bra, cross the neck straps and tie behind the neck.",
+      "Adjust the straps for a snug, comfortable fit. Pair with nipple pasties for an extra-spicy look.",
+      "Hand-wash in cool water and dry flat."
+    ],
+    note: "Please tell us your size (S, M, L, XL) in the note at checkout."
+  },
+  {
+    id: "nipple-pasties",
+    name: "Nipple Pasties (Pair)",
+    category: "Lingerie",
+    price: 2500,
+    color: "#ad1457",
+    images: ["images/nipple-pasties.jpg"],
+    description: "Cheeky self-adhesive nipple covers in cross and heart shapes, with playful messages. Wear them under sheer tops or with lingerie for a teasing look.",
+    features: ["Self-adhesive, no glue needed", "Cross and heart shapes", "Many colours and messages", "Skin-friendly adhesive"],
+    howItWorks: [
+      "Make sure the skin is clean, dry and free from lotion or oil.",
+      "Peel off the backing paper.",
+      "Centre the pasty over the nipple and press gently for a few seconds.",
+      "To remove, peel slowly from the edge. Each pair is for single use."
+    ],
+    note: "Tell us the design and colour you want in the note at checkout."
+  },
+
+  /* ---------------- Health & Care ---------------- */
+  {
+    id: "yoni-soap",
+    name: "Rose Yoni Soap Bar",
+    category: "Health & Care",
+    price: 4000,
+    color: "#f06292",
+    images: ["images/yoni-soap-1.jpg", "images/yoni-soap-2.jpg"],
+    description: "A handmade rose-scented soap bar made with plant herbs for gentle daily washing of the intimate area. Lathers richly and comes with a foaming mesh bag. 100 g (3.53 oz).",
+    features: ["Handmade with plant herbs", "Rose scent", "Rich lather", "Foaming mesh bag included"],
+    howItWorks: [
+      "Put the soap in the mesh bag and wet it under running water.",
+      "Rub the bag to make a rich foam.",
+      "Gently wash the outer intimate area (vulva) only with the foam.",
+      "Rinse well with clean water and pat dry.",
+      "Let the soap dry between uses so it lasts longer."
+    ],
+    note: "For external use only – never use soap inside the vagina. Stop using if you notice irritation. If you have itching, unusual discharge or odour, please see a doctor."
+  },
+
   /* ---------------- Couples & Games ---------------- */
   {
     id: "drunk-in-love",
@@ -166,11 +378,11 @@ window.PRODUCTS = [
     ]
   },
 
-  /* ---------------- Health ---------------- */
+  /* ---------------- Health & Care ---------------- */
   {
     id: "combo-test-kit",
     name: "HIV / Hepatitis B & C / Syphilis Combo Test Kit",
-    category: "Health",
+    category: "Health & Care",
     price: 25000,
     color: "#e64a19",
     images: ["images/test-kit.jpg"],
