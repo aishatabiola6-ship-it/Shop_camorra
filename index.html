@@ -1,23 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Camorra</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Preshy Emporium – discreet adult wellness store in Abraka, Delta State.">
+  <meta name="robots" content="noindex">
+  <title>Preshy Emporium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to Shop Camorra!</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Your one-stop shop for everything!</h2>
-            <p>Explore our exclusive deals, unique products, and more!</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Shop Camorra. All rights reserved.</p>
-    </footer>
+  <!-- Top bar (hidden on opening page) -->
+  <header id="topbar" class="topbar hidden">
+    <a href="#/shop" class="brand">Preshy <span>Emporium</span></a>
+    <nav class="nav">
+      <a href="#/shop">Shop</a>
+      <a href="#/about">About</a>
+      <a href="#/account" id="accountLink">Sign in</a>
+      <a href="#/cart" class="cart-btn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+        <span id="cartCount" class="badge">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <main id="app"></main>
+
+  <footer id="footer" class="footer hidden">
+    <p><strong>Preshy Emporium</strong> · Abraka, Delta State, Nigeria</p>
+    <p><a href="mailto:egwuenuprecious18@gmail.com">egwuenuprecious18@gmail.com</a></p>
+    <p class="muted">Strictly 18+. All orders are packed discreetly with no product names on the parcel.</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="config.js"></script>
+  <script src="products.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
