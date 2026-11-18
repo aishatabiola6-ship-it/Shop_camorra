@@ -162,7 +162,7 @@
     return `
     <section class="hero">
       <h1>Discover what feels good</h1>
-      <p>Toys, games, wellness and more, hand-picked by Preshy. Discreet packaging, delivery around Abraka and across Nigeria.</p>
+      <p>Toys, games, wellness and more, hand-picked by Preshy. Discreet packaging and delivery across Nigeria.</p>
     </section>
     <section class="container">
       <div class="toolbar">
@@ -316,7 +316,7 @@
       <form id="deliveryForm" class="form">
         <label>Full name<input name="name" required autocomplete="name" value="${esc(u.name || "")}"></label>
         <label>WhatsApp number<input name="whatsapp" type="tel" required autocomplete="tel" placeholder="e.g. 0803 123 4567" pattern="[0-9+ ]{10,16}"></label>
-        <label>Delivery address<textarea name="address" required rows="3" placeholder="House number, street, area, town (e.g. Abraka) and a nearby landmark"></textarea></label>
+        <label>Delivery address<textarea name="address" required rows="3" placeholder="House number, street, area, town/city and a nearby landmark"></textarea></label>
         <label>Anything else? (optional)<textarea name="note" rows="2" placeholder="Size, colour/design, best time to deliver…"></textarea></label>
         <button class="btn primary block" type="submit">Submit delivery details</button>
       </form>
@@ -372,7 +372,7 @@
     <section class="container narrow">
       <h1>Delivery, refunds &amp; privacy</h1>
       <div class="panel"><h3>Delivery</h3>
-        <p>We deliver within Abraka and across Nigeria. Delivery fees depend on your location and are not included at checkout. After you pay, we'll message you on WhatsApp with your delivery date and fee.</p>
+        <p>We deliver across Nigeria. Delivery fees depend on your location and are not included at checkout. After you pay, we'll message you on WhatsApp with your delivery date and fee.</p>
         <p>Every parcel is packed discreetly – there are no product names or store branding on the outside.</p></div>
       <div class="panel"><h3>Payments</h3>
         <p>Payments are processed securely by Flutterwave (card, bank transfer or USSD). We never see or store your card details.</p></div>
@@ -384,7 +384,7 @@
         <p>We only use your name, WhatsApp number and address to deliver your order and contact you about it. We never share your details or tell anyone what you bought.</p></div>
       <div class="panel"><h3>Age</h3><p>All products are for adults aged 18 and over only.</p></div>
       <div class="panel"><h3>Contact</h3>
-        <p>WhatsApp: <a href="${waLink()}" target="_blank" rel="noopener">${WA_DISPLAY}</a><br>Email: <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a><br>${esc(CFG.location)}</p></div>
+        <p>WhatsApp: <a href="${waLink()}" target="_blank" rel="noopener">${WA_DISPLAY}</a><br>Email: <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a></p></div>
     </section>`;
   }
 
@@ -497,21 +497,20 @@
     return `
     <section class="container narrow">
       <h1>About Preshy Emporium</h1>
-      <p>Preshy Emporium is an adult wellness boutique based in <strong>Abraka, Delta State</strong>. We believe everyone deserves to feel confident and informed about their pleasure, so every product comes with a clear explanation of how it works.</p>
+      <p>Preshy Emporium is an adult wellness boutique. We believe everyone deserves to feel confident and informed about their pleasure, so every product comes with a clear explanation of how it works.</p>
       <div class="panel">
         <h3>Our promise</h3>
         <ul class="features">
           <li>Body-safe materials only</li>
           <li>Discreet, unbranded packaging</li>
           <li>Private, judgement-free service</li>
-          <li>Delivery in Abraka and nationwide</li>
+          <li>Delivery nationwide</li>
         </ul>
       </div>
       <div class="panel">
         <h3>Contact</h3>
         <p>WhatsApp: <a href="${waLink()}" target="_blank" rel="noopener">${WA_DISPLAY}</a></p>
         <p>Email: <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a></p>
-        <p>Location: ${esc(CFG.location)}</p>
         <p>TikTok: <a href="${esc(CFG.tiktok)}" target="_blank" rel="noopener">@delta_intimacyhubng</a></p>
       </div>
     </section>`;

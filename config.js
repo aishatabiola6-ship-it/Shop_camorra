@@ -26,7 +26,7 @@ window.STORE_CONFIG = {
    * Never put the SECRET key here.
    */
   flutterwave: {
-    publicKey: ""
+    publicKey: "FLWPUBK_TEST-898a4a29e06abf6a3167fb6c45eafdb4-X"   // TEST key – replace with the LIVE key when going live
   },
 
   emailjs: {
