@@ -112,11 +112,16 @@
       toast("Code sent to " + esc(email));
       return true;
     }
-    if (r.status === 502 || r.status === 400) {
-      toast("Couldn't send the code. Please check the email address and try again.");
+    if (r.status === 400) {
+      toast("Please check the email address and try again.");
       return false;
     }
-    // 2) Automation not set up yet (or running locally): demo mode, show the code on screen.
+    if (r.status !== 503 && r.status !== 404 && r.status !== 0) {
+      // The email system is set up but something failed – say so instead of silently using demo mode.
+      toast("Sorry, we couldn't send the code right now (error " + r.status + "). Please try again in a minute or contact us on WhatsApp.", 7000);
+      return false;
+    }
+    // 2) Email automation not set up (503) or not available (404 / offline): demo mode, show the code on screen.
     const code = String(Math.floor(100000 + Math.random() * 900000));
     pending.set({ email, method, server: false, codeHash: await hash(code), expires: Date.now() + 10 * 60 * 1000 });
     try { sessionStorage.setItem("pe_demo_code", code); } catch (e) { /* ignore */ }

@@ -15,7 +15,17 @@ const sign = (email, code, expires) =>
   crypto.createHmac("sha256", (process.env.SHEET_TOKEN || "").trim()).update(`${email}|${code}|${expires}`).digest("hex");
 const same = (a, b) => a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
+// Any unexpected crash is logged (Netlify -> Logs -> Functions -> auth-email) instead of failing silently.
 export default async (req) => {
+  try {
+    return await handle(req);
+  } catch (e) {
+    console.error("[auth-email] CRASH:", e && e.stack ? e.stack : e);
+    return json(500, { ok: false, error: "server_error" });
+  }
+};
+
+async function handle(req) {
   if (req.method !== "POST") return json(405, { ok: false, error: "method_not_allowed" });
   if (!(process.env.SHEET_WEBHOOK_URL || "").trim() || !(process.env.SHEET_TOKEN || "").trim()) return json(503, { ok: false, error: "not_configured" });
 
@@ -53,6 +63,7 @@ export default async (req) => {
         <p style="font-size:34px;letter-spacing:8px;font-weight:bold;color:#c2185b;margin:18px 0">${code}</p>
         <p style="color:#7a6070">It expires in 10 minutes. If you didn't ask for this code, you can safely ignore this email.</p>`)
     });
+    console.log(`[auth-email] code for ${email.replace(/^(.).*(@.*)$/, "$1***$2")}: ${sent ? "sent" : "FAILED (see [sheet] line above)"}`);
     if (!sent) return json(502, { ok: false, error: "send_failed" });
     return json(200, { ok: true, token: sign(email, code, expires), expires });
   }
@@ -89,4 +100,4 @@ export default async (req) => {
   }
 
   return json(400, { ok: false, error: "unknown_action" });
-};
+}

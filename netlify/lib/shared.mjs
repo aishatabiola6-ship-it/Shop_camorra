@@ -111,10 +111,16 @@ export function waNumber(n) {
   return d;
 }
 
-/** Send data to the Google Apps Script (adds/updates an order row, or sends an email). */
+/** Send data to the Google Apps Script (adds/updates an order row, or sends an email). Returns true/false. */
 export async function sendToSheet(payload) {
+  return (await callScript(payload)).ok;
+}
+
+/** Same as sendToSheet but returns { ok, error } with Google's error message. */
+export async function callScript(payload) {
   const url = (process.env.SHEET_WEBHOOK_URL || "").trim();
-  if (!url) return false;
+  if (!url) { console.error("[sheet] SHEET_WEBHOOK_URL is not set"); return { ok: false, error: "SHEET_WEBHOOK_URL is not set in Netlify" }; }
+  const what = payload.action === "email" ? `email "${String(payload.subject || "").slice(0, 60)}"` : `order row ${payload.ref}`;
   try {
     const r = await fetch(url, {
       method: "POST",
@@ -122,11 +128,18 @@ export async function sendToSheet(payload) {
       body: JSON.stringify({ ...payload, token: (process.env.SHEET_TOKEN || "").trim() }),
       redirect: "follow"
     });
-    if (!r.ok) return false;
-    const body = await r.json().catch(() => null);
-    return !!(body && body.ok);
+    const text = await r.text();
+    let body = null;
+    try { body = JSON.parse(text); } catch (e) { /* not JSON – probably a Google error page */ }
+    if (r.ok && body && body.ok) { console.log(`[sheet] OK: ${what}`); return { ok: true }; }
+    // Google error pages hide the real message inside HTML – pull out the readable part.
+    const plain = text.replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const error = `HTTP ${r.status} – ${body ? JSON.stringify(body) : plain.slice(0, 500)}`;
+    console.error(`[sheet] FAILED: ${what} – ${error}`);
+    return { ok: false, error };
   } catch (e) {
-    return false;
+    console.error(`[sheet] FAILED: ${what} – could not reach Google: ${e && e.message}`);
+    return { ok: false, error: "could not reach Google: " + (e && e.message) };
   }
 }
 
