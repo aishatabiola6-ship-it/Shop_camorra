@@ -65,11 +65,12 @@ export default async (req) => {
 
   // 4. Site files
   try {
-    const { config, products } = await loadSite(new URL(req.url).origin);
-    add(products.length > 0, `Website files load (${products.length} products)`);
+    const { config, products, source } = await loadSite(new URL(req.url).origin);
+    add(products.length > 0, `Prices &amp; settings load (${products.length} products, from ${source.startsWith("disk") ? "function files" : "website"})`);
     add(/^FLWPUBK/.test((config.flutterwave && config.flutterwave.publicKey) || ""), "Flutterwave public key is on the website");
   } catch (e) {
-    add(false, "Website files load", "Could not read config.js / products.js from the site.");
+    add(false, "Prices &amp; settings load", "Could not read config.js / products.js. Send a screenshot of this line to your developer. Details: "
+      + String(e && e.message).replace(/[<>&]/g, "").slice(0, 400));
   }
 
   const allOk = rows.every((r) => r.ok);

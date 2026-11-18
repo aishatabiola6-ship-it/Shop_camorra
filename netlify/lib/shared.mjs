@@ -8,6 +8,9 @@
  *   SHEET_TOKEN        Any secret phrase; the same text goes in the Apps Script TOKEN line
  */
 import vm from "node:vm";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
@@ -35,14 +38,52 @@ export async function verifyTransaction({ transactionId, txRef }) {
   }
 }
 
-/** Load the store settings and real prices from the deployed site (customers can't change them in their browser). */
+/**
+ * Load the store settings and real prices (customers can't change these in their browser).
+ * 1st choice: the copies shipped with the function (netlify.toml -> included_files).
+ * Backup: download them from the live site.
+ */
 export async function loadSite(origin) {
-  const [cfg, prods] = await Promise.all([fetch(origin + "/config.js"), fetch(origin + "/products.js")]);
-  if (!cfg.ok || !prods.ok) throw new Error("could not load site files");
-  const ctx = { window: {} };
-  vm.runInNewContext(await cfg.text(), ctx, { timeout: 1000 });
-  vm.runInNewContext(await prods.text(), ctx, { timeout: 1000 });
-  return { config: ctx.window.STORE_CONFIG || {}, products: ctx.window.PRODUCTS || [] };
+  const errors = [];
+  const parse = (cfgText, prodText, source) => {
+    const ctx = { window: {} };
+    vm.runInNewContext(cfgText, ctx, { timeout: 1000 });
+    vm.runInNewContext(prodText, ctx, { timeout: 1000 });
+    const products = ctx.window.PRODUCTS || [];
+    if (!products.length) throw new Error("no products found");
+    return { config: ctx.window.STORE_CONFIG || {}, products, source };
+  };
+
+  // 1) From disk
+  const dirs = new Set();
+  const add = (d) => { if (d) dirs.add(d); };
+  add(process.cwd());
+  add(process.env.LAMBDA_TASK_ROOT);
+  try {
+    let d = path.dirname(fileURLToPath(import.meta.url));
+    for (let i = 0; i < 6; i++) { add(d); d = path.dirname(d); }
+  } catch (e) { /* import.meta not available */ }
+  for (const d of dirs) {
+    try {
+      const c = await fs.readFile(path.join(d, "config.js"), "utf8");
+      const p = await fs.readFile(path.join(d, "products.js"), "utf8");
+      return parse(c, p, "disk:" + d);
+    } catch (e) { /* try next */ }
+  }
+  errors.push("not found on disk (" + [...dirs].join(", ") + ")");
+
+  // 2) From the live site
+  const origins = [...new Set([origin, process.env.URL, process.env.DEPLOY_PRIME_URL, process.env.DEPLOY_URL].filter(Boolean))];
+  for (const o of origins) {
+    try {
+      const [cfg, prods] = await Promise.all([fetch(o + "/config.js"), fetch(o + "/products.js")]);
+      if (!cfg.ok || !prods.ok) throw new Error(`HTTP ${cfg.status}/${prods.status}`);
+      return parse(await cfg.text(), await prods.text(), "web:" + o);
+    } catch (e) {
+      errors.push(o + " → " + (e && e.message));
+    }
+  }
+  throw new Error(errors.join(" | "));
 }
 
 export async function loadProducts(origin) {
