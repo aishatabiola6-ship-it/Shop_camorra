@@ -74,10 +74,26 @@
 
   function updateBadge() {
     const n = cart.count();
-    const b = document.getElementById("cartCount");
-    b.textContent = n;
-    b.style.display = n ? "inline-flex" : "none";
+    ["cartCount", "tabCount"].forEach((id) => {
+      const b = document.getElementById(id);
+      if (!b) return;
+      b.textContent = n;
+      b.style.display = n ? "inline-flex" : "none";
+    });
   }
+
+  /* ---------------- saved (wishlist) ---------------- */
+  const saved = {
+    list() { return store.get("saved", []); },
+    has(id) { return this.list().includes(id); },
+    toggle(id) {
+      const l = this.list(); const i = l.indexOf(id);
+      if (i === -1) l.unshift(id); else l.splice(i, 1);
+      store.set("saved", l); return i === -1;
+    }
+  };
+  const HEART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.3-9.4C1.5 7.3 3.7 4 7.1 4c2 0 3.6 1.1 4.9 2.8C13.3 5.1 14.9 4 16.9 4c3.4 0 5.6 3.3 4.4 6.6C19.5 15.4 12 20 12 20z"/></svg>`;
+  const heartBtn = (p) => `<button class="heart ${saved.has(p.id) ? "on" : ""}" data-heart="${p.id}" aria-label="Save ${esc(p.name)}">${HEART}</button>`;
 
   /* ---------------- accounts ---------------- */
   const auth = {
@@ -171,25 +187,32 @@
   function viewOpening() {
     return `
     <section class="opening">
-      <div class="opening-glow"></div>
-      <div class="opening-inner">
+      <div class="opening-card">
         <h1 class="logo">Preshy<br><span>Emporium</span></h1>
         <p class="tagline">Pleasure, wellness &amp; intimacy – delivered discreetly.</p>
-        <div class="age-box">
-          <p>This store sells adult products.<br>You must be <strong>18 or older</strong> to enter.</p>
-          <div class="row center">
-            <button class="btn primary" id="enterBtn">I'm 18+ · Enter</button>
-            <a class="btn ghost" href="https://www.google.com">Leave</a>
-          </div>
-        </div>
+      </div>
+      <div class="age-box">
+        <h2>Welcome 💕</h2>
+        <p>This store sells adult products. You must be <strong>18 or older</strong> to enter.</p>
+        <button class="btn primary" id="enterBtn">I'm 18+ · Enter</button>
+        <a class="leave" href="https://www.google.com">I'm under 18 – leave</a>
       </div>
     </section>`;
   }
 
-  function addButton(p) {
-    return p.options
-      ? `<a class="btn small primary add" href="#/product/${p.id}">Choose ${esc(p.options.label.toLowerCase())}</a>`
-      : `<button class="btn small primary add" data-id="${p.id}">Add to cart</button>`;
+  function productCard(p) {
+    return `
+      <article class="card">
+        <a href="#/product/${p.id}" class="card-link">
+          ${productArt(p)}
+          <div class="card-body">
+            <h3>${esc(p.name)}</h3>
+            <p class="card-sub">${esc(p.category)}${p.options ? " · " + p.options.values.length + " " + esc(p.options.label.toLowerCase()) + "s" : ""}</p>
+            <p class="price">${money(p.price)}</p>
+          </div>
+        </a>
+        ${heartBtn(p)}
+      </article>`;
   }
 
   function viewShop(params) {
@@ -199,100 +222,113 @@
     const list = PRODUCTS.filter((p) =>
       (active === "All" || p.category === active) &&
       (!q || (p.name + " " + p.description + " " + p.category).toLowerCase().includes(q)));
-
     const me = auth.current();
+    const feature = findProduct("rose-izumi");
     return `
-    <section class="hero">
-      ${me && me.name ? `<p class="hello">Hi ${esc(me.name.split(" ")[0])} ✨</p>` : ""}
-      <h1>Discover what feels good</h1>
-      <p>Toys, games, wellness and more, hand-picked by Preshy. Discreet packaging and delivery across Nigeria.</p>
-    </section>
     <section class="container">
-      <div class="toolbar">
-        <input id="search" type="search" placeholder="Search products…" value="${esc(params.q || "")}">
+      <div class="home-head">
+        <div>
+          <p class="hello">${me && me.name ? "Hi " + esc(me.name.split(" ")[0]) + " ✨" : "Welcome ✨"}</p>
+          <h1>Find your favourite</h1>
+        </div>
       </div>
+      <label class="search">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Search toys, games, lingerie…" value="${esc(params.q || "")}" aria-label="Search">
+      </label>
+      ${active === "All" && !q && feature ? `
+      <a class="banner" href="#/product/${feature.id}">
+        <div class="b-text">
+          <span class="pill">Best seller</span>
+          <h2>The Rose is here 🌹</h2>
+          <span class="b-btn">Shop now →</span>
+        </div>
+        <div class="b-img"><img src="${esc(feature.images[0])}" alt=""></div>
+      </a>` : ""}
       <div class="chips">
         ${cats.map((c) => `<a class="chip ${c === active ? "on" : ""}" href="#/shop?cat=${encodeURIComponent(c)}">${esc(c)}</a>`).join("")}
       </div>
       <div class="grid">
-        ${list.length ? list.map((p) => `
-          <article class="card">
-            <a href="#/product/${p.id}" class="card-link">
-              ${productArt(p)}
-              <div class="card-body">
-                <h3>${esc(p.name)}</h3>
-                <p class="price">${money(p.price)}</p>
-              </div>
-            </a>
-            ${addButton(p)}
-          </article>`).join("") : `<p class="muted">No products match your search.</p>`}
+        ${list.length ? list.map(productCard).join("") : `<p class="muted">No products match your search.</p>`}
       </div>
+    </section>`;
+  }
+
+  function viewSaved() {
+    const list = saved.list().map(findProduct).filter(Boolean);
+    return `
+    <section class="container">
+      <div class="page-title"><h1>Saved</h1><span class="muted">${list.length} item${list.length === 1 ? "" : "s"}</span></div>
+      ${list.length ? `<div class="grid" style="margin-top:14px">${list.map(productCard).join("")}</div>` : `
+      <div class="empty"><div class="ic">♡</div><h2>Nothing saved yet</h2>
+        <p class="muted">Tap the heart on any product to save it for later.</p>
+        <a class="btn primary" href="#/shop">Explore products</a></div>`}
     </section>`;
   }
 
   function viewProduct(id) {
     const p = findProduct(id);
     if (!p) return `<section class="container"><p>Product not found. <a href="#/shop">Back to shop</a></p></section>`;
-    const related = PRODUCTS.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 3);
+    const related = PRODUCTS.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 4);
     return `
     <section class="container product">
-      <a href="#/shop" class="back">← Back to shop</a>
+      <div class="pdp-top">
+        <a href="#/shop" class="back"><span class="icon-back">‹</span> Back</a>
+        ${heartBtn(p)}
+      </div>
       <div class="product-grid">
-        <div>${productArt(p, true)}
+        <div class="gallery">${productArt(p, true)}
           ${p.images && p.images.length > 1 ? `<div class="thumbs">${p.images.map((src, i) =>
             `<button class="thumb-btn ${i === 0 ? "on" : ""}" data-src="${esc(src)}"><img src="${esc(src)}" alt=""></button>`).join("")}</div>` : ""}
         </div>
         <div>
           <p class="eyebrow">${esc(p.category)}</p>
-          <h1>${esc(p.name)}</h1>
-          <p class="price big">${money(p.price)}</p>
+          <div class="title-row"><h1>${esc(p.name)}</h1><p class="price big">${money(p.price)}</p></div>
+          <p class="lead">${esc(p.description)}</p>
 
-          <h2 class="section-title">Description</h2>
-          <p>${esc(p.description)}</p>
+          ${p.options ? `
+          <div class="opts">
+            <p class="opt-label">${esc(p.options.label)} · <strong id="optChosen">${esc(p.options.values[0])}</strong></p>
+            <div class="opt-row">${p.options.values.map((v, i) =>
+              `<button type="button" class="opt ${i === 0 ? "on" : ""}" data-opt="${esc(v)}">${esc(v)}</button>`).join("")}</div>
+          </div>` : ""}
+
+          <h2 class="section-title">Highlights</h2>
           <ul class="features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
 
           <h2 class="section-title">How it works</h2>
           <ol class="steps">${p.howItWorks.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
           ${p.note ? `<div class="note"><strong>Important:</strong> ${esc(p.note)}</div>` : ""}
 
-          ${p.options ? `
-          <div class="opts">
-            <p class="opt-label">${esc(p.options.label)}: <strong id="optChosen">${esc(p.options.values[0])}</strong></p>
-            <div class="opt-row">${p.options.values.map((v, i) =>
-              `<button type="button" class="opt ${i === 0 ? "on" : ""}" data-opt="${esc(v)}">${esc(v)}</button>`).join("")}</div>
-          </div>` : ""}
-          <div class="buy">
+          <div class="assure"><span>🔒 Secure payment · Flutterwave</span><span>📦 Discreet packaging</span><span>💬 Delivery info on WhatsApp</span></div>
+
+          <div class="buy sticky">
             <div class="qty">
               <button type="button" data-step="-1" aria-label="Decrease">−</button>
-              <input id="qty" type="number" min="1" value="1" inputmode="numeric">
+              <input id="qty" type="number" min="1" value="1" inputmode="numeric" aria-label="Quantity">
               <button type="button" data-step="1" aria-label="Increase">+</button>
             </div>
-            <button class="btn primary" id="addBtn" data-id="${p.id}">Add to cart</button>
+            <button class="btn primary" id="addBtn" data-id="${p.id}" data-price="${p.price}">Add to bag · ${money(p.price)}</button>
           </div>
-          <p class="muted small">Packed discreetly · Secure payment with Flutterwave (card, transfer or USSD)</p>
         </div>
       </div>
       ${related.length ? `
       <h2 class="section-title">You may also like</h2>
-      <div class="grid">${related.map((r) => `
-        <article class="card"><a href="#/product/${r.id}" class="card-link">${productArt(r)}
-          <div class="card-body"><h3>${esc(r.name)}</h3><p class="price">${money(r.price)}</p></div></a>
-          ${addButton(r)}</article>`).join("")}
-      </div>` : ""}
+      <div class="grid">${related.map(productCard).join("")}</div>` : ""}
     </section>`;
   }
 
   function viewCart() {
     const items = cartLines(cart.items());
     if (!items.length) {
-      return `<section class="container narrow center-text">
-        <h1>Your cart is empty</h1>
+      return `<section class="container narrow"><div class="empty"><div class="ic">👜</div>
+        <h2>Your bag is empty</h2>
         <p class="muted">Explore the shop and add as many items as you like.</p>
-        <a class="btn primary" href="#/shop">Start shopping</a></section>`;
+        <a class="btn primary" href="#/shop">Start shopping</a></div></section>`;
     }
     return `
     <section class="container narrow">
-      <h1>Your cart</h1>
+      <div class="page-title"><h1>Your bag</h1><button class="link" id="clearCart">Clear</button></div>
       <div class="cart-list">
         ${items.map(({ key, p, opt, q }) => `
         <div class="cart-row">
@@ -300,25 +336,23 @@
           <div class="cart-info">
             <a href="#/product/${p.id}"><strong>${esc(p.name)}</strong></a>
             ${opt ? `<span class="opt-chip">${esc(p.options ? p.options.label + ": " : "")}${esc(opt)}</span>` : ""}
-            <span class="muted">${money(p.price)} each</span>
-            <div class="qty sm">
-              <button data-cart="${esc(key)}" data-step="-1" aria-label="Decrease">−</button>
-              <input type="number" min="0" value="${q}" data-cartinput="${esc(key)}">
-              <button data-cart="${esc(key)}" data-step="1" aria-label="Increase">+</button>
-            </div>
+            <strong>${money(p.price * q)}</strong>
           </div>
           <div class="cart-right">
-            <strong>${money(p.price * q)}</strong>
+            <div class="qty sm">
+              <button data-cart="${esc(key)}" data-step="-1" aria-label="Decrease">−</button>
+              <input type="number" min="0" value="${q}" data-cartinput="${esc(key)}" aria-label="Quantity">
+              <button data-cart="${esc(key)}" data-step="1" aria-label="Increase">+</button>
+            </div>
             <button class="link danger" data-remove="${esc(key)}">Remove</button>
           </div>
         </div>`).join("")}
       </div>
       <div class="summary">
-        <div class="row between"><span>Items</span><span>${cart.count()}</span></div>
-        <div class="row between total"><span>Total</span><span>${money(cart.total())}</span></div>
-        <p class="muted small">Delivery fee is not included – it will be sent to you on WhatsApp after payment.</p>
-        <a class="btn primary block" href="#/checkout">Checkout</a>
-        <button class="link" id="clearCart">Clear cart</button>
+        <div class="row between"><span class="muted">Items</span><span>${cart.count()}</span></div>
+        <div class="row between total"><span>Subtotal</span><span>${money(cart.total())}</span></div>
+        <p class="muted small">Delivery fee isn't included – we'll send it to you on WhatsApp after payment.</p>
+        <a class="btn primary block" href="#/checkout">Checkout · ${money(cart.total())}</a>
       </div>
     </section>`;
   }
@@ -331,10 +365,10 @@
     const u = auth.current();
     if (!u) {
       store.set("after_login", "#/checkout");
-      return `<section class="container narrow center-text">
-        <h1>Sign in to checkout</h1>
+      return `<section class="container narrow"><div class="empty"><div class="ic">🔐</div>
+        <h2>Sign in to checkout</h2>
         <p class="muted">Create an account or sign in so we can confirm your order.</p>
-        <a class="btn primary" href="#/account">Sign in</a></section>`;
+        <a class="btn primary" href="#/account">Sign in</a></div></section>`;
     }
     if (store.get("paid_order", null)) { location.hash = "#/delivery"; return ""; }
     if (!cart.count()) { location.hash = "#/cart"; return ""; }
@@ -342,13 +376,19 @@
     return `
     <section class="container narrow">
       <h1>Checkout</h1>
-      <div class="summary">
+      <p class="sec-label">Contact</p>
+      <div class="info-row"><div class="ic">👤</div><div><p><strong>${esc(u.name || "Customer")}</strong></p><p class="muted">${esc(u.email)}</p></div></div>
+      <p class="sec-label">Order summary</p>
+      <div class="summary" style="margin-top:0">
         ${lines.map((l) => `<div class="row between line"><span>${esc(l.p.name + optLabel(l))} × ${l.q}</span><span>${money(l.p.price * l.q)}</span></div>`).join("")}
         <div class="row between total"><span>Total to pay now</span><span>${money(cart.total())}</span></div>
-        <p class="muted small">Delivery fee is <strong>not</strong> included. After payment you'll enter your delivery details, and we'll send your delivery date and fee to you on WhatsApp.</p>
       </div>
-      <button class="btn primary block pay-btn" id="payBtn">Pay ${money(cart.total())} securely with Flutterwave</button>
-      <p class="muted small center-text">Card, bank transfer or USSD · Payments are processed by Flutterwave</p>
+      <p class="sec-label">Delivery</p>
+      <div class="info-row"><div class="ic">📦</div><div><p>Delivery date &amp; fee sent to you on WhatsApp</p><p class="muted">You'll add your address right after paying · Discreet packaging</p></div></div>
+      <p class="sec-label">Payment</p>
+      <div class="info-row"><div class="ic">💳</div><div><p>Card, bank transfer or USSD</p><p class="muted">Processed securely by Flutterwave</p></div></div>
+      <button class="btn primary block pay-btn" id="payBtn">Pay ${money(cart.total())}</button>
+      <p class="muted small center-text">🔒 Secured by Flutterwave</p>
       ${PAY_DEMO ? `<p class="demo-note">Demo mode: no Flutterwave key is set in <code>config.js</code>, so payment is simulated and no money moves.</p>` : ""}
     </section>`;
   }
@@ -445,8 +485,7 @@
     }
     return `
     <section class="container auth">
-      <h1>Welcome</h1>
-      <p class="muted">Sign in to save your cart and checkout faster.</p>
+      <div class="auth-hero"><h1>Welcome 💕</h1><p>Sign in or create an account to shop and track your orders.</p></div>
       <div class="auth-buttons">
         <a class="btn social google" href="#/signin/google">
           <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
@@ -576,6 +615,12 @@
     document.getElementById("topbar").classList.toggle("hidden", !chrome);
     document.getElementById("footer").classList.toggle("hidden", !chrome);
     document.getElementById("waFloat").classList.toggle("hidden", !chrome);
+    // Bottom tabs on main pages; product pages get the sticky "Add to bag" bar instead.
+    const tabs = chrome && ["shop", "saved", "cart", "account", "about", "policies"].includes(route);
+    document.getElementById("tabbar").classList.toggle("hidden", !tabs);
+    document.body.classList.toggle("with-tabs", tabs);
+    document.body.classList.toggle("with-buybar", route === "product");
+    document.querySelectorAll("#tabbar a").forEach((a) => a.classList.toggle("on", a.dataset.tab === route));
 
     let html;
     switch (route) {
@@ -592,10 +637,11 @@
       case "about": html = viewAbout(); break;
       case "delivery": html = viewDelivery(); break;
       case "policies": html = viewPolicies(); break;
+      case "saved": html = viewSaved(); break;
       default: html = viewShop(params);
     }
     if (html === "") return;
-    if (TEST_MODE) {
+    if (TEST_MODE && route !== "") {
       html = `<div class="test-banner">Test mode – payments are not real. Use a Flutterwave test card.</div>` + html;
     }
     if (store.get("paid_order", null) && route !== "delivery") {
@@ -625,7 +671,7 @@
     // Add-to-cart buttons on cards
     app.querySelectorAll("button.add").forEach((b) => b.addEventListener("click", () => {
       cart.add(b.dataset.id, 1);
-      toast("Added to cart · <a href='#/cart'>View cart</a>");
+      toast("👜 Added to bag · <a href='#/cart'>View</a>");
     }));
 
     if (route === "") {
@@ -652,9 +698,13 @@
         app.querySelectorAll(".thumb-btn").forEach((x) => x.classList.toggle("on", x === t));
       }));
       const qty = document.getElementById("qty");
+      const addBtn = document.getElementById("addBtn");
+      const syncPrice = () => { addBtn.textContent = "Add to bag · " + money(Number(addBtn.dataset.price) * Math.max(1, parseInt(qty.value, 10) || 1)); };
       app.querySelectorAll(".buy [data-step]").forEach((b) => b.addEventListener("click", () => {
         qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) + parseInt(b.dataset.step, 10));
+        syncPrice();
       }));
+      qty.addEventListener("input", syncPrice);
       let chosen = (app.querySelector(".opt.on") || {}).dataset ? app.querySelector(".opt.on").dataset.opt : "";
       app.querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => {
         chosen = b.dataset.opt;
@@ -665,7 +715,7 @@
         const n = Math.max(1, parseInt(qty.value, 10) || 1);
         const p = findProduct(e.target.dataset.id);
         cart.add(p.options && chosen ? p.id + "|" + chosen : p.id, n);
-        toast(`${esc(p.name)}${p.options && chosen ? " (" + esc(chosen) + ")" : ""} added to cart · <a href='#/cart'>View cart</a>`);
+        toast(`👜 ${esc(p.name)}${p.options && chosen ? " (" + esc(chosen) + ")" : ""} added to bag · <a href='#/cart'>View</a>`);
       });
     }
 
@@ -852,6 +902,16 @@
       });
     }
   }
+
+  app.addEventListener("click", (e) => {
+    const h = e.target.closest("[data-heart]");
+    if (!h) return;
+    e.preventDefault(); e.stopPropagation();
+    const on = saved.toggle(h.dataset.heart);
+    h.classList.toggle("on", on);
+    toast(on ? "♥ Saved" : "Removed from saved");
+    if (parse().parts[0] === "saved") render();
+  });
 
   window.addEventListener("hashchange", render);
   updateBadge();
