@@ -1,0 +1,565 @@
+<title>For Adisa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@500;700&family=Nunito:wght@700;800&display=swap">
+<style>
+/* Layout: one screen. A sealed envelope floats in a plum night; tapping the seal opens it into a full letter where every scene plays. */
+:root{
+  --night:#2b0d26;
+  --night-2:#521545;
+  --blush:#f8c9d3;
+  --blush-mid:#f1a9ba;
+  --blush-deep:#e58aa0;
+  --paper:#fff8f1;
+  --ink:#3d1733;
+  --rose:#e3123f;
+  --rose-dark:#6d0019;
+  --leaf:#17703c;
+  --gold:#f4b731;
+  --tear:#4cb6ef;
+  --hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --loud:"Bagel Fat One","Arial Black",Impact,sans-serif;
+  --ui:"Nunito",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{
+  margin:0;box-sizing:border-box;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 35%,var(--night-2),var(--night) 72%);
+  background-color:var(--night);
+  color:var(--paper);font-family:var(--ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* floating background hearts */
+#floaters{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#floaters span{position:absolute;bottom:-60px;color:var(--blush-deep);opacity:.0;animation:floatUp linear infinite}
+@keyframes floatUp{
+  0%{transform:translateY(0) translateX(0) rotate(-10deg);opacity:0}
+  10%{opacity:.45}
+  50%{transform:translateY(-55vh) translateX(18px) rotate(8deg)}
+  90%{opacity:.35}
+  100%{transform:translateY(-115vh) translateX(-12px) rotate(-6deg);opacity:0}
+}
+
+#scene{position:fixed;inset:0;display:grid;place-items:center;z-index:1;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px))}
+
+/* ---------------- envelope ---------------- */
+#envWrap{display:flex;flex-direction:column;align-items:center;gap:28px;transition:transform .6s ease,opacity .5s ease}
+#envWrap.away{transform:translateY(40vh) scale(.8);opacity:0}
+.envelope{position:relative;width:min(80vw,360px);aspect-ratio:3/2;perspective:900px;cursor:pointer;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.45));animation:hover 3s ease-in-out infinite}
+.envelope:focus-visible{outline:3px dashed var(--blush);outline-offset:10px;border-radius:10px}
+@keyframes hover{50%{transform:translateY(-8px) rotate(-1deg)}}
+.env-back{position:absolute;inset:0;background:var(--blush-deep);border-radius:10px}
+.env-letter{position:absolute;left:7%;right:7%;top:7%;height:86%;background:var(--paper);border-radius:4px;z-index:1;
+  display:grid;place-items:start center;padding-top:10%;box-sizing:border-box;
+  font:700 clamp(18px,5vw,24px) var(--hand);color:var(--ink);
+  background-image:repeating-linear-gradient(transparent 0 17px,rgba(227,18,63,.12) 17px 18px);
+  transition:transform 1s cubic-bezier(.2,.8,.2,1) .65s}
+.env-pocket{position:absolute;inset:0;z-index:2;border-radius:10px;
+  background:linear-gradient(160deg,var(--blush),var(--blush-mid));
+  clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
+.env-pocket::after{content:"";position:absolute;inset:0;background:var(--blush-mid);opacity:.55;
+  clip-path:polygon(0 100%,50% 50%,100% 100%)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:60%;z-index:3;transform-origin:top;
+  background:linear-gradient(180deg,var(--blush-mid),var(--blush));
+  clip-path:polygon(0 0,100% 0,50% 100%);border-radius:10px 10px 0 0;
+  transition:transform .7s ease,z-index 0s linear .35s}
+.env-to{position:absolute;left:0;right:0;bottom:10%;z-index:3;text-align:center;
+  font:700 clamp(22px,6.4vw,30px) var(--hand);color:var(--ink);transition:opacity .3s}
+.env-seal{position:absolute;left:50%;top:60%;z-index:4;width:58px;height:58px;border-radius:50%;
+  transform:translate(-50%,-50%);display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#ff6a86,var(--rose) 58%,#8f0726);
+  box-shadow:0 3px 0 #7a0620,0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(255,255,255,.12);
+  color:#ffd9e1;font-size:28px;line-height:1;transition:transform .35s ease,opacity .35s ease}
+.env-seal span{animation:pulse 1.3s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}15%{transform:scale(1.25)}30%{transform:scale(1)}45%{transform:scale(1.15)}}
+.envelope.open{animation:none}
+.envelope.open .env-seal{transform:translate(-50%,-50%) scale(0) rotate(-45deg);opacity:0}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:0}
+.envelope.open .env-letter{transform:translateY(-62%)}
+.envelope.open .env-to{opacity:0}
+.hint{font:800 13px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--blush);opacity:.85;
+  animation:breathe 2s ease-in-out infinite;transition:opacity .3s}
+.hint.gone{opacity:0;animation:none}
+@keyframes breathe{50%{opacity:.4}}
+
+/* ---------------- the letter ---------------- */
+#letter{position:relative;width:min(92vw,520px);height:min(80vh,720px);border-radius:8px;overflow:hidden;
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(ellipse at 50% 0%,rgba(248,201,211,.45),transparent 60%),
+    repeating-linear-gradient(transparent 0 33px,rgba(227,18,63,.10) 33px 34px);
+  box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 1px rgba(109,0,25,.08);color:var(--ink)}
+#letter.enter{animation:unfold .8s cubic-bezier(.2,.9,.25,1.1) both}
+@keyframes unfold{from{transform:translateY(25%) scale(.45) rotate(-4deg);opacity:0}to{transform:none;opacity:1}}
+#letter::before{content:"";position:absolute;left:44px;top:0;bottom:0;width:1px;background:rgba(227,18,63,.18)}
+.salute{position:absolute;top:14px;left:58px;font:700 26px var(--hand);color:var(--rose)}
+#content{position:absolute;inset:56px 0 58px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;padding:0 22px;text-align:center}
+
+.hand{font-family:var(--hand);font-weight:700;line-height:1.1;color:var(--ink);text-wrap:balance}
+.big{font-size:clamp(36px,9.5vw,54px)}
+.mid{font-size:clamp(27px,7vw,40px)}
+.small{font-size:28px}
+.rose{color:var(--rose)}
+.muted{color:#8a6d80}
+.caret{display:inline-block;width:2px;height:.9em;margin-left:3px;background:currentColor;vertical-align:-.1em;animation:blink .7s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.pop{animation:pop .6s cubic-bezier(.2,.9,.3,1.3) both}
+.pop.late{animation-delay:.6s}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.94)}to{opacity:1;transform:none}}
+.out{transition:opacity .45s ease,transform .45s ease;opacity:0!important;transform:translateY(-10px)!important}
+
+.asalatu{font:400 clamp(42px,13vw,80px)/1 var(--loud);color:var(--leaf);letter-spacing:.02em;white-space:nowrap}
+.asalatu span{display:inline-block;text-shadow:3px 3px 0 var(--gold);animation:drop .9s cubic-bezier(.3,.7,.4,1) both}
+@keyframes drop{
+  0%{transform:translateY(-75vh) rotate(-20deg);opacity:0}
+  10%{opacity:1}
+  55%{transform:translateY(0) rotate(0)}
+  70%{transform:translateY(-22px) rotate(4deg)}
+  82%{transform:translateY(0)}
+  91%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
+}
+.cry{font-size:clamp(76px,23vw,116px);line-height:1;animation:pop .5s both,sob .5s ease-in-out .5s infinite}
+@keyframes sob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(7px) rotate(3deg)}}
+.tear{position:absolute;left:0;top:0;width:9px;height:12px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:var(--tear);pointer-events:none;opacity:.9}
+.emoji{font-size:44px;line-height:1}
+
+.me{font-family:var(--loud);color:var(--rose);text-shadow:4px 4px 0 var(--rose-dark);line-height:1;white-space:nowrap;transition:font-size .12s ease}
+.me.slam{animation:slam .35s cubic-bezier(.3,1.5,.5,1) both,flick .16s steps(1) .35s infinite}
+@keyframes slam{from{transform:scale(1.9) rotate(-6deg)}to{transform:scale(1) rotate(-2deg)}}
+@keyframes flick{50%{color:#fff;text-shadow:4px 4px 0 var(--rose)}}
+#letter.quake{animation:quake .09s linear infinite,paperflash .14s steps(1) infinite}
+@keyframes paperflash{50%{background-color:#ffd0da}}
+@keyframes quake{
+  0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-14px,8px) rotate(-1.5deg)}
+  50%{transform:translate(12px,-10px) rotate(1deg)}75%{transform:translate(-8px,-6px) rotate(-.5deg)}100%{transform:translate(10px,9px) rotate(1.2deg)}
+}
+#flash{position:fixed;inset:0;pointer-events:none;z-index:0}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden}
+body.rage #flash{animation:rage .14s steps(1) infinite}
+@keyframes rage{0%{background:rgba(214,0,40,.75)}50%{background:rgba(255,255,255,.12)}}
+.shout{position:absolute;left:0;top:0;font-family:var(--loud);white-space:nowrap;text-shadow:2px 2px 0 rgba(0,0,0,.35)}
+
+.heart{position:absolute;inset:0;transform-origin:50% 45%}
+.heart span{position:absolute;font-family:var(--hand);white-space:nowrap;line-height:1;opacity:0;
+  transform:translate(-50%,-50%) scale(.2);transition:opacity .35s ease,transform .45s cubic-bezier(.3,1.7,.5,1)}
+.heart span.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.heart.beat{animation:beat 1.15s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.07)}28%{transform:scale(1)}42%{transform:scale(1.045)}}
+
+.again{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;
+  font:800 15px var(--ui);color:#fff;background:var(--rose);border:0;border-radius:999px;padding:11px 20px;cursor:pointer;
+  box-shadow:0 4px 0 var(--rose-dark);animation:pop .5s both}
+.again:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  #letter.quake{animation-duration:.4s}
+  .envelope{animation:none}
+}
+</style>
+
+<div id="floaters" aria-hidden="true"></div>
+
+<main id="scene">
+  <div id="envWrap">
+    <div class="envelope" id="env" role="button" tabindex="0" aria-label="Open the letter for Adisa">
+      <div class="env-back"></div>
+      <div class="env-letter">♥</div>
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="env-to">For Adisa ♥</div>
+      <div class="env-seal"><span>♥</span></div>
+    </div>
+    <div class="hint" id="hint">Tap the seal to open</div>
+  </div>
+
+  <article id="letter" hidden aria-live="polite">
+    <div class="salute">My Adisa,</div>
+    <div id="content"></div>
+  </article>
+</main>
+
+<div id="flash" aria-hidden="true"></div>
+<div id="fx" aria-hidden="true"></div>
+
+<script>
+/* ---------- words (edit freely) ---------- */
+const NAME = "Adisa";
+const OPENING = "Ko si obirin mon ni ta";
+const ASALATU_TOP = "...or will your mom still go to";
+const ASALATU_WORD = "ASALATU";
+const ASALATU_BOTTOM = "to find a wife for you?";
+const APOLOGY = "Adisa, forgive me";
+const LOVE_LINES = [
+  "Mo nifẹ rẹ ♥",
+  "Olólùfẹ mi, you are my peace",
+  "Every road I walk leads back to you",
+  "You are my today and all my tomorrows",
+];
+const DESERVE = "The only person you deserve is";
+const E_COUNT = 8;
+const SHOUTS = ["ME", "MEEE", "me!!", "MEEEEE", "MINE", "ME!!!", "meee", "ME ONLY"];
+const HEART_COLORS = ["#e3123f", "#c8102e", "#ff3d6a", "#d6336c", "#b5002b", "#f0506e"];
+
+/* ---------- plumbing ---------- */
+const $ = s => document.querySelector(s);
+const env = $("#env"), envWrap = $("#envWrap"), hint = $("#hint");
+const letter = $("#letter"), content = $("#content"), fx = $("#fx");
+const measureCtx = document.createElement("canvas").getContext("2d");
+let run = 0, opened = false;
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function wait(t, ms) { await sleep(ms); if (t !== run) throw "stop"; }
+
+function add(text, cls) {
+  const el = document.createElement("div");
+  el.className = cls;
+  el.textContent = text;
+  content.appendChild(el);
+  return el;
+}
+async function type(t, el, text, speed) {
+  for (let i = 0; i <= text.length; i++) {
+    el.textContent = text.slice(0, i);
+    if (i < text.length) {
+      const c = document.createElement("span"); c.className = "caret"; el.appendChild(c);
+      await wait(t, speed);
+    }
+  }
+}
+async function fadeAll(t) {
+  [...content.children].forEach(el => el.classList.add("out"));
+  await wait(t, 480);
+  content.innerHTML = "";
+}
+function jolt(el, amt) {
+  const r = () => (Math.random() * 2 - 1) * amt;
+  el.animate([{ transform: "none" }, { transform: `translate(${r()}px,${r()}px)` },
+              { transform: `translate(${r()}px,${r()}px)` }, { transform: "none" }], { duration: 160 });
+}
+function fitSize(text, family, maxW, start) {
+  let size = start;
+  while (size > 18) {
+    measureCtx.font = `${size}px ${family}`;
+    if (measureCtx.measureText(text).width <= maxW) return size;
+    size -= 3;
+  }
+  return size;
+}
+
+/* ---------- floating hearts ---------- */
+(function floaters() {
+  const box = $("#floaters");
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement("span");
+    s.textContent = "♥";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.fontSize = 10 + Math.random() * 22 + "px";
+    s.style.animationDuration = 9 + Math.random() * 10 + "s";
+    s.style.animationDelay = -Math.random() * 18 + "s";
+    box.appendChild(s);
+  }
+})();
+
+/* ---------- open the envelope ---------- */
+async function openEnvelope() {
+  if (opened) return;
+  opened = true;
+  const t = ++run;
+  try {
+    env.classList.add("open");
+    hint.classList.add("gone");
+    await wait(t, 1750);
+    envWrap.classList.add("away");
+    await wait(t, 550);
+    envWrap.hidden = true;
+    letter.hidden = false;
+    letter.classList.remove("enter"); void letter.offsetWidth; letter.classList.add("enter");
+    await wait(t, 900);
+    letter.classList.remove("enter");
+    await play(t);
+  } catch (e) { if (e !== "stop") throw e; }
+}
+env.addEventListener("click", openEnvelope);
+env.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openEnvelope(); } });
+
+function reset() {
+  run++;
+  opened = false;
+  document.body.classList.remove("rage");
+  letter.classList.remove("quake", "enter");
+  fx.innerHTML = "";
+  content.innerHTML = "";
+  letter.querySelectorAll(".tear,.again").forEach(n => n.remove());
+  letter.hidden = true;
+  envWrap.hidden = false;
+  env.classList.remove("open");
+  hint.classList.remove("gone");
+  requestAnimationFrame(() => envWrap.classList.remove("away"));
+}
+
+/* ---------- the show ---------- */
+async function play(t) {
+  await document.fonts.ready;
+
+  // 1. Ko si obirin...
+  const open = add("", "hand big");
+  await type(t, open, OPENING, 95);
+  await wait(t, 1800);
+  await fadeAll(t);
+
+  // 2. Asalatu + crying face
+  add(ASALATU_TOP, "hand mid pop");
+  await wait(t, 700);
+  const word = add("", "asalatu");
+  [...ASALATU_WORD].forEach((ch, i) => {
+    const s = document.createElement("span");
+    s.textContent = ch;
+    s.style.animationDelay = i * 0.11 + "s";
+    word.appendChild(s);
+  });
+  await wait(t, ASALATU_WORD.length * 110 + 950);
+  add(ASALATU_BOTTOM, "hand mid pop");
+  await wait(t, 650);
+  const cry = add("😭", "cry");
+  await wait(t, 450);
+  await tears(t, cry, 4600);
+  await fadeAll(t);
+
+  // 3. forgive me
+  add(APOLOGY, "hand big rose pop");
+  add("🥺", "emoji pop late");
+  await wait(t, 3000);
+  await fadeAll(t);
+
+  // 4. soft love lines
+  for (const line of LOVE_LINES) {
+    add(line, "hand mid pop");
+    await wait(t, 2000);
+    await fadeAll(t);
+  }
+
+  // 5. MEEEEEEEE
+  await meScene(t);
+
+  // 6. heart of "Adisa"
+  await heartScene(t);
+}
+
+function tears(t, cry, ms) {
+  return new Promise((resolve, reject) => {
+    const drops = [];
+    const start = performance.now();
+    let last = start;
+    function frame(now) {
+      if (t !== run) { drops.forEach(d => d.el.remove()); return reject("stop"); }
+      const L = letter.getBoundingClientRect();
+      const r = cry.getBoundingClientRect();
+      const dt = Math.min(40, now - last) / 16.7; last = now;
+      if (now - start < ms) {
+        for (const side of [-1, 1]) {
+          const el = document.createElement("div");
+          el.className = "tear";
+          const sz = 0.7 + Math.random() * 0.6;
+          el.style.scale = sz;
+          letter.appendChild(el);
+          drops.push({
+            el,
+            x: r.left - L.left + r.width / 2 + side * r.width * 0.3,
+            y: r.top - L.top + r.height * 0.42,
+            vx: side * (1.8 + Math.random() * 3.6),
+            vy: -(2 + Math.random() * 3.2),
+          });
+        }
+      }
+      for (let i = drops.length - 1; i >= 0; i--) {
+        const d = drops[i];
+        d.vy += 0.5 * dt; d.x += d.vx * dt; d.y += d.vy * dt;
+        d.el.style.transform = `translate(${d.x}px,${d.y}px)`;
+        if (d.y > L.height + 20) { d.el.remove(); drops.splice(i, 1); }
+      }
+      if (now - start < ms || drops.length) requestAnimationFrame(frame); else resolve();
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+async function meScene(t) {
+  const line = add("", "hand mid");
+  await type(t, line, DESERVE, 60);
+  await wait(t, 650);
+  const me = add("", "me");
+  const maxW = letter.clientWidth * 0.9;
+  const fam = '"Bagel Fat One", Impact, sans-serif';
+  const finalWord = "M" + "E".repeat(E_COUNT) + "!!!";
+  const cap = fitSize(finalWord, fam, maxW, 170);
+  for (let n = 0; n <= E_COUNT; n++) {
+    const w = "M" + "E".repeat(n);
+    me.textContent = w;
+    me.style.fontSize = Math.min(44 + n * 13, fitSize(w + "!!!", fam, maxW, 170)) + "px";
+    jolt(letter, 3 + n * 2.2);
+    letter.animate([{ backgroundColor: "#ffc2cf" }, { backgroundColor: "#fff8f1" }], { duration: 220 });
+    await wait(t, n ? 190 : 520);
+  }
+  await wait(t, 220);
+  me.textContent = finalWord;
+  me.style.fontSize = cap + "px";
+  me.classList.add("slam");
+  document.body.classList.add("rage");
+  letter.classList.add("quake");
+  await burst(t, me, 2600);
+  document.body.classList.remove("rage");
+  letter.classList.remove("quake");
+  content.innerHTML = "";
+  await wait(t, 500);
+
+  add("*clears throat*", "hand small muted pop");
+  add("...anyway", "hand small muted pop late");
+  await wait(t, 2300);
+  await fadeAll(t);
+}
+
+function burst(t, src, ms) {
+  return new Promise((resolve, reject) => {
+    const parts = [];
+    const start = performance.now();
+    let last = start, n = 0;
+    function frame(now) {
+      if (t !== run) { fx.innerHTML = ""; return reject("stop"); }
+      const dt = Math.min(40, now - last) / 16.7; last = now;
+      const r = src.getBoundingClientRect();
+      if (now - start < ms && n++ % 2 === 0) {
+        for (let k = 0; k < 1; k++) {
+          const el = document.createElement("div");
+          el.className = "shout";
+          el.textContent = SHOUTS[Math.floor(Math.random() * SHOUTS.length)];
+          el.style.fontSize = 14 + Math.random() * 26 + "px";
+          el.style.color = ["#ffffff", "#ff1744", "#ffc2cf", "#ff8a80", "#f4b731"][Math.floor(Math.random() * 5)];
+          fx.appendChild(el);
+          const a = Math.random() * Math.PI * 2, sp = 9 + Math.random() * 12;
+          const ox = Math.cos(a) * (r.width * 0.55 + 20), oy = Math.sin(a) * (r.height * 0.5 + 70);
+          parts.push({ el, x: r.left + r.width / 2 + ox, y: r.top + r.height / 2 + oy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, rot: (Math.random() * 2 - 1) * 30 });
+        }
+      }
+      const W = innerWidth, H = innerHeight;
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        p.el.style.transform = `translate(-50%,-50%) translate(${p.x}px,${p.y}px) rotate(${p.rot}deg)`;
+        if (p.x < -150 || p.x > W + 150 || p.y < -150 || p.y > H + 150) { p.el.remove(); parts.splice(i, 1); }
+      }
+      if (now - start < ms) requestAnimationFrame(frame);
+      else { fx.innerHTML = ""; resolve(); }
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+/* ----- heart made only of the name ----- */
+function heartOutline(cx, cy, s) {
+  const pts = [];
+  for (let i = 0; i < 360; i++) {
+    const a = (i / 360) * Math.PI * 2;
+    const x = 16 * Math.sin(a) ** 3;
+    const y = 13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a);
+    pts.push([cx + x * s, cy - y * s]);
+  }
+  return pts;
+}
+function inside(px, py, poly) {
+  let ins = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if ((yi > py) !== (yj > py) && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) ins = !ins;
+  }
+  return ins;
+}
+function layoutHeart(W, H) {
+  const s = Math.min((W * 0.94) / 32, (H * 0.92) / 29);
+  const cx = W / 2, cy = H / 2 - 2.5 * s;
+  const poly = heartOutline(cx, cy, s);
+  const xs = poly.map(p => p[0]), ys = poly.map(p => p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const k = (s / 16) * 1.3;                       // scales word sizes with the heart
+  const boxes = [], words = [], cache = {};
+  const measure = (size, weight) => {
+    const key = size + weight;
+    if (!cache[key]) {
+      measureCtx.font = `${weight} ${size}px Caveat, cursive`;
+      const m = measureCtx.measureText(NAME);
+      cache[key] = [m.width, (m.actualBoundingBoxAscent + m.actualBoundingBoxDescent) || size * 0.75];
+    }
+    return cache[key];
+  };
+  const fits = (b) => {
+    const [x1, y1, x2, y2] = b, mx = (x1 + x2) / 2;
+    if (![[x1, y1], [x2, y1], [x1, y2], [x2, y2], [mx, y1], [mx, y2]].every(([x, y]) => inside(x, y, poly))) return false;
+    return !boxes.some(([a1, b1, a2, b2]) => x1 < a2 + 2 && x2 > a1 - 2 && y1 < b2 + 2 && y2 > b1 - 2);
+  };
+  const place = (x, y, size, weight) => {
+    const [w, h] = measure(size, weight);
+    const b = [x - w / 2, y - h / 2, x + w / 2, y + h / 2];
+    if (!fits(b)) return 0;
+    boxes.push(b);
+    words.push({ x, y, size, weight, color: HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)] });
+    return w;
+  };
+  const sizes = [15, 17, 19, 21, 23, 25, 28].map(v => Math.round(v * k));
+  const rowH = 21 * k;
+  for (let y = minY + rowH * 0.45; y < maxY; y += rowH) {
+    for (let x = minX; x < maxX;) {
+      const size = sizes[Math.floor(Math.random() * sizes.length)];
+      const weight = Math.random() < 0.7 ? 700 : 500;
+      const w = measure(size, weight)[0];
+      if (place(x + w / 2, y + (Math.random() * 2 - 1) * 1.5 * k, size, weight)) x += w + (3 + Math.random() * 7) * k;
+      else x += 2;
+    }
+  }
+  for (let i = 0; i < 2500; i++) {
+    place(minX + Math.random() * (maxX - minX), minY + Math.random() * (maxY - minY), Math.round((10 + Math.random() * 3) * k), 500);
+  }
+  return words;
+}
+
+async function heartScene(t) {
+  content.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "heart";
+  content.appendChild(box);
+  const words = layoutHeart(content.clientWidth, content.clientHeight);
+  for (let i = words.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [words[i], words[j]] = [words[j], words[i]]; }
+  const spans = words.map(w => {
+    const s = document.createElement("span");
+    s.textContent = NAME;
+    s.style.left = w.x + "px";
+    s.style.top = w.y + "px";
+    s.style.fontSize = w.size + "px";
+    s.style.fontWeight = w.weight;
+    s.style.color = w.color;
+    box.appendChild(s);
+    return s;
+  });
+  for (let i = 0; i < spans.length; i++) {
+    spans[i].classList.add("on");
+    if (i % 3 === 2) await wait(t, 28);
+  }
+  await wait(t, 700);
+  box.classList.add("beat");
+  await wait(t, 1500);
+  const again = document.createElement("button");
+  again.className = "again";
+  again.id = "again";
+  again.textContent = "Read it again ♥";
+  again.addEventListener("click", reset);
+  letter.appendChild(again);
+}
+</script>
