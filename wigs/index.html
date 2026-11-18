@@ -214,6 +214,15 @@ body.dark .auth.apple { background: #fff; color: #000; }
 .opt.on .radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 .opt .grow { flex: 1; }
 .opt small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.addr { display: grid; gap: 8px; }
+.addr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.field select { width: 100%; height: 52px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 0 12px; font: 16px "Inter", sans-serif; outline: none; }
+.field select:focus { border-color: var(--accent); }
+.parcel { display: flex; gap: 12px; align-items: center; padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 16px; }
+.parcel .pi { width: 46px; height: 46px; flex: none; border-radius: 14px; display: grid; place-items: center; background: var(--accent-soft); font-size: 22px; }
+.parcel b { display: block; font-size: 15px; }
+.parcel span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+.parcel code { font: 600 13px "JetBrains Mono", monospace; color: var(--text); }
 .secure { text-align: center; font-size: 12px; color: var(--muted); margin: 6px 0 4px; }
 
 /* ---------------- Track order ---------------- */
@@ -560,12 +569,14 @@ async function payWithFlutterwave() {
 function placeOrder(pay = {}) {
     const t = totals();
     state.tracking = { id: pay.txRef ? "CH-" + pay.txRef.slice(-6) : "CH-" + (20481 + state.orders),
-                       items: state.bag.slice(), total: t.total, express: state.express, start: Date.now() };
+                       items: state.bag.slice(), total: t.total, express: state.express, start: Date.now(),
+                       ship: shipKey(), address: addressText(state.addr), city: state.addr.area || state.addr.state,
+                       trackNo: shipKey() === "courier" ? "GIG" + String(Date.now()).slice(-8) : "WB-" + String(Date.now()).slice(-5) };
     notify("order", { orderId: state.tracking.id, txRef: pay.txRef || "", transactionId: pay.transactionId || "",
         name: state.contact.name, email: state.contact.email,
         itemsText: state.bag.map(itemLine).join("\n"), units: t.units, subtotal: t.sub, deliveryFee: t.delivery,
         total: t.total, totalText: naira(t.total), payment: PAY_LABEL[state.pay],
-        delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow" });
+        delivery: deliveryText(shipKey()), phone: state.addr.phone, address: addressText(state.addr) });
     state.bag = []; state.orders += 1;
     saveTracking();
     goRoot("placed");
@@ -583,14 +594,29 @@ const wig = (id) => WIGS.find((w) => w.id === id);
 const naira = (n) => "₦" + Math.round(n).toLocaleString("en-NG");
 const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 const state = { user: null, product: "v5", opts: null, qty: 1, bag: [], orders: 0,
-                liked: new Set(["w7"]), filter: "All", express: true, pay: "card", tracking: null,
+                liked: new Set(["w7"]), filter: "All", express: true, ship: "express", pay: "card", tracking: null,
+                addr: { phone: "", street: "", area: "", state: "Lagos", landmark: "" },
                 contact: { name: "", email: "" } };
 const itemLine = (i) => { const w = wig(i.id), o = i.opts;
     return `${w.name} · ${o.len}" · ${LACE[o.lace].name} · ${DENSITY[o.dens].name}${o.install ? " + install" : ""} × ${i.qty} — ${naira(i.price * i.qty)}`; };
 
+// Delivery: own rider inside Lagos (live map), courier or waybill elsewhere (status updates)
+const STATES = ["Lagos", "Abia", "Abuja (FCT)", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", "Cross River",
+    "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara",
+    "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"];
+const SHIP = {
+    express:  { fee: 5000, label: "Express rider", when: "Today, 3–6 PM", local: true },
+    standard: { fee: 2500, label: "Standard rider", when: "Tomorrow", local: true },
+    courier:  { fee: 9000, label: "Courier (GIG) to your door", when: "2–4 working days", local: false },
+    waybill:  { fee: 4500, label: "Waybill to motor park", when: "1–3 days · pick up at the park", local: false },
+};
+const shipKey = () => (state.addr.state === "Lagos" ? (["express", "standard"].includes(state.ship) ? state.ship : "express")
+                                                     : (["courier", "waybill"].includes(state.ship) ? state.ship : "courier"));
+const deliveryText = (k) => `${SHIP[k].label} · ${SHIP[k].when}`;
+const addressText = (a) => [a.street, a.area, a.state].filter(Boolean).join(", ") + (a.landmark ? ` (near ${a.landmark})` : "");
 function totals() {
     const sub = state.bag.reduce((s, i) => s + i.price * i.qty, 0);
-    const delivery = state.express ? 5000 : 2500;
+    const delivery = SHIP[shipKey()].fee;
     return { sub, delivery, total: sub + delivery, units: state.bag.reduce((n, i) => n + i.qty, 0) };
 }
 
@@ -762,10 +788,19 @@ const R = {
             <div style="height:8px"></div>
             <label class="field"><input id="co-email" type="email" inputmode="email" autocomplete="email" placeholder="Email for your receipt" value="${esc(state.contact.email)}"></label>
             <div class="err" id="co-err"></div>
-            <div class="card-box"><div class="lbl">Deliver to</div><b>Home</b><div style="color:var(--muted);margin-top:4px">14 Admiralty Way, Lekki Phase 1, Lagos</div></div>
+            <div class="label">Delivery address</div>
+            <div class="addr">
+                <label class="field"><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Phone number (for the rider)" value="${esc(state.addr.phone)}"></label>
+                <label class="field"><input id="ad-street" autocomplete="street-address" placeholder="House number and street" value="${esc(state.addr.street)}"></label>
+                <div class="addr-row">
+                    <label class="field"><input id="ad-area" autocomplete="address-level2" placeholder="Area / city" value="${esc(state.addr.area)}"></label>
+                    <label class="field sel"><select id="ad-state" aria-label="State">${STATES.map((x) => `<option ${x === state.addr.state ? "selected" : ""}>${x}</option>`).join("")}</select></label>
+                </div>
+                <label class="field"><input id="ad-landmark" placeholder="Nearest landmark (optional)" value="${esc(state.addr.landmark)}"></label>
+            </div>
+            <div class="err" id="ad-err"></div>
             <div class="label">Delivery</div>
-            <button class="opt ${state.express ? "on" : ""}" data-action="ship" data-x="1"><span class="radio"></span><span class="grow">Express<small>Today, 3–6 PM</small></span><b>₦5,000</b></button>
-            <button class="opt ${state.express ? "" : "on"}" data-action="ship" data-x="0"><span class="radio"></span><span class="grow">Standard<small>Tomorrow</small></span><b>₦2,500</b></button>
+            ${(state.addr.state === "Lagos" ? ["express", "standard"] : ["courier", "waybill"]).map((k) => `<button class="opt ${shipKey() === k ? "on" : ""}" data-action="ship" data-k="${k}"><span class="radio"></span><span class="grow">${SHIP[k].label}<small>${SHIP[k].when}${SHIP[k].local ? " · live rider tracking" : " · tracked with status updates"}</small></span><b>${naira(SHIP[k].fee)}</b></button>`).join("")}
             <div class="label">Payment</div>
             <button class="opt ${state.pay === "card" ? "on" : ""}" data-action="pay-m" data-m="card"><span class="radio"></span><span class="grow">Card<small>Visa, Mastercard, Verve</small></span></button>
             <button class="opt ${state.pay === "transfer" ? "on" : ""}" data-action="pay-m" data-m="transfer"><span class="radio"></span><span class="grow">Bank transfer<small>Instant confirmation</small></span></button>
@@ -791,7 +826,7 @@ const R = {
             <h2 class="serif">Order placed!</h2>
             <p>Payment received. We've emailed your receipt to<br><b>${esc(state.contact.email || "your inbox")}</b></p>
             <div class="done-card"><div class="stack">${tr.items.slice(0, 3).map((i) => thumb(wig(i.id))).join("")}</div>
-                <div class="info"><b>Order #${tr.id}</b><span>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</span><span>${tr.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow"}</span></div></div>
+                <div class="info"><b>Order #${tr.id}</b><span>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</span><span>${deliveryText(tr.ship || "express")}</span></div></div>
             <button class="btn-main pink full" data-action="track">Track order</button>
             <button class="btn-ghost" data-action="shop">Back to shop</button>
         </div></div>`;
@@ -803,9 +838,10 @@ const R = {
         return `<div class="scroll" style="padding-bottom:150px">
             <div class="topbar"><button class="icon-btn" data-action="shop" aria-label="Back to shop">${I.back}</button><div class="h-screen serif">Track Order<small>#${tr.id}</small></div></div>
             <div class="order-card"><div class="stack">${imgs}</div>
-                <div class="info"><b>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</b><span>${tr.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow"}</span></div>
+                <div class="info"><b>${units} unit${units > 1 ? "s" : ""} · ${naira(tr.total)}</b><span>${deliveryText(tr.ship || "express")}</span></div>
                 <span class="status" id="tr-status">Confirmed</span></div>
-            <div class="map-wrap">${mapSVG()}<div class="eta" id="tr-eta"><b>Preparing</b>Your unit is being styled</div></div>
+            ${isLocal(tr) ? `<div class="map-wrap">${mapSVG()}<div class="eta" id="tr-eta"><b>Preparing</b>Your unit is being styled</div></div>`
+              : `<div class="parcel"><span class="pi">${tr.ship === "waybill" ? "🚌" : "📦"}</span><div><b>${tr.ship === "waybill" ? "Waybill" : "GIG courier"} · <code>${tr.trackNo}</code></b><span>To ${esc(tr.address || tr.city)}</span><span id="tr-eta">Your unit is being styled</span></div></div>`}
             <ol class="steps" id="tr-steps"></ol>
         </div>
         <div class="rider" id="tr-rider"></div>`;
@@ -827,13 +863,25 @@ function clearTracking() {
     state.tracking = null;
 }
 
+const isLocal = (tr) => !tr.ship || SHIP[tr.ship].local;
+function parcelSteps(stage, tr) {
+    const t0 = tr.start, h = 3600000, wb = tr.ship === "waybill";
+    const rows = [
+        ["Order confirmed", clock(t0)],
+        ["Unit styled & packed", stage >= 1 ? clock(t0 + 2 * h) : "Your stylist is on it"],
+        [wb ? "Sent to the motor park" : "Handed to GIG courier", stage >= 2 ? `${wb ? "Waybill" : "Tracking"} no. ${tr.trackNo}` : "Waiting for dispatch"],
+        [`Arrived in ${tr.city}`, stage >= 3 ? (wb ? "Ready for pickup at the park" : "Out for delivery") : "In transit"],
+        [wb ? "Picked up" : "Delivered", stage >= 4 ? "Enjoy your unit!" : SHIP[tr.ship].when],
+    ];
+    return rows.map(([b, s], i) => `<li class="${i <= stage ? "done" : i === stage + 1 ? "now" : ""}"><span class="dot2">${I.check}</span><div><b>${b}</b><span>${s}</span></div></li>`).join("");
+}
 function stepsHTML(stage, tr) {
     const t0 = tr.start, min = 60000;
     const rows = [
         ["Order confirmed", clock(t0)],
         ["Unit styled & packed", stage >= 1 ? clock(t0 + 13 * min) : "Your stylist is on it"],
         ["Out for delivery", stage >= 2 ? (stage >= 3 ? "Rider has arrived" : `<span id="tr-away">Rider is on the way</span>`) : "Waiting for pickup"],
-        ["Delivered", stage >= 4 ? clock(t0 + 58 * min) : tr.express ? "Today, 3 – 6 PM" : "Tomorrow"],
+        ["Delivered", stage >= 4 ? clock(t0 + 58 * min) : SHIP[tr.ship || "express"].when],
     ];
     const done = [true, stage >= 1, stage >= 3, stage >= 4];
     return rows.map(([b, s], i) => `<li class="${done[i] ? "done" : (i === stage + 1 || (i === 2 && stage === 2)) ? "now" : ""}"><span class="dot2">${I.check}</span><div><b>${b}</b><span>${s}</span></div></li>`).join("");
@@ -848,6 +896,20 @@ function trackTick() {
     if (!tr || !$("#track").classList.contains("active")) { trackStage = -1; return; }
     const t = Date.now() - tr.start;
     const stage = t < PHASE.pack ? 0 : t < PHASE.out ? 1 : t < PHASE.out + PHASE.ride ? 2 : t < PHASE.out + PHASE.ride + PHASE.drop ? 3 : 4;
+    if (!isLocal(tr)) {
+        if (stage !== trackStage) {
+            trackStage = stage;
+            const wb = tr.ship === "waybill";
+            $("#tr-steps").innerHTML = parcelSteps(stage, tr);
+            $("#tr-status").textContent = ["Confirmed", "Packed", "In transit", wb ? "At the park" : "Out for delivery", wb ? "Picked up" : "Delivered"][stage];
+            $("#tr-status").classList.toggle("done", stage >= 3);
+            $("#tr-eta").textContent = ["Your unit is being styled", "Packed and ready to send", wb ? "On the bus to your city" : "On the way with GIG", wb ? "Waiting at the park for you" : "Out for delivery in your city", "Delivered — enjoy!"][stage];
+            $("#tr-rider").innerHTML = stage >= 4
+                ? `<div class="av">✓</div><div class="info"><b>${wb ? "Picked up" : "Delivered"} — enjoy your unit!</b><span>${wb ? "Waybill" : "GIG"} · ${tr.trackNo}</span></div><button class="btn-main" data-action="done">Back to shop</button>`
+                : `<div class="av">${wb ? "🚌" : "📦"}</div><div class="info"><b>${wb ? "Waybill" : "GIG courier"}</b><span>${wb ? "We'll text you when it reaches the park" : "Tracking no. " + tr.trackNo}</span></div><button class="call" data-action="call" aria-label="Call us">${I.phone}</button>`;
+        }
+        requestAnimationFrame(trackTick); return;
+    }
     if (stage !== trackStage) {
         if (trackStage === 2 && stage === 3) toast("Tunde has arrived 🎉", "check");
         trackStage = stage;
@@ -973,13 +1035,18 @@ app.addEventListener("click", (e) => {
         if (item.qty <= 0) state.bag.splice(+el.dataset.i, 1);
         render("bag"); updateBadge();
     }
-    if (action === "ship") { state.express = el.dataset.x === "1"; render("checkout"); }
+    if (action === "ship") { state.ship = el.dataset.k; state.express = state.ship === "express"; const sc = $("#checkout .scroll").scrollTop; render("checkout"); $("#checkout .scroll").scrollTop = sc; }
     if (action === "pay-m") { state.pay = el.dataset.m; render("checkout"); }
     if (action === "pay") {
         const c = state.contact;
         if (!c.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email.trim())) {
             $("#co-err").textContent = "Add your name and a valid email for your receipt";
             $("#checkout .scroll").scrollTop = 0; return;
+        }
+        const a = state.addr;
+        if (a.phone.replace(/\D/g, "").length < 10 || !a.street.trim() || !a.area.trim()) {
+            $("#ad-err").textContent = "Add your phone number, street and area so we can deliver";
+            $("#ad-phone").scrollIntoView({ block: "center" }); return;
         }
         if (state.demoFull) { el.innerHTML = spinner("Opening secure payment…"); setTimeout(openPaySheet, 700); return; }
         el.innerHTML = spinner(FLUTTERWAVE.publicKey && !params.has("demo") ? "Opening secure payment…" : "Confirming payment…");
@@ -1054,11 +1121,17 @@ app.addEventListener("input", (e) => {
         $("#otp-err").textContent = "";
     }
     if (e.target.id === "email") $("#email-err").textContent = "";
+    if (e.target.id && e.target.id.startsWith("ad-")) {
+        state.addr[e.target.id.slice(3)] = e.target.value;
+        $("#ad-err").textContent = "";
+        if (e.target.id === "ad-state") { const sc = $("#checkout .scroll").scrollTop; render("checkout"); $("#checkout .scroll").scrollTop = sc; }
+    }
     if (e.target.id === "co-name" || e.target.id === "co-email") {
         state.contact[e.target.id === "co-name" ? "name" : "email"] = e.target.value;
         $("#co-err").textContent = "";
     }
 });
+app.addEventListener("change", (e) => { if (e.target.id === "ad-state") e.target.dispatchEvent(new Event("input", { bubbles: true })); });
 app.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
     if (e.target.id === "email") $('[data-action="email"]').click();
@@ -1220,7 +1293,7 @@ const MAIL = {
     shell: (inner, sub) => `<div style="font-family:Arial,Helvetica,sans-serif;color:#2e1220"><div style="background:#3a1426;color:#fff;padding:24px;border-radius:16px 16px 0 0"><div style="font-size:24px;font-weight:700;font-family:Georgia,serif">camorra hair</div>${sub ? `<div style="opacity:.8;margin-top:6px">${sub}</div>` : ""}</div><div style="background:#fbf4f1;padding:22px;border-radius:0 0 16px 16px">${inner}</div></div>`,
     code: (code) => MAIL.shell(`<div style="text-align:center"><p style="margin:0 0 12px">Your sign-in code is</p><div style="font-size:40px;font-weight:800;letter-spacing:10px;margin:8px 0 16px">${code}</div><p style="color:#93707e;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask for it, you can ignore this email.</p></div>`),
     welcome: (name) => MAIL.shell(`<h2 style="margin:0 0 12px">Welcome, ${esc(name)} 💇🏾‍♀️</h2><p style="line-height:1.6;margin:0 0 12px">Thank you for joining Camorra Hair. You can now save your favourite units, check out in seconds and track every delivery live, right to your door.</p><p style="line-height:1.6;margin:0">Use code <b>WELCOME10</b> for 10% off your first unit.</p>`),
-    order: (o) => MAIL.shell(`<h2 style="margin:0 0 12px">Thank you, ${esc(o.name)}!</h2><p style="line-height:1.6;margin:0 0 16px">We have received your payment. Your unit is being styled and packed, and you can watch your rider live in the app once it is on the way.</p><div style="background:#fff;border:1px solid #efdde2;border-radius:12px;padding:14px;line-height:1.7;font-size:14px">${o.items.map(esc).join("<br>")}<hr style="border:0;border-top:1px dashed #efdde2;margin:10px 0">Delivery: ${o.delivery}<br>Payment: ${o.payment} · Ref ${o.ref}<br><b style="font-size:17px">Paid: ${o.total}</b></div>`, `Order #${o.id} is confirmed ✓`),
+    order: (o) => MAIL.shell(`<h2 style="margin:0 0 12px">Thank you, ${esc(o.name)}!</h2><p style="line-height:1.6;margin:0 0 16px">We have received your payment. Your unit is being styled and packed, and you can watch your rider live in the app once it is on the way.</p><div style="background:#fff;border:1px solid #efdde2;border-radius:12px;padding:14px;line-height:1.7;font-size:14px">${o.items.map(esc).join("<br>")}<hr style="border:0;border-top:1px dashed #efdde2;margin:10px 0">Delivery: ${o.delivery}<br>${o.address ? `To: ${esc(o.address)}<br>` : ""}Payment: ${o.payment} · Ref ${o.ref}<br><b style="font-size:17px">Paid: ${o.total}</b></div>`, `Order #${o.id} is confirmed ✓`),
 };
 let notifTap = null;
 function showNotif(title, line) {
@@ -1241,7 +1314,7 @@ function openPaySheet() {
             $("#paysheet").classList.remove("open");
             const ref = "CH-" + Date.now();
             state.lastOrderMail = { name: state.contact.name, items: state.bag.map(itemLine), total: naira(t.total), ref,
-                delivery: state.express ? "Express · Today 3–6 PM" : "Standard · Tomorrow", payment: PAY_LABEL[state.pay], id: "CH-" + ref.slice(-6) };
+                delivery: deliveryText(shipKey()), address: addressText(state.addr), payment: PAY_LABEL[state.pay], id: "CH-" + ref.slice(-6) };
             toast("Payment received 🎉", "check");
             placeOrder({ txRef: ref, transactionId: 1 });
         }, 1600);
@@ -1301,7 +1374,8 @@ async function demoFull() {
     if (demoRunning) return;
     demoRunning = true;
     document.body.classList.add("demo");
-    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null, demoFull: true, pay: "card",
+    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null, demoFull: true, pay: "card", ship: "express",
+                           addr: { phone: "", street: "", area: "", state: "Lagos", landmark: "" },
                            contact: { name: "", email: "" }, pendingEmail: "" });
     goRoot("login");
     $("#splash").classList.remove("hide"); await wait(1800);
@@ -1340,7 +1414,11 @@ async function demoFull() {
     await tap('[data-to="bag"]'); await wait(1900);
     await tap('[data-to="checkout"]'); await wait(1200);
     await tap('#co-name'); await typeInto("#co-name", " Rossi", 90); await wait(300);
-    await tap('[data-action="ship"][data-x="1"]'); await wait(700);
+    await tap('#ad-phone'); await typeInto("#ad-phone", "0803 555 0142", 60);
+    await tap('#ad-street'); await typeInto("#ad-street", "14 Admiralty Way", 55);
+    await tap('#ad-area'); await typeInto("#ad-area", "Lekki Phase 1", 55);
+    await tap('#ad-landmark'); await typeInto("#ad-landmark", "Mega Plaza", 60); await wait(400);
+    await tap('[data-action="ship"][data-k="express"]'); await wait(700);
     await tap('[data-action="pay-m"][data-m="transfer"]'); await wait(800);
     // 3. Pay by bank transfer with Flutterwave
     await tap('[data-action="pay"]'); await wait(3600);
@@ -1368,7 +1446,8 @@ async function demo() {
     if (demoRunning) return;
     demoRunning = true;
     document.body.classList.add("demo");
-    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null,
+    Object.assign(state, { user: null, bag: [], express: false, filter: "All", tracking: null, ship: "express",
+                           addr: { phone: "0803 555 0142", street: "14 Admiralty Way", area: "Lekki Phase 1", state: "Lagos", landmark: "" },
                            contact: { name: "Bella Rossi", email: "bella@example.com" } });
     goRoot("login");
     $("#splash").classList.remove("hide"); await wait(1800);
@@ -1385,7 +1464,7 @@ async function demo() {
     await tap('[data-action="add"]'); await wait(1300);
     await tap('[data-to="bag"]'); await wait(1700);
     await tap('[data-to="checkout"]'); await wait(1300);
-    await tap('[data-action="ship"][data-x="1"]'); await wait(900);
+    await tap('[data-action="ship"][data-k="express"]'); await wait(900);
     await tap('[data-action="pay"]'); await wait(2400);
     await wait(PHASE.out + 3500);
     await tap('[data-action="call"]');

@@ -73,7 +73,7 @@ and replace `PASTE_OWNER_EMAIL`.
 
 1. Create a Google Sheet with a tab named **Orders** and this header row in row 1:
 
-   `Date | Order ID | Customer | Email | Items | Units | Subtotal | Delivery fee | Total | Paid | Delivery | Payment | Flutterwave ref | Transaction ID | Status`
+   `Date | Order ID | Customer | Email | Phone | Address | Items | Units | Subtotal | Delivery fee | Total | Paid | Delivery | Payment | Flutterwave ref | Transaction ID | Status`
 
 2. In n8n open **Log Order to Google Sheet** → **Credential** → **Create new** → sign in with Google.
 3. Replace `PASTE_YOUR_GOOGLE_SHEET_URL` with the sheet's URL.
