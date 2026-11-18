@@ -133,7 +133,15 @@ h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
 .art-cat { position: absolute; bottom: 10px; left: 12px; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.75); }
 .art-big { border-radius: var(--radius); }
 .art-big .art-mark { font-size: 6rem; }
-.art-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+.art-photo { background: #fff; aspect-ratio: 1 / 1; overflow: hidden; }
+.art-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.art-photo.art-big { border-radius: var(--radius); }
+.thumbs { display: flex; gap: 10px; margin-top: 12px; }
+.thumb-btn { width: 72px; height: 72px; padding: 0; border: 2px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; cursor: pointer; }
+.thumb-btn.on { border-color: var(--rose); }
+.thumb-btn img { width: 100%; height: 100%; object-fit: contain; }
+.note { margin-top: 18px; padding: 14px 16px; border-radius: 12px; background: rgba(232,192,122,.08); border: 1px solid rgba(232,192,122,.45); color: var(--text); font-size: .92rem; }
+.note strong { color: var(--gold); }
 
 /* product page */
 .back { display: inline-block; margin-bottom: 18px; color: var(--muted); }

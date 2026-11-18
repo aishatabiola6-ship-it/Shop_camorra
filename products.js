@@ -1,241 +1,241 @@
 /*
  * Product catalogue. Edit names, prices and text here.
- * To use real photos, set `image` to a file path such as "images/bullet.jpg".
- * Without an image, a styled placeholder in the product's colour is shown.
+ *
+ * images: list of photos in the images/ folder. The first one is shown on the
+ *         shop page; all of them are shown on the product page.
+ * note:   optional warning/important notice shown on the product page.
+ *
+ * PRICES ARE PLACEHOLDERS – replace them with Preshy's real prices.
  */
 window.PRODUCTS = [
+  /* ---------------- For Her ---------------- */
   {
-    id: "velvet-bullet",
-    name: "Velvet Mini Bullet",
-    category: "Vibrators",
-    price: 12500,
-    color: "#e0457b",
-    image: "",
-    description: "A lipstick-sized vibrator that fits in a palm and slips easily into a bag. Smooth body-safe silicone with 10 vibration patterns. Perfect for beginners.",
-    features: ["10 vibration patterns", "USB rechargeable (60 min charge, 90 min use)", "Splash-proof", "Whisper-quiet motor"],
-    howItWorks: [
-      "Charge fully with the USB cable before first use – the light stays solid when full.",
-      "Press and hold the button for 2 seconds to switch on.",
-      "Tap the button to move through the 10 patterns, from gentle to strong.",
-      "Apply a little water-based lubricant and use it externally on sensitive areas.",
-      "Hold the button for 2 seconds to switch off, then wash with warm soapy water."
-    ]
-  },
-  {
-    id: "rose-suction",
-    name: "Rose Air-Pulse Stimulator",
-    category: "Vibrators",
-    price: 24000,
-    color: "#c2185b",
-    image: "",
-    description: "Our best seller. Shaped like a rose bud, it uses gentle pulses of air instead of direct vibration for a deep, touch-free sensation.",
-    features: ["7 air-pulse intensities", "Soft silicone mouth", "Waterproof (IPX7)", "Magnetic charging"],
-    howItWorks: [
-      "Charge with the magnetic cable until the light turns off.",
-      "Press the button once to switch on at the lowest level.",
-      "Place the soft opening gently over the clitoris so it forms a light seal.",
-      "Press the button again to increase intensity; hold it to switch off.",
-      "The motor pushes and pulls air through the opening, creating a sucking, pulsing feeling without rubbing."
-    ]
-  },
-  {
-    id: "classic-wand",
-    name: "Classic Massage Wand",
-    category: "Vibrators",
-    price: 32000,
-    color: "#8e24aa",
-    image: "",
-    description: "A powerful full-body massager with a flexible neck and a large, soft head. Great for sore muscles as well as intimate moments.",
-    features: ["20 patterns, 8 speeds", "Flexible neck", "Cordless, 2-hour battery", "Travel lock"],
-    howItWorks: [
-      "Charge for 3 hours before first use.",
-      "Press the power button; use + and – to change speed and the M button to change pattern.",
-      "Bend the neck to reach the angle you want.",
-      "Use over clothing or directly on the skin; start on low because it is strong.",
-      "Hold + and – together for 3 seconds to lock it for travel."
-    ]
-  },
-  {
-    id: "g-curve",
-    name: "G-Curve Vibrator",
-    category: "Vibrators",
-    price: 21500,
-    color: "#d81b60",
-    image: "",
-    description: "Curved, slim and smooth, designed to reach the G-spot easily. Soft silicone over a firm core.",
-    features: ["Curved tip", "12 patterns", "Waterproof", "Body-safe silicone"],
-    howItWorks: [
-      "Switch on with a long press and choose a pattern with short presses.",
-      "Apply plenty of water-based lube to the tip.",
-      "Insert slowly with the curve pointing towards the belly button.",
-      "The curved tip rests on the front wall, where vibrations are felt most.",
-      "Switch off, wash with mild soap and leave to air-dry."
-    ]
-  },
-  {
-    id: "rabbit-duo",
-    name: "Rabbit Duo",
-    category: "Vibrators",
-    price: 28500,
-    color: "#ad1457",
-    image: "",
-    description: "Dual-action design: an internal shaft plus an external 'ears' arm, each with its own motor for internal and external stimulation at once.",
-    features: ["Two independent motors", "9 patterns each", "Rechargeable", "Waterproof"],
-    howItWorks: [
-      "Use the top button to control the shaft and the bottom button for the ears.",
-      "Lubricate the shaft and insert gently.",
-      "Position so the ears rest against the clitoris on the outside.",
-      "Adjust each motor separately until it feels right.",
-      "Both motors switch off together with a 3-second hold of either button."
-    ]
-  },
-  {
-    id: "couples-ring",
-    name: "Vibrating Couples Ring",
-    category: "Couples",
-    price: 9500,
-    color: "#6a1b9a",
-    image: "",
-    description: "A stretchy ring worn at the base of the penis with a small vibrating bump that stimulates both partners during sex.",
-    features: ["Stretchy medical silicone", "Removable mini vibrator", "Up to 40 min per battery", "One size fits most"],
-    howItWorks: [
-      "Switch on the small vibrator and slot it into the ring.",
-      "Stretch the ring and roll it down to the base of the erect penis.",
-      "Keep the vibrating bump facing up so it touches your partner during intercourse.",
-      "The snug fit can also help erections feel firmer and last longer.",
-      "Remove after 30 minutes at most, wash and dry."
-    ]
-  },
-  {
-    id: "remote-egg",
-    name: "Remote Love Egg",
-    category: "Couples",
-    price: 18000,
-    color: "#7b1fa2",
-    image: "",
-    description: "A wearable egg vibrator with a wireless remote that works up to 10 metres away – hand the remote to your partner for a playful surprise.",
-    features: ["Wireless remote (10 m)", "10 patterns", "Silicone tail for easy removal", "Quiet"],
-    howItWorks: [
-      "Charge the egg and remote, then press the remote's power button to pair.",
-      "Lubricate the egg and insert it, leaving the soft tail outside.",
-      "Whoever holds the remote can change patterns and intensity.",
-      "Pull gently on the tail to remove.",
-      "Clean with toy cleaner or warm soapy water."
-    ]
-  },
-  {
-    id: "masturbator-cup",
-    name: "Stroker Cup",
-    category: "For Him",
-    price: 15000,
-    color: "#283593",
-    image: "",
-    description: "A discreet cup-shaped male masturbator with a soft, textured inner sleeve for a realistic feel.",
-    features: ["Ultra-soft TPE sleeve", "Textured inner chambers", "Adjustable suction cap", "Easy to clean"],
-    howItWorks: [
-      "Open the cup and add water-based lubricant inside the sleeve.",
-      "Insert and move the cup up and down at your own pace.",
-      "Loosen or tighten the bottom cap to control suction.",
-      "The ridges inside the sleeve add texture with every stroke.",
-      "Remove the sleeve, rinse with warm water, and let it air-dry before storing."
-    ]
-  },
-  {
-    id: "prostate-massager",
-    name: "Prostate Massager",
-    category: "For Him",
+    id: "app-wearable-vibrator",
+    name: "App-Controlled Wearable Vibrator",
+    category: "For Her",
     price: 22000,
-    color: "#1a237e",
-    image: "",
-    description: "Ergonomically angled to reach the prostate, with a flared base for safety and a vibrating head.",
-    features: ["Angled head", "Flared safety base", "8 vibration modes", "Rechargeable"],
+    color: "#e91e63",
+    images: ["images/app-wearable-vibrator.jpg"],
+    description: "A curved, wearable vibrator you control from your phone. One end sits inside, the slim arm rests outside, and the app lets you – or your partner – change the vibration from anywhere.",
+    features: ["Controlled by free phone app (Bluetooth)", "Wearable, hands-free C-shape", "Multiple vibration patterns", "Soft body-safe silicone", "USB rechargeable"],
     howItWorks: [
-      "Relax and apply generous water-based lube – the anus does not lubricate itself.",
-      "Insert slowly, pointing the curved head towards the front of the body.",
-      "The head rests on the prostate (about 5 cm inside).",
-      "Turn on vibration and adjust to taste.",
-      "The flared base prevents it going in too far. Wash carefully after use."
+      "Charge fully before first use.",
+      "Press the button on the toy to switch it on, then open the app and connect to it over Bluetooth.",
+      "Apply a little water-based lube to the round end and insert it gently; the slim arm rests outside against the clitoris.",
+      "Use the app to pick a pattern and intensity – you can hand control to a partner on their phone too.",
+      "Hold the button to switch off, then wash with warm soapy water and dry."
     ]
   },
   {
-    id: "beginner-plug",
-    name: "Beginner Plug Set",
+    id: "brush-vibrator",
+    name: "Makeup Brush Vibrator (Discreet)",
+    category: "For Her",
+    price: 15000,
+    color: "#f48fb1",
+    images: ["images/brush-vibrator.jpg"],
+    description: "Looks exactly like a makeup brush – perfect for privacy and travel. Remove the brush head and a smooth bullet vibrator is underneath.",
+    features: ["Disguised as a makeup brush", "Detachable brush head", "Multiple vibration modes", "Soft-touch pink finish", "Rechargeable"],
+    howItWorks: [
+      "Pull off the brush head to reveal the bullet vibrator.",
+      "Press the button on the handle to switch on; press again to change modes.",
+      "Use externally on sensitive areas, with a little water-based lube for comfort.",
+      "Hold the button to switch off, clean the bullet with warm soapy water and put the brush head back on."
+    ]
+  },
+
+  /* ---------------- For Him ---------------- */
+  {
+    id: "3in1-stroker",
+    name: "3-in-1 Realistic Stroker",
+    category: "For Him",
+    price: 20000,
+    color: "#5c6bc0",
+    images: ["images/3in1-stroker.jpg"],
+    description: "A soft, realistic male masturbator with three separate openings (mouth, vaginal and anal) for three different sensations in one toy.",
+    features: ["3 openings in one toy", "Ultra-soft, skin-like TPE", "Textured inner channels", "Manual – no batteries needed"],
+    howItWorks: [
+      "Rinse with warm water before use to make it soft and warm.",
+      "Apply plenty of water-based lubricant to the opening you choose and to yourself.",
+      "Insert and move at your own pace – each channel has a different texture inside.",
+      "After use, rinse the inside with warm water and mild soap, then let it dry completely.",
+      "Dust lightly with cornstarch or renewal powder to keep the material soft and stop it from getting sticky."
+    ]
+  },
+  {
+    id: "mini-torso",
+    name: "Mini Torso Masturbator",
+    category: "For Him",
+    price: 35000,
+    color: "#3f51b5",
+    images: ["images/mini-torso.jpg"],
+    description: "A compact, realistic half-body torso with a soft, lifelike feel. Smaller and lighter than a full doll, so it's easier to use, clean and store.",
+    features: ["Realistic body shape", "Soft, skin-like TPE", "Internal textured channel", "Compact and easy to store"],
+    howItWorks: [
+      "Warm the torso with warm (not hot) water or leave it near a warm towel for a few minutes.",
+      "Apply generous water-based lubricant to the opening.",
+      "Place it on a bed or pillow for support and use at your own pace.",
+      "Rinse the inner channel with warm water and mild soap; squeeze out the water and let it air-dry fully.",
+      "Dust with cornstarch or renewal powder and store away from direct sunlight."
+    ]
+  },
+  {
+    id: "torso-doll",
+    name: "BJdoll Full Torso Doll",
+    category: "For Him",
+    price: 85000,
+    color: "#283593",
+    images: ["images/torso-doll-1.jpg", "images/torso-doll-2.jpg"],
+    description: "A large, heavy, realistic torso doll with a full chest and hips. The weight and size give a much more lifelike experience than a hand-held stroker.",
+    features: ["Large realistic torso", "Soft, skin-like TPE", "Two internal channels", "Heavy and stable – stays in place"],
+    howItWorks: [
+      "Lay the doll on a towel on the bed or sofa – its weight keeps it steady.",
+      "Warm it with a heating pad or warm towel for a more lifelike feel.",
+      "Apply generous water-based lubricant before use (never silicone- or oil-based lube on TPE).",
+      "Clean the channels with warm water and mild soap using a cleaning bulb if available, then dry thoroughly.",
+      "Powder the skin with cornstarch to keep it soft and store it lying flat, covered, away from sunlight."
+    ]
+  },
+
+  /* ---------------- Anal ---------------- */
+  {
+    id: "vibrating-anal-plug",
+    name: "Vibrating Anal Plug (Remote / App)",
     category: "Anal",
-    price: 13500,
-    color: "#4527a0",
-    image: "",
-    description: "Three smooth silicone plugs in small, medium and large – a gentle way to explore at your own pace.",
-    features: ["3 sizes", "Flared base on each", "Body-safe silicone", "Storage pouch"],
+    price: 18000,
+    color: "#8e24aa",
+    images: ["images/anal-plug-1.jpg", "images/anal-plug-2.jpg"],
+    description: "A smooth silicone butt plug with a built-in vibrator and a jewel-style base. Control it with the wireless remote or your phone, so you or a partner can change the vibration hands-free.",
+    features: ["Wireless remote or phone-app control", "Safe body-safe silicone", "Whisper-quiet motor", "Flared jewelled base for safety", "USB rechargeable", "Colours: black, purple, red, green, white"],
     howItWorks: [
-      "Start with the smallest size.",
-      "Apply lots of water-based lube to the plug and yourself.",
-      "Breathe deeply and insert slowly; the narrow neck sits inside, the flared base outside.",
-      "Wear for a few minutes and move up a size only when comfortable.",
-      "Wash with warm soapy water after each use."
+      "Charge fully before first use.",
+      "Press the button on the base to switch on, then pair it with the remote or the app.",
+      "Relax and apply plenty of water-based lube to the plug and yourself – the anus doesn't lubricate itself.",
+      "Insert slowly; the narrow neck sits inside and the flared base stays outside so it can't go in too far.",
+      "Change vibration patterns with the remote or app. Remove gently, switch off and wash with warm soapy water."
+    ]
+  },
+
+  /* ---------------- Couples & Games ---------------- */
+  {
+    id: "drunk-in-love",
+    name: "Drunk in Love – Couples Card Game (X-Rated)",
+    category: "Games",
+    price: 8000,
+    color: "#b71c1c",
+    images: ["images/drunk-in-love.jpg"],
+    description: "A spicy drinking card game for couples. Flirty questions, confessions and dares that help you learn what your partner really likes – the X-rated 'even hotter' edition.",
+    features: ["For couples (2 players)", "Spicy questions & dares", "X-rated edition", "Great for date nights"],
+    howItWorks: [
+      "Shuffle the deck and place it face down between you.",
+      "Take turns drawing a card and reading it out loud.",
+      "Do what the card says – answer, act, or take a sip if you'd rather skip it.",
+      "Keep going as long as you like. Drink responsibly, and only play with drinks if you're both of legal drinking age."
     ]
   },
   {
-    id: "water-lube",
-    name: "Water-Based Lubricant 100ml",
-    category: "Essentials",
-    price: 4500,
-    color: "#00838f",
-    image: "",
-    description: "Silky, non-sticky lube that's safe with all toys and condoms. Unscented and gentle on sensitive skin.",
-    features: ["Safe with silicone toys", "Condom-compatible", "Washes off easily", "Fragrance-free"],
+    id: "do-am-or-leave-am",
+    name: "Do Am or Leave Am – Party Card Game",
+    category: "Games",
+    price: 10000,
+    color: "#e65100",
+    images: ["images/do-am-or-leave-am.jpg"],
+    description: "The Naija party game! Funny dares and challenges for groups – do the dare and earn points, or leave am and lose your turn. Guaranteed laughter at any hangout.",
+    features: ["2–8 players", "Made for Nigerian vibes", "Points-based dares", "Perfect for parties & hangouts"],
     howItWorks: [
-      "Squeeze a small amount onto fingers or the toy.",
-      "Spread over the area to reduce friction and make everything smoother.",
-      "Reapply whenever it starts to feel dry.",
-      "Rinse off with water afterwards – it does not stain."
+      "Shuffle the cards and sit in a circle.",
+      "On your turn, draw a card and read the dare out loud.",
+      "'Do am' to earn the reward points on the card, or 'leave am' and get no point.",
+      "Keep score – the player with the most points at the end wins."
     ]
   },
   {
-    id: "toy-cleaner",
-    name: "Toy Cleaner Spray",
-    category: "Essentials",
-    price: 3500,
-    color: "#00695c",
-    image: "",
-    description: "Antibacterial foaming cleaner that keeps your toys hygienic and lasting longer.",
-    features: ["Antibacterial", "Alcohol-free", "Safe on silicone", "150ml"],
+    id: "chess-3in1",
+    name: "3-in-1 Magnetic Chess, Draughts & Backgammon",
+    category: "Games",
+    price: 12000,
+    color: "#424242",
+    images: ["images/chess-set-1.jpg", "images/chess-set-2.jpg"],
+    description: "Three classic games in one folding board: chess, draughts (checkers) and backgammon. Magnetic pieces stay in place, so it's great for travel or relaxing with your partner.",
+    features: ["Chess, draughts & backgammon", "Magnetic pieces", "Folding board doubles as storage", "Dice included"],
     howItWorks: [
-      "Switch the toy off and remove batteries if any.",
-      "Spray all over the surface.",
-      "Leave for 30 seconds, then rinse or wipe with a clean cloth.",
-      "Air-dry fully before storing in a pouch."
+      "Unfold the board – one side is the chess/draughts board, the inside is the backgammon board.",
+      "Chess: set up the pieces in the back two rows and take turns moving to checkmate the king.",
+      "Draughts: place pieces on the dark squares and jump over your opponent's pieces to capture them.",
+      "Backgammon: roll the dice and move your pieces around the board to bear them all off first.",
+      "The magnets keep pieces in place, and everything folds up inside the board."
     ]
   },
+
+  /* ---------------- Health ---------------- */
   {
-    id: "massage-oil",
-    name: "Warming Massage Oil",
-    category: "Essentials",
-    price: 6000,
-    color: "#ef6c00",
-    image: "",
-    description: "A lightly scented oil that warms gently when you blow on it – ideal for setting the mood with a partner.",
-    features: ["Warming effect", "Vanilla scent", "Moisturising", "120ml"],
+    id: "combo-test-kit",
+    name: "HIV / Hepatitis B & C / Syphilis Combo Test Kit",
+    category: "Health",
+    price: 25000,
+    color: "#e64a19",
+    images: ["images/test-kit.jpg"],
+    description: "A rapid combination test that checks a small blood sample for HIV antibodies, Hepatitis C antibodies, Syphilis (TP) antibodies and Hepatitis B surface antigen (HBsAg) at the same time. Box of 20 tests.",
+    features: ["Tests for HIV, HCV, Syphilis & Hepatitis B", "Results in about 15 minutes", "Finger-prick blood sample", "20 tests per box"],
     howItWorks: [
-      "Warm a few drops between your palms.",
-      "Massage slowly into the skin with long strokes.",
-      "Blow softly on the skin to activate the warming feeling.",
-      "Not for internal use and not compatible with latex condoms."
-    ]
+      "Wash and dry your hands. Clean a fingertip with the alcohol swab and prick it with a sterile lancet.",
+      "Place the amount of blood shown in the leaflet into the sample well of the test cassette.",
+      "Add the buffer drops as instructed.",
+      "Wait about 15 minutes, then read each window: a line at C only means negative; a line at C and T means reactive (positive) for that infection.",
+      "If no line appears at C, the test is invalid – use a new test."
+    ],
+    note: "Always follow the leaflet inside the box. A reactive (positive) result must be confirmed at a hospital or clinic, and a negative result may not show a very recent infection."
+  },
+
+  /* ---------------- Vapes (18+) ---------------- */
+  {
+    id: "mak-lux6000-watermelon-ice",
+    name: "MAK LUX6000 Disposable Vape – Watermelon Ice",
+    category: "Vapes",
+    price: 12000,
+    color: "#e53935",
+    images: ["images/mak-lux6000-watermelon-ice.jpg"],
+    description: "Sweet, juicy watermelon with a cool icy finish. Up to 6,000 puffs from a sleek disposable device.",
+    features: ["Up to 6,000 puffs", "Watermelon Ice flavour", "Pre-filled, ready to use", "Rechargeable (Type-C)"],
+    howItWorks: [
+      "Remove the packaging and the rubber cap from the mouthpiece and base.",
+      "There are no buttons – just inhale gently from the mouthpiece and it switches on automatically.",
+      "If the light flashes and vapour stops, charge it with a Type-C cable.",
+      "When the flavour fades or it stops producing vapour after charging, it's finished – dispose of it responsibly."
+    ],
+    note: "Contains nicotine, which is addictive. Strictly 18+. Not for pregnant women or non-smokers."
   },
   {
-    id: "silk-blindfold",
-    name: "Silk Blindfold & Ties",
-    category: "Couples",
-    price: 7500,
-    color: "#4e342e",
-    image: "",
-    description: "A soft satin blindfold and two matching ties for light, playful bondage. Comfortable and easy to release.",
-    features: ["Satin fabric", "Adjustable elastic blindfold", "Two 1.5 m ties", "Machine washable"],
+    id: "mak-lux6000-strawberry-watermelon",
+    name: "MAK LUX6000 Disposable Vape – Strawberry Watermelon Ice",
+    category: "Vapes",
+    price: 12000,
+    color: "#43a047",
+    images: ["images/mak-lux6000-strawberry-watermelon.jpg"],
+    description: "Ripe strawberry blended with watermelon and a refreshing icy kick. Up to 6,000 puffs.",
+    features: ["Up to 6,000 puffs", "Strawberry Watermelon Ice flavour", "Pre-filled, ready to use", "Rechargeable (Type-C)"],
     howItWorks: [
-      "Agree on a safe word with your partner before you begin.",
-      "Place the blindfold over the eyes – removing sight heightens the other senses.",
-      "Tie wrists loosely with the satin ties, leaving room for two fingers.",
-      "Check in with your partner often and untie immediately if asked."
-    ]
+      "Remove the packaging and the rubber cap from the mouthpiece and base.",
+      "There are no buttons – just inhale gently from the mouthpiece and it switches on automatically.",
+      "If the light flashes and vapour stops, charge it with a Type-C cable.",
+      "When the flavour fades or it stops producing vapour after charging, it's finished – dispose of it responsibly."
+    ],
+    note: "Contains nicotine, which is addictive. Strictly 18+. Not for pregnant women or non-smokers."
+  },
+  {
+    id: "mak-bc5000-pink-lemonade",
+    name: "MAK BC5000 Disposable Vape – Pink Lemonade",
+    category: "Vapes",
+    price: 10000,
+    color: "#9575cd",
+    images: ["images/mak-bc5000-pink-lemonade.jpg"],
+    description: "Tangy pink lemonade flavour in a compact disposable. 13ml e-liquid, 650mAh battery and up to 5,000 puffs.",
+    features: ["Up to 5,000 puffs", "Pink Lemonade flavour", "13ml e-liquid, 650mAh battery", "Rechargeable (Type-C)"],
+    howItWorks: [
+      "Remove the packaging and the rubber cap from the mouthpiece and base.",
+      "There are no buttons – just inhale gently from the mouthpiece and it switches on automatically.",
+      "If the light flashes and vapour stops, charge it with a Type-C cable.",
+      "When the flavour fades or it stops producing vapour after charging, it's finished – dispose of it responsibly."
+    ],
+    note: "Contains nicotine, which is addictive. Strictly 18+. Not for pregnant women or non-smokers."
   }
 ];

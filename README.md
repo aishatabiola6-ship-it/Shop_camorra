@@ -16,7 +16,7 @@ A static website (plain HTML/CSS/JS, no build step). You can host it for free on
 - **Checkout** sends the order to the shop's email (the customer's email app opens with the order filled in)
 
 ## Editing
-- Products, prices and "how it works" steps: `products.js` (add photos with the `image` field, e.g. `images/bullet.jpg`)
+- Products, prices and "how it works" steps: `products.js`. Photos go in `images/` and are listed in each product's `images` field (first photo = shop thumbnail)
 - Store name, email, location and email sending: `config.js`
 
 ## Sending real verification emails

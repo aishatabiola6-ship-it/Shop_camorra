@@ -119,7 +119,8 @@
 
   /* ---------------- product visuals ---------------- */
   function productArt(p, big) {
-    if (p.image) return `<img src="${esc(p.image)}" alt="${esc(p.name)}" class="art-img">`;
+    const img = (p.images && p.images[0]) || p.image;
+    if (img) return `<div class="art-photo ${big ? "art-big" : ""}"><img src="${esc(img)}" alt="${esc(p.name)}" class="art-img" loading="lazy" id="${big ? "mainImg" : ""}"></div>`;
     const initials = p.name.split(" ").slice(0, 2).map((w) => w[0]).join("");
     return `<div class="art ${big ? "art-big" : ""}" style="--c:${p.color}">
       <span class="art-mark">${esc(initials)}</span>
@@ -158,7 +159,7 @@
     return `
     <section class="hero">
       <h1>Discover what feels good</h1>
-      <p>Body-safe toys and essentials, hand-picked by Preshy. Discreet packaging, delivery around Abraka and across Nigeria.</p>
+      <p>Toys, games, wellness and more, hand-picked by Preshy. Discreet packaging, delivery around Abraka and across Nigeria.</p>
     </section>
     <section class="container">
       <div class="toolbar">
@@ -191,7 +192,10 @@
     <section class="container product">
       <a href="#/shop" class="back">← Back to shop</a>
       <div class="product-grid">
-        <div>${productArt(p, true)}</div>
+        <div>${productArt(p, true)}
+          ${p.images && p.images.length > 1 ? `<div class="thumbs">${p.images.map((src, i) =>
+            `<button class="thumb-btn ${i === 0 ? "on" : ""}" data-src="${esc(src)}"><img src="${esc(src)}" alt=""></button>`).join("")}</div>` : ""}
+        </div>
         <div>
           <p class="eyebrow">${esc(p.category)}</p>
           <h1>${esc(p.name)}</h1>
@@ -203,6 +207,7 @@
 
           <h2 class="section-title">How it works</h2>
           <ol class="steps">${p.howItWorks.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
+          ${p.note ? `<div class="note"><strong>Important:</strong> ${esc(p.note)}</div>` : ""}
 
           <div class="buy">
             <div class="qty">
@@ -499,6 +504,10 @@
     }
 
     if (route === "product") {
+      app.querySelectorAll(".thumb-btn").forEach((t) => t.addEventListener("click", () => {
+        document.getElementById("mainImg").src = t.dataset.src;
+        app.querySelectorAll(".thumb-btn").forEach((x) => x.classList.toggle("on", x === t));
+      }));
       const qty = document.getElementById("qty");
       app.querySelectorAll(".buy [data-step]").forEach((b) => b.addEventListener("click", () => {
         qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) + parseInt(b.dataset.step, 10));
