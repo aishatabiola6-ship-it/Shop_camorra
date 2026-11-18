@@ -98,6 +98,7 @@
     pending.set({ email, method, codeHash: await hash(code), expires: Date.now() + 10 * 60 * 1000 });
 
     if (DEMO) {
+      try { sessionStorage.setItem("pe_demo_code", code); } catch (e) { /* ignore */ }
       toast("Demo mode – your code is <b>" + code + "</b>", 9000);
       return true;
     }
@@ -455,7 +456,9 @@
     <section class="container auth">
       <a href="#/account" class="back">← Back</a>
       <h1>Enter your code</h1>
-      <p class="muted">We sent a 6-digit code to <strong>${esc(p.email)}</strong>. It expires in 10 minutes.</p>
+      ${DEMO
+        ? `<p class="demo-note">Demo mode – emails aren't switched on yet, so here is your code: <strong class="demo-code">${esc((() => { try { return sessionStorage.getItem("pe_demo_code") || ""; } catch (e) { return ""; } })())}</strong></p>`
+        : `<p class="muted">We sent a 6-digit code to <strong>${esc(p.email)}</strong>. It expires in 10 minutes. Check your spam folder too.</p>`}
       <form id="verifyForm" class="form">
         <input name="code" class="code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="\\d{6}" required placeholder="••••••">
         <button class="btn primary block" type="submit">Verify</button>
@@ -752,7 +755,7 @@
         location.hash = "#/set-password";
       });
       document.getElementById("resend").addEventListener("click", () => {
-        const p = pending.get(); if (p) sendCode(p.email, p.method);
+        const p = pending.get(); if (p) sendCode(p.email, p.method).then(() => { if (DEMO) render(); });
       });
     }
 
