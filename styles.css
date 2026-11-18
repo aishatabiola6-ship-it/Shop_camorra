@@ -244,3 +244,4 @@ code { background: var(--bg-2); padding: 1px 6px; border-radius: 6px; }
   transition: transform .2s;
 }
 .wa-float:hover { transform: scale(1.08); }
+.socials a { display: inline-flex; align-items: center; gap: 6px; }

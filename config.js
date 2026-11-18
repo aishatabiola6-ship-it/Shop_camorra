@@ -16,6 +16,7 @@ window.STORE_CONFIG = {
 
   // WhatsApp number for customer questions and order messages (international format, digits only)
   whatsapp: "2348133284978",
+  tiktok: "https://www.tiktok.com/@delta_intimacyhubng",
 
   /*
    * Flutterwave payments.

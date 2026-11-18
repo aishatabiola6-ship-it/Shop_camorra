@@ -513,6 +513,7 @@
         <p>WhatsApp: <a href="${waLink()}" target="_blank" rel="noopener">${WA_DISPLAY}</a></p>
         <p>Email: <a href="mailto:${esc(CFG.email)}">${esc(CFG.email)}</a></p>
         <p>Location: ${esc(CFG.location)}</p>
+        <p>TikTok: <a href="${esc(CFG.tiktok)}" target="_blank" rel="noopener">@delta_intimacyhubng</a></p>
       </div>
     </section>`;
   }
