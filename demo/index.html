@@ -87,6 +87,12 @@ section.block{padding:56px 0}
 .bubble i{position:absolute;right:8px;bottom:3px;font-size:.66rem;color:#667;font-style:normal}
 .out{align-self:flex-end;background:#d9fdd3}.in{align-self:flex-start;background:#fff}
 
+/* slides */
+.slides{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:none}
+.slides::-webkit-scrollbar{display:none}
+.slide{flex:0 0 min(260px,62vw);scroll-snap-align:start;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);background:#fff}
+.slide img{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
+
 /* features */
 .feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .feat{background:rgba(255,255,255,.75);border:1px solid var(--line);border-radius:18px;padding:18px}
@@ -198,6 +204,22 @@ Please send me the delivery date and fee 🙏🏽<i>17:26 ✓✓</i></div>
 Your parcel is packed discreetly 🤫<i>17:27</i></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="block reveal" id="slides">
+    <div class="sec-head">
+      <p class="eyebrow">Slides</p>
+      <h2>The journey, <em>slide by slide</em></h2>
+      <p class="muted">Tap a slide to open it full screen. Swipe sideways to see them all.</p>
+    </div>
+    <div class="slides">
+      <a class="slide" href="slides/slide-1.jpg" target="_blank" rel="noopener"><img src="slides/slide-1.jpg" alt="Slide 1" loading="lazy"></a>
+      <a class="slide" href="slides/slide-2.jpg" target="_blank" rel="noopener"><img src="slides/slide-2.jpg" alt="Slide 2" loading="lazy"></a>
+      <a class="slide" href="slides/slide-3.jpg" target="_blank" rel="noopener"><img src="slides/slide-3.jpg" alt="Slide 3" loading="lazy"></a>
+      <a class="slide" href="slides/slide-4.jpg" target="_blank" rel="noopener"><img src="slides/slide-4.jpg" alt="Slide 4" loading="lazy"></a>
+      <a class="slide" href="slides/slide-5.jpg" target="_blank" rel="noopener"><img src="slides/slide-5.jpg" alt="Slide 5" loading="lazy"></a>
+      <a class="slide" href="slides/slide-6.jpg" target="_blank" rel="noopener"><img src="slides/slide-6.jpg" alt="Slide 6" loading="lazy"></a>
     </div>
   </section>
 
