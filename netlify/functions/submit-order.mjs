@@ -49,8 +49,8 @@ export default async (req) => {
   const saved = await sendToSheet({
     ref: order.ref,
     status: verified ? "PAID ✓ – arrange delivery" : "⚠ CHECK PAYMENT – " + problem,
-    amount: v.ok ? v.data.amount : "",
-    expected: total,
+    amount: v.ok ? Number(v.data.amount).toLocaleString("en-NG") : "",
+    expected: Number(total).toLocaleString("en-NG"),
     items: lines.join("\n"),
     name: order.name,
     whatsapp: order.whatsapp,
