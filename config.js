@@ -15,6 +15,13 @@ window.STORE_CONFIG = {
   whatsapp: "2348133284978",
   tiktok: "https://www.tiktok.com/@delta_intimacyhubng",
 
+  /*
+   * Products & prices from a Google Sheet (so the owner can edit them on her phone).
+   * In Google Sheets: File -> Share -> Publish to web -> choose the Products sheet -> CSV -> Publish,
+   * then paste the link here. Leave empty to use products.js instead.
+   */
+  productsSheetCsv: "",
+
   // "Hot right now" carousel on the home page (swipe; loops back to the first).
   // Use product ids from products.js – add or remove slides freely.
   featured: [

@@ -53,7 +53,25 @@ export async function loadSite(origin) {
     if (!products.length) throw new Error("no products found");
     return { config: ctx.window.STORE_CONFIG || {}, products, source };
   };
+  // When the owner keeps products in a Google Sheet, price orders from that sheet.
+  const withSheet = async (site) => {
+    const url = site.config.productsSheetCsv;
+    if (!url) return site;
+    try {
+      let parserSrc = null;
+      for (const d of dirs) { try { parserSrc = await fs.readFile(path.join(d, "products-sheet.js"), "utf8"); break; } catch (e) { /* next */ } }
+      if (!parserSrc) for (const o of origins) { try { const r = await fetch(o + "/products-sheet.js"); if (r.ok) { parserSrc = await r.text(); break; } } catch (e) { /* next */ } }
+      const ctx = { window: {} };
+      vm.runInNewContext(parserSrc, ctx, { timeout: 1000 });
+      const r = await fetch(url);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const list = ctx.window.parseProductsCsv(await r.text());
+      if (list.length) return { ...site, products: list, source: site.source + " + sheet" };
+    } catch (e) { console.error("[products] could not read the products sheet, using products.js:", e && e.message); }
+    return site;
+  };
 
+  const origins = [...new Set([origin, process.env.URL, process.env.DEPLOY_PRIME_URL, process.env.DEPLOY_URL].filter(Boolean))];
   // 1) From disk
   const dirs = new Set();
   const add = (d) => { if (d) dirs.add(d); };
@@ -67,18 +85,17 @@ export async function loadSite(origin) {
     try {
       const c = await fs.readFile(path.join(d, "config.js"), "utf8");
       const p = await fs.readFile(path.join(d, "products.js"), "utf8");
-      return parse(c, p, "disk:" + d);
+      return withSheet(parse(c, p, "disk:" + d));
     } catch (e) { /* try next */ }
   }
   errors.push("not found on disk (" + [...dirs].join(", ") + ")");
 
   // 2) From the live site
-  const origins = [...new Set([origin, process.env.URL, process.env.DEPLOY_PRIME_URL, process.env.DEPLOY_URL].filter(Boolean))];
   for (const o of origins) {
     try {
       const [cfg, prods] = await Promise.all([fetch(o + "/config.js"), fetch(o + "/products.js")]);
       if (!cfg.ok || !prods.ok) throw new Error(`HTTP ${cfg.status}/${prods.status}`);
-      return parse(await cfg.text(), await prods.text(), "web:" + o);
+      return withSheet(parse(await cfg.text(), await prods.text(), "web:" + o));
     } catch (e) {
       errors.push(o + " → " + (e && e.message));
     }

@@ -6,4 +6,4 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
   # Ship the price list and store settings with the functions, so they can read them from disk.
-  included_files = ["config.js", "products.js"]
+  included_files = ["config.js", "products.js", "products-sheet.js"]

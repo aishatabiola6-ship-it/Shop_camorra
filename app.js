@@ -3,7 +3,7 @@
   "use strict";
 
   const CFG = window.STORE_CONFIG;
-  const PRODUCTS = window.PRODUCTS;
+  let PRODUCTS = window.PRODUCTS; // replaced by the Google Sheet list when one is set up (see loadProducts)
   const app = document.getElementById("app");
   const PAY_DEMO = !(CFG.flutterwave && CFG.flutterwave.publicKey);
   const TEST_MODE = PAY_DEMO || /_TEST-/.test(CFG.flutterwave.publicKey);
@@ -208,7 +208,7 @@
           <div class="card-body">
             <h3>${esc(p.name)}</h3>
             <p class="card-sub">${esc(p.category)}${p.options ? " · " + p.options.values.length + " " + esc(p.options.label.toLowerCase()) + "s" : ""}</p>
-            <p class="price">${money(p.price)}</p>
+            <p class="price">${money(p.price)}${p.inStock === false ? ' <span class="soldout">Sold out</span>' : ""}</p>
           </div>
         </a>
         ${heartBtn(p)}
@@ -317,7 +317,9 @@
               <input id="qty" type="number" min="1" value="1" inputmode="numeric" aria-label="Quantity">
               <button type="button" data-step="1" aria-label="Increase">+</button>
             </div>
-            <button class="btn primary" id="addBtn" data-id="${p.id}" data-price="${p.price}">Add to bag · ${money(p.price)}</button>
+            ${p.inStock === false
+              ? `<button class="btn primary" id="addBtn" disabled style="cursor:not-allowed">Sold out</button>`
+              : `<button class="btn primary" id="addBtn" data-id="${p.id}" data-price="${p.price}">Add to bag · ${money(p.price)}</button>`}
           </div>
         </div>
       </div>
@@ -772,7 +774,7 @@
       }));
       const qty = document.getElementById("qty");
       const addBtn = document.getElementById("addBtn");
-      const syncPrice = () => { addBtn.textContent = "Add to bag · " + money(Number(addBtn.dataset.price) * Math.max(1, parseInt(qty.value, 10) || 1)); };
+      const syncPrice = () => { if (addBtn.disabled) return; addBtn.textContent = "Add to bag · " + money(Number(addBtn.dataset.price) * Math.max(1, parseInt(qty.value, 10) || 1)); };
       app.querySelectorAll(".buy [data-step]").forEach((b) => b.addEventListener("click", () => {
         qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) + parseInt(b.dataset.step, 10));
         syncPrice();
@@ -784,6 +786,7 @@
         app.querySelectorAll(".opt").forEach((x) => x.classList.toggle("on", x === b));
         document.getElementById("optChosen").textContent = chosen;
       }));
+      if (addBtn.disabled) return;
       document.getElementById("addBtn").addEventListener("click", (e) => {
         const n = Math.max(1, parseInt(qty.value, 10) || 1);
         const p = findProduct(e.target.dataset.id);
@@ -986,8 +989,37 @@
     if (parse().parts[0] === "saved") render();
   });
 
+  /* ---------------- products from Google Sheet ----------------
+     If config.js has productsSheetCsv, the product list comes from that sheet (the owner edits it
+     in Google Sheets). The last good copy is kept in the browser so the shop opens instantly;
+     if the sheet can't be reached, the built-in products.js list is used. */
+  async function loadProducts() {
+    const url = CFG.productsSheetCsv;
+    if (!url || typeof window.parseProductsCsv !== "function") return;
+    const cached = store.get("sheet_products", null);
+    if (cached && cached.length) PRODUCTS = cached;
+    try {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 6000);
+      const res = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Math.floor(Date.now() / 60000), { signal: ctl.signal });
+      clearTimeout(t);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const list = window.parseProductsCsv(await res.text());
+      if (list.length) { PRODUCTS = list; store.set("sheet_products", list); }
+    } catch (e) { /* keep cached / built-in list */ }
+  }
+
   window.addEventListener("hashchange", render);
   updateBadge();
   updateAccountLink();
-  render();
+  if (CFG.productsSheetCsv && !store.get("sheet_products", null)) {
+    app.innerHTML = '<div class="empty"><div class="ic">🌹</div><p class="muted">Loading the shop…</p></div>';
+    loadProducts().then(render);
+  } else {
+    render();
+    // refresh quietly in the background, then redraw if anything changed
+    if (CFG.productsSheetCsv) {
+      const before = JSON.stringify(PRODUCTS);
+      loadProducts().then(() => { if (JSON.stringify(PRODUCTS) !== before) render(); });
+    }
+  }
 })();

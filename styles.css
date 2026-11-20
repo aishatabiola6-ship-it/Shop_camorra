@@ -370,3 +370,4 @@ code { background: var(--soft); padding: 1px 6px; border-radius: 6px; }
   .hot-dots { left: 34px; bottom: 20px; }
   .banner h2 { font-size: 2rem; }
 }
+.soldout { display:inline-block; margin-left:6px; font-size:.7rem; font-weight:700; color:#fff; background:#8c7382; padding:2px 8px; border-radius:999px; vertical-align:middle; }
