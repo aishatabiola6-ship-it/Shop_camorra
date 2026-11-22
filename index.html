@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shop Camorra | Heels, Flats, Boots &amp; Sneakers</title>
-<meta name="description" content="Statement heels, ballet flats, boots, sneakers, slides and sandals. Pick your pair and order on WhatsApp.">
-<meta property="og:title" content="Shop Camorra">
-<meta property="og:description" content="Statement heels, slingbacks and sandals. Order on WhatsApp.">
+<title>Strut | Heels, Flats, Boots &amp; Sneakers</title>
+<meta name="description" content="Statement heels, ballet flats, boots, sneakers, slides and sandals. Pay online or order on WhatsApp, with delivery across Nigeria.">
+<meta property="og:title" content="Strut">
+<meta property="og:description" content="Heels, flats, boots and sneakers, delivered across Nigeria.">
 <meta property="og:image" content="img/rose-crystal.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -233,6 +233,111 @@
   .w-dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:width .4s,background .4s}
   .w-dots i.on{width:20px;background:#fff}
 
+  .w-screen{flex:1;display:flex;flex-direction:column;min-height:0}
+  .w-screen[hidden]{display:none}
+  .w-auth{background:var(--cream);color:var(--ink);overflow:auto;align-items:center;justify-content:center;padding:32px 20px;animation:fadeup .5s}
+  @keyframes fadeup{from{opacity:0;transform:translateY(16px)}}
+  .a-box{width:min(400px,100%)}
+  .a-logo{text-align:center;font-family:var(--serif);letter-spacing:.42em;text-transform:uppercase;font-size:1.1rem;margin-bottom:34px}
+  .a-box h2{font-size:2.6rem;font-weight:500}
+  .a-box h2 em{color:var(--gold);font-style:normal}
+  .a-sub{color:var(--muted);font-size:.92rem;margin:.3rem 0 1.6rem}
+  .a-btn{width:100%}
+  .a-err{color:var(--wine);font-size:.85rem;min-height:1.2em;margin:-4px 0 8px}
+  .a-or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.78rem;margin:16px 0}
+  .a-or::before,.a-or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .a-switch{text-align:center;font-size:.88rem;color:var(--muted);margin-top:22px}
+  .a-switch button{color:var(--ink);font-weight:600;text-decoration:underline}
+  .a-note{text-align:center;font-size:.74rem;color:var(--muted);margin-top:10px}
+  .field{display:block;margin-bottom:14px}
+  .field[hidden]{display:none}
+  .field span{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:6px;color:var(--muted)}
+  .field input,.field select,.field textarea{width:100%;padding:.8em 1em;border:1px solid var(--line);border-radius:12px;background:var(--paper);font:inherit;font-size:16px;color:var(--ink);outline:none;transition:border-color .2s}
+  .field textarea{resize:vertical}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+  .field.err input,.field.err select,.field.err textarea{border-color:var(--wine);background:#fbf1f1}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .nav-right{display:flex;align-items:center;gap:22px}
+  .drawer.wide{width:min(520px,100%)}
+  .back{width:40px;height:40px;border-radius:50%;background:var(--cream);font-size:1.1rem}
+  .co-body{padding-bottom:20px}
+  .co-h{font-family:var(--sans);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin:24px 0 12px}
+  .co-body .co-h:first-child{margin-top:14px}
+  .optcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .optc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;background:var(--paper);transition:.2s}
+  .optc b{display:block;font-size:.92rem;font-weight:600}
+  .optc small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+  .optc em{font-style:normal;font-weight:500;font-size:.85rem;display:block;margin-top:6px}
+  .optc[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .optc:disabled{opacity:.45;cursor:not-allowed}
+  .co-hint{color:var(--muted);font-size:.88rem;grid-column:1/-1}
+  .co-note{font-size:.82rem;color:var(--muted);margin-top:8px}
+  .co-note:empty{display:none}
+  .co-line{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:8px 0}
+  .co-line img{width:48px;height:58px;border-radius:8px;object-fit:cover}
+  .co-line h5{font-family:var(--serif);font-size:1.05rem;font-weight:600;line-height:1.2}
+  .co-line small{color:var(--muted);font-size:.78rem}
+  .sum{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .sum div{display:flex;justify-content:space-between;padding:5px 0;font-size:.95rem}
+  .sum .grand{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-size:1.1rem}
+  .link-wa{display:block;margin:16px auto 4px;color:#1f7a4d;font-size:.86rem;text-decoration:underline}
+  .demo{text-align:center}
+  .co-err{color:var(--wine);font-size:.85rem;text-align:center}
+  .co-err:empty{display:none}
+  .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .done-body{text-align:center}
+  .done-check{width:84px;height:84px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;margin:28px auto 18px;box-shadow:0 0 0 10px #efe3df;animation:pop .5s}
+  .done-check svg{width:36px;height:36px}
+  .done-body h4{font-family:var(--serif);font-size:2rem;font-weight:500}
+  .done-body > p{color:var(--muted);margin:.3rem auto 1.4rem;max-width:22em}
+  .receipt{border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-align:left;background:var(--paper)}
+  .receipt .r{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:.9rem}
+  .receipt .r span{color:var(--muted)}
+  .thumbs{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .thumbs img{width:44px;height:52px;border-radius:8px;object-fit:cover}
+  .pay-box{margin-top:14px;padding:14px;border-radius:12px;background:var(--cream);font-size:.86rem;text-align:left}
+  .p-top{text-align:center;padding:20px 0 6px}
+  .avatar{width:76px;height:76px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-family:var(--serif);font-size:2.1rem;margin:0 auto 10px;border:3px solid var(--paper);box-shadow:0 0 0 1px var(--line)}
+  .p-top h4{font-family:var(--serif);font-size:1.6rem;font-weight:500}
+  .p-top small{color:var(--muted);font-size:.82rem}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:14px;margin:18px 0 8px;background:var(--paper)}
+  .stats div{padding:12px 6px;text-align:center}
+  .stats div + div{border-left:1px solid var(--line)}
+  .stats b{display:block;font-size:1.15rem}
+  .stats span{font-size:.72rem;color:var(--muted)}
+  .order{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--paper)}
+  .order .r{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.88rem}
+  .order small{color:var(--muted);font-size:.78rem}
+  .pill{font-size:.7rem;padding:.3em .8em;border-radius:999px;background:#efe6d6;font-weight:500;white-space:nowrap}
+  .pill.go{background:#e3efe7;color:#1f6b43}
+  .pill.ok{background:var(--ink);color:#fff}
+  .p-row{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:15px 2px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+  .p-row small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+  .p-row::after{content:"›";color:var(--muted);font-size:1.3rem}
+  .req-intro{color:var(--muted);margin:16px 0 18px;font-size:.95rem}
+  .zones{margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.88rem;max-width:40em}
+  .zones div{display:grid;grid-template-columns:1.2fr 2fr .9fr;gap:12px;padding:10px 14px;background:var(--paper)}
+  .zones div + div{border-top:1px solid var(--line)}
+  .zones b{font-weight:600}
+  .zones span{color:var(--muted)}
+  .zones em{font-style:normal;text-align:right;font-weight:500}
+  .zones em small{color:var(--muted);font-weight:400}
+  @media (min-width:901px){
+    .w-slides{display:grid;grid-template-columns:repeat(3,1fr)}
+    .w-slides img{position:static;opacity:1;transform:none;height:100%;min-height:0}
+    .w-dots{display:none}
+    .w-panel{margin-top:-120px;text-align:center}
+    .w-go{max-width:340px;margin:0 auto}
+  }
+  @media (max-width:560px){
+    .acct-btn span{display:none}
+    .nav-right{gap:16px}
+    .zones div{grid-template-columns:1fr auto}
+    .zones span{grid-column:1/-1;grid-row:2;font-size:.8rem}
+    .two{grid-template-columns:1fr;gap:0}
+  }
+
   /* APP-STYLE HOME */
   .app{padding:24px 0 8px}
   .greet small{display:block;color:var(--muted);font-size:.85rem}
@@ -247,14 +352,15 @@
   .cat span{width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid var(--paper);box-shadow:0 0 0 1px var(--line);transition:box-shadow .2s}
   .cat:hover span{box-shadow:0 0 0 2px var(--gold)}
   .cat img{width:100%;height:100%;object-fit:cover}
-  .banner{position:relative;display:block;border-radius:20px;overflow:hidden;aspect-ratio:16/7;max-height:340px;width:100%;background:var(--ink);color:#fff;margin-bottom:34px}
-  .banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.85;transition:transform .8s}
-  .banner:hover img{transform:scale(1.04)}
-  .banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,14,10,.75),rgba(20,14,10,.05) 70%)}
-  .banner div{position:absolute;left:28px;bottom:26px;z-index:1}
-  .banner small{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
-  .banner h3{font-size:clamp(1.9rem,5vw,3rem);font-weight:500;margin:.15em 0 .5em}
-  .banner b{display:inline-flex;gap:.5em;background:var(--paper);color:var(--ink);padding:.6em 1.2em;border-radius:999px;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+  .banner{display:grid;grid-template-columns:1fr 1.4fr;border-radius:20px;overflow:hidden;background:var(--ink);color:#fff;margin-bottom:34px;min-height:300px}
+  .b-text{padding:32px 30px;display:flex;flex-direction:column;justify-content:center}
+  .b-text small{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-2)}
+  .b-text h3{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;margin:.2em 0 .3em}
+  .b-text p{color:#c9bfb3;font-size:.9rem;font-weight:300;margin-bottom:1.2rem;max-width:22em}
+  .b-text b{align-self:flex-start;background:var(--paper);color:var(--ink);padding:.65em 1.3em;border-radius:999px;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+  .b-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;min-height:0}
+  .b-imgs img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+  .banner:hover .b-imgs img{transform:scale(1.04)}
   .row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
   .row-head h3{font-size:1.6rem;font-weight:500}
   .row-head a{font-size:.8rem;color:var(--muted);text-decoration:underline}
@@ -268,19 +374,24 @@
   .t-card small{font-size:.82rem;font-weight:500}
   .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
 
+  @media (max-width:560px){
+    .banner{grid-template-columns:1fr;min-height:0}
+    .b-imgs{height:190px;order:-1}
+    .b-text{padding:22px}
+  }
+
   /* MOBILE TAB BAR */
   .tabbar{display:none}
   @media (max-width:900px){
     .hero{display:none}
     .tabbar{display:flex;position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:55;background:var(--ink);border-radius:999px;padding:6px;gap:4px;box-shadow:0 14px 30px -10px rgba(0,0,0,.5)}
-    .tabbar a,.tabbar button{position:relative;width:52px;height:44px;border-radius:999px;display:grid;place-items:center;color:#cfc6bb}
+    .tabbar a,.tabbar button{position:relative;width:50px;height:44px;border-radius:999px;display:grid;place-items:center;color:#cfc6bb}
     .tabbar .on{background:var(--paper);color:var(--ink)}
     .tabbar svg{width:20px;height:20px}
     .tabbar .tb-count{position:absolute;top:4px;right:10px;min-width:16px;height:16px;border-radius:8px;background:var(--wine);color:#fff;font-size:.62rem;display:none;place-items:center;padding:0 4px}
     .tabbar .tb-count.on{display:grid}
     .wa-float{display:none}
     footer{padding-bottom:100px}
-    .banner{aspect-ratio:16/10}
   }
 
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
@@ -331,34 +442,60 @@
 
 <header class="nav" id="nav">
   <div class="wrap">
-    <a href="#top" class="logo">Shop <em>Camorra</em></a>
+    <a href="#top" class="logo">Strut<em>.</em></a>
     <nav class="nav-links" aria-label="Main">
       <a href="#shop">Shop</a>
       <a href="#story">About</a>
       <a href="#how">How to order</a>
       <a href="#faq">FAQ</a>
     </nav>
+    <div class="nav-right">
+    <button class="bag-btn acct-btn" id="acctBtn" aria-label="Account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      <span id="acctName">Sign in</span>
+    </button>
     <button class="bag-btn" id="bagBtn" aria-label="Open bag">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
       <span class="bag-count" id="bagCount">0</span>
       <span>Bag</span>
     </button>
+    </div>
   </div>
 </header>
 
-<div class="welcome" id="welcome" role="dialog" aria-label="Welcome">
-  <div class="w-slides" id="wSlides">
-    <div class="w-logo">Shop Camorra</div>
-    <img src="img/crystal-coil.jpg" alt="" class="on">
-    <img src="img/knit-bow-boot.jpg" alt="">
-    <img src="img/cap-toe-mj.jpg" alt="">
-  </div>
-  <div class="w-panel">
-    <h2>Step in like it's <em>already yours.</em></h2>
-    <p>Heels, flats, boots &amp; sneakers, picked one pair at a time. Order in a few taps on WhatsApp.</p>
-    <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
-    <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i></div>
-  </div>
+<div class="welcome" id="welcome" role="dialog" aria-label="Welcome to Strut">
+  <section class="w-screen w-intro" id="wIntro">
+    <div class="w-slides">
+      <div class="w-logo">Strut</div>
+      <img src="img/rose-crystal.jpg" alt="" class="on">
+      <img src="img/choc-patent.jpg" alt="">
+      <img src="img/nude-twist-mule.jpg" alt="">
+    </div>
+    <div class="w-panel">
+      <h2>Walk in like it's <em>already yours.</em></h2>
+      <p>Heels, flats, boots &amp; sneakers, picked one pair at a time and delivered across Nigeria.</p>
+      <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
+      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i></div>
+    </div>
+  </section>
+  <section class="w-screen w-auth" id="wAuth" hidden>
+    <div class="a-box">
+      <div class="a-logo">Strut</div>
+      <h2 id="aTitle">Welcome back<em>.</em></h2>
+      <p class="a-sub" id="aSub">Sign in to pick up where you left off.</p>
+      <form id="aForm" novalidate>
+        <label class="field" id="aNameWrap" hidden><span>Full name</span><input id="aName" autocomplete="name" placeholder="Amara Okafor"></label>
+        <label class="field"><span>Email</span><input id="aEmail" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <label class="field"><span>Password</span><input id="aPass" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+        <p class="a-err" id="aErr" role="alert"></p>
+        <button class="btn btn-dark a-btn" id="aBtn" type="submit">Sign in</button>
+      </form>
+      <div class="a-or"><span>or</span></div>
+      <button class="btn btn-line a-btn" id="aGuest" type="button">Continue as guest</button>
+      <p class="a-switch"><span id="aSwitchTxt">New to Strut?</span> <button type="button" id="aSwitch">Create account</button></p>
+      <p class="a-note">Demo store: your account is saved on this device only.</p>
+    </div>
+  </section>
 </div>
 
 <main id="top">
@@ -367,7 +504,7 @@
       <div>
         <p class="eyebrow">New season · Just landed</p>
         <h1>Step in like you <em>own the room.</em></h1>
-        <p class="lead">Statement heels, mesh ballet flats, cosy boots and fresh sneakers, picked one pair at a time. Choose your size, tap order, and we'll sort the rest on WhatsApp.</p>
+        <p class="lead">Statement heels, mesh ballet flats, cosy boots and fresh sneakers, picked one pair at a time. Choose your size, check out in a few taps, and we'll deliver anywhere in Nigeria.</p>
         <div class="hero-ctas">
           <a href="#shop" class="btn btn-dark">Shop the edit</a>
           <a href="#" class="btn btn-line js-wa">Chat with us</a>
@@ -397,8 +534,8 @@
       </label>
       <div class="cats" id="cats"></div>
       <a class="banner" href="#shop" id="banner">
-        <img src="img/pearl-bow-pump.jpg" alt="">
-        <div><small>New season</small><h3>The Bridal Edit</h3><b>Shop now →</b></div>
+        <div class="b-text"><small>New in</small><h3>Statement heels</h3><p>Crystal, satin and patent pairs for the nights you'll remember.</p><b>Shop heels →</b></div>
+        <div class="b-imgs"><img src="img/rose-crystal.jpg" alt=""><img src="img/plum-satin.jpg" alt=""><img src="img/emerald-slingback.jpg" alt=""></div>
       </a>
       <div class="row-head"><h3>Trending now</h3><a href="#shop">See all</a></div>
       <div class="trend" id="trend"></div>
@@ -453,7 +590,7 @@
       <div class="steps">
         <div class="step reveal"><h3>Pick your pair</h3><p>Tap any style to see more photos, then choose your colour and EU size.</p></div>
         <div class="step reveal"><h3>Add to bag</h3><p>Add one pair or a few. Your bag keeps everything together with sizes and totals.</p></div>
-        <div class="step reveal"><h3>Send on WhatsApp</h3><p>Your order opens in WhatsApp, ready to send. We confirm stock, payment and delivery there.</p></div>
+        <div class="step reveal"><h3>Check out</h3><p>Pay by card or bank transfer, pay on delivery in Lagos, or send your order on WhatsApp if you prefer to chat.</p></div>
       </div>
     </div>
   </section>
@@ -465,8 +602,8 @@
         <h2>Good to know</h2>
       </div>
       <div class="reveal">
-        <details open><summary>How do I pay?</summary><p>Once you send your order on WhatsApp, we confirm availability and share payment details. Your pair ships as soon as payment is confirmed.</p></details>
-        <details><summary>How long does delivery take?</summary><p>Within the city, 24–48 hours. Other states, 2–4 working days. Delivery fees depend on your location and are confirmed before you pay.</p></details>
+        <details open><summary>How do I pay?</summary><p>Pay by card or bank transfer at checkout. In Lagos you can also pay the rider on delivery. Prefer to chat? Send your order on WhatsApp and we'll sort it there.</p></details>
+        <details><summary>How much is delivery?</summary><p>We deliver to all 36 states and FCT. The fee depends on your state and is shown at checkout before you pay:</p><div class="zones" id="zoneTable"></div></details>
         <details><summary>What if my size doesn't fit?</summary><p>Message us within 48 hours of delivery. Unworn pairs in their original box can be exchanged for another size, subject to stock.</p></details>
         <details><summary>How do I find my size?</summary><p>Measure your foot from heel to longest toe in cm and send it to us. As a guide: 23.5cm ≈ EU 37, 24cm ≈ EU 38, 24.5cm ≈ EU 39, 25cm ≈ EU 40.</p></details>
       </div>
@@ -477,10 +614,11 @@
     <div class="cta reveal">
       <div>
         <h2>Can't find your size or colour? <em>Just ask.</em></h2>
-        <p>New pairs arrive often. Tell us what you're looking for and we'll let you know the moment it lands.</p>
+        <p>Seen a pair you love somewhere else? Tell us about it and we'll find it for you.</p>
       </div>
       <div class="btns">
         <a href="#" class="btn btn-wa js-wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Message on WhatsApp</a>
+        <button class="btn btn-line js-req">Request a pair</button>
         <a href="#" class="btn btn-line js-ig">Follow on Instagram</a>
         <a href="#" class="btn btn-line js-tt">Follow on TikTok</a>
       </div>
@@ -490,7 +628,7 @@
 
 <footer>
   <div class="wrap">
-    <a href="#top" class="logo">Shop <em>Camorra</em></a>
+    <a href="#top" class="logo">Strut<em>.</em></a>
     <div class="links">
       <a href="#shop">Shop</a>
       <a href="#how">How to order</a>
@@ -526,7 +664,7 @@
     <div class="opts" id="mSizes"></div>
     <div class="m-actions">
       <button class="btn btn-dark" id="mAdd">Add to bag</button>
-      <button class="btn btn-wa" id="mBuy">Order this pair on WhatsApp</button>
+      <button class="btn btn-line" id="mBuy">Buy now</button>
       <p class="m-note" id="mNote"></p>
     </div>
   </div>
@@ -540,8 +678,79 @@
   <div class="d-items" id="dItems"></div>
   <div class="d-foot" id="dFoot">
     <div class="total"><span>Subtotal</span><b id="dTotal"></b></div>
-    <small>Delivery fee is confirmed on WhatsApp based on your location.</small>
-    <button class="btn btn-wa" id="checkout">Send order on WhatsApp</button>
+    <small>Delivery is calculated at checkout based on your state.</small>
+    <button class="btn btn-dark" id="checkout">Checkout <span aria-hidden="true">→</span></button>
+    <button class="link-wa" id="bagWa" type="button">Prefer to chat? Order on WhatsApp</button>
+  </div>
+</aside>
+
+<aside class="drawer wide" id="checkoutPanel" aria-label="Checkout">
+  <div class="d-head">
+    <button class="back" id="coBack" type="button" aria-label="Back to bag">←</button>
+    <h3>Checkout</h3>
+    <button class="x" data-close aria-label="Close checkout">×</button>
+  </div>
+  <div class="d-items co-body">
+    <h4 class="co-h">Delivery details</h4>
+    <label class="field" data-f="name"><span>Full name</span><input id="coName" autocomplete="name"></label>
+    <div class="two">
+      <label class="field" data-f="phone"><span>Phone</span><input id="coPhone" type="tel" autocomplete="tel" placeholder="0801 234 5678"></label>
+      <label class="field"><span>Email (optional)</span><input id="coEmail" type="email" autocomplete="email"></label>
+    </div>
+    <div class="two">
+      <label class="field" data-f="state"><span>State</span><select id="coState"></select></label>
+      <label class="field"><span>City / area</span><input id="coCity" autocomplete="address-level2" placeholder="e.g. Lekki"></label>
+    </div>
+    <label class="field" data-f="address" id="coAddrWrap"><span>Street address</span><input id="coAddr" autocomplete="street-address" placeholder="House number, street, landmark"></label>
+    <h4 class="co-h">Delivery</h4>
+    <div class="optcs" id="coShip"></div>
+    <h4 class="co-h">Payment</h4>
+    <div class="optcs" id="coPay"></div>
+    <p class="co-note" id="coPayNote"></p>
+    <h4 class="co-h">Order summary</h4>
+    <div id="coItems"></div>
+    <div class="sum">
+      <div><span>Subtotal</span><b id="coSub"></b></div>
+      <div><span>Delivery</span><b id="coFee"></b></div>
+      <div class="grand"><span>Total</span><b id="coTotal"></b></div>
+    </div>
+    <button class="link-wa" id="coWa" type="button">Prefer to chat? Send this order on WhatsApp</button>
+  </div>
+  <div class="d-foot">
+    <p class="co-err" id="coErr" role="alert"></p>
+    <button class="btn btn-dark" id="coPlace" type="button">Place order</button>
+    <small class="demo">Demo checkout · no money is charged</small>
+  </div>
+</aside>
+
+<aside class="drawer wide" id="donePanel" aria-label="Order confirmed">
+  <div class="d-head"><h3>Order confirmed</h3><button class="x" data-close aria-label="Close">×</button></div>
+  <div class="d-items done-body" id="doneBody"></div>
+  <div class="d-foot">
+    <button class="btn btn-dark" id="doneTrack" type="button">View my orders</button>
+    <button class="btn btn-line" data-close data-go="#shop" type="button">Continue shopping</button>
+  </div>
+</aside>
+
+<aside class="drawer" id="profilePanel" aria-label="Your account">
+  <div class="d-head"><h3>Account</h3><button class="x" data-close aria-label="Close account">×</button></div>
+  <div class="d-items" id="profBody"></div>
+</aside>
+
+<aside class="drawer" id="requestPanel" aria-label="Request a pair">
+  <div class="d-head"><h3>Request a pair</h3><button class="x" data-close aria-label="Close">×</button></div>
+  <div class="d-items co-body">
+    <p class="req-intro">Seen a pair you love somewhere else? Describe it and we'll find it for you.</p>
+    <label class="field" data-f="req"><span>What are you looking for?</span><textarea id="reqWhat" rows="4" placeholder="e.g. Nude pointed slingback, about 9cm heel, for a wedding in December"></textarea></label>
+    <div class="two">
+      <label class="field"><span>Size (EU)</span><select id="reqSize"><option>Not sure</option><option>36</option><option>37</option><option>38</option><option>39</option><option>40</option><option>41</option><option>42</option></select></label>
+      <label class="field"><span>Budget</span><select id="reqBudget"><option>Flexible</option><option>Under ₦50,000</option><option>₦50,000 – ₦100,000</option><option>₦100,000 – ₦200,000</option><option>Above ₦200,000</option></select></label>
+    </div>
+    <label class="field"><span>Needed by (optional)</span><input id="reqWhen" placeholder="e.g. 14 December"></label>
+  </div>
+  <div class="d-foot">
+    <button class="btn btn-wa" id="reqSend" type="button">Send request on WhatsApp</button>
+    <small>Have a photo? Send it in the chat once WhatsApp opens.</small>
   </div>
 </aside>
 
@@ -551,17 +760,38 @@
   <a href="#home" class="on" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg></a>
   <a href="#shop" aria-label="Shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></a>
   <button id="tbBag" aria-label="Bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="tb-count" id="tbCount"></span></button>
+  <button id="tbMe" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button>
   <a href="#" class="js-wa" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></a>
 </nav>
 
 <script>
 /* ===== Shop settings: edit these ===== */
 const SHOP = {
-  name: "Shop Camorra",
+  name: "Strut",
   whatsapp: "2349125837823",            // country code + number, no + or spaces
   instagram: "https://www.instagram.com/shop_camorra",
   tiktok: "https://www.tiktok.com/@shop_camorra",
   currency: "₦",
+};
+
+/* ===== Delivery: fees by zone (shop is in Lagos) ===== */
+const DELIVERY = {
+  zones: {
+    lagos: {label:"Lagos",               fee:3500, days:[1,2]},
+    sw:    {label:"South-West",          fee:5000, days:[2,3]},
+    se:    {label:"South & East",        fee:6500, days:[3,4]},
+    nc:    {label:"North-Central & FCT", fee:7000, days:[3,5]},
+    n:     {label:"North",               fee:8500, days:[4,6]},
+  },
+  express: 6000,                         // Lagos same-day
+  states: {
+    lagos:["Lagos"],
+    sw:["Ogun","Oyo","Osun","Ondo","Ekiti"],
+    se:["Edo","Delta","Rivers","Anambra","Enugu","Imo","Abia","Cross River","Akwa Ibom","Bayelsa","Ebonyi"],
+    nc:["FCT (Abuja)","Kwara","Kogi","Niger","Benue","Plateau","Nasarawa"],
+    n:["Kano","Kaduna","Katsina","Sokoto","Kebbi","Zamfara","Jigawa","Bauchi","Gombe","Adamawa","Taraba","Borno","Yobe"],
+  },
+  bank: {name:"Strut Ltd", number:"0123456789", bank:"Demo Bank"},
 };
 
 /* ===== Products: edit names, prices, sizes and colours here ===== */
@@ -851,7 +1081,7 @@ function renderGrid(){
   const q = query.trim().toLowerCase();
   const list = PRODUCTS.filter(p => (group === "All" || p.group === group) && (current === "All" || p.cat === current)
     && (!q || (p.name+" "+p.cat+" "+p.group+" "+p.colors.map(c=>c[0]).join(" ")).toLowerCase().includes(q)));
-  if (!list.length){ $("#grid").innerHTML = `<p class="empty">No shoes match "${q.replace(/[<>&"]/g,"")}". Try another word, or ask us on WhatsApp.</p>`; return; }
+  if (!list.length){ $("#grid").innerHTML = `<p class="empty">No shoes match "${q.replace(/[<>&"]/g,"")}". Try another word, or <button class="js-req" style="text-decoration:underline">request a pair</button> and we'll find it.</p>`; return; }
   $("#grid").innerHTML = list.map((p,i) => `
     <article class="card" tabindex="0" data-id="${p.id}" style="animation-delay:${i*60}ms" aria-label="${p.name}, ${money(p.price)}">
       <div class="card-img">
@@ -922,7 +1152,7 @@ $("#mAdd").addEventListener("click", () => {
 $("#mBuy").addEventListener("click", () => {
   if (!ready()) return;
   const p = byId(sel.id);
-  window.open(waLink(`Hi ${SHOP.name}! I'd like to order:\n\n• ${p.name}\n  Colour: ${sel.color}\n  Size: EU ${sel.size}\n  Price: ${money(p.price)}\n\nIs it available?`), "_blank", "noopener");
+  addToBag(sel.id, sel.color, sel.size); openCheckout();
 });
 
 // bag
@@ -960,10 +1190,11 @@ $("#dItems").addEventListener("click", e => {
   else return;
   save(); renderBag();
 });
-$("#checkout").addEventListener("click", () => {
+$("#checkout").addEventListener("click", () => openCheckout());
+$("#bagWa").addEventListener("click", () => {
   const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const total = money(bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0));
-  window.open(waLink(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nDelivery address:`), "_blank", "noopener");
+  window.open(waLink(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nState:\nDelivery address:`), "_blank", "noopener");
 });
 $("#bagBtn").addEventListener("click", () => open("#drawer"));
 renderBag();
@@ -994,7 +1225,7 @@ function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add(
 
 // app-style home
 const h = new Date().getHours();
-$("#greet").textContent = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+const greetWord = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
 const CATS = [["Heels","Heels","All","rose-crystal.jpg"],["Flats","Flats","Ballet flats","cap-toe-mj.jpg"],["Boots","Boots","All","cocoa-fur-boot.jpg"],
   ["Sneakers","Sneakers","All","racer-pink.jpg"],["Slides","Flats","Slides","lock-slide.jpg"],["Bridal","Heels","Bridal","pearl-bow-pump.jpg"],["Sandals","Heels","Sandals","crystal-coil.jpg"]];
 $("#cats").innerHTML = CATS.map(([l,g,c,img]) => `<button class="cat" data-g="${g}" data-c="${c}"><span><img src="img/${img}" alt="" loading="lazy"></span>${l}</button>`).join("");
@@ -1003,7 +1234,7 @@ function goShop(g, c){
   renderGroups(); renderGrid(); $("#shop").scrollIntoView({behavior:"smooth"});
 }
 $("#cats").addEventListener("click", e => { const b = e.target.closest(".cat"); if (b) goShop(b.dataset.g, b.dataset.c); });
-$("#banner").addEventListener("click", e => { e.preventDefault(); goShop("Heels","Bridal"); });
+$("#banner").addEventListener("click", e => { e.preventDefault(); goShop("Heels","All"); });
 const trending = PRODUCTS.filter(p => /Bestseller|Statement|New|Limited/.test(p.badge||"")).slice(0,12);
 $("#trend").innerHTML = trending.map(p => `<button class="t-card" data-id="${p.id}"><div><img src="img/${p.imgs[0]}" alt="" loading="lazy"><i aria-hidden="true">♡</i></div><h4>${p.name}</h4><small>${money(p.price)}</small></button>`).join("");
 $("#trend").addEventListener("click", e => { const c = e.target.closest(".t-card"); if (c) openModal(c.dataset.id); });
@@ -1027,22 +1258,239 @@ function syncTabCount(){ const n = bag.reduce((a,l)=>a+l.qty,0), c = $("#tbCount
 syncTabCount();
 const _renderBag = renderBag; renderBag = function(b){ _renderBag(b); syncTabCount(); };
 
-// welcome screen (once per visit)
+// ===== account (demo: saved on this device only) =====
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} },
+};
+const getUser = () => store.get("strutUser", null);
+const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function refreshUser(){
+  const u = getUser();
+  $("#greet").textContent = u ? `${greetWord}, ${firstName(u)}` : greetWord;
+  $("#acctName").textContent = u ? firstName(u) : "Sign in";
+}
+refreshUser();
+const nameFromEmail = e => e.split("@")[0].split(/[._\-0-9]+/).filter(Boolean).map(w => w[0].toUpperCase()+w.slice(1)).join(" ") || "Friend";
+
+// ===== welcome → sign in =====
+const W = $("#welcome");
+let wTimer;
+function finishWelcome(){
+  clearInterval(wTimer); W.classList.add("gone"); document.body.style.overflow = "";
+  try { sessionStorage.setItem("strutWelcome","1"); } catch(e) {}
+  setTimeout(() => { W.hidden = true; }, 650);
+}
+let authMode = "in";
+function setAuthMode(m){
+  authMode = m;
+  const up = m === "up";
+  $("#aTitle").innerHTML = up ? "Create account<em>.</em>" : "Welcome back<em>.</em>";
+  $("#aSub").textContent = up ? "Save your details for faster checkout." : "Sign in to pick up where you left off.";
+  $("#aNameWrap").hidden = !up;
+  $("#aBtn").textContent = up ? "Create account" : "Sign in";
+  $("#aSwitchTxt").textContent = up ? "Already have an account?" : "New to Strut?";
+  $("#aSwitch").textContent = up ? "Sign in" : "Create account";
+  $("#aPass").autocomplete = up ? "new-password" : "current-password";
+  $("#aErr").textContent = "";
+}
+function showAuth(mode){
+  setAuthMode(mode || "in");
+  W.hidden = false; W.classList.remove("gone"); document.body.style.overflow = "hidden";
+  $("#wIntro").hidden = true; $("#wAuth").hidden = false;
+  setTimeout(() => (authMode === "up" ? $("#aName") : $("#aEmail")).focus(), 60);
+}
+$("#aSwitch").addEventListener("click", () => setAuthMode(authMode === "up" ? "in" : "up"));
+$("#aGuest").addEventListener("click", finishWelcome);
+$("#aForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const email = $("#aEmail").value.trim(), pass = $("#aPass").value, nm = $("#aName").value.trim();
+  if (authMode === "up" && nm.length < 2) return $("#aErr").textContent = "Please enter your name.";
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return $("#aErr").textContent = "Please enter a valid email.";
+  if (pass.length < 4) return $("#aErr").textContent = "Password must be at least 4 characters.";
+  const prev = getUser();
+  const name = authMode === "up" ? nm : (prev && prev.email === email ? prev.name : nameFromEmail(email));
+  store.set("strutUser", {name, email});          // the password is never stored
+  $("#aPass").value = "";
+  refreshUser(); finishWelcome(); renderProfile();
+  toast(`Welcome${authMode === "up" ? "" : " back"}, ${firstName({name})}`);
+});
 (function(){
-  const w = $("#welcome");
-  let seen = false; try { seen = sessionStorage.getItem("scWelcome") === "1"; } catch(e) {}
-  if (seen || location.hash){ w.remove(); return; }
+  let seen = false; try { seen = sessionStorage.getItem("strutWelcome") === "1"; } catch(e) {}
+  if (seen || location.hash){ W.hidden = true; W.classList.add("gone"); return; }
   document.body.style.overflow = "hidden";
-  const imgs = w.querySelectorAll(".w-slides img"), dots = w.querySelectorAll(".w-dots i");
+  const imgs = W.querySelectorAll(".w-slides img"), dots = W.querySelectorAll(".w-dots i");
   let i = 0;
-  const t = setInterval(() => { imgs[i].classList.remove("on"); dots[i].classList.remove("on"); i = (i+1) % imgs.length; imgs[i].classList.add("on"); dots[i].classList.add("on"); }, 3200);
-  $("#wGo").addEventListener("click", () => {
-    clearInterval(t); w.classList.add("gone"); document.body.style.overflow = "";
-    try { sessionStorage.setItem("scWelcome","1"); } catch(e) {}
-    setTimeout(() => w.remove(), 700);
-  });
+  wTimer = setInterval(() => { imgs[i].classList.remove("on"); dots[i].classList.remove("on"); i = (i+1) % imgs.length; imgs[i].classList.add("on"); dots[i].classList.add("on"); }, 3200);
+  $("#wGo").addEventListener("click", () => { clearInterval(wTimer); getUser() ? finishWelcome() : showAuth("in"); });
   setTimeout(() => $("#wGo").focus(), 100);
 })();
+
+// ===== delivery helpers =====
+const STATE_ZONE = {};
+Object.entries(DELIVERY.states).forEach(([z, list]) => list.forEach(st => STATE_ZONE[st] = z));
+const ALL_STATES = Object.keys(STATE_ZONE).sort((a,b) => a.localeCompare(b));
+$("#zoneTable").innerHTML = Object.entries(DELIVERY.zones).map(([k,z]) =>
+  `<div><b>${z.label}</b><span>${k==="lagos" ? "Same-day express "+money(DELIVERY.express)+" · free pickup in Lekki" : DELIVERY.states[k].join(", ")}</span><em>${money(z.fee)}<br><small>${z.days[0]}–${z.days[1]} days</small></em></div>`).join("");
+$("#coState").innerHTML = `<option value="">Choose state</option>` + ALL_STATES.map(st => `<option>${st}</option>`).join("");
+function shipOptions(state){
+  const zk = STATE_ZONE[state]; if (!zk) return [];
+  const z = DELIVERY.zones[zk];
+  const std = {id:"std", name:"Standard", fee:z.fee, eta:`${z.days[0]}–${z.days[1]} days`, days:z.days};
+  if (zk !== "lagos") return [std];
+  return [std, {id:"exp", name:"Express", fee:DELIVERY.express, eta:"Same day", days:[0,0]}, {id:"pick", name:"Pickup", fee:0, eta:"Lekki · ready in 24h", days:[1,1]}];
+}
+const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"transfer", name:"Bank transfer", sub:"Pay to our account"},{id:"pod", name:"Pay on delivery", sub:"Lagos only"}];
+const fmtDay = d => d.toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"});
+const addDays = (n, from) => { const d = new Date(from || Date.now()); d.setDate(d.getDate()+n); return d; };
+const etaText = (days, from) => days[1] === 0 ? "Today" : days[0] === days[1] ? fmtDay(addDays(days[0], from)) : `${fmtDay(addDays(days[0], from))} – ${fmtDay(addDays(days[1], from))}`;
+const thumbOf = l => { const p = byId(l.id); return p ? `img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}` : ""; };
+
+// ===== checkout =====
+const co = {ship:"std", pay:"card"};
+const subtotal = () => bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0);
+function openCheckout(){
+  if (!bag.length) return;
+  const u = getUser(), a = store.get("strutAddr", {});
+  if (!$("#coName").value) $("#coName").value = a.name || (u ? u.name : "");
+  if (!$("#coEmail").value) $("#coEmail").value = a.email || (u ? u.email : "");
+  if (!$("#coPhone").value) $("#coPhone").value = a.phone || "";
+  if (!$("#coState").value && a.state) $("#coState").value = a.state;
+  if (!$("#coCity").value) $("#coCity").value = a.city || "";
+  if (!$("#coAddr").value) $("#coAddr").value = a.address || "";
+  $("#coErr").textContent = "";
+  document.querySelectorAll("#checkoutPanel .field.err").forEach(f => f.classList.remove("err"));
+  renderCheckout(); open("#checkoutPanel");
+}
+function renderCheckout(){
+  const state = $("#coState").value, opts = shipOptions(state), lagos = STATE_ZONE[state] === "lagos";
+  if (!opts.find(o => o.id === co.ship)) co.ship = "std";
+  if (co.pay === "pod" && !lagos) co.pay = "card";
+  $("#coShip").innerHTML = opts.length
+    ? opts.map(o => `<button type="button" class="optc" aria-pressed="${o.id===co.ship}" data-ship="${o.id}"><b>${o.name}</b><small>${o.eta}</small><em>${o.fee ? money(o.fee) : "Free"}</em></button>`).join("")
+    : `<p class="co-hint">Choose your state to see delivery options and fees.</p>`;
+  $("#coPay").innerHTML = PAYS.map(p => `<button type="button" class="optc" aria-pressed="${p.id===co.pay}" data-pay="${p.id}" ${p.id==="pod" && !lagos ? "disabled" : ""}><b>${p.name}</b><small>${p.sub}</small></button>`).join("");
+  $("#coPayNote").textContent = co.pay === "transfer" ? "You'll get our account details after you place the order."
+    : co.pay === "pod" ? "Pay the rider by cash or transfer when your pair arrives."
+    : state && !lagos ? "Pay on delivery is available in Lagos only." : "";
+  $("#coAddrWrap").hidden = co.ship === "pick";
+  $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${l.color} · EU ${l.size} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
+  const ship = opts.find(o => o.id === co.ship), fee = ship ? ship.fee : 0, total = subtotal() + fee;
+  $("#coSub").textContent = money(subtotal());
+  $("#coFee").textContent = ship ? (fee ? money(fee) : "Free") : "Choose state";
+  $("#coTotal").textContent = money(total);
+  $("#coPlace").textContent = co.pay === "pod" ? `Place order · ${money(total)}` : `Pay ${money(total)}`;
+}
+$("#coState").addEventListener("change", renderCheckout);
+$("#coShip").addEventListener("click", e => { const b = e.target.closest("[data-ship]"); if (b){ co.ship = b.dataset.ship; renderCheckout(); }});
+$("#coPay").addEventListener("click", e => { const b = e.target.closest("[data-pay]"); if (b && !b.disabled){ co.pay = b.dataset.pay; renderCheckout(); }});
+$("#coBack").addEventListener("click", () => open("#drawer"));
+document.querySelectorAll("#checkoutPanel input, #checkoutPanel select").forEach(el => el.addEventListener("input", () => {
+  el.closest(".field").classList.remove("err");
+  if (!document.querySelector("#checkoutPanel .field.err")) $("#coErr").textContent = "";
+}));
+function coDetails(){
+  const state = $("#coState").value, ship = shipOptions(state).find(o => o.id === co.ship);
+  return {name:$("#coName").value.trim(), phone:$("#coPhone").value.trim(), email:$("#coEmail").value.trim(), state, city:$("#coCity").value.trim(), address:$("#coAddr").value.trim(), ship};
+}
+function coValidate(d){
+  const bad = [];
+  if (d.name.length < 2) bad.push("name");
+  if (d.phone.replace(/\D/g,"").length < 10) bad.push("phone");
+  if (!d.state) bad.push("state");
+  if (co.ship !== "pick" && d.address.length < 5) bad.push("address");
+  document.querySelectorAll("#checkoutPanel .field[data-f]").forEach(f => f.classList.toggle("err", bad.includes(f.dataset.f)));
+  $("#coErr").textContent = bad.length ? "Please fill in the highlighted details." : "";
+  if (bad.length) document.querySelector(`#checkoutPanel .field[data-f="${bad[0]}"]`).querySelector("input,select").focus();
+  return !bad.length;
+}
+$("#coPlace").addEventListener("click", () => {
+  const d = coDetails(); if (!coValidate(d)) return;
+  const btn = $("#coPlace"); btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Processing…`;
+  setTimeout(() => {
+    const sub = subtotal(), fee = d.ship.fee;
+    const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
+      name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay};
+    const orders = store.get("strutOrders", []); orders.unshift(order); store.set("strutOrders", orders);
+    store.set("strutAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
+    bag = []; save(); renderBag();
+    btn.disabled = false; renderDone(order); renderProfile(); open("#donePanel");
+  }, 1400);
+});
+$("#coWa").addEventListener("click", () => {
+  const d = coDetails();
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const fee = d.ship ? d.ship.fee : 0;
+  window.open(waLink(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}`), "_blank", "noopener");
+});
+function renderDone(o){
+  const pairs = o.items.reduce((a,l)=>a+l.qty,0);
+  const payBox = o.pay === "transfer"
+    ? `<div class="pay-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to <b>${DELIVERY.bank.name}</b> · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with <b>${o.no}</b> as the reference. We ship as soon as it lands.</div>`
+    : o.pay === "pod" ? `<div class="pay-box">Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.</div>`
+    : `<div class="pay-box">Payment received. A receipt is on its way to your email.</div>`;
+  $("#doneBody").innerHTML = `
+    <div class="done-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5 9-10"/></svg></div>
+    <h4>Thank you, ${esc(o.name.split(" ")[0])}</h4>
+    <p>Your order is confirmed and being packed with love.</p>
+    <div class="receipt">
+      <div class="r"><span>Order number</span><b>#${o.no}</b></div>
+      <div class="r"><span>${o.ship === "Pickup" ? "Ready for pickup" : "Estimated delivery"}</span><b>${etaText(o.days, o.at)}</b></div>
+      <div class="r"><span>Deliver to</span><b>${o.ship === "Pickup" ? "Lekki studio" : esc([o.city, o.state].filter(Boolean).join(", "))}</b></div>
+      <div class="r"><span>Total (${pairs} ${pairs>1?"pairs":"pair"})</span><b>${money(o.total)}</b></div>
+      <div class="thumbs">${o.items.map(l => `<img src="${thumbOf(l)}" alt="">`).join("")}</div>
+    </div>${payBox}`;
+}
+$("#doneTrack").addEventListener("click", () => { renderProfile(); open("#profilePanel"); });
+
+// ===== profile =====
+function orderStatus(o){
+  const age = (Date.now() - o.at) / 864e5;
+  if (age >= Math.max(o.days[1], 0.5)) return `<span class="pill ok">Delivered</span>`;
+  if (age >= 0.25) return `<span class="pill go">On the way</span>`;
+  return `<span class="pill">Processing</span>`;
+}
+function renderProfile(){
+  const u = getUser(), orders = store.get("strutOrders", []), a = store.get("strutAddr", null);
+  const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
+  $("#profBody").innerHTML = `
+    <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "S"}</div>
+      <h4>${u ? esc(u.name) : "Guest"}</h4><small>${u ? esc(u.email) : "Sign in to save your details"}</small></div>
+    <div class="stats"><div><b>${orders.length}</b><span>Orders</span></div><div><b>${pairs}</b><span>Pairs</span></div><div><b>${Math.floor(spent/1000)}</b><span>Points</span></div></div>
+    <h4 class="co-h">My orders</h4>
+    ${orders.length ? orders.map(o => `<div class="order"><div class="r"><b>#${o.no}</b>${orderStatus(o)}</div>
+      <div class="r"><small>${new Date(o.at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})} · ${o.ship} · ${esc(o.state)}</small><b>${money(o.total)}</b></div>
+      <div class="thumbs">${o.items.map(l => `<img src="${thumbOf(l)}" alt="">`).join("")}</div></div>`).join("")
+      : `<p class="co-note">No orders yet. Your orders will show here.</p>`}
+    <h4 class="co-h">Settings</h4>
+    <button class="p-row" data-act="addr"><span>Saved address<small>${a ? esc([a.address, a.city, a.state].filter(Boolean).join(", ")) : "None yet, added at checkout"}</small></span></button>
+    <button class="p-row js-req"><span>Request a pair<small>We'll find the shoe you're looking for</small></span></button>
+    <a class="p-row" href="${waLink(`Hi ${SHOP.name}! I need help with my order.`)}" target="_blank" rel="noopener"><span>Help &amp; support<small>Chat with us on WhatsApp</small></span></a>
+    ${u ? `<button class="p-row" data-act="out"><span>Sign out</span></button>`
+        : `<button class="p-row" data-act="in"><span>Sign in<small>Or create an account</small></span></button>`}`;
+}
+$("#profBody").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  if (b.dataset.act === "out"){ store.del("strutUser"); refreshUser(); renderProfile(); toast("Signed out"); }
+  if (b.dataset.act === "in"){ close(true); showAuth("in"); }
+  if (b.dataset.act === "addr"){ if (bag.length) openCheckout(); else toast("Your address is saved when you check out"); }
+});
+const openProfile = () => { renderProfile(); open("#profilePanel"); };
+$("#acctBtn").addEventListener("click", openProfile);
+$("#tbMe").addEventListener("click", openProfile);
+
+// ===== request a pair =====
+document.addEventListener("click", e => { if (e.target.closest(".js-req")){ e.preventDefault(); open("#requestPanel"); setTimeout(() => $("#reqWhat").focus(), 80); }});
+$("#reqSend").addEventListener("click", () => {
+  const what = $("#reqWhat").value.trim();
+  if (what.length < 4){ $("#reqWhat").closest(".field").classList.add("err"); $("#reqWhat").focus(); return; }
+  const u = getUser(), when = $("#reqWhen").value.trim();
+  window.open(waLink(`Hi ${SHOP.name}! I'd like to request a pair:\n\n${what}\n\nSize: ${$("#reqSize").value}\nBudget: ${$("#reqBudget").value}${when ? "\nNeeded by: "+when : ""}${u ? "\n\nName: "+u.name : ""}`), "_blank", "noopener");
+  close(); toast("Request ready in WhatsApp");
+});
+$("#reqWhat").addEventListener("input", () => $("#reqWhat").closest(".field").classList.remove("err"));
 
 // nav border + reveal on scroll
 addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 10), {passive:true});
