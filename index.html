@@ -10,7 +10,7 @@
 <meta property="og:image" content="img/rose-crystal.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=Bodoni+Moda:ital,opsz,wght@1,6..96,800&display=swap" rel="stylesheet">
 <style>
   :root{
     --cream:#f6f0e8; --sand:#ece2d4; --paper:#fffaf3;
@@ -42,8 +42,6 @@
   .nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--cream) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
   .nav.scrolled{border-color:var(--line)}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
-  .logo{font-family:var(--serif);font-size:1.6rem;font-weight:600;letter-spacing:.02em}
-  .logo em{color:var(--gold);font-style:italic}
   .nav-links{display:flex;gap:2rem;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase}
   .nav-links a{position:relative;padding:.3em 0}
   .nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .3s}
@@ -222,7 +220,6 @@
   .w-slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity 1.2s,transform 6s linear}
   .w-slides img.on{opacity:1;transform:scale(1)}
   .w-slides::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,10,.45) 0%,rgba(20,14,10,0) 25%,rgba(20,14,10,0) 60%,rgba(27,23,20,1) 100%)}
-  .w-logo{position:absolute;top:max(22px,env(safe-area-inset-top));left:0;right:0;text-align:center;z-index:2;font-family:var(--serif);font-size:1.15rem;letter-spacing:.42em;text-transform:uppercase;color:#fff}
   .w-panel{padding:6px 24px max(26px,env(safe-area-inset-bottom));width:min(560px,100%);margin:0 auto;position:relative;z-index:2;margin-top:-90px}
   .w-panel h2{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:500}
   .w-panel h2 em{font-style:italic;color:var(--gold-2)}
@@ -238,7 +235,6 @@
   .w-auth{background:var(--cream);color:var(--ink);overflow:auto;align-items:center;justify-content:center;padding:32px 20px;animation:fadeup .5s}
   @keyframes fadeup{from{opacity:0;transform:translateY(16px)}}
   .a-box{width:min(400px,100%)}
-  .a-logo{text-align:center;font-family:var(--serif);letter-spacing:.42em;text-transform:uppercase;font-size:1.1rem;margin-bottom:34px}
   .a-box h2{font-size:2.6rem;font-weight:500}
   .a-box h2 em{color:var(--gold);font-style:normal}
   .a-sub{color:var(--muted);font-size:.92rem;margin:.3rem 0 1.6rem}
@@ -324,7 +320,7 @@
   .zones em{font-style:normal;text-align:right;font-weight:500}
   .zones em small{color:var(--muted);font-weight:400}
   @media (min-width:901px){
-    .w-slides{display:grid;grid-template-columns:repeat(3,1fr)}
+    .w-slides{display:grid;grid-template-columns:repeat(4,1fr)}
     .w-slides img{position:static;opacity:1;transform:none;height:100%;min-height:0}
     .w-dots{display:none}
     .w-panel{margin-top:-120px;text-align:center}
@@ -337,6 +333,67 @@
     .zones span{grid-column:1/-1;grid-row:2;font-size:.8rem}
     .two{grid-template-columns:1fr;gap:0}
   }
+
+  /* LOGO */
+  .logo{font-family:"Bodoni Moda",var(--serif);font-style:italic;font-weight:800;font-size:2.2rem;letter-spacing:-.03em;line-height:1}
+  .logo em{color:var(--gold);font-style:normal}
+  .w-logo{position:absolute;top:max(18px,env(safe-area-inset-top));left:0;right:0;text-align:center;z-index:2;font-family:"Bodoni Moda",var(--serif);font-style:italic;font-weight:800;font-size:clamp(3.2rem,12vw,4.6rem);letter-spacing:-.03em;line-height:1;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.35)}
+  .w-logo em,.a-logo em{color:var(--gold-2);font-style:normal}
+  .a-logo{text-align:center;font-family:"Bodoni Moda",var(--serif);font-style:italic;font-weight:800;font-size:3.4rem;letter-spacing:-.03em;line-height:1;margin-bottom:28px}
+
+  /* AUTH STEPS */
+  .a-step[hidden]{display:none}
+  .a-step{animation:fadeup .35s}
+  .a-sub b{color:var(--ink);font-weight:600;word-break:break-all}
+  .a-link{font-size:.82rem;color:var(--muted);text-decoration:underline;display:block;margin:-6px 0 10px auto}
+  .a-switch button:disabled{color:var(--muted);text-decoration:none;cursor:default;font-weight:400}
+  .pw{position:relative;display:block}
+  .pw input{padding-right:64px}
+  .eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:.75rem;letter-spacing:.06em;color:var(--muted);padding:.4em .6em;border-radius:8px;text-transform:none}
+  .field .pw{margin:0;letter-spacing:normal;text-transform:none;color:inherit;font-size:inherit}
+  .code-in{font-size:1.7rem!important;letter-spacing:.55em;text-align:center;font-weight:600;padding-left:1.4em!important}
+  .rules{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 14px}
+  .rules li{font-size:.74rem;padding:.3em .8em;border-radius:999px;background:var(--sand);color:var(--muted);transition:.2s}
+  .rules li.ok{background:#e3efe7;color:#1f6b43}
+  .rules li.ok::before{content:"✓ "}
+
+  /* EMAIL NOTIFICATION + VIEWER */
+  .notif{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));z-index:130;width:min(400px,calc(100% - 24px));transform:translate(-50%,-140%);transition:transform .45s cubic-bezier(.2,.8,.2,1);background:rgba(255,250,243,.96);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 18px 40px -12px rgba(0,0,0,.35);padding:12px 14px;display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;color:var(--ink)}
+  .notif.on{transform:translate(-50%,0)}
+  .notif .ic{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:800;font-size:1.3rem}
+  .notif small{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+  .notif b{display:block;font-size:.9rem;line-height:1.25}
+  .notif span{display:block;font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mailview{position:fixed;inset:0;z-index:125;background:rgba(20,14,10,.55);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:.3s}
+  .mailview.on{opacity:1;visibility:visible}
+  .mv-card{background:var(--paper);width:min(560px,100%);max-height:100%;overflow:auto;border-radius:20px;transform:translateY(20px);transition:transform .3s}
+  .mailview.on .mv-card{transform:none}
+  .mv-meta{padding:16px 20px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.82rem;color:var(--muted)}
+  .mv-meta h4{grid-column:1/-1;font-family:var(--sans);font-size:1.05rem;color:var(--ink);font-weight:600}
+  .mv-meta .x{position:static;box-shadow:none;background:var(--cream);grid-row:1;grid-column:2;width:34px;height:34px}
+  .em{padding:0 0 24px}
+  .em-head{background:var(--ink);color:#fff;text-align:center;padding:22px;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:800;font-size:2.2rem;letter-spacing:-.03em}
+  .em-head em{color:var(--gold-2);font-style:normal}
+  .em-body{padding:24px 24px 0;font-size:.95rem;line-height:1.65}
+  .em-body h3{font-size:1.8rem;font-weight:500;margin-bottom:.5rem}
+  .em-body p{margin-bottom:.9rem;color:#4b433c}
+  .em-code{font-size:2.2rem;letter-spacing:.35em;font-weight:600;text-align:center;background:var(--cream);border-radius:14px;padding:16px 0 16px .35em;margin:8px 0 16px;color:var(--ink)}
+  .em-btn{display:inline-block;background:var(--ink);color:#fff!important;padding:.8em 1.6em;border-radius:999px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;margin:4px 0 14px}
+  .em-table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:.88rem}
+  .em-table td{padding:7px 0;border-bottom:1px solid var(--line)}
+  .em-table td:last-child{text-align:right;white-space:nowrap}
+  .em-table tr.t td{font-weight:600;border-bottom:0;padding-top:10px}
+  .em-box{background:var(--cream);border-radius:12px;padding:12px 14px;font-size:.88rem;margin-bottom:14px}
+  .em-foot{padding:16px 24px 0;font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);margin-top:10px}
+  .mail-row{display:grid;grid-template-columns:10px 1fr auto;gap:10px;width:100%;text-align:left;padding:14px 2px;border-bottom:1px solid var(--line);align-items:start}
+  .mail-row i{width:8px;height:8px;border-radius:50%;margin-top:7px}
+  .mail-row.unread i{background:var(--wine)}
+  .mail-row b{display:block;font-size:.92rem;font-weight:500}
+  .mail-row.unread b{font-weight:700}
+  .mail-row span{display:block;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+  .mail-row small{font-size:.74rem;color:var(--muted)}
+  .badge-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--wine);color:#fff;font-size:.7rem;margin-left:6px}
+  @media (max-width:560px){ .logo{font-size:1.95rem} .a-logo{font-size:3rem} }
 
   /* APP-STYLE HOME */
   .app{padding:24px 0 8px}
@@ -466,34 +523,82 @@
 <div class="welcome" id="welcome" role="dialog" aria-label="Welcome to Strut">
   <section class="w-screen w-intro" id="wIntro">
     <div class="w-slides">
-      <div class="w-logo">Strut</div>
-      <img src="img/rose-crystal.jpg" alt="" class="on">
-      <img src="img/choc-patent.jpg" alt="">
-      <img src="img/nude-twist-mule.jpg" alt="">
+      <div class="w-logo">Strut<em>.</em></div>
+      <img src="img/rose-crystal.jpg" alt="Rose gold crystal heels" class="on">
+      <img src="img/velvet-mj.jpg" alt="Velvet Mary Jane flats">
+      <img src="img/plum-runner.jpg" alt="Blush and plum runners">
+      <img src="img/cocoa-fur-boot.jpg" alt="Cocoa fur-cuff boots">
     </div>
     <div class="w-panel">
       <h2>Walk in like it's <em>already yours.</em></h2>
       <p>Heels, flats, boots &amp; sneakers, picked one pair at a time and delivered across Nigeria.</p>
       <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
-      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i></div>
+      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i><i></i></div>
     </div>
   </section>
   <section class="w-screen w-auth" id="wAuth" hidden>
     <div class="a-box">
-      <div class="a-logo">Strut</div>
-      <h2 id="aTitle">Welcome back<em>.</em></h2>
-      <p class="a-sub" id="aSub">Sign in to pick up where you left off.</p>
-      <form id="aForm" novalidate>
-        <label class="field" id="aNameWrap" hidden><span>Full name</span><input id="aName" autocomplete="name" placeholder="Amara Okafor"></label>
-        <label class="field"><span>Email</span><input id="aEmail" type="email" autocomplete="email" placeholder="you@example.com"></label>
-        <label class="field"><span>Password</span><input id="aPass" type="password" autocomplete="current-password" placeholder="••••••••"></label>
-        <p class="a-err" id="aErr" role="alert"></p>
-        <button class="btn btn-dark a-btn" id="aBtn" type="submit">Sign in</button>
+      <div class="a-logo">Strut<em>.</em></div>
+
+      <!-- sign in -->
+      <form class="a-step" data-step="in" novalidate>
+        <h2>Welcome back<em>.</em></h2>
+        <p class="a-sub">Sign in with your email and password.</p>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <label class="field"><span>Password</span><span class="pw"><input name="pass" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" class="eye" aria-label="Show password">Show</button></span></label>
+        <button type="button" class="a-link a-forgot" data-go="forgot">Forgot password?</button>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Sign in</button>
+        <div class="a-or"><span>or</span></div>
+        <button class="btn btn-line a-btn a-guest" type="button">Continue as guest</button>
+        <p class="a-switch">New to Strut? <button type="button" data-go="up">Create account</button></p>
       </form>
-      <div class="a-or"><span>or</span></div>
-      <button class="btn btn-line a-btn" id="aGuest" type="button">Continue as guest</button>
-      <p class="a-switch"><span id="aSwitchTxt">New to Strut?</span> <button type="button" id="aSwitch">Create account</button></p>
-      <p class="a-note">Demo store: your account is saved on this device only.</p>
+
+      <!-- create account: name + email -->
+      <form class="a-step" data-step="up" novalidate hidden>
+        <h2>Create account<em>.</em></h2>
+        <p class="a-sub">We'll email you a code to confirm it's you.</p>
+        <label class="field"><span>Full name</span><input name="name" autocomplete="name" placeholder="Amara Okafor"></label>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Send code</button>
+        <div class="a-or"><span>or</span></div>
+        <button class="btn btn-line a-btn a-guest" type="button">Continue as guest</button>
+        <p class="a-switch">Already have an account? <button type="button" data-go="in">Sign in</button></p>
+      </form>
+
+      <!-- forgot password: email -->
+      <form class="a-step" data-step="forgot" novalidate hidden>
+        <h2>Reset password<em>.</em></h2>
+        <p class="a-sub">Enter your account email and we'll send you a code.</p>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Send code</button>
+        <p class="a-switch">Remembered it? <button type="button" data-go="in">Sign in</button></p>
+      </form>
+
+      <!-- verify code -->
+      <form class="a-step" data-step="code" novalidate hidden>
+        <h2>Check your email<em>.</em></h2>
+        <p class="a-sub">We sent a 6-digit code to <b class="a-to"></b></p>
+        <label class="field"><span>Verification code</span><input name="code" class="code-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Verify</button>
+        <p class="a-switch"><button type="button" class="a-resend" disabled>Resend code</button> · <button type="button" class="a-back">Change email</button></p>
+      </form>
+
+      <!-- set password -->
+      <form class="a-step" data-step="pass" novalidate hidden>
+        <h2 class="a-pass-title">Create a password<em>.</em></h2>
+        <p class="a-sub">You'll use it with your email to sign in next time.</p>
+        <label class="field"><span>Password</span><span class="pw"><input name="pass" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="eye" aria-label="Show password">Show</button></span></label>
+        <ul class="rules"><li data-r="len">8+ characters</li><li data-r="num">A number</li><li data-r="let">A letter</li></ul>
+        <label class="field"><span>Confirm password</span><input name="pass2" type="password" autocomplete="new-password" placeholder="Type it again"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn a-pass-btn" type="submit">Create account</button>
+      </form>
+
+      <p class="a-note">Demo store: accounts are saved on this device and emails arrive in your Strut inbox.</p>
     </div>
   </section>
 </div>
@@ -695,7 +800,7 @@
     <label class="field" data-f="name"><span>Full name</span><input id="coName" autocomplete="name"></label>
     <div class="two">
       <label class="field" data-f="phone"><span>Phone</span><input id="coPhone" type="tel" autocomplete="tel" placeholder="0801 234 5678"></label>
-      <label class="field"><span>Email (optional)</span><input id="coEmail" type="email" autocomplete="email"></label>
+      <label class="field" data-f="email"><span>Email (for your receipt)</span><input id="coEmail" type="email" autocomplete="email"></label>
     </div>
     <div class="two">
       <label class="field" data-f="state"><span>State</span><select id="coState"></select></label>
@@ -754,6 +859,14 @@
   </div>
 </aside>
 
+<aside class="drawer" id="inboxPanel" aria-label="Inbox">
+  <div class="d-head"><button class="back" id="inboxBack" type="button" aria-label="Back to account">←</button><h3>Inbox</h3><button class="x" data-close aria-label="Close inbox">×</button></div>
+  <div class="d-items" id="inboxBody"></div>
+</aside>
+
+<button class="notif" id="notif" type="button" aria-live="polite"></button>
+<div class="mailview" id="mailview" role="dialog" aria-modal="true" aria-label="Email"><div class="mv-card" id="mvBody"></div></div>
+
 <div class="toast" id="toast" role="status"></div>
 
 <nav class="tabbar" aria-label="Quick menu">
@@ -772,6 +885,13 @@ const SHOP = {
   instagram: "https://www.instagram.com/shop_camorra",
   tiktok: "https://www.tiktok.com/@shop_camorra",
   currency: "₦",
+};
+
+/* ===== Email: leave blank for the demo inbox, or add EmailJS keys to send real emails (see README) ===== */
+const EMAIL = {
+  publicKey:  "",
+  serviceId:  "",
+  templateId: "",
 };
 
 /* ===== Delivery: fees by zone (shop is in Lagos) ===== */
@@ -1258,24 +1378,108 @@ function syncTabCount(){ const n = bag.reduce((a,l)=>a+l.qty,0), c = $("#tbCount
 syncTabCount();
 const _renderBag = renderBag; renderBag = function(b){ _renderBag(b); syncTabCount(); };
 
-// ===== account (demo: saved on this device only) =====
+// ===== storage =====
 const store = {
   get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
   del(k){ try { localStorage.removeItem(k); } catch(e){} },
 };
-const getUser = () => store.get("strutUser", null);
-const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
+store.del("strutUser");                                   // old demo format
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const normEmail = e => e.trim().toLowerCase();
+const validEmail = e => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(e);
+
+// ===== accounts (passwords are salted + hashed with PBKDF2, never stored as text) =====
+const accounts = () => store.get("strutAccounts", {});
+const getUser = () => { const s = store.get("strutSession", null), a = s && accounts()[s]; return a ? {name:a.name, email:s} : null; };
+const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+async function hashPassword(pass, saltHex){
+  const salt = saltHex ? new Uint8Array(saltHex.match(/../g).map(h => parseInt(h,16))) : crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt, iterations:150000, hash:"SHA-256"}, key, 256);
+  return {salt:hex(salt), hash:hex(bits)};
+}
 function refreshUser(){
   const u = getUser();
   $("#greet").textContent = u ? `${greetWord}, ${firstName(u)}` : greetWord;
   $("#acctName").textContent = u ? firstName(u) : "Sign in";
 }
 refreshUser();
-const nameFromEmail = e => e.split("@")[0].split(/[._\-0-9]+/).filter(Boolean).map(w => w[0].toUpperCase()+w.slice(1)).join(" ") || "Friend";
 
-// ===== welcome → sign in =====
+// ===== email (demo inbox + optional real sending via EmailJS) =====
+const inbox = () => store.get("strutInbox", []);
+let emailjsReady;
+function loadEmailJS(){
+  if (!emailjsReady) emailjsReady = new Promise((res, rej) => {
+    const sc = document.createElement("script");
+    sc.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js";
+    sc.onload = () => { window.emailjs.init({publicKey: EMAIL.publicKey}); res(window.emailjs); };
+    sc.onerror = rej; document.head.appendChild(sc);
+  });
+  return emailjsReady;
+}
+const mailHTML = (inner) => `<div class="em"><div class="em-head">Strut<em>.</em></div><div class="em-body">${inner}</div>
+  <div class="em-foot">You're receiving this because you used ${esc(SHOP.name)}. Questions? Reply to this email or message us on WhatsApp.</div></div>`;
+async function sendEmail({to, subject, preview, inner}){
+  const mail = {id: Date.now() + "" + Math.random().toString(36).slice(2,6), to: normEmail(to), subject, preview, html: mailHTML(inner), at: Date.now(), read: false};
+  const box = inbox(); box.unshift(mail); store.set("strutInbox", box.slice(0, 60));
+  notify(mail); refreshMailBadge();
+  if (EMAIL.publicKey && EMAIL.serviceId && EMAIL.templateId){
+    try { const ej = await loadEmailJS(); await ej.send(EMAIL.serviceId, EMAIL.templateId, {to_email: to, subject, html: mail.html}); }
+    catch(e){ console.warn("Email not sent", e); }
+  }
+  return mail;
+}
+let notifT;
+function notify(mail){
+  const n = $("#notif");
+  n.innerHTML = `<span class="ic">S</span><span><small><span>Strut · Mail</span><span>now</span></small><b>${esc(mail.subject)}</b><span>${esc(mail.preview)}</span></span>`;
+  n.dataset.id = mail.id; n.classList.add("on");
+  clearTimeout(notifT); notifT = setTimeout(() => n.classList.remove("on"), 7000);
+}
+$("#notif").addEventListener("click", () => { $("#notif").classList.remove("on"); openMail($("#notif").dataset.id); });
+function openMail(id){
+  const box = inbox(), m = box.find(x => x.id === id); if (!m) return;
+  m.read = true; store.set("strutInbox", box); refreshMailBadge();
+  $("#mvBody").innerHTML = `<div class="mv-meta"><h4>${esc(m.subject)}</h4><span>From: ${esc(SHOP.name)} &lt;hello@strut.ng&gt;<br>To: ${esc(m.to)}</span><button class="x" id="mvClose" aria-label="Close email">×</button><span>${new Date(m.at).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</span></div>${m.html}`;
+  $("#mailview").classList.add("on");
+  if ($("#inboxPanel").classList.contains("open")) renderInbox();
+}
+function closeMail(){ $("#mailview").classList.remove("on"); }
+$("#mailview").addEventListener("click", e => { if (e.target.id === "mailview" || e.target.closest("#mvClose")) closeMail(); if (e.target.closest("[data-shop]")){ e.preventDefault(); closeMail(); close(true); $("#shop").scrollIntoView({behavior:"smooth"}); }});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#mailview").classList.contains("on")){ e.stopImmediatePropagation(); closeMail(); } }, true);
+const myMail = () => { const u = getUser(); return u ? inbox().filter(m => m.to === u.email) : []; };
+function refreshMailBadge(){ /* profile badge is re-rendered on open */ if ($("#profilePanel").classList.contains("open")) renderProfile(); }
+function renderInbox(){
+  const list = myMail();
+  $("#inboxBody").innerHTML = list.length ? list.map(m => `<button class="mail-row ${m.read ? "" : "unread"}" data-mail="${m.id}"><i></i><span><b>${esc(m.subject)}</b><span>${esc(m.preview)}</span></span><small>${new Date(m.at).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</small></button>`).join("")
+    : `<p class="co-note" style="margin-top:20px">No emails yet.</p>`;
+}
+$("#inboxBody").addEventListener("click", e => { const r = e.target.closest("[data-mail]"); if (r) openMail(r.dataset.mail); });
+
+// email templates
+const mailCode = (to, code, purpose) => sendEmail({to, subject:`Your Strut code: ${code}`, preview:`Use ${code} to ${purpose}. It expires in 10 minutes.`,
+  inner:`<h3>Your code</h3><p>Use this code to ${purpose}:</p><div class="em-code">${code}</div><p>It expires in 10 minutes. If you didn't ask for this, you can ignore this email.</p>`});
+const mailWelcome = (u) => sendEmail({to:u.email, subject:`Welcome to Strut, ${firstName(u)}`, preview:"Your account is ready. Here's what you can do next.",
+  inner:`<h3>Welcome, ${esc(firstName(u))}.</h3><p>Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.</p>
+  <div class="em-box"><b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· Request a pair you've seen elsewhere</div>
+  <a class="em-btn" href="#shop" data-shop>Start shopping</a><p>See you soon,<br>The Strut team</p>`});
+const mailSignIn = (u) => sendEmail({to:u.email, subject:`Welcome back, ${firstName(u)}`, preview:"You just signed in to your Strut account.",
+  inner:`<h3>Welcome back, ${esc(firstName(u))}.</h3><p>You signed in to Strut on ${new Date().toLocaleString("en-GB",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}.</p>
+  <a class="em-btn" href="#shop" data-shop>See what's new</a><p>Wasn't you? Reset your password from the sign-in page straight away.</p>`});
+function mailOrder(o, to){
+  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td>${esc(p ? p.name : l.id)}<br><small>${esc(l.color)} · EU ${l.size} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
+  const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
+    : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.</div>`
+    : `<div class="em-box">Paid by card · ${money(o.total)}</div>`;
+  return sendEmail({to, subject:`Order confirmed #${o.no}`, preview:`Thanks, ${o.name.split(" ")[0]}! ${money(o.total)} · ${o.ship === "Pickup" ? "ready for pickup" : "arriving " + etaText(o.days, o.at)}`,
+    inner:`<h3>Thank you, ${esc(o.name.split(" ")[0])}.</h3><p>Your order <b>#${o.no}</b> is confirmed and being packed with love.</p>
+    <table class="em-table">${rows}<tr><td>Subtotal</td><td>${money(o.sub)}</td></tr><tr><td>Delivery (${o.ship})</td><td>${o.fee ? money(o.fee) : "Free"}</td></tr><tr class="t"><td>Total</td><td>${money(o.total)}</td></tr></table>
+    ${pay}<p><b>${o.ship === "Pickup" ? "Pickup" : "Delivery"}:</b> ${o.ship === "Pickup" ? "Lekki studio, " + etaText(o.days, o.at) : esc([o.address, o.city, o.state].filter(Boolean).join(", ")) + "<br>Estimated: " + etaText(o.days, o.at)}</p>`});
+}
+
+// ===== welcome → auth =====
 const W = $("#welcome");
 let wTimer;
 function finishWelcome(){
@@ -1283,47 +1487,108 @@ function finishWelcome(){
   try { sessionStorage.setItem("strutWelcome","1"); } catch(e) {}
   setTimeout(() => { W.hidden = true; }, 650);
 }
-let authMode = "in";
-function setAuthMode(m){
-  authMode = m;
-  const up = m === "up";
-  $("#aTitle").innerHTML = up ? "Create account<em>.</em>" : "Welcome back<em>.</em>";
-  $("#aSub").textContent = up ? "Save your details for faster checkout." : "Sign in to pick up where you left off.";
-  $("#aNameWrap").hidden = !up;
-  $("#aBtn").textContent = up ? "Create account" : "Sign in";
-  $("#aSwitchTxt").textContent = up ? "Already have an account?" : "New to Strut?";
-  $("#aSwitch").textContent = up ? "Sign in" : "Create account";
-  $("#aPass").autocomplete = up ? "new-password" : "current-password";
-  $("#aErr").textContent = "";
+const steps = [...document.querySelectorAll(".a-step")];
+const stepEl = n => steps.find(s => s.dataset.step === n);
+const flow = {mode:null, name:"", email:"", code:null, exp:0, tries:0, verified:false};
+function showStep(n){
+  steps.forEach(s => s.hidden = s.dataset.step !== n);
+  const s = stepEl(n); s.querySelector(".a-err").textContent = "";
+  setTimeout(() => { const f = s.querySelector("input"); if (f) f.focus(); }, 60);
 }
-function showAuth(mode){
-  setAuthMode(mode || "in");
+function showAuth(step){
   W.hidden = false; W.classList.remove("gone"); document.body.style.overflow = "hidden";
-  $("#wIntro").hidden = true; $("#wAuth").hidden = false;
-  setTimeout(() => (authMode === "up" ? $("#aName") : $("#aEmail")).focus(), 60);
+  $("#wIntro").hidden = true; $("#wAuth").hidden = false; showStep(step || "in");
 }
-$("#aSwitch").addEventListener("click", () => setAuthMode(authMode === "up" ? "in" : "up"));
-$("#aGuest").addEventListener("click", finishWelcome);
-$("#aForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const email = $("#aEmail").value.trim(), pass = $("#aPass").value, nm = $("#aName").value.trim();
-  if (authMode === "up" && nm.length < 2) return $("#aErr").textContent = "Please enter your name.";
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return $("#aErr").textContent = "Please enter a valid email.";
-  if (pass.length < 4) return $("#aErr").textContent = "Password must be at least 4 characters.";
-  const prev = getUser();
-  const name = authMode === "up" ? nm : (prev && prev.email === email ? prev.name : nameFromEmail(email));
-  store.set("strutUser", {name, email});          // the password is never stored
-  $("#aPass").value = "";
-  refreshUser(); finishWelcome(); renderProfile();
-  toast(`Welcome${authMode === "up" ? "" : " back"}, ${firstName({name})}`);
+const err = (n, t) => { stepEl(n).querySelector(".a-err").textContent = t; return false; };
+function busy(form, on, label){ const b = form.querySelector('button[type="submit"]'); b.disabled = on; if (on){ b.dataset.l = b.textContent; b.innerHTML = `<span class="spin"></span> ${label}`; } else b.textContent = b.dataset.l || b.textContent; }
+document.querySelectorAll("#wAuth [data-go]").forEach(b => b.addEventListener("click", () => {
+  const cur = b.closest(".a-step"), email = cur.querySelector('[name="email"]');
+  showStep(b.dataset.go);
+  const next = stepEl(b.dataset.go).querySelector('[name="email"]');
+  if (email && next && email.value && !next.value) next.value = email.value;
+}));
+document.querySelectorAll("#wAuth .a-guest").forEach(b => b.addEventListener("click", finishWelcome));
+document.querySelectorAll("#wAuth .eye").forEach(b => b.addEventListener("click", () => {
+  const i = b.previousElementSibling, show = i.type === "password"; i.type = show ? "text" : "password"; b.textContent = show ? "Hide" : "Show";
+}));
+let resendT;
+function sendCode(){
+  flow.code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+  flow.exp = Date.now() + 10*60*1000; flow.tries = 0; flow.verified = false;
+  mailCode(flow.email, flow.code, flow.mode === "reset" ? "reset your password" : "confirm your email");
+  const s = stepEl("code"), r = s.querySelector(".a-resend");
+  s.querySelector(".a-to").textContent = flow.email; s.querySelector('[name="code"]').value = "";
+  let left = 30; r.disabled = true; r.textContent = `Resend in ${left}s`;
+  clearInterval(resendT); resendT = setInterval(() => { left--; if (left <= 0){ clearInterval(resendT); r.disabled = false; r.textContent = "Resend code"; } else r.textContent = `Resend in ${left}s`; }, 1000);
+  showStep("code");
+}
+stepEl("code").querySelector(".a-resend").addEventListener("click", () => { sendCode(); toast("New code sent"); });
+stepEl("code").querySelector(".a-back").addEventListener("click", () => showStep(flow.mode === "reset" ? "forgot" : "up"));
+stepEl("code").querySelector('[name="code"]').addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g,"").slice(0,6); if (e.target.value.length === 6) stepEl("code").requestSubmit(); });
+
+stepEl("in").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target;
+  const email = normEmail(f.email.value), pass = f.pass.value, acct = accounts()[email];
+  if (!validEmail(email)) return err("in", "Please enter a valid email.");
+  if (!pass) return err("in", "Please enter your password.");
+  if (!acct) return err("in", "No account with this email. Create one below.");
+  busy(f, true, "Signing in…");
+  const {hash} = await hashPassword(pass, acct.salt);
+  busy(f, false);
+  if (hash !== acct.hash) return err("in", "Incorrect password. Try again or reset it.");
+  store.set("strutSession", email); f.pass.value = "";
+  const u = getUser(); refreshUser(); finishWelcome(); mailSignIn(u);
 });
+stepEl("up").addEventListener("submit", e => {
+  e.preventDefault(); const f = e.target;
+  const name = f.name.value.trim().replace(/\s+/g," "), email = normEmail(f.email.value);
+  if (name.length < 2) return err("up", "Please enter your name.");
+  if (!validEmail(email)) return err("up", "Please enter a valid email.");
+  if (accounts()[email]) return err("up", "An account already uses this email. Sign in instead.");
+  Object.assign(flow, {mode:"up", name, email}); sendCode();
+});
+stepEl("forgot").addEventListener("submit", e => {
+  e.preventDefault(); const email = normEmail(e.target.email.value);
+  if (!validEmail(email)) return err("forgot", "Please enter a valid email.");
+  if (!accounts()[email]) return err("forgot", "No account with this email.");
+  Object.assign(flow, {mode:"reset", name:accounts()[email].name, email}); sendCode();
+});
+stepEl("code").addEventListener("submit", e => {
+  e.preventDefault(); const v = e.target.code.value.trim();
+  if (Date.now() > flow.exp) return err("code", "This code has expired. Tap Resend code.");
+  if (++flow.tries > 5) return err("code", "Too many attempts. Tap Resend code for a new one.");
+  if (v !== flow.code) return err("code", "That code isn't right. Check your email and try again.");
+  flow.verified = true; flow.code = null;
+  const s = stepEl("pass");
+  s.querySelector(".a-pass-title").innerHTML = flow.mode === "reset" ? "New password<em>.</em>" : "Create a password<em>.</em>";
+  s.querySelector(".a-pass-btn").textContent = flow.mode === "reset" ? "Save password" : "Create account";
+  s.pass.value = s.pass2.value = ""; checkRules(); showStep("pass");
+});
+const RULES = {len: p => p.length >= 8, num: p => /\d/.test(p), let: p => /[a-z]/i.test(p)};
+function checkRules(){ const p = stepEl("pass").pass.value; stepEl("pass").querySelectorAll(".rules li").forEach(li => li.classList.toggle("ok", RULES[li.dataset.r](p))); }
+stepEl("pass").pass.addEventListener("input", checkRules);
+stepEl("pass").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target;
+  if (!flow.verified) return showStep(flow.mode === "reset" ? "forgot" : "up");
+  if (!Object.values(RULES).every(r => r(f.pass.value))) return err("pass", "Use at least 8 characters with a letter and a number.");
+  if (f.pass.value !== f.pass2.value) return err("pass", "The passwords don't match.");
+  busy(f, true, "Saving…");
+  const {salt, hash} = await hashPassword(f.pass.value);
+  const all = accounts(), isNew = flow.mode === "up";
+  all[flow.email] = {...(all[flow.email] || {created: Date.now()}), name: flow.name, salt, hash};
+  store.set("strutAccounts", all); store.set("strutSession", flow.email);
+  busy(f, false); f.pass.value = f.pass2.value = ""; flow.verified = false;
+  const u = getUser(); refreshUser(); finishWelcome();
+  if (isNew) mailWelcome(u); else toast("Password updated. You're signed in.");
+});
+
 (function(){
   let seen = false; try { seen = sessionStorage.getItem("strutWelcome") === "1"; } catch(e) {}
   if (seen || location.hash){ W.hidden = true; W.classList.add("gone"); return; }
   document.body.style.overflow = "hidden";
   const imgs = W.querySelectorAll(".w-slides img"), dots = W.querySelectorAll(".w-dots i");
   let i = 0;
-  wTimer = setInterval(() => { imgs[i].classList.remove("on"); dots[i].classList.remove("on"); i = (i+1) % imgs.length; imgs[i].classList.add("on"); dots[i].classList.add("on"); }, 3200);
+  wTimer = setInterval(() => { imgs[i].classList.remove("on"); dots[i].classList.remove("on"); i = (i+1) % imgs.length; imgs[i].classList.add("on"); dots[i].classList.add("on"); }, 3000);
   $("#wGo").addEventListener("click", () => { clearInterval(wTimer); getUser() ? finishWelcome() : showAuth("in"); });
   setTimeout(() => $("#wGo").focus(), 100);
 })();
@@ -1355,7 +1620,7 @@ function openCheckout(){
   if (!bag.length) return;
   const u = getUser(), a = store.get("strutAddr", {});
   if (!$("#coName").value) $("#coName").value = a.name || (u ? u.name : "");
-  if (!$("#coEmail").value) $("#coEmail").value = a.email || (u ? u.email : "");
+  if (u) $("#coEmail").value = u.email; else if (!$("#coEmail").value) $("#coEmail").value = a.email || "";
   if (!$("#coPhone").value) $("#coPhone").value = a.phone || "";
   if (!$("#coState").value && a.state) $("#coState").value = a.state;
   if (!$("#coCity").value) $("#coCity").value = a.city || "";
@@ -1401,6 +1666,7 @@ function coValidate(d){
   if (d.phone.replace(/\D/g,"").length < 10) bad.push("phone");
   if (!d.state) bad.push("state");
   if (co.ship !== "pick" && d.address.length < 5) bad.push("address");
+  if (d.email && !validEmail(normEmail(d.email))) bad.push("email");
   document.querySelectorAll("#checkoutPanel .field[data-f]").forEach(f => f.classList.toggle("err", bad.includes(f.dataset.f)));
   $("#coErr").textContent = bad.length ? "Please fill in the highlighted details." : "";
   if (bad.length) document.querySelector(`#checkoutPanel .field[data-f="${bad[0]}"]`).querySelector("input,select").focus();
@@ -1412,11 +1678,13 @@ $("#coPlace").addEventListener("click", () => {
   setTimeout(() => {
     const sub = subtotal(), fee = d.ship.fee;
     const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
-      name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay};
+      name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, owner:(getUser()||{}).email || null};
     const orders = store.get("strutOrders", []); orders.unshift(order); store.set("strutOrders", orders);
     store.set("strutAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
     bag = []; save(); renderBag();
     btn.disabled = false; renderDone(order); renderProfile(); open("#donePanel");
+    const to = (getUser() || {}).email || d.email;
+    if (to) setTimeout(() => mailOrder(order, to), 900);
   }, 1400);
 });
 $("#coWa").addEventListener("click", () => {
@@ -1453,7 +1721,8 @@ function orderStatus(o){
   return `<span class="pill">Processing</span>`;
 }
 function renderProfile(){
-  const u = getUser(), orders = store.get("strutOrders", []), a = store.get("strutAddr", null);
+  const u = getUser(), orders = store.get("strutOrders", []).filter(o => (o.owner || null) === (u ? u.email : null)), a = store.get("strutAddr", null);
+  const unread = myMail().filter(m => !m.read).length;
   const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
   $("#profBody").innerHTML = `
     <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "S"}</div>
@@ -1465,6 +1734,7 @@ function renderProfile(){
       <div class="thumbs">${o.items.map(l => `<img src="${thumbOf(l)}" alt="">`).join("")}</div></div>`).join("")
       : `<p class="co-note">No orders yet. Your orders will show here.</p>`}
     <h4 class="co-h">Settings</h4>
+    ${u ? `<button class="p-row" data-act="inbox"><span>Inbox${unread ? `<span class="badge-n">${unread}</span>` : ""}<small>Codes, welcome and order emails</small></span></button>` : ""}
     <button class="p-row" data-act="addr"><span>Saved address<small>${a ? esc([a.address, a.city, a.state].filter(Boolean).join(", ")) : "None yet, added at checkout"}</small></span></button>
     <button class="p-row js-req"><span>Request a pair<small>We'll find the shoe you're looking for</small></span></button>
     <a class="p-row" href="${waLink(`Hi ${SHOP.name}! I need help with my order.`)}" target="_blank" rel="noopener"><span>Help &amp; support<small>Chat with us on WhatsApp</small></span></a>
@@ -1473,11 +1743,13 @@ function renderProfile(){
 }
 $("#profBody").addEventListener("click", e => {
   const b = e.target.closest("[data-act]"); if (!b) return;
-  if (b.dataset.act === "out"){ store.del("strutUser"); refreshUser(); renderProfile(); toast("Signed out"); }
+  if (b.dataset.act === "out"){ store.del("strutSession"); refreshUser(); renderProfile(); toast("Signed out"); }
+  if (b.dataset.act === "inbox"){ renderInbox(); open("#inboxPanel"); }
   if (b.dataset.act === "in"){ close(true); showAuth("in"); }
   if (b.dataset.act === "addr"){ if (bag.length) openCheckout(); else toast("Your address is saved when you check out"); }
 });
 const openProfile = () => { renderProfile(); open("#profilePanel"); };
+$("#inboxBack").addEventListener("click", openProfile);
 $("#acctBtn").addEventListener("click", openProfile);
 $("#tbMe").addEventListener("click", openProfile);
 

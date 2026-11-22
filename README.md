@@ -14,3 +14,17 @@ Everything you will usually change is at the top of the `<script>` in `index.htm
 - `PRODUCTS`: each shoe's name, category, price, colours, photos and description
 
 Photos live in `img/`.
+
+## Accounts and emails
+
+Customers create an account with their name and email, confirm it with a 6-digit code, then set a password. Next time they sign in with email and password, and "Forgot password?" resets it with a new code. Passwords are salted and hashed (PBKDF2) before they are saved; the plain password is never stored.
+
+This is a showcase, so accounts live in the visitor's own browser, and every email (code, welcome, sign-in, order confirmation) lands in the in-site inbox (Account → Inbox) with a pop-up notification.
+
+To also send real emails, create a free [EmailJS](https://www.emailjs.com) account:
+
+1. Add an email service (for example Gmail) and note its **Service ID**.
+2. Create a template with **To** set to `{{to_email}}`, **Subject** set to `{{subject}}`, and the body set to `{{{html}}}` (three braces, so the HTML renders).
+3. Copy your **Public Key**, then fill in `EMAIL` at the top of the script in `index.html`.
+
+Real accounts that work across devices need a backend (for example Firebase or Supabase); the browser-only version is fine for a demo.
