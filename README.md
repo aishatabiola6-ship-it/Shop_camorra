@@ -8,6 +8,7 @@ Plain HTML, no build step. Open `index.html` in a browser to preview.
 
 Everything you will usually change is at the top of the `<script>` in `index.html`:
 
+- `EMAIL`: the Google Apps Script web app URL for real emails
 - `SHOP`: shop name, WhatsApp number, Instagram and TikTok links
 - `DELIVERY`: delivery zones, fees, days and which states belong to each zone
 - `SIZES`: the EU sizes offered
@@ -21,10 +22,6 @@ Customers create an account with their name and email, confirm it with a 6-digit
 
 This is a showcase, so accounts live in the visitor's own browser, and every email (code, welcome, sign-in, order confirmation) lands in the in-site inbox (Account → Inbox) with a pop-up notification.
 
-To also send real emails, create a free [EmailJS](https://www.emailjs.com) account:
-
-1. Add an email service (for example Gmail) and note its **Service ID**.
-2. Create a template with **To** set to `{{to_email}}`, **Subject** set to `{{subject}}`, and the body set to `{{{html}}}` (three braces, so the HTML renders).
-3. Copy your **Public Key**, then fill in `EMAIL` at the top of the script in `index.html`.
+To send real emails from Gmail, follow [email/SETUP.md](email/SETUP.md): paste `email/strut-email.gs` into Google Apps Script, deploy it as a web app and put its URL in `EMAIL.scriptUrl`.
 
 Real accounts that work across devices need a backend (for example Firebase or Supabase); the browser-only version is fine for a demo.

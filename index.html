@@ -931,11 +931,10 @@ const SHOP = {
   currency: "₦",
 };
 
-/* ===== Email: leave blank for the demo inbox, or add EmailJS keys to send real emails (see README) ===== */
+/* ===== Email: paste the Google Apps Script web app URL to send real emails (see email/SETUP.md).
+   Leave blank and emails only appear in the on-site inbox. ===== */
 const EMAIL = {
-  publicKey:  "",
-  serviceId:  "",
-  templateId: "",
+  scriptUrl: "",
 };
 
 /* ===== Delivery: fees by zone (shop is in Lagos) ===== */
@@ -1461,17 +1460,15 @@ function refreshUser(){
 }
 refreshUser();
 
-// ===== email (demo inbox + optional real sending via EmailJS) =====
+// ===== email (on-site inbox + real sending through Google Apps Script when EMAIL.scriptUrl is set) =====
 const inbox = () => store.get("strutInbox", []);
-let emailjsReady;
-function loadEmailJS(){
-  if (!emailjsReady) emailjsReady = new Promise((res, rej) => {
-    const sc = document.createElement("script");
-    sc.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js";
-    sc.onload = () => { window.emailjs.init({publicKey: EMAIL.publicKey}); res(window.emailjs); };
-    sc.onerror = rej; document.head.appendChild(sc);
-  });
-  return emailjsReady;
+const liveMail = () => /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(EMAIL.scriptUrl || "");
+async function callMail(action, data){
+  if (!liveMail()) return null;
+  try {
+    const r = await fetch(EMAIL.scriptUrl, {method:"POST", body: JSON.stringify(Object.assign({action}, data))});
+    return await r.json();
+  } catch(e){ console.warn("Email service unreachable", e); return null; }
 }
 const mailHTML = (inner) => `<div class="em"><div class="em-head">Strut<em>.</em></div><div class="em-body">${inner}</div>
   <div class="em-foot">You're receiving this because you used ${esc(SHOP.name)}. Questions? Reply to this email or message us on WhatsApp.</div></div>`;
@@ -1479,10 +1476,6 @@ async function sendEmail({to, subject, preview, inner}){
   const mail = {id: Date.now() + "" + Math.random().toString(36).slice(2,6), to: normEmail(to), subject, preview, html: mailHTML(inner), at: Date.now(), read: false};
   const box = inbox(); box.unshift(mail); store.set("strutInbox", box.slice(0, 60));
   notify(mail); refreshMailBadge();
-  if (EMAIL.publicKey && EMAIL.serviceId && EMAIL.templateId){
-    try { const ej = await loadEmailJS(); await ej.send(EMAIL.serviceId, EMAIL.templateId, {to_email: to, subject, html: mail.html}); }
-    catch(e){ console.warn("Email not sent", e); }
-  }
   return mail;
 }
 let notifT;
@@ -1515,14 +1508,24 @@ $("#inboxBody").addEventListener("click", e => { const r = e.target.closest("[da
 // email templates
 const mailCode = (to, code, purpose) => sendEmail({to, subject:`Your Strut code: ${code}`, preview:`Use ${code} to ${purpose}. It expires in 10 minutes.`,
   inner:`<h3>Your code</h3><p>Use this code to ${purpose}:</p><div class="em-code">${code}</div><p>It expires in 10 minutes. If you didn't ask for this, you can ignore this email.</p>`});
-const mailWelcome = (u) => sendEmail({to:u.email, subject:`Welcome to Strut, ${firstName(u)}`, preview:"Your account is ready. Here's what you can do next.",
+const mailWelcome = (u) => (callMail("welcome", {email:u.email, name:u.name}), sendEmail({to:u.email, subject:`Welcome to Strut, ${firstName(u)}`, preview:"Your account is ready. Here's what you can do next.",
   inner:`<h3>Welcome, ${esc(firstName(u))}.</h3><p>Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.</p>
   <div class="em-box"><b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· Request a pair you've seen elsewhere</div>
-  <a class="em-btn" href="#shop" data-shop>Start shopping</a><p>See you soon,<br>The Strut team</p>`});
-const mailSignIn = (u) => sendEmail({to:u.email, subject:`Welcome back, ${firstName(u)}`, preview:"You just signed in to your Strut account.",
+  <a class="em-btn" href="#shop" data-shop>Start shopping</a><p>See you soon,<br>The Strut team</p>`}));
+const mailSignIn = (u) => (callMail("signin", {email:u.email, name:u.name}), sendEmail({to:u.email, subject:`Welcome back, ${firstName(u)}`, preview:"You just signed in to your Strut account.",
   inner:`<h3>Welcome back, ${esc(firstName(u))}.</h3><p>You signed in to Strut on ${new Date().toLocaleString("en-GB",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}.</p>
-  <a class="em-btn" href="#shop" data-shop>See what's new</a><p>Wasn't you? Reset your password from the sign-in page straight away.</p>`});
+  <a class="em-btn" href="#shop" data-shop>See what's new</a><p>Wasn't you? Reset your password from the sign-in page straight away.</p>`}));
 function mailOrder(o, to){
+  callMail("order", {email: to, order: {
+    no: o.no, name: o.name, ship: o.ship, note: o.note || "",
+    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, detail: `${l.color} · EU ${l.size} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
+    sub: money(o.sub), fee: o.fee ? money(o.fee) : "Free", total: money(o.total),
+    payText: o.pay === "transfer" ? `Complete your transfer: send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with ${o.no} as the reference.`
+      : o.pay === "pod" ? `Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.` : `Paid by card · ${money(o.total)}`,
+    whereLabel: o.ship === "Pickup" ? "Pickup" : "Delivery",
+    where: o.ship === "Pickup" ? "Lekki studio" : [o.address, o.city, o.state].filter(Boolean).join(", "),
+    eta: etaText(o.days, o.at)
+  }});
   const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td>${esc(p ? p.name : l.id)}<br><small>${esc(l.color)} · EU ${l.size} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
   const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
     : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.</div>`
@@ -1566,17 +1569,28 @@ document.querySelectorAll("#wAuth .eye").forEach(b => b.addEventListener("click"
   const i = b.previousElementSibling, show = i.type === "password"; i.type = show ? "text" : "password"; b.textContent = show ? "Hide" : "Show";
 }));
 let resendT;
-function sendCode(){
-  flow.code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
-  flow.exp = Date.now() + 10*60*1000; flow.tries = 0; flow.verified = false;
-  mailCode(flow.email, flow.code, flow.mode === "reset" ? "reset your password" : "confirm your email");
+async function sendCode(){
+  flow.exp = Date.now() + 10*60*1000; flow.tries = 0; flow.verified = false; flow.server = false; flow.code = null;
+  if (liveMail()){
+    const form = stepEl(flow.mode === "reset" ? "forgot" : "up");
+    busy(form, true, "Sending code…");
+    const r = await callMail("code", {email: flow.email, name: flow.name, purpose: flow.mode === "reset" ? "reset" : "signup"});
+    busy(form, false);
+    if (r && r.ok){ flow.server = true; toast("Code sent to " + flow.email); }
+    else if (r && r.error === "too_many") return err(flow.mode === "reset" ? "forgot" : "up", "Too many codes requested. Please wait a minute and try again.");
+    else if (r && r.error === "bad_email") return err(flow.mode === "reset" ? "forgot" : "up", "Please check the email address.");
+  }
+  if (!flow.server){
+    flow.code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+    mailCode(flow.email, flow.code, flow.mode === "reset" ? "reset your password" : "confirm your email");
+  }
   const s = stepEl("code"), r = s.querySelector(".a-resend");
   s.querySelector(".a-to").textContent = flow.email; s.querySelector('[name="code"]').value = "";
   let left = 30; r.disabled = true; r.textContent = `Resend in ${left}s`;
   clearInterval(resendT); resendT = setInterval(() => { left--; if (left <= 0){ clearInterval(resendT); r.disabled = false; r.textContent = "Resend code"; } else r.textContent = `Resend in ${left}s`; }, 1000);
   showStep("code");
 }
-stepEl("code").querySelector(".a-resend").addEventListener("click", () => { sendCode(); toast("New code sent"); });
+stepEl("code").querySelector(".a-resend").addEventListener("click", () => { sendCode(); });
 stepEl("code").querySelector(".a-back").addEventListener("click", () => showStep(flow.mode === "reset" ? "forgot" : "up"));
 stepEl("code").querySelector('[name="code"]').addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g,"").slice(0,6); if (e.target.value.length === 6) stepEl("code").requestSubmit(); });
 
@@ -1607,11 +1621,19 @@ stepEl("forgot").addEventListener("submit", e => {
   if (!accounts()[email]) return err("forgot", "No account with this email.");
   Object.assign(flow, {mode:"reset", name:accounts()[email].name, email}); sendCode();
 });
-stepEl("code").addEventListener("submit", e => {
+let verifying = false;
+stepEl("code").addEventListener("submit", async e => {
   e.preventDefault(); const v = e.target.code.value.trim();
+  if (verifying) return;
   if (Date.now() > flow.exp) return err("code", "This code has expired. Tap Resend code.");
   if (++flow.tries > 5) return err("code", "Too many attempts. Tap Resend code for a new one.");
-  if (v !== flow.code) return err("code", "That code isn't right. Check your email and try again.");
+  if (flow.server){
+    verifying = true; busy(e.target, true, "Checking…");
+    const r = await callMail("verify", {email: flow.email, code: v});
+    busy(e.target, false); verifying = false;
+    if (!r) return err("code", "Couldn't check the code. Check your connection and try again.");
+    if (!r.ok) return err("code", r.error === "expired" ? "This code has expired. Tap Resend code." : r.error === "too_many" ? "Too many attempts. Tap Resend code for a new one." : "That code isn't right. Check your email and try again.");
+  } else if (v !== flow.code) return err("code", "That code isn't right. Check your email and try again.");
   flow.verified = true; flow.code = null;
   const s = stepEl("pass");
   s.querySelector(".a-pass-title").innerHTML = flow.mode === "reset" ? "New password<em>.</em>" : "Create a password<em>.</em>";
