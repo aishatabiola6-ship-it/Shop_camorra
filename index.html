@@ -1509,7 +1509,7 @@ $("#inboxBody").addEventListener("click", e => { const r = e.target.closest("[da
 const mailCode = (to, code, purpose) => sendEmail({to, subject:`Your Strut code: ${code}`, preview:`Use ${code} to ${purpose}. It expires in 10 minutes.`,
   inner:`<h3>Your code</h3><p>Use this code to ${purpose}:</p><div class="em-code">${code}</div><p>It expires in 10 minutes. If you didn't ask for this, you can ignore this email.</p>`});
 const mailWelcome = (u) => (callMail("welcome", {email:u.email, name:u.name}), sendEmail({to:u.email, subject:`Welcome to Strut, ${firstName(u)}`, preview:"Your account is ready. Here's what you can do next.",
-  inner:`<h3>Welcome, ${esc(firstName(u))}.</h3><p>Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.</p>
+  inner:`<img src="img/email-welcome.jpg" alt="" style="display:block;width:100%;border-radius:12px;margin:0 0 18px"><h3>Welcome, ${esc(firstName(u))}.</h3><p>Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.</p>
   <div class="em-box"><b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· Request a pair you've seen elsewhere</div>
   <a class="em-btn" href="#shop" data-shop>Start shopping</a><p>See you soon,<br>The Strut team</p>`}));
 const mailSignIn = (u) => (callMail("signin", {email:u.email, name:u.name}), sendEmail({to:u.email, subject:`Welcome back, ${firstName(u)}`, preview:"You just signed in to your Strut account.",
@@ -1518,7 +1518,7 @@ const mailSignIn = (u) => (callMail("signin", {email:u.email, name:u.name}), sen
 function mailOrder(o, to){
   callMail("order", {email: to, order: {
     no: o.no, name: o.name, ship: o.ship, note: o.note || "",
-    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, detail: `${l.color} · EU ${l.size} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
+    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, img: thumbOf(l).replace(/^img\//,""), detail: `${l.color} · EU ${l.size} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
     sub: money(o.sub), fee: o.fee ? money(o.fee) : "Free", total: money(o.total),
     payText: o.pay === "transfer" ? `Complete your transfer: send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with ${o.no} as the reference.`
       : o.pay === "pod" ? `Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.` : `Paid by card · ${money(o.total)}`,
@@ -1526,13 +1526,13 @@ function mailOrder(o, to){
     where: o.ship === "Pickup" ? "Lekki studio" : [o.address, o.city, o.state].filter(Boolean).join(", "),
     eta: etaText(o.days, o.at)
   }});
-  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td>${esc(p ? p.name : l.id)}<br><small>${esc(l.color)} · EU ${l.size} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
+  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(l.color)} · EU ${l.size} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
   const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
     : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.</div>`
     : `<div class="em-box">Paid by card · ${money(o.total)}</div>`;
   return sendEmail({to, subject:`Order confirmed #${o.no}`, preview:`Thanks, ${o.name.split(" ")[0]}! ${money(o.total)} · ${o.ship === "Pickup" ? "ready for pickup" : "arriving " + etaText(o.days, o.at)}`,
     inner:`<h3>Thank you, ${esc(o.name.split(" ")[0])}.</h3><p>Your order <b>#${o.no}</b> is confirmed and being packed with love.</p>
-    <table class="em-table">${rows}<tr><td>Subtotal</td><td>${money(o.sub)}</td></tr><tr><td>Delivery (${o.ship})</td><td>${o.fee ? money(o.fee) : "Free"}</td></tr><tr class="t"><td>Total</td><td>${money(o.total)}</td></tr></table>
+    <table class="em-table">${rows}<tr><td></td><td>Subtotal</td><td>${money(o.sub)}</td></tr><tr><td></td><td>Delivery (${o.ship})</td><td>${o.fee ? money(o.fee) : "Free"}</td></tr><tr class="t"><td></td><td>Total</td><td>${money(o.total)}</td></tr></table>
     ${o.note ? `<div class="em-box"><b>Gift note</b><br><i>“${esc(o.note)}”</i><br>We'll write this on a card in your parcel.</div>` : ""}${pay}<p><b>${o.ship === "Pickup" ? "Pickup" : "Delivery"}:</b> ${o.ship === "Pickup" ? "Lekki studio, " + etaText(o.days, o.at) : esc([o.address, o.city, o.state].filter(Boolean).join(", ")) + "<br>Estimated: " + etaText(o.days, o.at)}</p>`});
 }
 

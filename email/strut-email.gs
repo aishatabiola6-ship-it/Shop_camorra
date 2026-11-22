@@ -88,6 +88,7 @@ function sendWelcome(email, name) {
   cache.remove("v:" + email);
   const n = esc(firstName(name) || "there");
   send(email, "Welcome to Strut, " + (firstName(name) || "friend"),
+    '<img src="' + SITE_URL + 'img/email-welcome.jpg" width="472" alt="Heels, flats, sneakers and boots at Strut" style="display:block;width:100%;max-width:472px;height:auto;border-radius:12px;margin:0 0 20px">' +
     h("Welcome, " + n + ".") +
     p("Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.") +
     box("<b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· Request a pair you've seen elsewhere") +
@@ -113,12 +114,14 @@ function sendOrder(email, o) {
   if (!allow("order:" + email, 5, 3600)) return json({ ok: false, error: "too_many" });
   const items = (Array.isArray(o.items) ? o.items : []).slice(0, 12);
   const rows = items.map(function (l) {
-    return '<tr><td style="padding:8px 0;border-bottom:1px solid #ddd0bf">' + esc(clean(l.name, 60)) +
+    const img = /^[a-z0-9-]{1,40}\.jpg$/.test(String(l.img || "")) ? SITE_URL + "img/thumb/" + l.img : "";
+    return '<tr>' + (img ? '<td style="padding:8px 12px 8px 0;border-bottom:1px solid #ddd0bf;width:64px"><img src="' + img + '" width="64" height="64" alt="" style="display:block;width:64px;height:64px;border-radius:10px"></td>' : '<td style="border-bottom:1px solid #ddd0bf"></td>') +
+      '<td style="padding:8px 0;border-bottom:1px solid #ddd0bf">' + esc(clean(l.name, 60)) +
       '<br><span style="color:#6f655c;font-size:13px">' + esc(clean(l.detail, 80)) + "</span></td>" +
       '<td style="padding:8px 0;border-bottom:1px solid #ddd0bf;text-align:right;white-space:nowrap">' + esc(clean(l.price, 20)) + "</td></tr>";
   }).join("");
   const line = function (a, b, bold) {
-    return '<tr><td style="padding:7px 0;' + (bold ? "font-weight:600" : "border-bottom:1px solid #ddd0bf") + '">' + a +
+    return '<tr><td></td><td style="padding:7px 0;' + (bold ? "font-weight:600" : "border-bottom:1px solid #ddd0bf") + '">' + a +
       '</td><td style="padding:7px 0;text-align:right;' + (bold ? "font-weight:600" : "border-bottom:1px solid #ddd0bf") + '">' + b + "</td></tr>";
   };
   const no = esc(clean(o.no, 20));
