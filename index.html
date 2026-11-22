@@ -278,6 +278,18 @@
   .sum .grand{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-size:1.1rem}
   .link-wa{display:block;margin:16px auto 4px;color:#1f7a4d;font-size:.86rem;text-decoration:underline}
   .demo{text-align:center}
+  .opt-tag{font-size:.62rem;letter-spacing:.12em;color:var(--muted);font-weight:500;margin-left:6px;text-transform:uppercase}
+  .gift-tg{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;margin-bottom:12px;font-size:.92rem;font-weight:500}
+  .gift-tg small{display:block;color:var(--muted);font-weight:400;font-size:.8rem;margin-top:2px}
+  .gift-tg input{position:absolute;opacity:0;pointer-events:none}
+  .gift-tg .box{flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;transition:.2s}
+  .gift-tg input:checked + .box{background:var(--ink);border-color:var(--ink)}
+  .gift-tg input:checked + .box::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .gift-tg:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .field .count{display:block;text-align:right;font-size:.72rem;color:var(--muted);margin-top:4px;letter-spacing:0;text-transform:none}
+  .note-card{margin-top:14px;padding:16px;border-radius:12px;background:var(--cream);text-align:left;border-left:3px solid var(--gold)}
+  .note-card small{display:block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .note-card p{font-family:var(--serif);font-style:italic;font-size:1.15rem;line-height:1.35;color:var(--ink)!important;margin:0!important}
   .co-err{color:var(--wine);font-size:.85rem;text-align:center}
   .co-err:empty{display:none}
   .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite}
@@ -843,6 +855,9 @@
     <h4 class="co-h">Payment</h4>
     <div class="optcs" id="coPay"></div>
     <p class="co-note" id="coPayNote"></p>
+    <h4 class="co-h">Gift note <span class="opt-tag">optional</span></h4>
+    <label class="gift-tg"><input type="checkbox" id="coGift"><span class="box" aria-hidden="true"></span><span>This order is a gift<small>We'll add a handwritten card with your message</small></span></label>
+    <label class="field" id="coNoteWrap" hidden><span>Your message</span><textarea id="coNote" rows="3" maxlength="200" placeholder="e.g. Happy birthday Tolu! Strut into your new year. Love, Amara"></textarea><small class="count" id="coNoteCount">0 / 200</small></label>
     <h4 class="co-h">Order summary</h4>
     <div id="coItems"></div>
     <div class="sum">
@@ -1517,7 +1532,7 @@ function mailOrder(o, to){
   return sendEmail({to, subject:`Order confirmed #${o.no}`, preview:`Thanks, ${o.name.split(" ")[0]}! ${money(o.total)} · ${o.ship === "Pickup" ? "ready for pickup" : "arriving " + etaText(o.days, o.at)}`,
     inner:`<h3>Thank you, ${esc(o.name.split(" ")[0])}.</h3><p>Your order <b>#${o.no}</b> is confirmed and being packed with love.</p>
     <table class="em-table">${rows}<tr><td>Subtotal</td><td>${money(o.sub)}</td></tr><tr><td>Delivery (${o.ship})</td><td>${o.fee ? money(o.fee) : "Free"}</td></tr><tr class="t"><td>Total</td><td>${money(o.total)}</td></tr></table>
-    ${pay}<p><b>${o.ship === "Pickup" ? "Pickup" : "Delivery"}:</b> ${o.ship === "Pickup" ? "Lekki studio, " + etaText(o.days, o.at) : esc([o.address, o.city, o.state].filter(Boolean).join(", ")) + "<br>Estimated: " + etaText(o.days, o.at)}</p>`});
+    ${o.note ? `<div class="em-box"><b>Gift note</b><br><i>“${esc(o.note)}”</i><br>We'll write this on a card in your parcel.</div>` : ""}${pay}<p><b>${o.ship === "Pickup" ? "Pickup" : "Delivery"}:</b> ${o.ship === "Pickup" ? "Lekki studio, " + etaText(o.days, o.at) : esc([o.address, o.city, o.state].filter(Boolean).join(", ")) + "<br>Estimated: " + etaText(o.days, o.at)}</p>`});
 }
 
 // ===== welcome → auth =====
@@ -1690,16 +1705,18 @@ function renderCheckout(){
   $("#coPlace").textContent = co.pay === "pod" ? `Place order · ${money(total)}` : `Pay ${money(total)}`;
 }
 $("#coState").addEventListener("change", renderCheckout);
+$("#coGift").addEventListener("change", () => { $("#coNoteWrap").hidden = !$("#coGift").checked; if ($("#coGift").checked) setTimeout(() => $("#coNote").focus(), 50); });
+$("#coNote").addEventListener("input", () => { $("#coNoteCount").textContent = $("#coNote").value.length + " / 200"; });
 $("#coShip").addEventListener("click", e => { const b = e.target.closest("[data-ship]"); if (b){ co.ship = b.dataset.ship; renderCheckout(); }});
 $("#coPay").addEventListener("click", e => { const b = e.target.closest("[data-pay]"); if (b && !b.disabled){ co.pay = b.dataset.pay; renderCheckout(); }});
 $("#coBack").addEventListener("click", () => open("#drawer"));
 document.querySelectorAll("#checkoutPanel input, #checkoutPanel select").forEach(el => el.addEventListener("input", () => {
-  el.closest(".field").classList.remove("err");
+  const fd = el.closest(".field"); if (fd) fd.classList.remove("err");
   if (!document.querySelector("#checkoutPanel .field.err")) $("#coErr").textContent = "";
 }));
 function coDetails(){
   const state = $("#coState").value, ship = shipOptions(state).find(o => o.id === co.ship);
-  return {name:$("#coName").value.trim(), phone:$("#coPhone").value.trim(), email:$("#coEmail").value.trim(), state, city:$("#coCity").value.trim(), address:$("#coAddr").value.trim(), ship};
+  return {note: $("#coGift").checked ? $("#coNote").value.trim() : "", name:$("#coName").value.trim(), phone:$("#coPhone").value.trim(), email:$("#coEmail").value.trim(), state, city:$("#coCity").value.trim(), address:$("#coAddr").value.trim(), ship};
 }
 function coValidate(d){
   const bad = [];
@@ -1719,10 +1736,11 @@ $("#coPlace").addEventListener("click", () => {
   setTimeout(() => {
     const sub = subtotal(), fee = d.ship.fee;
     const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
-      name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, owner:(getUser()||{}).email || null};
+      name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, note:d.note, owner:(getUser()||{}).email || null};
     const orders = store.get("strutOrders", []); orders.unshift(order); store.set("strutOrders", orders);
     store.set("strutAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
     bag = []; save(); renderBag();
+    $("#coGift").checked = false; $("#coNote").value = ""; $("#coNoteWrap").hidden = true; $("#coNoteCount").textContent = "0 / 200";
     btn.disabled = false; renderDone(order); renderProfile(); open("#donePanel");
     const to = (getUser() || {}).email || d.email;
     if (to) setTimeout(() => mailOrder(order, to), 900);
@@ -1732,7 +1750,7 @@ $("#coWa").addEventListener("click", () => {
   const d = coDetails();
   const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const fee = d.ship ? d.ship.fee : 0;
-  openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}`);
+  openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}${d.note ? "\n\nGift note: " + d.note : ""}`);
 });
 function renderDone(o){
   const pairs = o.items.reduce((a,l)=>a+l.qty,0);
@@ -1750,7 +1768,7 @@ function renderDone(o){
       <div class="r"><span>Deliver to</span><b>${o.ship === "Pickup" ? "Lekki studio" : esc([o.city, o.state].filter(Boolean).join(", "))}</b></div>
       <div class="r"><span>Total (${pairs} ${pairs>1?"pairs":"pair"})</span><b>${money(o.total)}</b></div>
       <div class="thumbs">${o.items.map(l => `<img src="${thumbOf(l)}" alt="">`).join("")}</div>
-    </div>${payBox}`;
+    </div>${o.note ? `<div class="note-card"><small>Gift note</small><p>“${esc(o.note)}”</p></div>` : ""}${payBox}`;
 }
 $("#doneTrack").addEventListener("click", () => { renderProfile(); open("#profilePanel"); });
 
