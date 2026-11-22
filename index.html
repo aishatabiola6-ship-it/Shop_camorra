@@ -1164,9 +1164,19 @@ PRODUCTS.forEach(p => p.group = p.group || "Heels");
 const $ = s => document.querySelector(s);
 const money = n => SHOP.currency + n.toLocaleString("en-NG");
 const waLink = text => `https://wa.me/${SHOP.whatsapp}?text=${encodeURIComponent(text)}`;
+// Open WhatsApp in a way that also works inside TikTok / Instagram in-app browsers
+function openWA(text){
+  const url = waLink(text);
+  const inApp = /Instagram|FBAN|FBAV|TikTok|musical_ly|Bytedance|Snapchat|Line\//i.test(navigator.userAgent);
+  if (inApp){ location.href = url; return; }
+  // note: the store's own open() panel function shadows window.open, so use a real link click
+  const link = document.createElement("a");
+  link.href = url; link.target = "_blank"; link.rel = "noopener";
+  document.body.appendChild(link); link.click(); link.remove();
+}
 const byId = id => PRODUCTS.find(p => p.id === id);
 
-document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); a.target = "_blank"; a.rel = "noopener"; });
+document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); a.addEventListener("click", e => { e.preventDefault(); openWA(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); }); });
 document.querySelectorAll(".js-ig").forEach(a => { a.href = SHOP.instagram; a.target = "_blank"; a.rel = "noopener"; });
 document.querySelectorAll(".js-tt").forEach(a => { a.href = SHOP.tiktok; a.target = "_blank"; a.rel = "noopener"; });
 $("#copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name}`;
@@ -1314,7 +1324,7 @@ $("#checkout").addEventListener("click", () => openCheckout());
 $("#bagWa").addEventListener("click", () => {
   const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const total = money(bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0));
-  window.open(waLink(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nState:\nDelivery address:`), "_blank", "noopener");
+  openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nState:\nDelivery address:`);
 });
 $("#bagBtn").addEventListener("click", () => open("#drawer"));
 renderBag();
@@ -1691,7 +1701,7 @@ $("#coWa").addEventListener("click", () => {
   const d = coDetails();
   const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const fee = d.ship ? d.ship.fee : 0;
-  window.open(waLink(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}`), "_blank", "noopener");
+  openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}`);
 });
 function renderDone(o){
   const pairs = o.items.reduce((a,l)=>a+l.qty,0);
@@ -1737,11 +1747,12 @@ function renderProfile(){
     ${u ? `<button class="p-row" data-act="inbox"><span>Inbox${unread ? `<span class="badge-n">${unread}</span>` : ""}<small>Codes, welcome and order emails</small></span></button>` : ""}
     <button class="p-row" data-act="addr"><span>Saved address<small>${a ? esc([a.address, a.city, a.state].filter(Boolean).join(", ")) : "None yet, added at checkout"}</small></span></button>
     <button class="p-row js-req"><span>Request a pair<small>We'll find the shoe you're looking for</small></span></button>
-    <a class="p-row" href="${waLink(`Hi ${SHOP.name}! I need help with my order.`)}" target="_blank" rel="noopener"><span>Help &amp; support<small>Chat with us on WhatsApp</small></span></a>
+    <a class="p-row" href="${waLink(`Hi ${SHOP.name}! I need help with my order.`)}" data-wa="Hi ${SHOP.name}! I need help with my order."><span>Help &amp; support<small>Chat with us on WhatsApp</small></span></a>
     ${u ? `<button class="p-row" data-act="out"><span>Sign out</span></button>`
         : `<button class="p-row" data-act="in"><span>Sign in<small>Or create an account</small></span></button>`}`;
 }
 $("#profBody").addEventListener("click", e => {
+  const w = e.target.closest("[data-wa]"); if (w){ e.preventDefault(); openWA(w.dataset.wa); return; }
   const b = e.target.closest("[data-act]"); if (!b) return;
   if (b.dataset.act === "out"){ store.del("strutSession"); refreshUser(); renderProfile(); toast("Signed out"); }
   if (b.dataset.act === "inbox"){ renderInbox(); open("#inboxPanel"); }
@@ -1759,7 +1770,7 @@ $("#reqSend").addEventListener("click", () => {
   const what = $("#reqWhat").value.trim();
   if (what.length < 4){ $("#reqWhat").closest(".field").classList.add("err"); $("#reqWhat").focus(); return; }
   const u = getUser(), when = $("#reqWhen").value.trim();
-  window.open(waLink(`Hi ${SHOP.name}! I'd like to request a pair:\n\n${what}\n\nSize: ${$("#reqSize").value}\nBudget: ${$("#reqBudget").value}${when ? "\nNeeded by: "+when : ""}${u ? "\n\nName: "+u.name : ""}`), "_blank", "noopener");
+  openWA(`Hi ${SHOP.name}! I'd like to request a pair:\n\n${what}\n\nSize: ${$("#reqSize").value}\nBudget: ${$("#reqBudget").value}${when ? "\nNeeded by: "+when : ""}${u ? "\n\nName: "+u.name : ""}`);
   close(); toast("Request ready in WhatsApp");
 });
 $("#reqWhat").addEventListener("input", () => $("#reqWhat").closest(".field").classList.remove("err"));
