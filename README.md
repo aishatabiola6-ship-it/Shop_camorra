@@ -25,3 +25,15 @@ This is a showcase, so accounts live in the visitor's own browser, and every ema
 To send real emails from Gmail, follow [email/SETUP.md](email/SETUP.md): paste `email/strut-email.gs` into Google Apps Script, deploy it as a web app and put its URL in `EMAIL.scriptUrl`.
 
 Real accounts that work across devices need a backend (for example Firebase or Supabase); the browser-only version is fine for a demo.
+
+# Bridgeline Cargo (`cargo/`)
+
+A second showcase: a China → Nigeria shipping company that sells its services like products. Open `cargo/index.html`.
+
+- Scroll-driven motion scenes: braided cargo line hero, aerial road with counting numbers, sideways "pick how your goods travel" panels, and an X-ray truck scan.
+- Shipping shop with filters (air, sea, road, warehouse, documents); quantities are in each service's unit (kg, CBM, container, trip).
+- Instant quote: air uses chargeable weight (real vs L×W×H÷6000), sea uses CBM, then adds the result to the cart.
+- Checkout with delivery options and Nigerian states, simulated payment, a BL- tracking number and a WhatsApp order message.
+- Tracking page: demo numbers BL-104233, BL-208815, BL-310077, plus any order placed in that browser.
+
+Edit `SHOP`, `SERVICES`, `DELIVERY` at the top of the `<script>` in `cargo/index.html`. All artwork is inline SVG, no photos needed.
