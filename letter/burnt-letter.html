@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Letter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #2b1a0e; }
+  html, body { margin: 0; background: #14100c; }
+  body {
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: flex-start;
+    padding: 56px 16px;
+    box-sizing: border-box;
+    background: radial-gradient(ellipse at center, #2a211a 0%, #0e0b08 75%);
+  }
+  .sheet { position: relative; width: 100%; max-width: 720px; }
+
+  /* The paper itself, with torn/charred edges from an SVG displacement filter */
+  .paper {
+    position: absolute; inset: 0;
+    filter: url(#burn);
+    background:
+      radial-gradient(ellipse at 18% 12%, rgba(120,70,20,.35) 0, transparent 22%),
+      radial-gradient(ellipse at 85% 30%, rgba(110,60,15,.30) 0, transparent 18%),
+      radial-gradient(ellipse at 30% 78%, rgba(100,55,15,.30) 0, transparent 20%),
+      radial-gradient(ellipse at 72% 88%, rgba(90,45,10,.35) 0, transparent 16%),
+      radial-gradient(ellipse at 50% 50%, #ecd8a8 0%, #dcc08a 45%, #c49a5a 75%, #8a5a26 92%, #3a200c 100%);
+    box-shadow:
+      inset 0 0 40px 18px rgba(60,28,6,.85),
+      inset 0 0 120px 40px rgba(120,70,25,.45);
+  }
+  /* soot glow around the burnt edge */
+  .paper::after {
+    content: ""; position: absolute; inset: 0;
+    box-shadow: 0 0 22px 6px rgba(20,8,0,.9), 0 0 60px 10px rgba(255,120,30,.08);
+  }
+  /* grain + scorch blotches */
+  .grain {
+    position: absolute; inset: 0; pointer-events: none;
+    filter: url(#burn);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .18  0 0 0 0 .05  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity: .9;
+  }
+  .hole {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, #0e0b08 0 38%, #2a1405 48%, rgba(90,45,10,.7) 62%, transparent 74%);
+    filter: url(#burn);
+  }
+
+  .writing {
+    position: relative;
+    padding: 72px 70px 80px;
+    color: var(--ink);
+    font-family: "IM Fell English", Georgia, serif;
+    font-size: 19px; line-height: 1.75;
+    text-shadow: 0 0 1px rgba(43,26,14,.55);
+  }
+  .writing p { margin: 0 0 1.05em; text-indent: 1.6em; }
+  .writing p.open { text-indent: 0; }
+  .writing p.open::first-letter {
+    float: left; font-size: 3.4em; line-height: .85; padding: 6px 8px 0 0;
+  }
+  .quote { font-style: italic; }
+  .close { font-style: italic; text-indent: 0 !important; margin-top: 1.6em !important; }
+  .sign {
+    text-align: right; margin-top: 18px;
+    font-family: "Mrs Saint Delafield", cursive;
+    font-size: 52px; line-height: 1; color: #24140a;
+  }
+  .rule { text-align: center; letter-spacing: .6em; opacity: .55; margin: 6px 0 22px; }
+
+  @media (max-width: 600px) {
+    body { padding: 32px 16px; }
+    .writing { padding: 52px 34px 60px; font-size: 16.5px; }
+    .sign { font-size: 42px; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="burn" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="4" seed="7" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="sheet">
+  <div class="paper"></div>
+  <div class="grain"></div>
+  <div class="hole" style="width:46px;height:38px;top:9%;right:6%"></div>
+  <div class="hole" style="width:30px;height:34px;bottom:14%;left:5%"></div>
+  <div class="hole" style="width:22px;height:20px;top:52%;right:3%"></div>
+
+  <div class="writing">
+    <p class="open">There is a line of yours I still carry with me: <span class="quote">“The period we shared this year was the happiest I’ve ever had this year.”</span> I cannot say whether you have known a happier moment since, but those words stayed. They were only words, and yet it has always been the smallest things that matter most to me.</p>
+
+    <p>From the twenty-fourth of April to the twenty-first of July, we spoke without pause. No one before you had ever counted down the days to see me. The first time we met, you made me feel whole again, and you gave me a gentler way of seeing something I had long misunderstood.</p>
+
+    <p>It may surprise you that I still feel this way. I do. But I have not come to press my feelings upon you; I have come to thank you. Because of you, I began to take serious things seriously. I found worth in things I once ignored. I did more, and the more is mine, wholly and only mine.</p>
+
+    <p>You said things to me that were unfair, and I never once had an unkind word to give in return. Let me simply say this: I understand that you came to see me differently. I still see you the same. I truly changed. I only changed too late.</p>
+
+    <p>I had pictured us reading side by side, you preparing for your next MB, and I for my end-of-semester exams. That picture has been taken from me, and I am still learning how to look away from it.</p>
+
+    <p>I want to stop feeling this way, but the person I am right now does not know what to do with all of this. I want to leave you in peace. I do not want to cheer for you from the quiet distance of friendship. I do not want anything at all. I only want to wake two weeks from now and feel well again.</p>
+
+    <p>Perhaps our paths will cross again someday. Until then, I do not want to go to the clinic, read, sit through my online classes and fall into bed each night still thinking of how much I love you, knowing there is nothing I can do with that love.</p>
+
+    <p>I wish this were not happening to me. I wish I could be the calm, untouchable one whom nothing ever reaches.</p>
+
+    <p class="close">But I am not. And so I have written it down.</p>
+
+    <div class="sign">Ige Adubi</div>
+  </div>
+</div>
+</body>
+</html>
