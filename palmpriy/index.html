@@ -438,7 +438,7 @@ footer a:hover{color:#fff}
 </head>
 <body>
 
-<div class="announce">Welcome to your glow era<span class="hide-sm"> · Delivered across Nigeria</span></div>
+<div class="announce">Welcome to your glow era</div>
 
 <header>
   <div class="wrap nav">
@@ -528,7 +528,7 @@ footer a:hover{color:#fff}
         <div class="acc">
           <details open><summary>How to use</summary><p>After a warm shower, press the La Coco pump and smooth it over damp skin. Once it has soaked in, press the Golden pump and sweep it over shoulders, collarbones and legs for a soft glow.</p></details>
           <details><summary>Ingredients</summary><p>A blend of plant oils chosen for softness and shine. Full ingredient list on the bottle and available on request.</p></details>
-          <details><summary>Delivery &amp; returns</summary><p>We deliver across Nigeria. Delivery fees depend on your area and are shown at checkout. See our Refund and Return Policy for returns.</p></details>
+          <details><summary>Delivery &amp; returns</summary><p>We deliver worldwide. Lagos delivery fees are shown at checkout; for other states and countries we confirm the fee after you order. See our Refund and Return Policy for returns.</p></details>
         </div>
       </div>
     </div>
@@ -766,6 +766,10 @@ const DELIVERY = [
     ['Ajah', 5000],
     ['Ibeju-Lekki', 7000],
   ]},
+  // Regions with no fixed fee yet: the fee is confirmed after the order.
+  { region:'Other parts of Lagos', areas:[] },
+  { region:'Rest of Nigeria', areas:[] },
+  { region:'Worldwide (outside Nigeria)', areas:[] },
 ];
 const SHOP = { whatsapp: '2349161030326', usdRate: 1500 }; // ₦ per $1, update before launch
 
@@ -982,11 +986,10 @@ function render(){
       <div class="field"><label for="coEmail">Email</label><input id="coEmail" data-k="email" type="email" value="${esc(co.email)}" autocomplete="email"></div>
       <div class="field"><label for="coPhone">Phone</label><input id="coPhone" data-k="phone" type="tel" value="${esc(co.phone)}" autocomplete="tel" placeholder="+234…"></div>
     </div>
-    ${del?`<div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" data-k="address" autocomplete="street-address">${esc(co.address)}</textarea></div>
-    <h5>Delivery area</h5>
-    <div class="field"><select id="coRegion" aria-label="Region">${DELIVERY.map(d=>`<option${d.region===co.region?' selected':''}>${d.region}</option>`).join('')}</select></div>
+    ${del?`<div class="field"><label for="coAddr">Delivery address (include city and country)</label><textarea id="coAddr" data-k="address" autocomplete="street-address">${esc(co.address)}</textarea></div>
+    <div class="field"><label for="coRegion">Where should we deliver?</label><select id="coRegion">${DELIVERY.map(d=>`<option${d.region===co.region?' selected':''}>${d.region}</option>`).join('')}</select></div>
     <div class="opts" id="coAreas">${region.areas.map(a=>`<label class="opt"><input type="radio" name="area" value="${a[0]}"${a[0]===co.area?' checked':''}><span>${a[0]}</span><b>${fmt(a[1])}</b></label>`).join('')}
-      <label class="opt"><input type="radio" name="area" value="Other"${co.area==='Other'?' checked':''}><span>Somewhere else<small>Fee confirmed on WhatsApp</small></span></label></div>`:''}
+      ${region.areas.length?'':`<label class="opt"><input type="radio" name="area" value="Other" checked><span>${region.region}<small>We confirm the delivery fee after you order</small></span></label>`}</div>`:''}
     <h5>Payment</h5>
     <div class="opts" id="coPay">
       <label class="opt"><input type="radio" name="pay" value="transfer"${co.pay==='transfer'?' checked':''}><span>Pay via transfer<small>We send the exact account details on WhatsApp</small></span></label>
@@ -994,14 +997,14 @@ function render(){
     </div></div>`;
   $('#dfoot').innerHTML=(co.err?`<div class="co-err">${co.err}</div>`:'')+
     `<div class="row"><span>Subtotal</span><span>${fmt(sub)}</span></div>`+
-    (del?`<div class="row"><span>Delivery</span><span>${co.area&&co.area!=='Other'?fmt(fee):co.area==='Other'?'On WhatsApp':'Pick an area'}</span></div>`:'')+
-    `<div class="row total"><span>Total</span><span>${fmt(total)}</span></div>`+nairaNote+
+    (del?`<div class="row"><span>Delivery</span><span>${co.area&&co.area!=='Other'?fmt(fee):co.area==='Other'?'Confirmed after order':'Pick an area'}</span></div>`:'')+
+    `<div class="row total"><span>Total</span><span>${fmt(total)}${del&&co.area==='Other'?' <small style="font-size:13px;font-weight:500;color:var(--muted)">+ delivery</small>':''}</span></div>`+nairaNote+
     `<button class="btn btn-primary btn-block" id="placeOrder">Checkout now</button>`+
     `<p class="co-note">By continuing, you agree to Palmpriy's <a href="#">Terms and Conditions</a>, <a href="#">Privacy Policy</a> and <a href="#">Refund and Return Policy</a>.</p>`;
   $('#backBag').onclick=()=>{ step='bag'; render(); };
   $('#lines').querySelectorAll('[data-k]').forEach(el=>el.oninput=()=>{ co[el.dataset.k]=el.value; if(co.err){ co.err=''; const e=$('.co-err'); if(e) e.remove(); } });
   if(del){
-    $('#coRegion').onchange=e=>{ co.region=e.target.value; co.area=''; render(); };
+    $('#coRegion').onchange=e=>{ co.region=e.target.value; const rg=DELIVERY.find(d=>d.region===co.region); co.area=rg&&!rg.areas.length?'Other':''; render(); };
     $('#coAreas').onchange=e=>{ co.area=e.target.value; render(); };
   }
   $('#coPay').onchange=e=>{ co.pay=e.target.value; };
@@ -1013,7 +1016,7 @@ function render(){
     co.err='';
     const lines=cart.map(l=>`• ${l.name}${l.type!=='product'?' ('+l.note+')':' x'+l.qty} - ${naira(l.price*l.qty)}`).join('\n');
     const msg=`Hello Palmpriy! I would like to order:\n${lines}\n\nSubtotal: ${naira(sub)}`+
-      (del?`\nDelivery: ${co.area==='Other'?'please confirm the fee':co.region+', '+co.area+' - '+naira(fee)}`:'')+
+      (del?`\nDelivery: ${co.area==='Other'?co.region+' (please confirm the fee)':co.region+', '+co.area+' - '+naira(fee)}`:'')+
       `\nTotal: ${naira(total)}${del&&co.area==='Other'?' + delivery':''}`+
       `\n\nName: ${co.name.trim()}\nEmail: ${co.email.trim()}\nPhone: ${co.phone.trim()}`+(del?`\nAddress: ${co.address.trim()}`:'')+
       `\nPayment: ${co.pay==='card'?'Card (please send a Paystack payment link)':'Bank transfer (please send account details)'}`;
