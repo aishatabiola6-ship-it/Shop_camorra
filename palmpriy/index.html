@@ -25,7 +25,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-variant-numeric:lining-nums;font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -85,7 +85,7 @@ header{position:sticky;top:0;z-index:40;background:rgba(251,244,232,.88);backdro
 .hero-art{position:relative;justify-self:center;width:min(420px,88%)}
 .hero-art .halo{position:absolute;inset:-12% -12%;border-radius:50%;background:radial-gradient(circle,rgba(255,236,200,.75) 0%,rgba(255,236,200,0) 65%)}
 .hero-art .bottle{position:relative;border-radius:200px 200px 28px 28px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(60,20,0,.6);aspect-ratio:4/5;background:#fff}
-.hero-art .bottle img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.hero-art .bottle img{width:100%;height:100%;object-fit:cover;object-position:center 70%}
 .hero-art .chip{position:absolute;background:rgba(255,255,255,.95);color:var(--ink);border-radius:16px;padding:12px 16px;font-size:13px;box-shadow:0 14px 30px -12px rgba(0,0,0,.35)}
 .hero-art .chip b{display:block;font-family:var(--serif);font-size:20px;font-weight:600;color:var(--amber-deep)}
 .hero-art .c1{left:-8%;top:30%}
@@ -110,8 +110,30 @@ section{padding:80px 0}
 /* product feature */
 .product{display:grid;gap:40px;align-items:center}
 @media(min-width:900px){.product{grid-template-columns:1fr 1fr;gap:72px}}
-.gallery{position:relative;border-radius:var(--radius);background:linear-gradient(160deg,#fff 0%,var(--sand) 100%);aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
-.gallery img{height:88%;width:auto;object-fit:contain;mix-blend-mode:multiply}
+.gallery{position:relative;border-radius:var(--radius);background:var(--sand);aspect-ratio:4/5;overflow:hidden}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:opacity .25s}
+.thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.thumbs button{aspect-ratio:1;border-radius:12px;overflow:hidden;border:2px solid transparent;padding:0;opacity:.7;transition:opacity .2s,border-color .2s}
+.thumbs button:hover{opacity:1}
+.thumbs button[aria-pressed=true]{border-color:var(--amber);opacity:1}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+/* lookbook */
+.look{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);grid-auto-rows:200px}
+@media(min-width:900px){.look{grid-template-columns:repeat(4,1fr);grid-auto-rows:270px;gap:14px}}
+.look figure{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--sand)}
+.look .tall{grid-row:span 2}
+.look img,.look video{width:100%;height:100%;object-fit:cover;display:block}
+.look figcaption{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.92);color:var(--ink);font-size:12px;font-weight:600;padding:6px 11px;border-radius:999px}
+.look .live{position:absolute;top:12px;left:12px;background:rgba(20,10,4,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:6px 11px;border-radius:999px}
+.look .live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#FF6A3D;margin-right:7px;vertical-align:1px}
+/* studio corners */
+.corners{display:grid;gap:12px;margin-top:16px;grid-template-columns:1fr 1fr}
+@media(min-width:900px){.corners{grid-template-columns:1.1fr 1fr 1fr;gap:16px}}
+.corners .txt{grid-column:1/-1;border:1px solid rgba(251,244,232,.15);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;justify-content:flex-end}
+@media(min-width:900px){.corners .txt{grid-column:auto}}
+.corners h3{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.05;color:var(--honey);margin-bottom:10px}
+.corners p{color:rgba(251,244,232,.7);font-size:15px}
+.corners img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius)}
 .gallery .tag{position:absolute;top:18px;left:18px;background:var(--ink);color:var(--honey);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;font-weight:600}
 .pinfo h3{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5vw,48px);line-height:1.05;margin:10px 0 6px}
 .price{font-size:24px;font-weight:700;margin-bottom:18px}
@@ -337,7 +359,7 @@ footer a:hover{color:#fff}
     </div>
     <div class="hero-art">
       <div class="halo"></div>
-      <div class="bottle"><img src="img/dual-body-oil-hero.jpg" alt="Palmpriy Dual Body Oil bottle"></div>
+      <div class="bottle"><img src="img/oil-flower.jpg" alt="Palmpriy Dual Body Oil beside a yellow flower"></div>
       <div class="chip c1"><b>75 ml + 75 ml</b>Body oil &amp; shimmer</div>
       <div class="chip c2"><b data-price="60000">₦60,000</b>Free Lagos delivery</div>
     </div>
@@ -352,30 +374,50 @@ footer a:hover{color:#fff}
 <section id="shop">
   <div class="wrap">
     <div class="product">
-      <div class="gallery reveal">
-        <span class="tag">Bestseller</span>
-        <img src="img/dual-body-oil.jpg" alt="Palmpriy Dual Body Oil">
+      <div class="reveal">
+        <div class="gallery">
+          <span class="tag">Bestseller</span>
+          <img id="mainImg" src="img/oil-silk.jpg" alt="Palmpriy Dual Body Oil with its box">
+        </div>
+        <div class="thumbs" id="thumbs"></div>
       </div>
       <div class="pinfo reveal">
         <span class="eyebrow dark">Body Care</span>
         <h3>Palmpriy Dual Body Oil</h3>
         <div class="price"><span data-price="60000">₦60,000</span> <small>150 ml total</small></div>
-        <p>A split bottle with two oils that work together. One side soaks in and softens skin. The other side leaves a fine golden shimmer and a warm scent that lasts.</p>
+        <p>A split bottle with two oils that work together. One side soaks in and softens skin. The other side leaves a fine golden shimmer and a warm scent that lasts. Two pumps let you use them together or one at a time.</p>
         <div class="duo">
           <div><span class="dot" style="background:#E9A24B"></span><h4>La Coco</h4><p>Body oil · nourishing, smoothing · 75 ml</p></div>
-          <div><span class="dot" style="background:linear-gradient(135deg,#F7D58B,#C8860A)"></span><h4>Golden</h4><p>Shimmer oil · lumière satinée · 75 ml</p></div>
+          <div><span class="dot" style="background:linear-gradient(135deg,#F7D58B,#C8860A)"></span><h4>Golden</h4><p>Shimmer oil · glow, radiance · 75 ml</p></div>
         </div>
         <div class="buy">
           <div class="qty"><button id="minus" aria-label="Decrease">−</button><span id="qty">1</span><button id="plus" aria-label="Increase">+</button></div>
           <button class="btn btn-primary" id="addBtn">Add to bag</button>
         </div>
-        <div class="perks"><span>Parfumé, fragrant oil</span><span>For all skin tones</span><span>Non-greasy finish</span></div>
+        <div class="perks"><span>Sparkling fragrance oil</span><span>Two pumps, one bottle</span><span>For all skin tones</span></div>
         <div class="acc">
-          <details open><summary>How to use</summary><p>After a warm shower, smooth La Coco over damp skin. Once it has soaked in, sweep a few drops of Golden over shoulders, collarbones and legs for a soft glow.</p></details>
+          <details open><summary>How to use</summary><p>After a warm shower, press the La Coco pump and smooth it over damp skin. Once it has soaked in, press the Golden pump and sweep it over shoulders, collarbones and legs for a soft glow.</p></details>
           <details><summary>Ingredients</summary><p>A blend of plant oils chosen for softness and shine. Full ingredient list on the bottle and available on request.</p></details>
           <details><summary>Delivery &amp; returns</summary><p>Lagos: 1–2 working days. Other states: 3–5 working days. Unopened items can be returned within 7 days; see our Refund and Return Policy.</p></details>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOOKBOOK -->
+<section id="glow" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow dark">#PalmpriyGlow</span><h2>See the <em>glow</em>.</h2></div>
+      <p>Real skin, real light. One press of La Coco, one of Golden, and the shimmer does the rest.</p>
+    </div>
+    <div class="look reveal">
+      <figure class="tall"><video autoplay muted loop playsinline preload="metadata" poster="img/glow-poster.jpg" aria-label="Model applying Palmpriy Dual Body Oil"><source src="img/glow.mp4" type="video/mp4"></video><span class="live">Watch</span></figure>
+      <figure class="tall"><img src="img/campaign-closeup.jpg" alt="Glowing skin with the Dual Body Oil" loading="lazy" style="object-position:center 30%"></figure>
+      <figure class="tall"><img src="img/campaign-beach.jpg" alt="Palmpriy on the beach" loading="lazy" style="object-position:center 20%"><figcaption>Beach-day glow</figcaption></figure>
+      <figure><img src="img/oil-pump.jpg" alt="The dual pump: body oil and shimmer oil" loading="lazy"><figcaption>Dual pump</figcaption></figure>
+      <figure><img src="img/oil-drip.jpg" alt="Body oil and shimmer oil dripping over the bottle" loading="lazy" style="object-position:center 30%"></figure>
     </div>
   </div>
 </section>
@@ -403,6 +445,11 @@ footer a:hover{color:#fff}
       <p>Sculpted walls, soft curves and built-in glow lighting. Made for shoots, content days, launches and portraits. Tap a space to check the price and book.</p>
     </div>
     <div class="spaces" id="spaces"></div>
+    <div class="corners reveal">
+      <div class="txt"><h3>Every corner is a set.</h3><p>Between the six spaces, the hallways are just as shootable: a sculpted wave mirror, soft pebble screens and warm light everywhere you turn.</p></div>
+      <img src="img/studio-mirror-1.jpg" alt="Wave mirror and pebble screen at Palmpriy Studio" loading="lazy">
+      <img src="img/studio-mirror-2.jpg" alt="Lounge chair beside the wave mirror" loading="lazy">
+    </div>
     <div class="studio-info reveal">
       <div><b>Mon – Sat</b><span>9AM – 5PM, last booking 4PM</span></div>
       <div><b>From <span data-price="65000">₦65,000</span>/hr</b><span>Minimum 1 hour. 3+ hours get 10% off</span></div>
@@ -414,7 +461,7 @@ footer a:hover{color:#fff}
 <!-- ABOUT -->
 <section id="about">
   <div class="wrap about">
-    <div class="about-img reveal"><img src="img/casa-coco.jpg" alt="Casa coco space at Palmpriy Studio"></div>
+    <div class="about-img reveal"><img src="img/story-portrait.jpg" alt="Portrait at Palmpriy Studio" style="object-position:center 25%"></div>
     <div class="reveal">
       <span class="eyebrow dark">Our story</span>
       <blockquote>Formulated for skin, body &amp; <em>everyday radiance.</em></blockquote>
@@ -518,7 +565,7 @@ footer a:hover{color:#fff}
 <!-- Gift modal -->
 <div class="modal" id="gmodal" role="dialog" aria-modal="true" aria-labelledby="gTitle">
   <button class="close" data-close aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-  <div class="mimg"><img id="gImg" src="img/dual-body-oil.jpg" alt=""></div>
+  <div class="mimg"><img id="gImg" src="img/oil-silk.jpg" alt=""></div>
   <form class="mbody" id="giftForm">
     <span class="eyebrow dark">Gift me</span>
     <h3 id="gTitle">Send a gift</h3>
@@ -538,7 +585,7 @@ footer a:hover{color:#fff}
 <script>
 const SHOP = { whatsapp: '2349161030326', usdRate: 1500 }; // ₦ per $1, update before launch
 
-const PRODUCT = { id:'dual-oil', name:'Palmpriy Dual Body Oil', price:60000, img:'img/dual-body-oil.jpg' };
+const PRODUCT = { id:'dual-oil', name:'Palmpriy Dual Body Oil', price:60000, img:'img/oil-silk.jpg' };
 
 const SPACES = [
   { id:'aruma', name:'Aruma space', rate:90000, img:'img/aruma.jpg', mood:'Arched', desc:'A clean cream set with a sculpted bench and a deep wine arch lit from within. Great for fashion and editorial.' },
@@ -568,6 +615,15 @@ $('#spaces').innerHTML = SPACES.map(s => `
     <span class="meta"><span><h3>${s.name}</h3><span class="rate">${fmt(s.rate)} per hour</span></span>
     <span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
   </button>`).join('');
+
+/* product gallery */
+const SHOTS = [
+  ['img/oil-silk.jpg','With its box'],['img/oil-tray.jpg','On a gold tray'],['img/oil-pump.jpg','Dual pump'],['img/oil-petals.jpg','With petals'],['img/oil-pool.jpg','In water'],
+];
+$('#thumbs').innerHTML = SHOTS.map((t,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===0}" aria-label="${t[1]}"><img src="${t[0]}" alt="" loading="lazy"></button>`).join('');
+$('#thumbs').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const t=SHOTS[+b.dataset.i];
+  $('#mainImg').src=t[0]; $('#mainImg').alt='Palmpriy Dual Body Oil, '+t[1].toLowerCase();
+  $('#thumbs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); };
 
 /* product qty */
 let qty = 1;
@@ -617,7 +673,7 @@ $('#bookBtn').onclick=()=>{
 
 /* gifting */
 const GIFTS = [
-  { id:'oil', name:'Dual Body Oil', sub:'Wrapped and delivered', price:60000, img:'img/dual-body-oil.jpg' },
+  { id:'oil', name:'Dual Body Oil', sub:'Boxed, wrapped and delivered', price:60000, img:'img/oil-silk.jpg' },
   { id:'card-65', name:'Studio Hour', sub:'Gift card · Floral walkway or Sahara', price:65000, img:'img/floral-walkway.jpg' },
   { id:'card-90', name:'Any Space, 1 Hour', sub:'Gift card · all six sets', price:90000, img:'img/velvet-arch.jpg' },
 ];
@@ -688,6 +744,7 @@ $('#newsForm').onsubmit=e=>{ e.preventDefault(); e.target.hidden=true; $('#newsO
 const io=new IntersectionObserver(es=>es.forEach(x=>{ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
+document.querySelectorAll('video').forEach(v=>{ v.muted=true; const p=v.play(); if(p) p.catch(()=>{}); });
 $('#yr').textContent=new Date().getFullYear();
 applyCurrency();
 </script>
