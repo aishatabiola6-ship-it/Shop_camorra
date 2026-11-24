@@ -19,6 +19,7 @@ The page is hidden from search engines by a `noindex` tag in `index.html` while 
 - **Meet our founder**: the CEO's portrait with the brand promise as her quote. Founder: Priscilla Ajoke Ojo (@its.priscy), with links to her Instagram, Priscy Luxe Bags (@priscyluxe) and Priscyscloset (@priscyscloset__).
 - **Glow list signup** with a campaign portrait.
 - **Checkout like their current site**: delivery details, Lagos delivery areas with fees, and pay by transfer or card. The order goes to WhatsApp with everything filled in; Palmpriy replies with account details or a Paystack link. Bank details are not printed on the page because Paystack transfer accounts are created per order.
+- **Gift Me** (from their menu): fans send Palmpriy a money gift. Quick amounts ₦1,000 to ₦10,000 or a custom amount (minimum ₦100), name, email and a note; it goes to WhatsApp for payment details. Their current Gift Me shows "Unable to start payment".
 - **Brand story, ritual guide, newsletter and a cleaner footer** with tap-to-call, email and WhatsApp links.
 
 ## Editing
