@@ -11,6 +11,7 @@ A pitch concept for palmpriyworld.com. Plain HTML, no build step: open `index.ht
 - **Gifting** (from the current site's Gift Now / Gift Me): send the oil or a studio gift card with the recipient's name, phone and a note. It goes into the bag and the WhatsApp order.
 - **NGN / USD switch** in the header (rate set in `SHOP.usdRate`). Checkout always shows the naira total.
 - **Their real logo and welcome line** ("where your glow is our priority…") carried over.
+- **Reels section** ("Glow in the wild"): three campaign clips (`img/reel-*.mp4`) that play while on screen, swipe sideways on phones, and have a tap-to-unmute button.
 - **Real photography**: product gallery with thumbnails, a "See the glow" lookbook with the looping video and campaign shots, and the studio's wave-mirror hallway.
 - **Brand story, ritual guide, newsletter and a cleaner footer** with tap-to-call, email and WhatsApp links.
 
