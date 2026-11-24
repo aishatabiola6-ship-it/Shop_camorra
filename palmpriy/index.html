@@ -355,7 +355,7 @@ footer a:hover{color:#fff}
 </head>
 <body>
 
-<div class="announce"><span class="hide-sm">Welcome to your glow era · </span>Free Lagos delivery over <span data-price="100000">₦100,000</span></div>
+<div class="announce">Welcome to your glow era<span class="hide-sm"> · Order on WhatsApp, delivered across Nigeria</span></div>
 
 <header>
   <div class="wrap nav">
@@ -404,7 +404,7 @@ footer a:hover{color:#fff}
       <div class="halo"></div>
       <div class="bottle"><img src="img/oil-flower.jpg" alt="Palmpriy Dual Body Oil beside a yellow flower"></div>
       <div class="chip c1"><b>75 ml + 75 ml</b>Body oil &amp; shimmer</div>
-      <div class="chip c2"><b data-price="60000">₦60,000</b>Free Lagos delivery</div>
+      <div class="chip c2"><b data-price="60000">₦60,000</b>Dual Body Oil</div>
     </div>
   </div>
 </section>
@@ -441,7 +441,7 @@ footer a:hover{color:#fff}
         <div class="acc">
           <details open><summary>How to use</summary><p>After a warm shower, press the La Coco pump and smooth it over damp skin. Once it has soaked in, press the Golden pump and sweep it over shoulders, collarbones and legs for a soft glow.</p></details>
           <details><summary>Ingredients</summary><p>A blend of plant oils chosen for softness and shine. Full ingredient list on the bottle and available on request.</p></details>
-          <details><summary>Delivery &amp; returns</summary><p>Lagos: 1–2 working days. Other states: 3–5 working days. Unopened items can be returned within 7 days; see our Refund and Return Policy.</p></details>
+          <details><summary>Delivery &amp; returns</summary><p>We deliver across Nigeria. Your delivery fee and timing are confirmed on WhatsApp when you place your order. See our Refund and Return Policy for returns.</p></details>
         </div>
       </div>
     </div>
@@ -778,13 +778,12 @@ function render(){
   $('#lines').innerHTML=cart.map((l,i)=>`<div class="line"><img src="${l.img}" alt=""><div class="t"><h4>${l.name}</h4><small>${l.type!=='product'?l.note:'Qty '+l.qty+' · '+fmt(l.price)+' each'}</small><button class="rm" data-i="${i}">Remove</button></div><div class="amt">${fmt(l.price*l.qty)}</div></div>`).join('');
   const prod=cart.filter(l=>l.type==='product').reduce((a,l)=>a+l.price*l.qty,0);
   const total=cart.reduce((a,l)=>a+l.price*l.qty,0);
-  const free=prod>=100000||!prod;
   $('#dfoot').innerHTML=`<div class="row"><span>Subtotal</span><span>${fmt(total)}</span></div>`+
-    (currency==='USD'?`<div class="row" style="font-size:13px;color:var(--muted)"><span>You'll pay in naira: ${naira(total+(free?0:3500))}</span></div>`:'')+(prod?`<div class="row"><span>Lagos delivery</span><span>${free?'Free':fmt(3500)}</span></div>`:'')+
-    `<div class="row total"><span>Total</span><span>${fmt(total+(free?0:3500))}</span></div>`+
+    (currency==='USD'?`<div class="row" style="font-size:13px;color:var(--muted)"><span>You'll pay in naira: ${naira(total)}</span></div>`:'')+(prod?`<div class="row" style="font-size:13px;color:var(--muted)"><span>Delivery</span><span>Confirmed on WhatsApp</span></div>`:'')+
+    `<div class="row total"><span>Total</span><span>${fmt(total)}</span></div>`+
     `<button class="btn btn-primary btn-block" id="checkout">Check out on WhatsApp</button>`;
   $('#checkout').onclick=()=>{
-    const msg='Hello Palmpriy! I would like to order:\n'+cart.map(l=>`• ${l.name}${l.type!=='product'?' ('+l.note+')':' x'+l.qty} - ${naira(l.price*l.qty)}`).join('\n')+`\nTotal: ${naira(total+(free?0:3500))}`;
+    const msg='Hello Palmpriy! I would like to order:\n'+cart.map(l=>`• ${l.name}${l.type!=='product'?' ('+l.note+')':' x'+l.qty} - ${naira(l.price*l.qty)}`).join('\n')+`\nTotal (before delivery): ${naira(total)}`;
     window.open('https://wa.me/'+SHOP.whatsapp+'?text='+encodeURIComponent(msg),'_blank');
   };
 }
