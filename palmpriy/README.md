@@ -22,3 +22,6 @@ The page is hidden from search engines by a `noindex` tag in `index.html` while 
 ## Editing
 At the bottom of `index.html`: `SHOP` (WhatsApp number, USD rate), `GIFTS` (gift options), `PRODUCT` and `SPACES` (names, prices, photos, descriptions).
 Photos in `img/` are the brand's own product, campaign and studio shots (resized for web). Casa coco, Floral walkway, Sahara and Cocoon are still cropped from screenshots, so swap in their originals before going live. `img/glow.mp4` is a 7-second muted loop made from the brand's video.
+
+## Deploying on Cloudflare
+`wrangler.jsonc` serves this folder as a static site on Cloudflare Workers (worker name `shop-camorra`). In the Worker's **Settings → Build**, set the branch to `claude/intelligent-euler-y9juzz`, the root directory to `palmpriy`, leave the build command empty, and keep the deploy command as `npx wrangler deploy`. `.assetsignore` keeps the config and README off the live site.

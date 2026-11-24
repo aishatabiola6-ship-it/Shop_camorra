@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers config: serves this folder as a static website.
+  "name": "shop-camorra",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "single-page-application"
+  }
+}
