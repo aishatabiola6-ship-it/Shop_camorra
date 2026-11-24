@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Strut | Heels, Flats, Boots &amp; Sneakers</title>
 <meta name="description" content="Statement heels, ballet flats, boots, sneakers, slides and sandals. Pay online or order on WhatsApp, with delivery across Nigeria.">
+<meta name="theme-color" content="#1b1714">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Strut">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta property="og:title" content="Strut">
 <meta property="og:description" content="Heels, flats, boots and sneakers, delivered across Nigeria.">
 <meta property="og:image" content="img/rose-crystal.jpg">
@@ -1849,6 +1857,12 @@ $("#reqWhat").addEventListener("input", () => $("#reqWhat").closest(".field").cl
 addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 10), {passive:true});
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold:.12});
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+<script>
+// Make Strut installable and usable offline
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
 </script>
 </body>
 </html>
