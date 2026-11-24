@@ -223,6 +223,12 @@ details p{color:var(--muted);padding-top:10px;font-size:14.5px}
 .sign .rule{width:40px;height:1px;background:var(--amber)}
 .sign b{font-family:var(--serif);font-style:italic;font-size:24px;font-weight:500;color:var(--amber);display:block;line-height:1.1}
 .sign small{color:var(--muted);font-size:13px}
+.founder-links{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:28px}
+.founder-links .btn{height:46px;padding:0 22px;font-size:14px}
+.also{display:flex;flex-direction:column;line-height:1.2;border-left:1px solid var(--line);padding-left:20px}
+.also small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.also b{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--amber)}
+.also:hover b{color:var(--amber-deep)}
 .values{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .values span{border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13.5px;background:#fff}
 
@@ -467,9 +473,9 @@ footer a:hover{color:#fff}
       <p>Beach days, pool days, every day. Tap the speaker to turn the sound on.</p>
     </div>
     <div class="reels reveal">
-      <div class="reel"><video muted loop playsinline preload="metadata" poster="img/reel-beach.jpg" aria-label="Palmpriy beach day film"><source src="img/reel-beach.mp4" type="video/mp4"></video><span class="handle">@palmpriy</span><button class="snd" aria-label="Turn sound on"></button><div class="cap"><span><b>Beach day</b><small>Sun, sand, shimmer</small></span><a href="#shop">Shop</a></div></div>
-      <div class="reel"><video muted loop playsinline preload="metadata" poster="img/reel-poolside.jpg" aria-label="Applying Palmpriy poolside"><source src="img/reel-poolside.mp4" type="video/mp4"></video><span class="handle">@palmpriy</span><button class="snd" aria-label="Turn sound on"></button><div class="cap"><span><b>Poolside</b><small>One press, all-day glow</small></span><a href="#shop">Shop</a></div></div>
-      <div class="reel"><video muted loop playsinline preload="metadata" poster="img/reel-pool.jpg" aria-label="Palmpriy pool day film"><source src="img/reel-pool.mp4" type="video/mp4"></video><span class="handle">@palmpriy</span><button class="snd" aria-label="Turn sound on"></button><div class="cap"><span><b>Golden dip</b><small>Shimmer that catches the light</small></span><a href="#shop">Shop</a></div></div>
+      <div class="reel"><video muted loop playsinline preload="metadata" poster="img/reel-beach.jpg" aria-label="Palmpriy beach day film"><source src="img/reel-beach.mp4" type="video/mp4"></video><span class="handle">@palmpriyworld</span><button class="snd" aria-label="Turn sound on"></button><div class="cap"><span><b>Beach day</b><small>Sun, sand, shimmer</small></span><a href="#shop">Shop</a></div></div>
+      <div class="reel"><video muted loop playsinline preload="metadata" poster="img/reel-poolside.jpg" aria-label="Applying Palmpriy poolside"><source src="img/reel-poolside.mp4" type="video/mp4"></video><span class="handle">@palmpriyworld</span><button class="snd" aria-label="Turn sound on"></button><div class="cap"><span><b>Poolside</b><small>One press, all-day glow</small></span><a href="#shop">Shop</a></div></div>
+      <div class="reel"><video muted loop playsinline preload="metadata" poster="img/reel-pool.jpg" aria-label="Palmpriy pool day film"><source src="img/reel-pool.mp4" type="video/mp4"></video><span class="handle">@palmpriyworld</span><button class="snd" aria-label="Turn sound on"></button><div class="cap"><span><b>Golden dip</b><small>Shimmer that catches the light</small></span><a href="#shop">Shop</a></div></div>
     </div>
   </div>
 </section>
@@ -498,14 +504,18 @@ footer a:hover{color:#fff}
 <!-- ABOUT -->
 <section id="about">
   <div class="wrap about">
-    <div class="about-img reveal"><img src="img/story-portrait.jpg" alt="The founder and CEO of Palmpriy at Palmpriy Studio" style="object-position:center 25%"></div>
+    <div class="about-img reveal"><img src="img/story-portrait.jpg" alt="Priscilla Ajoke Ojo, founder and CEO of Palmpriy, at Palmpriy Studio" style="object-position:center 25%"></div>
     <div class="reveal">
       <span class="eyebrow dark">Meet our founder</span>
       <blockquote>“Your glow is our priority and your confidence is <em>our promise.</em>”</blockquote>
-      <div class="sign"><span class="rule"></span><span><b>Founder &amp; CEO</b><small>Palmpriy</small></span></div>
-      <p style="margin-top:18px">Palmpriy was built by its founder on one belief: care for your skin should feel like a ritual, not a chore. Every bottle is formulated for skin, body and everyday radiance, with honest ingredients that leave skin soft, scented and glowing.</p>
+      <div class="sign"><span class="rule"></span><span><b>Priscilla Ajoke Ojo</b><small>Founder &amp; CEO, Palmpriy</small></span></div>
+      <p style="margin-top:18px">Palmpriy was built by Priscilla Ajoke Ojo, the creator millions know as @its.priscy, on one belief: care for your skin should feel like a ritual, not a chore. Every bottle is formulated for skin, body and everyday radiance, with honest ingredients that leave skin soft, scented and glowing.</p>
       <p>That same vision shaped Palmpriy Studio, a space in Lekki where creators, brands and friends can make beautiful work in golden light.</p>
       <div class="values"><span>Clean rituals</span><span>Honest ingredients</span><span>Timeless care</span><span>Lagos-born</span></div>
+      <div class="founder-links">
+        <a href="https://instagram.com/its.priscy" target="_blank" rel="noopener" class="btn btn-ghost">Follow @its.priscy</a>
+        <a href="https://www.priscyluxebags.com" target="_blank" rel="noopener" class="also"><small>Also by Priscilla</small><b>Priscy Luxe Bags →</b></a>
+      </div>
     </div>
   </div>
 </section>
@@ -546,14 +556,14 @@ footer a:hover{color:#fff}
         <div class="logo"><img src="img/logo.png" alt="Palmpriy"></div>
         <p>Formulated for skin, body &amp; everyday radiance. We believe in clean rituals, honest ingredients, and timeless care for you.</p>
         <div class="social">
-          <a href="https://instagram.com/palmpriy" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
+          <a href="https://instagram.com/palmpriyworld" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
           <a href="mailto:palmpriy@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
           <a href="https://wa.me/2349161030326" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z"/><path d="M9 9.5c.3 2 2.2 4.2 4.5 4.8l1.2-1.2 1.8.8-.4 1.6c-3.5.4-7.3-3.4-7.1-7l1.6-.4.8 1.8L9 9.5Z" stroke-width="1.2"/></svg></a>
         </div>
       </div>
       <div>
         <h5>Shop</h5>
-        <ul><li><a href="#shop">Body Care</a></li><li><a href="#studio">Palmpriy Studio</a></li><li><a href="#gift">Send a Gift</a></li><li><a href="#ritual">The Ritual</a></li><li><a href="#about">Our Founder</a></li></ul>
+        <ul><li><a href="#shop">Body Care</a></li><li><a href="#studio">Palmpriy Studio</a></li><li><a href="#gift">Send a Gift</a></li><li><a href="#ritual">The Ritual</a></li><li><a href="#about">Our Founder</a></li><li><a href="https://www.priscyluxebags.com" target="_blank" rel="noopener">Priscy Luxe Bags ↗</a></li></ul>
       </div>
       <div>
         <h5>Help</h5>
