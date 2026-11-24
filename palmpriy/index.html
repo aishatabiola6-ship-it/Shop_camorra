@@ -972,7 +972,7 @@ function render(){
   if(step==='bag'){
     $('#lines').innerHTML=cart.map((l,i)=>`<div class="line"><img src="${l.img}" alt=""><div class="t"><h4>${l.name}</h4><small>${l.type!=='product'?esc(l.note):'Qty '+l.qty+' · '+fmt(l.price)+' each'}</small><button class="rm" data-i="${i}">Remove</button></div><div class="amt">${fmt(l.price*l.qty)}</div></div>`).join('');
     $('#dfoot').innerHTML=`<div class="row"><span>Subtotal</span><span>${fmt(sub)}</span></div>`+
-      (del?`<div class="row" style="font-size:13px;color:var(--muted)"><span>Delivery</span><span>Chosen at checkout</span></div>`:'')+nairaNote+
+      nairaNote+
       `<button class="btn btn-primary btn-block" id="toCheckout">Checkout</button>`;
     $('#toCheckout').onclick=()=>{ step='checkout'; co.err=''; render(); $('.dbody').scrollTop=0; };
     return;
@@ -991,13 +991,13 @@ function render(){
     <div class="opts" id="coAreas">${region.areas.map(a=>`<label class="opt"><input type="radio" name="area" value="${a[0]}"${a[0]===co.area?' checked':''}><span>${a[0]}</span><b>${fmt(a[1])}</b></label>`).join('')}
       ${region.areas.length?'':`<label class="opt"><input type="radio" name="area" value="Other" checked><span>${region.region}<small>We confirm the delivery fee after you order</small></span></label>`}</div>`:''}
     <h5>Payment</h5>
+    <p class="co-note" style="text-align:left;margin:-4px 0 10px">🌍 We deliver worldwide. ${del&&co.area&&co.area!=='Other'?`Delivery to ${co.area}: ${fmt(fee)}, included in your total.`:'The delivery fee is confirmed after you order.'}</p>
     <div class="opts" id="coPay">
       <label class="opt"><input type="radio" name="pay" value="transfer"${co.pay==='transfer'?' checked':''}><span>Pay via transfer<small>We send the exact account details on WhatsApp</small></span></label>
       <label class="opt"><input type="radio" name="pay" value="card"${co.pay==='card'?' checked':''}><span>Pay with card and more<small>We send you a secure Paystack payment link</small></span></label>
     </div></div>`;
   $('#dfoot').innerHTML=(co.err?`<div class="co-err">${co.err}</div>`:'')+
     `<div class="row"><span>Subtotal</span><span>${fmt(sub)}</span></div>`+
-    (del?`<div class="row"><span>Delivery</span><span>${co.area&&co.area!=='Other'?fmt(fee):co.area==='Other'?'Confirmed after order':'Pick an area'}</span></div>`:'')+
     `<div class="row total"><span>Total</span><span>${fmt(total)}${del&&co.area==='Other'?' <small style="font-size:13px;font-weight:500;color:var(--muted)">+ delivery</small>':''}</span></div>`+nairaNote+
     `<button class="btn btn-primary btn-block" id="placeOrder">Checkout now</button>`+
     `<p class="co-note">By continuing, you agree to Palmpriy's <a href="#">Terms and Conditions</a>, <a href="#">Privacy Policy</a> and <a href="#">Refund and Return Policy</a>.</p>`;
