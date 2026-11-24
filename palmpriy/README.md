@@ -14,6 +14,7 @@ A pitch concept for palmpriyworld.com. Plain HTML, no build step: open `index.ht
 - **Reels section** ("Glow in the wild"): three campaign clips (`img/reel-*.mp4`) that play while on screen, swipe sideways on phones, and have a tap-to-unmute button.
 - **Real photography**: product gallery with thumbnails, a "See the glow" lookbook with the looping video and campaign shots, and the studio's wave-mirror hallway.
 - **Meet our founder**: the CEO's portrait with the brand promise as her quote. Founder: Priscilla Ajoke Ojo (@its.priscy), with links to her Instagram, Priscy Luxe Bags (@priscyluxe) and Priscyscloset (@priscyscloset__).
+- **Glow list signup** with a campaign portrait.
 - **Brand story, ritual guide, newsletter and a cleaner footer** with tap-to-call, email and WhatsApp links.
 
 ## Editing
