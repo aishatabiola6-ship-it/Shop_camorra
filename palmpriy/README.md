@@ -17,10 +17,11 @@ The page is hidden from search engines by a `noindex` tag in `index.html` while 
 - **Real photography**: product gallery with thumbnails, a "See the glow" lookbook with the looping video and campaign shots, and the studio's wave-mirror hallway.
 - **Meet our founder**: the CEO's portrait with the brand promise as her quote. Founder: Priscilla Ajoke Ojo (@its.priscy), with links to her Instagram, Priscy Luxe Bags (@priscyluxe) and Priscyscloset (@priscyscloset__).
 - **Glow list signup** with a campaign portrait.
+- **Checkout like their current site**: delivery details, Lagos delivery areas with fees, and pay by transfer or card. The order goes to WhatsApp with everything filled in; Palmpriy replies with account details or a Paystack link. Bank details are not printed on the page because Paystack transfer accounts are created per order.
 - **Brand story, ritual guide, newsletter and a cleaner footer** with tap-to-call, email and WhatsApp links.
 
 ## Editing
-At the bottom of `index.html`: `SHOP` (WhatsApp number, USD rate), `GIFTS` (gift options), `PRODUCT` and `SPACES` (names, prices, photos, descriptions).
+At the bottom of `index.html`: `DELIVERY` (delivery areas and fees, copied from the current checkout; add the rest of their list), `SHOP` (WhatsApp number, USD rate), `GIFTS` (gift options), `PRODUCT` and `SPACES` (names, prices, photos, descriptions).
 Photos in `img/` are the brand's own product, campaign and studio shots (resized for web). Casa coco, Floral walkway, Sahara and Cocoon are still cropped from screenshots, so swap in their originals before going live. `img/glow.mp4` is a 7-second muted loop made from the brand's video.
 
 ## Deploying on Cloudflare

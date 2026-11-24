@@ -322,6 +322,23 @@ footer a:hover{color:#fff}
 .empty{text-align:center;color:var(--muted);padding:60px 10px}
 .empty b{display:block;font-family:var(--serif);font-size:28px;color:var(--ink);font-weight:500;margin-bottom:6px}
 .row{display:flex;justify-content:space-between;font-size:15px}
+.co,.co *{min-width:0}
+.co .field input,.co .field select,.co .field textarea{width:100%}
+.dbody{overflow-x:hidden}
+.co h5{font-family:var(--sans);font-size:15px;font-weight:700;margin:18px 0 10px}
+.co h5:first-child{margin-top:0}
+.co .back{font-size:13px;color:var(--muted);text-decoration:underline;margin-bottom:12px}
+.co .field textarea{min-height:64px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;cursor:pointer;font-size:14.5px}
+.opt:has(input:checked){border-color:var(--amber);box-shadow:0 0 0 1px var(--amber)}
+.opt input{accent-color:var(--amber);flex:none}
+.opt span{flex:1}
+.opt b{white-space:nowrap}
+.opt small{display:block;color:var(--muted);font-size:12.5px}
+.co-err{background:#FBE9E6;color:#A3341F;border-radius:12px;padding:10px 14px;font-size:14px}
+.co-note{font-size:12.5px;color:var(--muted);text-align:center}
+.co-note a{color:var(--amber);text-decoration:underline}
 .row.total{font-weight:700;font-size:18px}
 
 .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);opacity:0;pointer-events:none;width:min(920px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;background:var(--cream);border-radius:28px;z-index:70;transition:opacity .3s,transform .3s;display:grid}
@@ -649,6 +666,15 @@ footer a:hover{color:#fff}
 <div class="toast" id="toast"></div>
 
 <script>
+// Delivery areas and fees, copied from Palmpriy's current checkout. Add the rest of their list here.
+const DELIVERY = [
+  { region:'Lagos Island', areas:[
+    ['Ikoyi, VI, Obalende, CMS', 4000],
+    ['Lekki Phase 1 – Ikota', 4000],
+    ['Ajah', 5000],
+    ['Ibeju-Lekki', 7000],
+  ]},
+];
 const SHOP = { whatsapp: '2349161030326', usdRate: 1500 }; // ₦ per $1, update before launch
 
 const PRODUCT = { id:'dual-oil', name:'Palmpriy Dual Body Oil', price:60000, img:'img/oil-silk.jpg' };
@@ -770,24 +796,76 @@ function applyCurrency(){
 }
 $('#curBtn').onclick=()=>{ currency = currency==='NGN'?'USD':'NGN'; try{localStorage.setItem('palmpriy-cur',currency);}catch(e){} applyCurrency(); toast(currency==='USD'?'Showing prices in US dollars':'Showing prices in naira'); };
 
-/* cart */
+/* cart + checkout */
+let step='bag';
+const co={ name:'', email:'', phone:'', address:'', region:DELIVERY[0].region, area:'', pay:'transfer', err:'' };
+const needsDelivery=()=>cart.some(l=>l.type==='product'||(l.type==='gift'&&l.id.startsWith('oil')));
+function deliveryFee(){ if(!needsDelivery()) return 0; const r=DELIVERY.find(d=>d.region===co.region); const a=r&&r.areas.find(x=>x[0]===co.area); return a?a[1]:0; }
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function render(){
   const count=cart.reduce((a,l)=>a+l.qty,0);
   $('#badge').textContent=count; $('#badge').hidden=!count;
-  if(!cart.length){ $('#lines').innerHTML='<div class="empty"><b>Your bag is empty</b>Add the Dual Body Oil or book a studio space.</div>'; $('#dfoot').innerHTML=''; return; }
-  $('#lines').innerHTML=cart.map((l,i)=>`<div class="line"><img src="${l.img}" alt=""><div class="t"><h4>${l.name}</h4><small>${l.type!=='product'?l.note:'Qty '+l.qty+' · '+fmt(l.price)+' each'}</small><button class="rm" data-i="${i}">Remove</button></div><div class="amt">${fmt(l.price*l.qty)}</div></div>`).join('');
-  const prod=cart.filter(l=>l.type==='product').reduce((a,l)=>a+l.price*l.qty,0);
-  const total=cart.reduce((a,l)=>a+l.price*l.qty,0);
-  $('#dfoot').innerHTML=`<div class="row"><span>Subtotal</span><span>${fmt(total)}</span></div>`+
-    (currency==='USD'?`<div class="row" style="font-size:13px;color:var(--muted)"><span>You'll pay in naira: ${naira(total)}</span></div>`:'')+(prod?`<div class="row" style="font-size:13px;color:var(--muted)"><span>Delivery</span><span>Confirmed on WhatsApp</span></div>`:'')+
-    `<div class="row total"><span>Total</span><span>${fmt(total)}</span></div>`+
-    `<button class="btn btn-primary btn-block" id="checkout">Check out on WhatsApp</button>`;
-  $('#checkout').onclick=()=>{
-    const msg='Hello Palmpriy! I would like to order:\n'+cart.map(l=>`• ${l.name}${l.type!=='product'?' ('+l.note+')':' x'+l.qty} - ${naira(l.price*l.qty)}`).join('\n')+`\nTotal (before delivery): ${naira(total)}`;
+  $('.dhead h3').textContent=step==='bag'?'Your bag':'Checkout';
+  if(!cart.length){ step='bag'; $('.dhead h3').textContent='Your bag'; $('#lines').innerHTML='<div class="empty"><b>Your bag is empty</b>Add the Dual Body Oil or book a studio space.</div>'; $('#dfoot').innerHTML=''; return; }
+  const sub=cart.reduce((a,l)=>a+l.price*l.qty,0), fee=deliveryFee(), total=sub+fee, del=needsDelivery();
+  const nairaNote=currency==='USD'?`<div class="row" style="font-size:13px;color:var(--muted)"><span>You'll pay in naira: ${naira(total)}</span></div>`:'';
+  if(step==='bag'){
+    $('#lines').innerHTML=cart.map((l,i)=>`<div class="line"><img src="${l.img}" alt=""><div class="t"><h4>${l.name}</h4><small>${l.type!=='product'?esc(l.note):'Qty '+l.qty+' · '+fmt(l.price)+' each'}</small><button class="rm" data-i="${i}">Remove</button></div><div class="amt">${fmt(l.price*l.qty)}</div></div>`).join('');
+    $('#dfoot').innerHTML=`<div class="row"><span>Subtotal</span><span>${fmt(sub)}</span></div>`+
+      (del?`<div class="row" style="font-size:13px;color:var(--muted)"><span>Delivery</span><span>Chosen at checkout</span></div>`:'')+nairaNote+
+      `<button class="btn btn-primary btn-block" id="toCheckout">Checkout</button>`;
+    $('#toCheckout').onclick=()=>{ step='checkout'; co.err=''; render(); $('.dbody').scrollTop=0; };
+    return;
+  }
+  const region=DELIVERY.find(d=>d.region===co.region)||DELIVERY[0];
+  $('#lines').innerHTML=`<div class="co">
+    <button class="back" id="backBag">← Back to bag</button>
+    <h5>Delivery details</h5>
+    <div class="field"><label for="coName">Name</label><input id="coName" data-k="name" value="${esc(co.name)}" autocomplete="name"></div>
+    <div class="two">
+      <div class="field"><label for="coEmail">Email</label><input id="coEmail" data-k="email" type="email" value="${esc(co.email)}" autocomplete="email"></div>
+      <div class="field"><label for="coPhone">Phone</label><input id="coPhone" data-k="phone" type="tel" value="${esc(co.phone)}" autocomplete="tel" placeholder="+234…"></div>
+    </div>
+    ${del?`<div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" data-k="address" autocomplete="street-address">${esc(co.address)}</textarea></div>
+    <h5>Delivery area</h5>
+    <div class="field"><select id="coRegion" aria-label="Region">${DELIVERY.map(d=>`<option${d.region===co.region?' selected':''}>${d.region}</option>`).join('')}</select></div>
+    <div class="opts" id="coAreas">${region.areas.map(a=>`<label class="opt"><input type="radio" name="area" value="${a[0]}"${a[0]===co.area?' checked':''}><span>${a[0]}</span><b>${fmt(a[1])}</b></label>`).join('')}
+      <label class="opt"><input type="radio" name="area" value="Other"${co.area==='Other'?' checked':''}><span>Somewhere else<small>Fee confirmed on WhatsApp</small></span></label></div>`:''}
+    <h5>Payment</h5>
+    <div class="opts" id="coPay">
+      <label class="opt"><input type="radio" name="pay" value="transfer"${co.pay==='transfer'?' checked':''}><span>Pay via transfer<small>We send the exact account details on WhatsApp</small></span></label>
+      <label class="opt"><input type="radio" name="pay" value="card"${co.pay==='card'?' checked':''}><span>Pay with card and more<small>We send you a secure Paystack payment link</small></span></label>
+    </div></div>`;
+  $('#dfoot').innerHTML=(co.err?`<div class="co-err">${co.err}</div>`:'')+
+    `<div class="row"><span>Subtotal</span><span>${fmt(sub)}</span></div>`+
+    (del?`<div class="row"><span>Delivery</span><span>${co.area&&co.area!=='Other'?fmt(fee):co.area==='Other'?'On WhatsApp':'Pick an area'}</span></div>`:'')+
+    `<div class="row total"><span>Total</span><span>${fmt(total)}</span></div>`+nairaNote+
+    `<button class="btn btn-primary btn-block" id="placeOrder">Checkout now</button>`+
+    `<p class="co-note">By continuing, you agree to Palmpriy's <a href="#">Terms and Conditions</a>, <a href="#">Privacy Policy</a> and <a href="#">Refund and Return Policy</a>.</p>`;
+  $('#backBag').onclick=()=>{ step='bag'; render(); };
+  $('#lines').querySelectorAll('[data-k]').forEach(el=>el.oninput=()=>{ co[el.dataset.k]=el.value; if(co.err){ co.err=''; const e=$('.co-err'); if(e) e.remove(); } });
+  if(del){
+    $('#coRegion').onchange=e=>{ co.region=e.target.value; co.area=''; render(); };
+    $('#coAreas').onchange=e=>{ co.area=e.target.value; render(); };
+  }
+  $('#coPay').onchange=e=>{ co.pay=e.target.value; };
+  $('#placeOrder').onclick=()=>{
+    if(!co.name.trim()||!co.email.trim()||!co.phone.trim()){ co.err='Please fill name, email and phone.'; render(); return; }
+    if(!/^\S+@\S+\.\S+$/.test(co.email.trim())){ co.err='Please check your email address.'; render(); return; }
+    if(del&&!co.address.trim()){ co.err='Please add your delivery address.'; render(); return; }
+    if(del&&!co.area){ co.err='Please pick a delivery area.'; render(); return; }
+    co.err='';
+    const lines=cart.map(l=>`• ${l.name}${l.type!=='product'?' ('+l.note+')':' x'+l.qty} - ${naira(l.price*l.qty)}`).join('\n');
+    const msg=`Hello Palmpriy! I would like to order:\n${lines}\n\nSubtotal: ${naira(sub)}`+
+      (del?`\nDelivery: ${co.area==='Other'?'please confirm the fee':co.region+', '+co.area+' - '+naira(fee)}`:'')+
+      `\nTotal: ${naira(total)}${del&&co.area==='Other'?' + delivery':''}`+
+      `\n\nName: ${co.name.trim()}\nEmail: ${co.email.trim()}\nPhone: ${co.phone.trim()}`+(del?`\nAddress: ${co.address.trim()}`:'')+
+      `\nPayment: ${co.pay==='card'?'Card (please send a Paystack payment link)':'Bank transfer (please send account details)'}`;
     window.open('https://wa.me/'+SHOP.whatsapp+'?text='+encodeURIComponent(msg),'_blank');
+    render();
   };
 }
-$('#lines').onclick=e=>{ const b=e.target.closest('.rm'); if(!b) return; cart.splice(+b.dataset.i,1); save(); render(); };
+$('#lines').onclick=e=>{ const b=e.target.closest('.rm'); if(!b) return; cart.splice(+b.dataset.i,1); if(co.area&&!needsDelivery()) co.area=''; save(); render(); };
 
 /* overlays */
 function show(sel){ $(sel).classList.add('open'); $('#scrim').classList.add('show'); document.body.style.overflow='hidden'; }
