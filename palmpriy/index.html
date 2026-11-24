@@ -275,7 +275,9 @@ footer a:hover{color:#fff}
 .social a{width:42px;height:42px;border-radius:50%;border:1px solid rgba(251,244,232,.25);display:grid;place-items:center;transition:background .2s}
 .social a:hover{background:var(--amber);border-color:var(--amber)}
 .social svg{width:18px;height:18px}
-.fbottom{border-top:1px solid rgba(251,244,232,.12);margin-top:48px;padding-top:22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:13px}
+.paym{display:flex;flex-wrap:wrap;gap:6px}
+.paym span{border:1px solid rgba(251,244,232,.25);border-radius:6px;padding:3px 8px;font-size:11.5px;font-weight:600;letter-spacing:.02em;color:var(--cream);background:rgba(251,244,232,.06)}
+.fbottom{align-items:center;border-top:1px solid rgba(251,244,232,.12);margin-top:48px;padding-top:22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:13px}
 
 /* gifting */
 .gift-band{display:grid;gap:28px;align-items:center;background:linear-gradient(135deg,#FFF6E8 0%,#F7DDB4 100%);border-radius:32px;padding:36px 22px;position:relative;overflow:hidden}
@@ -614,7 +616,7 @@ footer a:hover{color:#fff}
         </ul>
       </div>
     </div>
-    <div class="fbottom"><span>© <span id="yr"></span> Palmpriy. All rights reserved.</span><span>Prices in NGN</span></div>
+    <div class="fbottom"><span>© <span id="yr"></span> PalmPriy World. All rights reserved.</span><span class="paym" aria-label="Accepted payment methods"><span>Mastercard</span><span>Visa</span><span>Verve</span><span>Stripe</span><span>Apple Pay</span><span>Google Pay</span></span></div>
   </div>
 </footer>
 
