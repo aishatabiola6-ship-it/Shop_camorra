@@ -7,6 +7,7 @@ The page is hidden from search engines by a `noindex` tag in `index.html` while 
 ## What changed compared with the current site
 - **A hero that sells**: the Dual Body Oil sits up front with a clear message and two buttons (shop / book the studio). The current site opens straight into a product grid.
 - **Two businesses, kept separate**: Body Care and Palmpriy Studio each get their own section instead of sharing one filtered product list.
+- **Swipeable product photos**: the current photo is big in front with the others peeking behind; swipe on phones, arrows on desktop, plus dots and thumbnails.
 - **Real product page**: explains both sides of the bottle (La Coco + Golden), how to use it, ingredients and delivery.
 - **Studio booking**: tap a space, pick a date, start time and hours. The total updates as you choose (10% off for 3+ hours, closed Sundays).
 - **One bag for both**: oils and studio bookings go in the same bag, and checkout sends the whole order to WhatsApp.

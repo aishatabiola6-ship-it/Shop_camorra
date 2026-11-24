@@ -111,8 +111,19 @@ section{padding:80px 0}
 /* product feature */
 .product{display:grid;gap:40px;align-items:center}
 @media(min-width:900px){.product{grid-template-columns:1fr 1fr;gap:72px}}
-.gallery{position:relative;border-radius:var(--radius);background:var(--sand);aspect-ratio:4/5;overflow:hidden}
-.gallery img{width:100%;height:100%;object-fit:cover;transition:opacity .25s}
+.gallery{position:relative;overflow-x:clip;aspect-ratio:1/1.08;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.gallery.dragging{cursor:grabbing}
+.slide{position:absolute;top:4%;bottom:4%;left:14%;width:72%;border-radius:var(--radius);overflow:hidden;background:var(--sand);
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .45s,filter .45s;box-shadow:0 24px 50px -28px rgba(60,25,0,.55)}
+.gallery.dragging .slide{transition:none}
+.slide img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.g-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:44px;height:44px;border-radius:50%;background:rgba(251,244,232,.95);color:var(--ink);display:none;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.g-nav.prev{left:2px}.g-nav.next{right:2px}
+@media(hover:hover){.g-nav{display:grid}}
+.g-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
+.g-dots button{width:7px;height:7px;border-radius:4px;background:var(--line);padding:0;transition:width .3s,background .3s}
+.g-dots button[aria-current=true]{width:22px;background:var(--amber)}
+@media(prefers-reduced-motion:reduce){.slide{transition:none}}
 .thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
 .thumbs button{aspect-ratio:1;border-radius:12px;overflow:hidden;border:2px solid transparent;padding:0;opacity:.7;transition:opacity .2s,border-color .2s}
 .thumbs button:hover{opacity:1}
@@ -154,7 +165,7 @@ section{padding:80px 0}
 .corners h3{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.05;color:var(--honey);margin-bottom:10px}
 .corners p{color:rgba(251,244,232,.7);font-size:15px}
 .corners img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius)}
-.gallery .tag{position:absolute;top:18px;left:18px;background:var(--ink);color:var(--honey);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;font-weight:600}
+.gallery .tag{position:absolute;z-index:15;top:calc(4% + 16px);left:calc(14% + 16px);background:var(--ink);color:var(--honey);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;font-weight:600}
 .pinfo h3{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5vw,48px);line-height:1.05;margin:10px 0 6px}
 .price{font-size:24px;font-weight:700;margin-bottom:18px}
 .price small{font-size:14px;color:var(--muted);font-weight:500;margin-left:6px}
@@ -437,10 +448,12 @@ footer a:hover{color:#fff}
   <div class="wrap">
     <div class="product">
       <div class="reveal">
-        <div class="gallery">
+        <div class="gallery" id="gallery" role="region" aria-roledescription="carousel" aria-label="Dual Body Oil photos">
           <span class="tag">Bestseller</span>
-          <img id="mainImg" src="img/oil-silk.jpg" alt="Palmpriy Dual Body Oil with its box">
+          <button class="g-nav prev" type="button" aria-label="Previous photo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="g-nav next" type="button" aria-label="Next photo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg></button>
         </div>
+        <div class="g-dots" id="gDots"></div>
         <div class="thumbs" id="thumbs"></div>
       </div>
       <div class="pinfo reveal">
@@ -714,10 +727,50 @@ $('#spaces').innerHTML = SPACES.map(s => `
 const SHOTS = [
   ['img/oil-silk.jpg','With its box'],['img/oil-tray.jpg','On a gold tray'],['img/oil-pump.jpg','Dual pump'],['img/oil-petals.jpg','With petals'],['img/oil-pool.jpg','In water'],
 ];
-$('#thumbs').innerHTML = SHOTS.map((t,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===0}" aria-label="${t[1]}"><img src="${t[0]}" alt="" loading="lazy"></button>`).join('');
-$('#thumbs').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const t=SHOTS[+b.dataset.i];
-  $('#mainImg').src=t[0]; $('#mainImg').alt='Palmpriy Dual Body Oil, '+t[1].toLowerCase();
-  $('#thumbs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); };
+const gal=$('#gallery'), N=SHOTS.length; let gi=0;
+gal.insertAdjacentHTML('beforeend', SHOTS.map((t,i)=>`<div class="slide" data-i="${i}"><img src="${t[0]}" alt="Palmpriy Dual Body Oil, ${t[1].toLowerCase()}" ${i?'loading="lazy"':''} draggable="false"></div>`).join(''));
+$('#thumbs').innerHTML = SHOTS.map((t,i)=>`<button type="button" data-i="${i}" aria-label="${t[1]}"><img src="${t[0]}" alt="" loading="lazy"></button>`).join('');
+$('#gDots').innerHTML = SHOTS.map((t,i)=>`<button type="button" data-i="${i}" aria-label="Photo ${i+1}: ${t[1]}"></button>`).join('');
+const slides=[...gal.querySelectorAll('.slide')];
+function placeSlides(drag=0){
+  const w=gal.clientWidth||1;
+  slides.forEach((el,i)=>{
+    let d=((i-gi)%N+N)%N; if(d>N/2) d-=N;
+    const p=d-drag/(w*.6);                         // fractional position while dragging
+    const a=Math.min(Math.abs(p),2);
+    const x=p*24, sc=1-a*.14, op=a>1.6?0:1-Math.max(0,a-1)*.6;
+    el.style.transform=`translateX(${x}%) scale(${sc})`;
+    el.style.zIndex=String(10-Math.round(a*3));
+    el.style.opacity=String(op);
+    el.style.filter=a>.05?`brightness(${1-a*.12})`:'none';
+    el.setAttribute('aria-hidden', d!==0);
+  });
+  $('#thumbs').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed',i===gi));
+  $('#gDots').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===gi));
+}
+const goTo=i=>{ gi=((i%N)+N)%N; placeSlides(); };
+$('#thumbs').onclick=e=>{ const b=e.target.closest('button'); if(b) goTo(+b.dataset.i); };
+$('#gDots').onclick=e=>{ const b=e.target.closest('button'); if(b) goTo(+b.dataset.i); };
+gal.querySelector('.prev').onclick=()=>goTo(gi-1);
+gal.querySelector('.next').onclick=()=>goTo(gi+1);
+gal.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') goTo(gi-1); if(e.key==='ArrowRight') goTo(gi+1); });
+let sx=null, sy=0, dx=0, horiz=null;
+gal.addEventListener('pointerdown',e=>{ if(e.target.closest('.g-nav')) return; sx=e.clientX; sy=e.clientY; dx=0; horiz=null; });
+gal.addEventListener('pointermove',e=>{
+  if(sx===null) return;
+  const mx=e.clientX-sx, my=e.clientY-sy;
+  if(horiz===null && Math.abs(mx)+Math.abs(my)>8){ horiz=Math.abs(mx)>Math.abs(my); if(horiz){ gal.setPointerCapture(e.pointerId); gal.classList.add('dragging'); } }
+  if(horiz){ dx=mx; placeSlides(dx); }
+});
+const endDrag=()=>{
+  if(sx===null) return; sx=null; gal.classList.remove('dragging');
+  if(horiz){ const t=gal.clientWidth*.12; if(dx<-t) goTo(gi+1); else if(dx>t) goTo(gi-1); else placeSlides(); }
+  else if(Math.abs(dx)<4){}               // plain tap: do nothing
+};
+gal.addEventListener('pointerup',endDrag); gal.addEventListener('pointercancel',endDrag);
+gal.addEventListener('click',e=>{ const sl=e.target.closest('.slide'); if(sl && +sl.dataset.i!==gi && !dx) goTo(+sl.dataset.i); });
+addEventListener('resize',()=>placeSlides());
+placeSlides();
 
 /* product qty */
 let qty = 1;
