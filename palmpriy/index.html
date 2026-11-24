@@ -381,6 +381,48 @@ footer a:hover{color:#fff}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+
+/* ---- phone: shorter page ---- */
+@media(max-width:759px){
+  section{padding:56px 0}
+  .sec-head{margin-bottom:24px}
+  .sec-head h2{font-size:34px}
+  .hero .wrap{padding-top:36px;padding-bottom:44px;gap:22px}
+  .hero h1{font-size:44px;margin:12px 0 14px}
+  .hero .cta{margin-top:22px}
+  .hero-art{width:min(300px,78%)}
+  /* swipe rows */
+  .spaces,.steps,.gift-opts{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:78%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 6px;scrollbar-width:none}
+  .spaces::-webkit-scrollbar,.steps::-webkit-scrollbar,.gift-opts::-webkit-scrollbar{display:none}
+  .spaces>*,.steps>*,.gift-opts>*{scroll-snap-align:center}
+  .space{aspect-ratio:4/4.6}
+  .steps{grid-auto-columns:70%}
+  .step{padding:22px 20px}
+  .step .n{font-size:40px}
+  .gift-opts{grid-auto-columns:62%;margin:0 -22px;padding:0 22px 6px}
+  .gift-band{padding:28px 22px;gap:22px}
+  .gift-band h2{font-size:34px}
+  .corners{display:none}
+  .studio-info{margin-top:22px;gap:8px}
+  .studio-info div{padding:14px 16px}
+  .studio-info b{font-size:20px}
+  .look{grid-auto-rows:150px;gap:8px}
+  .about{gap:24px}
+  .about-img{aspect-ratio:1/1;border-radius:200px 200px var(--radius) var(--radius)}
+  .about blockquote{font-size:28px;margin:10px 0 14px}
+  .values{display:none}
+  .product{gap:24px}
+  .acc{margin-top:18px}
+  .thumbs{display:none}
+  .news-img{min-height:260px}
+  .news-body{padding:28px 22px 32px}
+  footer{padding:48px 0 24px;margin-top:56px}
+  .fgrid{gap:26px}
+  .fbottom{margin-top:28px}
+}
+.swipe-hint{display:none}
+@media(max-width:759px){.swipe-hint{display:block;font-size:12.5px;color:var(--muted);margin:-12px 0 14px}
+  .studio .swipe-hint{color:rgba(251,244,232,.6)}}
 </style>
 </head>
 <body>
@@ -504,6 +546,7 @@ footer a:hover{color:#fff}
       <div><span class="eyebrow dark">The ritual</span><h2>Three minutes to <em>radiant</em>.</h2></div>
       <p>Clean rituals, honest ingredients and timeless care. Here is how to get the most from every drop.</p>
     </div>
+    <p class="swipe-hint">Swipe to see more →</p>
     <div class="steps">
       <div class="step reveal"><div class="n">01</div><h4>Prep</h4><p>Shower warm and pat skin until it is just damp. Damp skin takes in oil best.</p></div>
       <div class="step reveal"><div class="n">02</div><h4>Nourish</h4><p>Massage La Coco from ankles upward in slow circles until skin feels soft.</p></div>
@@ -534,6 +577,7 @@ footer a:hover{color:#fff}
       <div><span class="eyebrow">Palmpriy Studio · Lekki</span><h2>Six warm-lit sets.<br>Book by the <em>hour</em>.</h2></div>
       <p>Sculpted walls, soft curves and built-in glow lighting. Made for shoots, content days, launches and portraits. Tap a space to check the price and book.</p>
     </div>
+    <p class="swipe-hint">Swipe to see more →</p>
     <div class="spaces" id="spaces"></div>
     <div class="corners reveal">
       <div class="txt"><h3>Every corner is a set.</h3><p>Between the six spaces, the hallways are just as shootable: a sculpted wave mirror, soft pebble screens and warm light everywhere you turn.</p></div>
