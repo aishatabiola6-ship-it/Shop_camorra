@@ -1635,7 +1635,7 @@ $("#coPlace").addEventListener("click", () => {
   const btn = $("#coPlace"); btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Processing…`;
   setTimeout(() => {
     const sub = subtotal(), fee = d.ship.fee;
-    const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
+    const order = {no:"BLS-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
       name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, note:d.note, owner:(getUser()||{}).email || null};
     const orders = store.get("blushOrders", []); orders.unshift(order); store.set("blushOrders", orders);
     store.set("blushAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
