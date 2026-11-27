@@ -567,6 +567,7 @@
   #welcome .w-go{max-width:none;background:var(--ink);color:#fff;box-shadow:0 14px 30px -14px rgba(42,22,25,.7)}
   #welcome .w-go:hover{background:var(--wine)}
   #welcome .w-dots{display:flex;margin-top:16px}
+  #welcome .w-dots[hidden]{display:none}
   #welcome .w-dots i{background:rgba(42,22,25,.18)}
   #welcome .w-dots i.on{background:var(--wine)}
   @keyframes bob{50%{transform:translateY(-10px)}}
@@ -667,6 +668,42 @@
     .trust .wrap{grid-template-columns:1fr 1fr}
     .bfoot{padding-bottom:110px}
   }
+  /* ===== Home hero with model looks ===== */
+  .bh-grid{display:grid;grid-template-columns:1fr;align-items:center}
+  .bh-looks{display:none}
+  .bh-collage{display:none}
+  .hl,.hc{position:relative;overflow:hidden;display:block;text-align:left;color:#fff;background:var(--sand)}
+  .hl img,.hc img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+  .hl:hover img,.hc:hover img{transform:scale(1.05)}
+  .hl-info{position:absolute;left:0;right:0;bottom:0;padding:44px 16px 14px;background:linear-gradient(180deg,transparent,rgba(42,22,25,.82));display:flex;flex-direction:column;gap:2px}
+  .hl-info small{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
+  .hl-info b{font-family:var(--serif);font-weight:500;font-size:1.5rem;line-height:1.05}
+  .hl-info em{font-style:normal;font-size:.75rem;opacity:.9}
+  .look.flash{animation:flash 1.4s ease}
+  @keyframes flash{25%{box-shadow:0 0 0 4px var(--wine),0 22px 44px -32px rgba(140,29,63,.7)}}
+  @media (min-width:901px){
+    .bh{text-align:left;padding-top:40px}
+    .bh-grid{grid-template-columns:1fr 1.05fr;gap:40px;margin-bottom:40px}
+    .bh-sub{margin:0}
+    .bh-search{margin:28px 0 0}
+    .bh-cats{justify-content:center}
+    .bh-collage{display:block;position:relative;height:600px}
+    .hc{position:absolute;box-shadow:0 30px 60px -28px rgba(140,29,63,.6);border:6px solid #fff}
+    .hc0{left:20%;top:0;width:52%;height:92%;border-radius:999px 999px 30px 30px}
+    .hc1{right:0;top:9%;width:31%;aspect-ratio:3/4;border-radius:24px;transform:rotate(3deg)}
+    .hc2{left:0;bottom:2%;width:31%;aspect-ratio:3/4;border-radius:24px;transform:rotate(-3deg)}
+    .hc1 .hl-info b,.hc2 .hl-info b{font-size:1.15rem}
+    .hc1 .hl-info em,.hc2 .hl-info em{display:none}
+    .hc0 .hl-info{padding:70px 26px 26px 42%;align-items:flex-end;text-align:right}
+    .hc0 .hl-info b{font-size:2rem}
+    .hc-chip{position:absolute;right:6%;bottom:12%;background:#fff;color:var(--wine);font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:.7em 1.2em;border-radius:999px;box-shadow:0 12px 26px -12px rgba(140,29,63,.55);transform:rotate(-4deg)}
+  }
+  @media (max-width:900px){
+    .bh-looks{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:22px -16px 0;padding:4px 16px 8px}
+    .bh-looks::-webkit-scrollbar{display:none}
+    .hl{flex:none;width:62%;aspect-ratio:3/4;border-radius:26px;scroll-snap-align:start;border:4px solid #fff;box-shadow:0 18px 34px -22px rgba(140,29,63,.7)}
+    .bh-search{margin-top:18px}
+  }
 </style>
 </head>
 <body>
@@ -700,10 +737,6 @@
     <div class="w-stage">
       <div class="w-slides">
         <img src="img/look-soft-glam.jpg" alt="Model wearing a soft glam look with a glossy nude lip" class="on">
-        <img src="img/look-night-out.jpg" alt="Model wearing a bold smoky eye and deep red lip">
-        <img src="img/look-bronze-sculpt.jpg" alt="Model wearing warm bronze eyes, a berry blush and a glossy brown lip">
-        <img src="img/look-copper-glam.jpg" alt="Model wearing copper shimmer eyes and a glossy pink lip">
-        <img src="img/look-everyday-glow.jpg" alt="Model wearing soft bronze eyes, a winged liner and a nude lip">
       </div>
       <img class="w-float f1" src="img/rare-soft-pinch.jpg" alt="">
       <img class="w-float f2" src="img/ct-heart-blush.jpg" alt="">
@@ -714,7 +747,7 @@
       <h2>Your glow, <em>delivered.</em></h2>
       <p>Glosses, blushes, lashes &amp; more from the brands you love, delivered across Nigeria.</p>
       <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
-      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <div class="w-dots" id="wDots" hidden><i class="on"></i></div>
     </div>
   </section>
   <section class="w-screen w-auth" id="wAuth" hidden>
@@ -786,15 +819,21 @@
 <main id="top">
   <section class="bh" id="home">
     <div class="wrap">
+      <div class="bh-grid">
+      <div class="bh-text">
       <p class="bh-hi" id="greet" hidden></p>
       <span class="bh-pill">✦ New in: lashes, brows &amp; foundation for every shade</span>
       <h1>All the glam.<br><em>None of the guesswork.</em></h1>
       <p class="bh-sub">Authentic makeup from Dior to Vee Beauty, matched to your skin tone and delivered across Nigeria.</p>
+      <div class="bh-looks" id="heroLooks" aria-label="Shop the looks"></div>
       <label class="search bh-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="search" type="search" placeholder="Try “lip gloss”, “Fenty” or “lashes”" autocomplete="off" aria-label="Search makeup">
         <button type="button" id="searchGo" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </label>
+      </div>
+      <div class="bh-collage" id="heroCollage" aria-hidden="true"></div>
+      </div>
       <div class="cats bh-cats" id="cats"></div>
     </div>
     <div class="bh-shades" aria-hidden="true"><span id="shadeBar"></span></div>
@@ -1303,6 +1342,22 @@ $("#lookGrid").innerHTML = LOOKS.map(l => {
   <p>Send us a photo of a look you love, or tell us the occasion, and we'll put together the products for your skin tone.</p>
   <button type="button" class="btn js-look-ask">Plan my look on WhatsApp</button></article>`;
 document.querySelector(".js-look-ask").addEventListener("click", () => openWA(`Hi ${SHOP.name}! Please help me put together a makeup look. Here's a photo / the occasion:`));
+// Model looks at the top of the home page: a swipe row on phones, a collage on laptops
+const lookCard = (l, i, cls) => { const ps = l.items.map(byId).filter(Boolean);
+  return `<button type="button" class="${cls}" data-look="${i}"><img src="img/${l.photo}" alt="${l.name} look" loading="${i < 2 ? "eager" : "lazy"}">
+    <span class="hl-info"><small>${l.tag}</small><b>${l.name}</b><em>${ps.length} products · Shop the look →</em></span></button>`; };
+const withPhotos = LOOKS.map((l, i) => [l, i]).filter(([l]) => l.photo);
+$("#heroLooks").innerHTML = withPhotos.map(([l, i]) => lookCard(l, i, "hl")).join("");
+$("#heroCollage").innerHTML = withPhotos.slice(0, 3).map(([l, i], k) => lookCard(l, i, "hc hc" + k)).join("")
+  + `<span class="hc-chip">✦ ${withPhotos.length} looks to shop</span>`;
+$("#heroCollage").removeAttribute("aria-hidden");
+document.querySelectorAll("#heroLooks, #heroCollage").forEach(el => el.addEventListener("click", e => {
+  const b = e.target.closest("[data-look]"); if (!b) return;
+  const card = document.querySelectorAll("#lookGrid .look")[+b.dataset.look]; if (!card) return;
+  card.scrollIntoView({behavior:"smooth", block:"center"});
+  if (matchMedia("(max-width:900px)").matches) card.parentElement.scrollTo({left: card.offsetLeft - 16, behavior:"smooth"});
+  card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+}));
 $("#lookGrid").addEventListener("click", e => { const b = e.target.closest("[data-id]"); if (b) openModal(b.dataset.id); });
 $("#trend").addEventListener("click", e => { const c = e.target.closest(".t-card"); if (c) openModal(c.dataset.id); });
 let searchT;
