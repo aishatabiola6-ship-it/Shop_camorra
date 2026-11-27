@@ -1,14 +1,8 @@
 # Strut
 
-Strut is a showcase shoe and beauty store: heels, flats, boots, sneakers and makeup. Customers sign in or browse as a guest, pick a style, colour and size (or a shade for makeup), and check out with delivery fees by state. Payment is simulated (no money is charged), and every order can also be sent on WhatsApp.
+Strut is a showcase shoe store: heels, flats, boots and sneakers. Customers sign in or browse as a guest, pick a style, colour and size, and check out with delivery fees by state. Payment is simulated (no money is charged), and every order can also be sent on WhatsApp.
 
-## Blush (makeup site)
-
-`beauty.html` is a separate makeup store, Blush, built on the same code: sign-in, checkout, delivery by state, WhatsApp orders and emails. Customers pick a shade instead of a size. Tabs are categories (Lips, Cheeks, Eyes, Face, Sets, Tools) and the filter chips are brands. It has its own bag, orders and inbox; accounts are shared with Strut, so one sign-in works on both.
-
-Makeup products live in `beauty-products.js`, used by both Blush and Strut's Beauty tab, so a price or shade change there updates both sites.
-
-Plain HTML, no build step. Open `index.html` or `beauty.html` in a browser to preview.
+Plain HTML, no build step. Open `index.html` in a browser to preview.
 
 ## Editing
 
@@ -18,7 +12,7 @@ Everything you will usually change is at the top of the `<script>` in `index.htm
 - `SHOP`: shop name, WhatsApp number, Instagram and TikTok links
 - `DELIVERY`: delivery zones, fees, days and which states belong to each zone
 - `SIZES`: the EU sizes offered
-- `PRODUCTS`: each shoe's name, category, price, colours, photos and description. Products in the `Beauty` group skip the size picker and show "Shade" instead of "Colour"
+- `PRODUCTS`: each shoe's name, category, price, colours, photos and description
 
 Photos live in `img/`.
 

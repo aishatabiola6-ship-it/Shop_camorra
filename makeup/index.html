@@ -6,8 +6,7 @@
 <title>Blush | Makeup &amp; Beauty</title>
 <meta name="description" content="Authentic makeup from Dior, YSL, Huda Beauty, Charlotte Tilbury, Rare Beauty and more. Pay online or order on WhatsApp, with delivery across Nigeria.">
 <meta name="theme-color" content="#2a1619">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232a1619%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%227%22 fill=%22%23dba3ad%22/%3E%3C/svg%3E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Blush">
@@ -555,7 +554,6 @@
       <a href="#story">About</a>
       <a href="#how">How to order</a>
       <a href="#faq">FAQ</a>
-      <a href="index.html">Shoes</a>
     </nav>
     <div class="nav-right">
     <button class="bag-btn acct-btn" id="acctBtn" aria-label="Account">
@@ -789,7 +787,6 @@
       <a href="#shop">Shop</a>
       <a href="#how">How to order</a>
       <a href="#faq">FAQ</a>
-      <a href="index.html">Shop shoes at Strut</a>
       <a href="#" class="js-ig">Instagram</a>
       <a href="#" class="js-tt">TikTok</a>
       <a href="#" class="js-wa">WhatsApp</a>
@@ -933,7 +930,7 @@
   <a href="#" class="js-wa" aria-label="WhatsApp"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span></a>
 </nav>
 
-<script src="beauty-products.js"></script>
+<script src="products.js"></script>
 <script>
 /* ===== Shop settings: edit these ===== */
 const SHOP = {
@@ -947,7 +944,7 @@ const SHOP = {
 /* ===== Email: paste the Google Apps Script web app URL to send real emails (see email/SETUP.md).
    Leave blank and emails only appear in the on-site inbox. ===== */
 const EMAIL = {
-  scriptUrl: "https://script.google.com/macros/s/AKfycbxlL-R_LsmwWYajFXGdcskKymdaVceGSPTxKvMNzzvU07dE6I7-vr731QUXzHV8rtvK/exec",
+  scriptUrl: "",
 };
 
 /* ===== Delivery: fees by zone (shop is in Lagos) ===== */
@@ -975,7 +972,7 @@ const SIZES = [36,37,38,39,40,41,42];
 const PRODUCTS = [
 
 ];
-// This site sells makeup only: products come from beauty-products.js.
+// Products come from products.js.
 // The category (Lips, Cheeks…) becomes the tab and the brand becomes the filter chip.
 const BRANDS = ["Charlotte Tilbury","Huda Beauty","Rare Beauty","Too Faced","Dior","YSL","KIKO","TIRTIR","Laneige","Joocyee","MAANGE","Morphe"];
 const brandOf = n => BRANDS.find(b => n.startsWith(b)) || n.split(" ")[0];
@@ -1222,14 +1219,14 @@ const store = {
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
   del(k){ try { localStorage.removeItem(k); } catch(e){} },
 };
-store.del("strutUser");                                   // old demo format
+store.del("blushUser");                                   // old demo format
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const normEmail = e => e.trim().toLowerCase();
 const validEmail = e => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(e);
 
 // ===== accounts (passwords are salted + hashed with PBKDF2, never stored as text) =====
-const accounts = () => store.get("strutAccounts", {});
-const getUser = () => { const s = store.get("strutSession", null), a = s && accounts()[s]; return a ? {name:a.name, email:s} : null; };
+const accounts = () => store.get("blushAccounts", {});
+const getUser = () => { const s = store.get("blushSession", null), a = s && accounts()[s]; return a ? {name:a.name, email:s} : null; };
 const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
 const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
 async function hashPassword(pass, saltHex){
@@ -1251,7 +1248,7 @@ const liveMail = () => /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.te
 async function callMail(action, data){
   if (!liveMail()) return null;
   try {
-    const r = await fetch(EMAIL.scriptUrl, {method:"POST", body: JSON.stringify(Object.assign({action, site:"blush"}, data))});
+    const r = await fetch(EMAIL.scriptUrl, {method:"POST", body: JSON.stringify(Object.assign({action}, data))});
     return await r.json();
   } catch(e){ console.warn("Email service unreachable", e); return null; }
 }
@@ -1389,7 +1386,7 @@ stepEl("in").addEventListener("submit", async e => {
   const {hash} = await hashPassword(pass, acct.salt);
   busy(f, false);
   if (hash !== acct.hash) return err("in", "Incorrect password. Try again or reset it.");
-  store.set("strutSession", email); f.pass.value = "";
+  store.set("blushSession", email); f.pass.value = "";
   const u = getUser(); refreshUser(); finishWelcome(); mailSignIn(u);
 });
 stepEl("up").addEventListener("submit", e => {
@@ -1437,7 +1434,7 @@ stepEl("pass").addEventListener("submit", async e => {
   const {salt, hash} = await hashPassword(f.pass.value);
   const all = accounts(), isNew = flow.mode === "up";
   all[flow.email] = {...(all[flow.email] || {created: Date.now()}), name: flow.name, salt, hash};
-  store.set("strutAccounts", all); store.set("strutSession", flow.email);
+  store.set("blushAccounts", all); store.set("blushSession", flow.email);
   busy(f, false); f.pass.value = f.pass2.value = ""; flow.verified = false;
   const u = getUser(); refreshUser(); finishWelcome();
   if (isNew) mailWelcome(u); else toast("Password updated. You're signed in.");
@@ -1479,7 +1476,7 @@ const co = {ship:"std", pay:"card"};
 const subtotal = () => bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0);
 function openCheckout(){
   if (!bag.length) return;
-  const u = getUser(), a = store.get("strutAddr", {});
+  const u = getUser(), a = store.get("blushAddr", {});
   if (!$("#coName").value) $("#coName").value = a.name || (u ? u.name : "");
   if (u) $("#coEmail").value = u.email; else if (!$("#coEmail").value) $("#coEmail").value = a.email || "";
   if (!$("#coPhone").value) $("#coPhone").value = a.phone || "";
@@ -1543,7 +1540,7 @@ $("#coPlace").addEventListener("click", () => {
     const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
       name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, note:d.note, owner:(getUser()||{}).email || null};
     const orders = store.get("blushOrders", []); orders.unshift(order); store.set("blushOrders", orders);
-    store.set("strutAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
+    store.set("blushAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
     bag = []; save(); renderBag();
     $("#coGift").checked = false; $("#coNote").value = ""; $("#coNoteWrap").hidden = true; $("#coNoteCount").textContent = "0 / 200";
     btn.disabled = false; renderDone(order); renderProfile(); open("#donePanel");
@@ -1585,7 +1582,7 @@ function orderStatus(o){
   return `<span class="pill">Processing</span>`;
 }
 function renderProfile(){
-  const u = getUser(), orders = store.get("blushOrders", []).filter(o => (o.owner || null) === (u ? u.email : null)), a = store.get("strutAddr", null);
+  const u = getUser(), orders = store.get("blushOrders", []).filter(o => (o.owner || null) === (u ? u.email : null)), a = store.get("blushAddr", null);
   const unread = myMail().filter(m => !m.read).length;
   const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
   $("#profBody").innerHTML = `
@@ -1608,7 +1605,7 @@ function renderProfile(){
 $("#profBody").addEventListener("click", e => {
   const w = e.target.closest("[data-wa]"); if (w){ e.preventDefault(); openWA(w.dataset.wa); return; }
   const b = e.target.closest("[data-act]"); if (!b) return;
-  if (b.dataset.act === "out"){ store.del("strutSession"); refreshUser(); renderProfile(); toast("Signed out"); }
+  if (b.dataset.act === "out"){ store.del("blushSession"); refreshUser(); renderProfile(); toast("Signed out"); }
   if (b.dataset.act === "inbox"){ renderInbox(); open("#inboxPanel"); }
   if (b.dataset.act === "in"){ close(true); showAuth("in"); }
   if (b.dataset.act === "addr"){ if (bag.length) openCheckout(); else toast("Your address is saved when you check out"); }

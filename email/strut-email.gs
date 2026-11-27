@@ -16,17 +16,7 @@
  * arbitrary mail from your account.
  */
 
-// Two shops share this script: Strut (shoes, index.html) and Blush (makeup, beauty.html).
-// The website says which one with `site`; anything else means Strut.
-const BRANDS = {
-  strut: { name: "Strut", page: "", img: "email-welcome.jpg", alt: "Heels, flats, sneakers and boots at Strut",
-           intro: "Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.",
-           request: "Request a pair you've seen elsewhere", head: "#1b1714", dot: "#c9a76c" },
-  blush: { name: "Blush", page: "beauty.html", img: "huda-new-nude.jpg", alt: "Makeup at Blush",
-           intro: "Your Blush account is ready. Every product we stock is 100% authentic, and we're always happy to help you find your shade.",
-           request: "Request a product you've seen elsewhere", head: "#2a1619", dot: "#dba3ad" },
-};
-let B = BRANDS.strut;             // set for each request in doPost
+const SENDER_NAME = "Strut";
 const SITE_URL = "https://aishatabiola6-ship-it.github.io/Shop_camorra/";
 const WHATSAPP = "2349125837823";
 const DAILY_LIMIT = 90;           // Gmail allows ~100/day on a normal account
@@ -45,7 +35,6 @@ function doPost(e) {
   let body = {};
   try { body = JSON.parse((e && e.postData && e.postData.contents) || "{}"); } catch (err) { return json({ ok: false, error: "bad_json" }); }
   const action = String(body.action || "");
-  B = body.site === "blush" ? BRANDS.blush : BRANDS.strut;
   const email = String(body.email || "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email) || email.length > 120) return json({ ok: false, error: "bad_email" });
 
@@ -68,7 +57,7 @@ function sendCode(email, name, purpose) {
   const code = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
   CacheService.getScriptCache().put("c:" + email, JSON.stringify({ code: code, tries: 0 }), 600);
   const what = purpose === "reset" ? "reset your password" : "confirm your email";
-  send(email, "Your " + B.name + " code: " + code,
+  send(email, "Your Strut code: " + code,
     h("Your code") +
     p((name ? "Hi " + esc(firstName(name)) + ", use" : "Use") + " this code to " + what + ":") +
     '<div style="font-size:34px;letter-spacing:10px;font-weight:600;text-align:center;background:#f6f0e8;border-radius:14px;padding:18px 0 18px 10px;margin:8px 0 18px;color:#1b1714">' + code + "</div>" +
@@ -98,13 +87,13 @@ function sendWelcome(email, name) {
   if (!cache.get("v:" + email)) return json({ ok: false, error: "not_verified" });
   cache.remove("v:" + email);
   const n = esc(firstName(name) || "there");
-  send(email, "Welcome to " + B.name + ", " + (firstName(name) || "friend"),
-    '<img src="' + SITE_URL + 'img/' + B.img + '" width="472" alt="' + B.alt + '" style="display:block;width:100%;max-width:472px;height:auto;border-radius:12px;margin:0 0 20px">' +
+  send(email, "Welcome to Strut, " + (firstName(name) || "friend"),
+    '<img src="' + SITE_URL + 'img/email-welcome.jpg" width="472" alt="Heels, flats, sneakers and boots at Strut" style="display:block;width:100%;max-width:472px;height:auto;border-radius:12px;margin:0 0 20px">' +
     h("Welcome, " + n + ".") +
-    p(B.intro) +
-    box("<b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· " + B.request) +
-    btn("Start shopping", SITE_URL + B.page + "#shop") +
-    p("See you soon,<br>The " + B.name + " team"));
+    p("Your Strut account is ready. We pick every pair by hand, so you'll only find shoes we'd wear ourselves.") +
+    box("<b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· Request a pair you've seen elsewhere") +
+    btn("Start shopping", SITE_URL + "#shop") +
+    p("See you soon,<br>The Strut team"));
   return json({ ok: true });
 }
 
@@ -113,8 +102,8 @@ function sendSignIn(email, name) {
   const when = Utilities.formatDate(new Date(), "Africa/Lagos", "EEEE d MMMM, HH:mm");
   send(email, "Welcome back, " + (firstName(name) || "friend"),
     h("Welcome back, " + esc(firstName(name) || "there") + ".") +
-    p("You signed in to " + B.name + " on " + when + ".") +
-    btn("See what's new", SITE_URL + B.page + "#shop") +
+    p("You signed in to Strut on " + when + ".") +
+    btn("See what's new", SITE_URL + "#shop") +
     p("Wasn't you? Reset your password from the sign-in page straight away."));
   return json({ ok: true });
 }
@@ -158,11 +147,11 @@ function send(to, subject, inner) {
   const html =
     '<div style="background:#f6f0e8;padding:24px 12px;font-family:Helvetica,Arial,sans-serif;color:#1b1714">' +
     '<div style="max-width:520px;margin:0 auto;background:#fffaf3;border-radius:18px;overflow:hidden">' +
-    '<div style="background:' + B.head + ';color:#fff;text-align:center;padding:22px;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:34px;letter-spacing:-1px">' + B.name + '<span style="color:' + B.dot + '">.</span></div>' +
+    '<div style="background:#1b1714;color:#fff;text-align:center;padding:22px;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:34px;letter-spacing:-1px">Strut<span style="color:#c9a76c">.</span></div>' +
     '<div style="padding:26px 24px 8px;font-size:15px;line-height:1.6">' + inner + "</div>" +
-    '<div style="padding:16px 24px 24px;font-size:12px;color:#6f655c;border-top:1px solid #ddd0bf">You\'re receiving this because you used ' + B.name + '. Questions? Reply to this email or message us on <a href="https://wa.me/' + WHATSAPP + '" style="color:#1f7a4d">WhatsApp</a>.</div>' +
+    '<div style="padding:16px 24px 24px;font-size:12px;color:#6f655c;border-top:1px solid #ddd0bf">You\'re receiving this because you used Strut. Questions? Reply to this email or message us on <a href="https://wa.me/' + WHATSAPP + '" style="color:#1f7a4d">WhatsApp</a>.</div>' +
     "</div></div>";
-  MailApp.sendEmail({ to: to, subject: subject, htmlBody: html, name: B.name });
+  MailApp.sendEmail({ to: to, subject: subject, htmlBody: html, name: SENDER_NAME });
 }
 
 function allow(key, max, seconds) {

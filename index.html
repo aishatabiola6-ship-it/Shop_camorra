@@ -556,7 +556,6 @@
       <a href="#story">About</a>
       <a href="#how">How to order</a>
       <a href="#faq">FAQ</a>
-      <a href="beauty.html">Beauty</a>
     </nav>
     <div class="nav-right">
     <button class="bag-btn acct-btn" id="acctBtn" aria-label="Account">
@@ -660,7 +659,7 @@
       <div>
         <p class="eyebrow">New season · Just landed</p>
         <h1>Step in like you <em>own the room.</em></h1>
-        <p class="lead">Statement heels, mesh ballet flats, cosy boots, fresh sneakers and beauty favourites, picked one at a time. Choose your size, check out in a few taps, and we'll deliver anywhere in Nigeria.</p>
+        <p class="lead">Statement heels, mesh ballet flats, cosy boots and fresh sneakers, picked one pair at a time. Choose your size, check out in a few taps, and we'll deliver anywhere in Nigeria.</p>
         <div class="hero-ctas">
           <a href="#shop" class="btn btn-dark">Shop the edit</a>
           <a href="#" class="btn btn-line js-wa">Chat with us</a>
@@ -789,7 +788,6 @@
       <a href="#shop">Shop</a>
       <a href="#how">How to order</a>
       <a href="#faq">FAQ</a>
-      <a href="beauty.html">Shop makeup at Blush</a>
       <a href="#" class="js-ig">Instagram</a>
       <a href="#" class="js-tt">TikTok</a>
       <a href="#" class="js-wa">WhatsApp</a>
@@ -814,13 +812,11 @@
     <div class="m-price" id="mPrice"></div>
     <p class="m-desc" id="mDesc"></p>
     <div id="mColorsWrap">
-      <div class="opt-label"><span id="mColorLabel">Colour</span> <span id="mColorName"></span></div>
+      <div class="opt-label">Colour <span id="mColorName"></span></div>
       <div class="opts" id="mColors"></div>
     </div>
-    <div id="mSizesWrap">
-      <div class="opt-label">Size (EU) <span>Need help? Ask us</span></div>
-      <div class="opts" id="mSizes"></div>
-    </div>
+    <div class="opt-label">Size (EU) <span>Need help? Ask us</span></div>
+    <div class="opts" id="mSizes"></div>
     <div class="m-actions">
       <button class="btn btn-dark" id="mAdd">Add to bag</button>
       <button class="btn btn-line" id="mBuy">Buy now</button>
@@ -933,7 +929,6 @@
   <a href="#" class="js-wa" aria-label="WhatsApp"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span></a>
 </nav>
 
-<script src="beauty-products.js"></script>
 <script>
 /* ===== Shop settings: edit these ===== */
 const SHOP = {
@@ -1213,11 +1208,8 @@ const PRODUCTS = [
   {id:"plum-runner", group:"Sneakers", name:"Blush & Plum Runner", cat:"Runners", price:78000,
    imgs:["plum-runner.jpg"], colors:[["Blush / plum","#f2b2c6"]],
    desc:"Retro mesh runner in blush with plum overlays on a cushioned, chunky sole."},
-
 ];
-PRODUCTS.push(...BEAUTY);                                // makeup lives in beauty-products.js (shared with beauty.html)
 PRODUCTS.forEach(p => p.group = p.group || "Heels");
-const noSize = p => p && p.group === "Beauty";   // makeup: shade only, no shoe size
 
 /* ===== App ===== */
 const $ = s => document.querySelector(s);
@@ -1234,7 +1226,6 @@ function openWA(text){
   document.body.appendChild(link); link.click(); link.remove();
 }
 const byId = id => PRODUCTS.find(p => p.id === id);
-const optLine = l => `${l.color}${l.size ? ` · EU ${l.size}` : ""}`;
 
 document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); a.addEventListener("click", e => { e.preventDefault(); openWA(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); }); });
 document.querySelectorAll(".js-ig").forEach(a => { a.href = SHOP.instagram; a.target = "_blank"; a.rel = "noopener"; });
@@ -1243,11 +1234,11 @@ $("#copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name}`;
 $("#statCount").textContent = PRODUCTS.length;
 
 // marquee
-const words = ["Crystal slingbacks","Mesh ballet flats","Bridal heels","Everyday slides","Velvet Mary Janes","Fur-lined boots","Fresh sneakers","Glosses & blushes","Delivered to your door"];
+const words = ["Crystal slingbacks","Mesh ballet flats","Bridal heels","Everyday slides","Velvet Mary Janes","Fur-lined boots","Fresh sneakers","Delivered to your door"];
 $("#marquee").innerHTML = [...words,...words,...words,...words].map(w=>`<span>${w}</span>`).join("");
 
 // filters + grid
-const ORDER = ["Heels","Flats","Boots","Sneakers","Beauty"];
+const ORDER = ["Heels","Flats","Boots","Sneakers"];
 const groups = ["All", ...new Set(PRODUCTS.map(p => p.group))].sort((a,b) => (a==="All"?-1:ORDER.indexOf(a)) - (b==="All"?-1:ORDER.indexOf(b)));
 let group = "All", current = "All", query = "";
 function renderGroups(){
@@ -1271,7 +1262,7 @@ function renderGrid(){
   const q = query.trim().toLowerCase();
   const list = PRODUCTS.filter(p => (group === "All" || p.group === group) && (current === "All" || p.cat === current)
     && (!q || (p.name+" "+p.cat+" "+p.group+" "+p.colors.map(c=>c[0]).join(" ")).toLowerCase().includes(q)));
-  if (!list.length){ $("#grid").innerHTML = `<p class="empty">Nothing matches "${q.replace(/[<>&"]/g,"")}". Try another word, or <button class="js-req" style="text-decoration:underline">request a pair</button> and we'll find it.</p>`; return; }
+  if (!list.length){ $("#grid").innerHTML = `<p class="empty">No shoes match "${q.replace(/[<>&"]/g,"")}". Try another word, or <button class="js-req" style="text-decoration:underline">request a pair</button> and we'll find it.</p>`; return; }
   $("#grid").innerHTML = list.map((p,i) => `
     <article class="card" tabindex="0" data-id="${p.id}" style="animation-delay:${i*60}ms" aria-label="${p.name}, ${money(p.price)}">
       <div class="card-img">
@@ -1306,8 +1297,6 @@ function openModal(id){
   $("#mColorsWrap").style.display = "";
   $("#mColors").innerHTML = p.colors.map(c=>`<button class="opt color" aria-pressed="${sel.color===c[0]}" data-color="${c[0]}"><i style="background:${c[1]}"></i>${c[0]}</button>`).join("");
   $("#mColorName").textContent = sel.color || "Choose one";
-  $("#mColorLabel").textContent = noSize(p) ? "Shade" : "Colour";
-  $("#mSizesWrap").style.display = noSize(p) ? "none" : "";
   $("#mSizes").innerHTML = SIZES.map(s=>`<button class="opt" aria-pressed="false" data-size="${s}">${s}</button>`).join("");
   note("");
   open("#modal");
@@ -1332,9 +1321,8 @@ $("#mSizes").addEventListener("click", e => {
 });
 function note(t, warn){ const n = $("#mNote"); n.textContent = t; n.classList.toggle("warn", !!warn); }
 function ready(){
-  const beauty = noSize(byId(sel.id));
-  if (!sel.color){ note(beauty ? "Please choose a shade." : "Please choose a colour.", true); return false; }
-  if (!sel.size && !beauty){ note("Please choose your size.", true); return false; }
+  if (!sel.color){ note("Please choose a colour.", true); return false; }
+  if (!sel.size){ note("Please choose your size.", true); return false; }
   return true;
 }
 $("#mAdd").addEventListener("click", () => {
@@ -1369,7 +1357,7 @@ function renderBag(bump){
   $("#dItems").innerHTML = bag.map((l,i) => { const p = byId(l.id); return `
     <div class="line">
       <img src="img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}" alt="">
-      <div><h4>${p.name}</h4><small>${optLine(l)}</small>
+      <div><h4>${p.name}</h4><small>${l.color} · EU ${l.size}</small>
         <div class="qty"><button data-q="-1" data-i="${i}" aria-label="Decrease">−</button><span>${l.qty}</span><button data-q="1" data-i="${i}" aria-label="Increase">+</button></div>
       </div>
       <div style="text-align:right"><b>${money(p.price*l.qty)}</b><button class="rm" data-rm="${i}">Remove</button></div>
@@ -1385,7 +1373,7 @@ $("#dItems").addEventListener("click", e => {
 });
 $("#checkout").addEventListener("click", () => openCheckout());
 $("#bagWa").addEventListener("click", () => {
-  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${optLine(l)} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const total = money(bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0));
   openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nState:\nDelivery address:`);
 });
@@ -1420,7 +1408,7 @@ function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add(
 const h = new Date().getHours();
 const greetWord = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
 const CATS = [["Heels","Heels","All","rose-crystal.jpg"],["Flats","Flats","Ballet flats","cap-toe-mj.jpg"],["Boots","Boots","All","cocoa-fur-boot.jpg"],
-  ["Sneakers","Sneakers","All","racer-pink.jpg"],["Slides","Flats","Slides","lock-slide.jpg"],["Bridal","Heels","Bridal","pearl-bow-pump.jpg"],["Sandals","Heels","Sandals","crystal-coil.jpg"],["Beauty","Beauty","All","ysl-blush-box.jpg"]];
+  ["Sneakers","Sneakers","All","racer-pink.jpg"],["Slides","Flats","Slides","lock-slide.jpg"],["Bridal","Heels","Bridal","pearl-bow-pump.jpg"],["Sandals","Heels","Sandals","crystal-coil.jpg"]];
 $("#cats").innerHTML = CATS.map(([l,g,c,img]) => `<button class="cat" data-g="${g}" data-c="${c}"><span><img src="img/${img}" alt="" loading="lazy"></span>${l}</button>`).join("");
 function goShop(g, c){
   group = g; current = c; query = ""; $("#search").value = "";
@@ -1538,7 +1526,7 @@ const mailSignIn = (u) => (callMail("signin", {email:u.email, name:u.name}), sen
 function mailOrder(o, to){
   callMail("order", {email: to, order: {
     no: o.no, name: o.name, ship: o.ship, note: o.note || "",
-    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, img: thumbOf(l).replace(/^img\//,""), detail: `${optLine(l)} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
+    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, img: thumbOf(l).replace(/^img\//,""), detail: `${l.color} · EU ${l.size} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
     sub: money(o.sub), fee: o.fee ? money(o.fee) : "Free", total: money(o.total),
     payText: o.pay === "transfer" ? `Complete your transfer: send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with ${o.no} as the reference.`
       : o.pay === "pod" ? `Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.` : `Paid by card · ${money(o.total)}`,
@@ -1546,7 +1534,7 @@ function mailOrder(o, to){
     where: o.ship === "Pickup" ? "Lekki studio" : [o.address, o.city, o.state].filter(Boolean).join(", "),
     eta: etaText(o.days, o.at)
   }});
-  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(optLine(l))} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
+  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(l.color)} · EU ${l.size} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
   const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
     : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.</div>`
     : `<div class="em-box">Paid by card · ${money(o.total)}</div>`;
@@ -1737,7 +1725,7 @@ function renderCheckout(){
     : co.pay === "pod" ? "Pay the rider by cash or transfer when your pair arrives."
     : state && !lagos ? "Pay on delivery is available in Lagos only." : "";
   $("#coAddrWrap").hidden = co.ship === "pick";
-  $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${optLine(l)} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
+  $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${l.color} · EU ${l.size} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
   const ship = opts.find(o => o.id === co.ship), fee = ship ? ship.fee : 0, total = subtotal() + fee;
   $("#coSub").textContent = money(subtotal());
   $("#coFee").textContent = ship ? (fee ? money(fee) : "Free") : "Choose state";
@@ -1788,7 +1776,7 @@ $("#coPlace").addEventListener("click", () => {
 });
 $("#coWa").addEventListener("click", () => {
   const d = coDetails();
-  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${optLine(l)} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const fee = d.ship ? d.ship.fee : 0;
   openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}${d.note ? "\n\nGift note: " + d.note : ""}`);
 });

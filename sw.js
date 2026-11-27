@@ -1,8 +1,8 @@
 // Strut offline support: the shop opens even with a weak or no connection.
 // Pages load fresh when online (falling back to the saved copy offline);
 // photos and icons are saved after the first view so they load instantly.
-const VERSION = "strut-v2";
-const CORE = ["./", "./index.html", "./beauty.html", "./beauty-products.js", "./manifest.webmanifest",
+const VERSION = "strut-v1";
+const CORE = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
@@ -21,11 +21,12 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   const fonts = /fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if (url.origin !== location.origin && !fonts) return;    // leave other sites (WhatsApp, Apps Script) alone
+  if (url.pathname.includes("/makeup/")) return;           // the makeup site has its own offline support
 
-  if (req.mode === "navigate" || url.pathname.endsWith(".js")) {   // pages and product data: fresh first, saved copy offline
+  if (req.mode === "navigate") {                           // the page itself: fresh first, saved copy offline
     e.respondWith(fetch(req)
-      .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); } return res; })
-      .catch(() => caches.match(req, {ignoreSearch: true}).then((hit) => hit || caches.match("./index.html"))));
+      .then((res) => { const copy = res.clone(); caches.open(VERSION).then((c) => c.put("./index.html", copy)); return res; })
+      .catch(() => caches.match("./index.html")));
     return;
   }
   e.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((res) => {   // photos, icons, fonts: saved copy first

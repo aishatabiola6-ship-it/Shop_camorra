@@ -1,5 +1,5 @@
-/* Makeup products, shared by the Strut shoe store (index.html, under "Beauty")
-   and the makeup site (beauty.html). Edit names, prices, shades and photos here once.
+/* Makeup products: edit names, prices, shades and photos here.
+   group/cat: the page uses cat (Lips, Cheeks, Eyes, Face, Sets, Tools) as the tab and the brand as the filter.
    colors: [shade name, swatch colour, optional photo index]. Photos live in img/. */
 const BEAUTY = [
   {id:"dior-lip-maximizer", group:"Beauty", name:"Dior Addict Lip Maximizer", cat:"Lips", price:65000, badge:"Bestseller",
