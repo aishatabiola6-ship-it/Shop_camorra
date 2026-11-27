@@ -1430,7 +1430,7 @@ async function sendEmail({to, subject, preview, inner}){
 let notifT;
 function notify(mail){
   const n = $("#notif");
-  n.innerHTML = `<span class="ic">S</span><span><small><span>Blush · Mail</span><span>now</span></small><b>${esc(mail.subject)}</b><span>${esc(mail.preview)}</span></span>`;
+  n.innerHTML = `<span class="ic">B</span><span><small><span>Blush · Mail</span><span>now</span></small><b>${esc(mail.subject)}</b><span>${esc(mail.preview)}</span></span>`;
   n.dataset.id = mail.id; n.classList.add("on");
   clearTimeout(notifT); notifT = setTimeout(() => n.classList.remove("on"), 7000);
 }
