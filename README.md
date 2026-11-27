@@ -2,7 +2,13 @@
 
 Strut is a showcase shoe and beauty store: heels, flats, boots, sneakers and makeup. Customers sign in or browse as a guest, pick a style, colour and size (or a shade for makeup), and check out with delivery fees by state. Payment is simulated (no money is charged), and every order can also be sent on WhatsApp.
 
-Plain HTML, no build step. Open `index.html` in a browser to preview.
+## Blush (makeup site)
+
+`beauty.html` is a separate makeup store, Blush, built on the same code: sign-in, checkout, delivery by state, WhatsApp orders and emails. Customers pick a shade instead of a size. Tabs are categories (Lips, Cheeks, Eyes, Face, Sets, Tools) and the filter chips are brands. It has its own bag, orders and inbox; accounts are shared with Strut, so one sign-in works on both.
+
+Makeup products live in `beauty-products.js`, used by both Blush and Strut's Beauty tab, so a price or shade change there updates both sites.
+
+Plain HTML, no build step. Open `index.html` or `beauty.html` in a browser to preview.
 
 ## Editing
 
