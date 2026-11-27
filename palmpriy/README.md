@@ -5,6 +5,7 @@ A pitch concept for palmpriyworld.com. Plain HTML, no build step: open `index.ht
 The page is hidden from search engines by a `noindex` tag in `index.html` while it is a pitch. Remove that line once Palmpriy approves it.
 
 ## What changed compared with the current site
+- **Welcome page**: shown on a visitor's first visit (or any link ending in `#welcome`), with three buttons: Shop the glow, Book the studio, Enter the site.
 - **A hero that sells**: the Dual Body Oil sits up front with a clear message and two buttons (shop / book the studio). The current site opens straight into a product grid.
 - **Two businesses, kept separate**: Body Care and Palmpriy Studio each get their own section instead of sharing one filtered product list.
 - **Swipeable product photos**: the current photo is big in front with the others peeking behind; swipe on phones, arrows on desktop, plus dots and thumbnails.

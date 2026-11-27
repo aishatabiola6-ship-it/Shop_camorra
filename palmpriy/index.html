@@ -434,9 +434,53 @@ footer a:hover{color:#fff}
 .swipe-hint{display:none}
 @media(max-width:759px){.swipe-hint{display:block;font-size:12.5px;color:var(--muted);margin:-12px 0 14px}
   .studio .swipe-hint{color:rgba(251,244,232,.6)}}
+
+/* ---- welcome page ---- */
+.welcome{position:fixed;inset:0;z-index:100;display:grid;overflow:auto;color:#fff;
+  background:radial-gradient(120% 80% at 80% 10%,#F7C987 0%,#EFA350 30%,#C86A0A 70%,#7A3A04 100%);
+  transition:opacity .6s ease,transform .6s ease}
+.welcome.hide{opacity:0;transform:scale(1.03);pointer-events:none}
+.welcome[hidden]{display:none}
+.w-in{width:100%;max-width:1100px;margin:auto;padding:28px 20px 36px;display:grid;gap:26px;align-items:center}
+@media(min-width:900px){.w-in{grid-template-columns:1fr 1fr;gap:56px;padding:48px 40px}}
+.w-logo{height:40px;width:auto;filter:brightness(0) invert(1);opacity:.95}
+.w-text h1{font-family:var(--serif);font-weight:500;font-size:clamp(44px,10vw,88px);line-height:.98;letter-spacing:-.02em;margin:18px 0 16px}
+.w-text h1 em{color:#FFE7C2}
+.w-text p{font-size:16.5px;max-width:440px;opacity:.92}
+.w-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.w-cta .btn-ghost{border-color:rgba(255,255,255,.7);color:#fff}
+.w-cta .btn-ghost:hover{background:#fff;color:var(--amber-deep)}
+.w-skip{display:inline-block;margin-top:16px;font-size:13.5px;opacity:.85;text-decoration:underline}
+.w-art{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);overflow:hidden;gap:10px;height:min(62vh,520px);min-height:300px}
+.w-art img{width:100%;height:100%;min-height:0;object-fit:cover;border-radius:22px;box-shadow:0 24px 50px -26px rgba(40,10,0,.7)}
+.w-art img:first-child{grid-row:span 2;border-radius:200px 200px 22px 22px}
+@media(max-width:899px){.w-art{order:-1;height:36vh;min-height:230px}.w-in{gap:20px;padding-top:20px}.w-logo{height:32px}.w-text h1{font-size:44px;margin:12px 0 12px}.w-text p{font-size:15.5px}.w-cta{margin-top:20px}}
+.w-in>*{animation:wUp .9s cubic-bezier(.2,.8,.2,1) both}
+.w-art{animation-delay:.15s}
+@keyframes wUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.w-in>*{animation:none}.welcome{transition:none}}
 </style>
 </head>
 <body>
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-label="Welcome to Palmpriy">
+  <div class="w-in">
+    <div class="w-text">
+      <img class="w-logo" src="img/logo.png" alt="Palmpriy">
+      <h1>Welcome to your <em>glow era.</em></h1>
+      <p>Where your glow is our priority and your confidence is our promise. Body oils for everyday radiance, and a warm-lit studio in Lekki.</p>
+      <div class="w-cta">
+        <a href="#shop" class="btn btn-light" data-enter>Shop the glow</a>
+        <a href="#studio" class="btn btn-ghost" data-enter>Book the studio</a>
+      </div>
+      <a href="#" class="w-skip" data-enter>Enter the site →</a>
+    </div>
+    <div class="w-art" aria-hidden="true">
+      <img src="img/oil-flower.jpg" alt="">
+      <img src="img/campaign-closeup.jpg" alt="" style="object-position:center 30%">
+      <img src="img/velvet-arch.jpg" alt="">
+    </div>
+  </div>
+</div>
 
 <div class="announce">Welcome to your glow era</div>
 
@@ -1059,6 +1103,20 @@ document.querySelectorAll('.reel .snd').forEach(b=>{
     vids.forEach(o=>{ o.muted=true; }); document.querySelectorAll('.reel .snd').forEach(o=>{ o.innerHTML=ICON_OFF; o.setAttribute('aria-label','Turn sound on'); });
     if(on){ v.muted=false; tryPlay(v); b.innerHTML=ICON_ON; b.setAttribute('aria-label','Turn sound off'); } };
 });
+/* welcome page: shown on the first visit (and whenever the link ends in #welcome) */
+(function(){
+  const w=$('#welcome'); let seen=false;
+  try{ seen=localStorage.getItem('palmpriy-welcomed')==='1'; }catch(e){}
+  if(seen && location.hash!=='#welcome'){ w.hidden=true; return; }
+  document.body.style.overflow='hidden';
+  const enter=target=>{
+    try{ localStorage.setItem('palmpriy-welcomed','1'); }catch(e){}
+    w.classList.add('hide'); document.body.style.overflow='';
+    setTimeout(()=>{ w.hidden=true; if(target&&target!=='#'){ const el=document.querySelector(target); if(el) el.scrollIntoView({behavior:'smooth'}); } },500);
+  };
+  w.addEventListener('click',e=>{ const a=e.target.closest('[data-enter]'); if(!a) return; e.preventDefault(); enter(a.getAttribute('href')); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !w.hidden) enter('#'); });
+})();
 $('#yr').textContent=new Date().getFullYear();
 applyCurrency();
 </script>
