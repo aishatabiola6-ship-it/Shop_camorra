@@ -1,0 +1,1740 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blush | Makeup &amp; Beauty</title>
+<meta name="description" content="Authentic makeup from Dior, YSL, Huda Beauty, Charlotte Tilbury, Rare Beauty and more. Pay online or order on WhatsApp, with delivery across Nigeria.">
+<meta name="theme-color" content="#2a1619">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232a1619%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%227%22 fill=%22%23dba3ad%22/%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Blush">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="og:title" content="Blush">
+<meta property="og:description" content="Authentic makeup and beauty, delivered across Nigeria.">
+<meta property="og:image" content="img/ysl-blush-box.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fbf2f0; --sand:#f4e1df; --paper:#fffafa;
+    --ink:#2a1619; --muted:#7a5f63; --line:#ecd2d0;
+    --gold:#b0697a; --gold-2:#dba3ad; --wine:#8c1d3f;
+    --serif:"Cormorant Garamond",Georgia,serif;
+    --sans:"Jost",system-ui,-apple-system,Segoe UI,sans-serif;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{display:block;max-width:100%}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1200px,100% - 32px);margin-inline:auto}
+  .eyebrow{font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;letter-spacing:-.01em}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;padding:.95em 1.7em;border-radius:999px;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;transition:.25s ease}
+  .btn-dark{background:var(--ink);color:var(--paper)}
+  .btn-dark:hover{background:var(--wine)}
+  .btn-line{border:1px solid var(--ink)}
+  .btn-line:hover{background:var(--ink);color:var(--paper)}
+  .btn-wa{background:#1f7a4d;color:#fff}
+  .btn-wa:hover{background:#17603c}
+  .btn svg{width:18px;height:18px;flex:none}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--cream) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+  .nav.scrolled{border-color:var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .nav-links{display:flex;gap:2rem;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase}
+  .nav-links a{position:relative;padding:.3em 0}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .3s}
+  .nav-links a:hover::after{width:100%}
+  .bag-btn{position:relative;display:flex;align-items:center;gap:.5rem;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase}
+  .bag-btn svg{width:22px;height:22px}
+  .bag-count{position:absolute;top:-6px;left:13px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--wine);color:#fff;font-size:.68rem;letter-spacing:0;display:grid;place-items:center;transform:scale(0);transition:transform .25s}
+  .bag-count.on{transform:scale(1)}
+  .bag-count.pop{animation:pop .4s}
+  @keyframes pop{50%{transform:scale(1.4)}}
+
+  /* HERO */
+  .hero{padding:48px 0 72px}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+  .hero h1{font-size:clamp(3rem,7vw,5.6rem);margin:.35em 0 .3em}
+  .hero h1 em{font-style:italic;color:var(--wine)}
+  .hero p.lead{font-size:1.08rem;color:var(--muted);max-width:30em;font-weight:300}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:2rem}
+  .hero-stats{display:flex;gap:2.4rem;margin-top:2.6rem;padding-top:1.6rem;border-top:1px solid var(--line)}
+  .hero-stats b{display:block;font-family:var(--serif);font-size:1.9rem;font-weight:500;line-height:1}
+  .hero-stats span{font-size:.78rem;color:var(--muted);letter-spacing:.06em}
+  .hero-art{position:relative;aspect-ratio:4/5}
+  .hero-art .a,.hero-art .b,.hero-art .c{position:absolute;overflow:hidden;border-radius:var(--r);box-shadow:0 30px 60px -30px rgba(40,25,10,.45)}
+  .hero-art img{width:100%;height:100%;object-fit:cover}
+  .hero-art .a{inset:0 22% 12% 0;border-radius:200px 200px var(--r) var(--r)}
+  .hero-art .b{width:44%;aspect-ratio:3/4;right:0;bottom:0;border:6px solid var(--cream)}
+  .hero-art .c{width:30%;aspect-ratio:1;right:4%;top:8%;border:6px solid var(--cream);border-radius:50%}
+  .hero-art .tag{position:absolute;left:-14px;bottom:18%;background:var(--paper);padding:.8rem 1.1rem;border-radius:12px;box-shadow:0 14px 30px -14px rgba(40,25,10,.35);font-size:.8rem}
+  .hero-art .tag b{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:600}
+
+  /* MARQUEE */
+  .marquee{background:var(--ink);color:var(--gold-2);overflow:hidden;white-space:nowrap;padding:14px 0}
+  .marquee-track{display:inline-flex;gap:3rem;animation:scroll 32s linear infinite;font-family:var(--serif);font-size:1.25rem;font-style:italic}
+  .marquee-track span::after{content:"✦";margin-left:3rem;font-style:normal;font-size:.8rem;vertical-align:middle}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* COLLECTION */
+  section{scroll-margin-top:70px}
+  .shop{padding:88px 0}
+  .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
+  .head h2{font-size:clamp(2.3rem,4.5vw,3.4rem);margin-top:.25em}
+  .filters{display:flex;flex-wrap:wrap;gap:8px}
+  .filter-stack{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+  .groups{display:flex;gap:4px;padding:4px;background:var(--sand);border-radius:999px}
+  .tab{padding:.5em 1.3em;border-radius:999px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--muted);transition:.2s}
+  .tab[aria-selected="true"]{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(40,25,10,.12)}
+  .chip{padding:.55em 1.15em;border:1px solid var(--line);border-radius:999px;font-size:.8rem;letter-spacing:.08em;transition:.2s;background:var(--paper)}
+  .chip:hover{border-color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:32px 22px}
+  .card{cursor:pointer;opacity:0;transform:translateY(18px);animation:rise .6s forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .card-img{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:var(--sand)}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .5s}
+  .card-img img.alt{position:absolute;inset:0;opacity:0}
+  .card:hover .card-img img{transform:scale(1.05)}
+  .card:hover .card-img img.alt{opacity:1}
+  .badge{position:absolute;top:12px;left:12px;background:var(--paper);padding:.3em .8em;border-radius:999px;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .badge.wine{background:var(--wine);color:#fff}
+  .quick{position:absolute;left:12px;right:12px;bottom:12px;padding:.8em;border-radius:999px;background:var(--paper);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;text-align:center;font-weight:500;transform:translateY(140%);transition:transform .35s}
+  .card:hover .quick,.card:focus-visible .quick{transform:none}
+  .card-info{display:flex;justify-content:space-between;gap:12px;padding:14px 2px 0}
+  .card-info h3{font-size:1.3rem;font-weight:600}
+  .card-info small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+  .price{font-weight:500;white-space:nowrap;font-size:.95rem}
+  .swatches{display:flex;gap:5px;margin-top:8px}
+  .swatches i{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+
+  /* STORY */
+  .story{background:var(--sand);padding:96px 0}
+  .story .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .story-imgs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .story-imgs img{border-radius:var(--r);aspect-ratio:3/4;object-fit:cover;width:100%}
+  .story-imgs img:last-child{margin-top:56px}
+  .story h2{font-size:clamp(2.2rem,4vw,3.2rem);margin:.3em 0 .5em}
+  .story p{color:var(--muted);font-weight:300;font-size:1.05rem;margin-bottom:1rem}
+  .perks{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:2rem}
+  .perk b{display:block;font-family:var(--serif);font-size:1.25rem;font-weight:600}
+  .perk span{font-size:.88rem;color:var(--muted)}
+
+  /* STEPS */
+  .how{padding:96px 0}
+  .how h2{font-size:clamp(2.2rem,4vw,3.2rem);margin:.25em 0 2.5rem}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+  .step{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:30px 26px;position:relative}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:var(--serif);font-size:3rem;color:var(--gold-2);line-height:1;display:block;margin-bottom:.6rem}
+  .step h3{font-size:1.45rem;font-weight:600;margin-bottom:.4rem}
+  .step p{color:var(--muted);font-size:.95rem}
+
+  /* FAQ */
+  .faq{padding:0 0 96px}
+  .faq .wrap{display:grid;grid-template-columns:1fr 1.6fr;gap:56px}
+  .faq h2{font-size:clamp(2.2rem,4vw,3.2rem);margin-top:.25em}
+  details{border-bottom:1px solid var(--line);padding:20px 0}
+  summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;font-family:var(--serif);font-size:1.35rem;font-weight:600}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:var(--sans);font-weight:300;font-size:1.5rem;line-height:1;transition:transform .3s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--muted);padding-top:.6rem;max-width:40em}
+
+  /* CTA + FOOTER */
+  .cta{position:relative;overflow:hidden;background:var(--ink);color:var(--paper);border-radius:24px;padding:72px 48px;display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:center;margin-bottom:72px}
+  .cta h2{font-size:clamp(2.2rem,4.5vw,3.6rem)}
+  .cta h2 em{color:var(--gold-2)}
+  .cta p{color:#c9bfb3;margin-top:.8rem;font-weight:300}
+  .cta .btns{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .cta .btn-line{border-color:var(--paper)}
+  .cta .btn-line:hover{background:var(--paper);color:var(--ink)}
+  footer{border-top:1px solid var(--line);padding:36px 0 44px;font-size:.88rem;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  footer .links{display:flex;gap:1.5rem;flex-wrap:wrap}
+  footer a:hover{color:var(--ink)}
+
+  /* MODAL */
+  .overlay{position:fixed;inset:0;background:rgba(20,14,10,.55);z-index:60;opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.open{opacity:1;pointer-events:auto}
+  .modal{position:fixed;z-index:70;left:50%;top:50%;width:min(980px,100% - 32px);max-height:calc(100% - 48px);overflow:auto;background:var(--paper);border-radius:20px;display:grid;grid-template-columns:1.05fr 1fr;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:.35s cubic-bezier(.2,.7,.2,1)}
+  .modal.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+  .m-gallery{background:var(--sand);padding:14px;display:flex;flex-direction:column;gap:10px}
+  .m-main{aspect-ratio:4/5;border-radius:12px;overflow:hidden}
+  .m-main img{width:100%;height:100%;object-fit:cover}
+  .m-thumbs{display:flex;gap:8px}
+  .m-thumbs button{width:64px;height:64px;border-radius:8px;overflow:hidden;opacity:.55;border:2px solid transparent}
+  .m-thumbs button[aria-pressed="true"]{opacity:1;border-color:var(--ink)}
+  .m-thumbs img{width:100%;height:100%;object-fit:cover}
+  .m-body{padding:36px 34px;display:flex;flex-direction:column}
+  .m-body h3{font-size:2.3rem;margin:.3em 0 .2em}
+  .m-price{font-size:1.25rem;font-weight:500}
+  .m-desc{color:var(--muted);margin:1rem 0 1.4rem;font-weight:300}
+  .opt-label{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.6rem;display:flex;justify-content:space-between}
+  .opt-label span{letter-spacing:.04em;text-transform:none;color:var(--muted);font-weight:400}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.4rem}
+  .opt{min-width:48px;padding:.6em .9em;border:1px solid var(--line);border-radius:10px;font-size:.88rem;transition:.2s}
+  .opt:hover{border-color:var(--ink)}
+  .opt[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .opt.color{display:flex;align-items:center;gap:.5em}
+  .opt.color i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
+  .m-actions{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+  .m-note{font-size:.8rem;color:var(--muted);text-align:center;min-height:1.2em}
+  .m-note.warn{color:var(--wine)}
+  .x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:1.4rem;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+
+  /* DRAWER */
+  .drawer{position:fixed;z-index:70;top:0;right:0;height:100%;width:min(420px,100%);background:var(--paper);transform:translateX(100%);transition:transform .4s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column}
+  .drawer.open{transform:none}
+  .d-head{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line)}
+  .d-head h3{font-size:1.8rem}
+  .d-head .x{position:static;box-shadow:none;background:var(--cream)}
+  .d-items{flex:1;overflow:auto;padding:8px 24px}
+  .d-empty{text-align:center;color:var(--muted);padding:60px 10px}
+  .d-empty b{display:block;font-family:var(--serif);font-size:1.6rem;color:var(--ink);font-weight:500;margin-bottom:.3rem}
+  .line{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+  .line img{width:72px;height:88px;object-fit:cover;border-radius:8px}
+  .line h4{font-family:var(--serif);font-size:1.15rem;font-weight:600;line-height:1.2}
+  .line small{color:var(--muted);font-size:.8rem;display:block}
+  .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;margin-top:6px}
+  .qty button{width:28px;height:28px}
+  .qty span{min-width:20px;text-align:center;font-size:.85rem}
+  .line .rm{font-size:.75rem;color:var(--muted);text-decoration:underline;margin-top:6px;display:block;margin-left:auto}
+  .d-foot{padding:20px 24px 24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+  .total{display:flex;justify-content:space-between;font-size:1.05rem}
+  .total b{font-weight:600}
+  .d-foot small{color:var(--muted);font-size:.8rem}
+
+  .toast{position:fixed;left:50%;bottom:24px;z-index:80;background:var(--ink);color:var(--paper);padding:.8rem 1.3rem;border-radius:999px;font-size:.88rem;transform:translate(-50%,calc(100% + 40px));transition:transform .35s;visibility:hidden}
+  .toast.on{visibility:visible}
+  .toast.on{transform:translate(-50%,0)}
+  .wa-float{position:fixed;right:18px;bottom:18px;z-index:50;width:56px;height:56px;border-radius:50%;background:#1f7a4d;color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.4);transition:transform .2s}
+  .wa-float:hover{transform:scale(1.07)}
+  .wa-float svg{width:28px;height:28px}
+
+  /* WELCOME SCREEN */
+  .welcome{position:fixed;inset:0;z-index:100;background:var(--ink);color:var(--paper);display:flex;flex-direction:column;transition:opacity .6s,visibility .6s}
+  .welcome.gone{opacity:0;visibility:hidden}
+  .w-slides{position:relative;flex:1;overflow:hidden}
+  .w-slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity 1.2s,transform 6s linear}
+  .w-slides img.on{opacity:1;transform:scale(1)}
+  .w-slides::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,10,.45) 0%,rgba(20,14,10,0) 25%,rgba(20,14,10,0) 60%,rgba(27,23,20,1) 100%)}
+  .w-panel{padding:6px 24px max(26px,env(safe-area-inset-bottom));width:min(560px,100%);margin:0 auto;position:relative;z-index:2;margin-top:-90px}
+  .w-panel h2{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:500}
+  .w-panel h2 em{font-style:italic;color:var(--gold-2)}
+  .w-panel p{color:#c9bfb3;font-weight:300;margin:.6rem 0 1.5rem;font-size:.95rem}
+  .w-go{width:100%;background:var(--paper);color:var(--ink);padding:1.05em;border-radius:999px;font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;display:flex;justify-content:center;gap:.6em}
+  .w-go:hover{background:var(--gold-2)}
+  .w-dots{display:flex;justify-content:center;gap:6px;margin-top:18px}
+  .w-dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:width .4s,background .4s}
+  .w-dots i.on{width:20px;background:#fff}
+
+  .w-screen{flex:1;display:flex;flex-direction:column;min-height:0}
+  .w-screen[hidden]{display:none}
+  .w-auth{background:var(--cream);color:var(--ink);overflow:auto;align-items:center;justify-content:center;padding:32px 20px;animation:fadeup .5s}
+  @keyframes fadeup{from{opacity:0;transform:translateY(16px)}}
+  .a-box{width:min(400px,100%)}
+  .a-box h2{font-size:2.6rem;font-weight:500}
+  .a-box h2 em{color:var(--gold);font-style:normal}
+  .a-sub{color:var(--muted);font-size:.92rem;margin:.3rem 0 1.6rem}
+  .a-btn{width:100%}
+  .a-err{color:var(--wine);font-size:.85rem;min-height:1.2em;margin:-4px 0 8px}
+  .a-or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.78rem;margin:16px 0}
+  .a-or::before,.a-or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .a-switch{text-align:center;font-size:.88rem;color:var(--muted);margin-top:22px}
+  .a-switch button{color:var(--ink);font-weight:600;text-decoration:underline}
+  .a-note{text-align:center;font-size:.74rem;color:var(--muted);margin-top:10px}
+  .field{display:block;margin-bottom:14px}
+  .field[hidden]{display:none}
+  .field span{display:block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:6px;color:var(--muted)}
+  .field input,.field select,.field textarea{width:100%;padding:.8em 1em;border:1px solid var(--line);border-radius:12px;background:var(--paper);font:inherit;font-size:16px;color:var(--ink);outline:none;transition:border-color .2s}
+  .field textarea{resize:vertical}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+  .field.err input,.field.err select,.field.err textarea{border-color:var(--wine);background:#fbf1f1}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .nav-right{display:flex;align-items:center;gap:22px}
+  .drawer.wide{width:min(520px,100%)}
+  .back{width:40px;height:40px;border-radius:50%;background:var(--cream);font-size:1.1rem}
+  .co-body{padding-bottom:20px}
+  .co-h{font-family:var(--sans);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin:24px 0 12px}
+  .co-body .co-h:first-child{margin-top:14px}
+  .optcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .optc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;background:var(--paper);transition:.2s}
+  .optc b{display:block;font-size:.92rem;font-weight:600}
+  .optc small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+  .optc em{font-style:normal;font-weight:500;font-size:.85rem;display:block;margin-top:6px}
+  .optc[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .optc:disabled{opacity:.45;cursor:not-allowed}
+  .co-hint{color:var(--muted);font-size:.88rem;grid-column:1/-1}
+  .co-note{font-size:.82rem;color:var(--muted);margin-top:8px}
+  .co-note:empty{display:none}
+  .co-line{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:8px 0}
+  .co-line img{width:48px;height:58px;border-radius:8px;object-fit:cover}
+  .co-line h5{font-family:var(--serif);font-size:1.05rem;font-weight:600;line-height:1.2}
+  .co-line small{color:var(--muted);font-size:.78rem}
+  .sum{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .sum div{display:flex;justify-content:space-between;padding:5px 0;font-size:.95rem}
+  .sum .grand{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-size:1.1rem}
+  .link-wa{display:block;margin:16px auto 4px;color:#1f7a4d;font-size:.86rem;text-decoration:underline}
+  .demo{text-align:center}
+  .opt-tag{font-size:.62rem;letter-spacing:.12em;color:var(--muted);font-weight:500;margin-left:6px;text-transform:uppercase}
+  .gift-tg{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;margin-bottom:12px;font-size:.92rem;font-weight:500}
+  .gift-tg small{display:block;color:var(--muted);font-weight:400;font-size:.8rem;margin-top:2px}
+  .gift-tg input{position:absolute;opacity:0;pointer-events:none}
+  .gift-tg .box{flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;transition:.2s}
+  .gift-tg input:checked + .box{background:var(--ink);border-color:var(--ink)}
+  .gift-tg input:checked + .box::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .gift-tg:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .field .count{display:block;text-align:right;font-size:.72rem;color:var(--muted);margin-top:4px;letter-spacing:0;text-transform:none}
+  .note-card{margin-top:14px;padding:16px;border-radius:12px;background:var(--cream);text-align:left;border-left:3px solid var(--gold)}
+  .note-card small{display:block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .note-card p{font-family:var(--serif);font-style:italic;font-size:1.15rem;line-height:1.35;color:var(--ink)!important;margin:0!important}
+  .co-err{color:var(--wine);font-size:.85rem;text-align:center}
+  .co-err:empty{display:none}
+  .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .done-body{text-align:center}
+  .done-check{width:84px;height:84px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;margin:28px auto 18px;box-shadow:0 0 0 10px #efe3df;animation:pop .5s}
+  .done-check svg{width:36px;height:36px}
+  .done-body h4{font-family:var(--serif);font-size:2rem;font-weight:500}
+  .done-body > p{color:var(--muted);margin:.3rem auto 1.4rem;max-width:22em}
+  .receipt{border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-align:left;background:var(--paper)}
+  .receipt .r{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:.9rem}
+  .receipt .r span{color:var(--muted)}
+  .thumbs{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .thumbs img{width:44px;height:52px;border-radius:8px;object-fit:cover}
+  .pay-box{margin-top:14px;padding:14px;border-radius:12px;background:var(--cream);font-size:.86rem;text-align:left}
+  .p-top{text-align:center;padding:20px 0 6px}
+  .avatar{width:76px;height:76px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-family:var(--serif);font-size:2.1rem;margin:0 auto 10px;border:3px solid var(--paper);box-shadow:0 0 0 1px var(--line)}
+  .p-top h4{font-family:var(--serif);font-size:1.6rem;font-weight:500}
+  .p-top small{color:var(--muted);font-size:.82rem}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:14px;margin:18px 0 8px;background:var(--paper)}
+  .stats div{padding:12px 6px;text-align:center}
+  .stats div + div{border-left:1px solid var(--line)}
+  .stats b{display:block;font-size:1.15rem}
+  .stats span{font-size:.72rem;color:var(--muted)}
+  .order{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--paper)}
+  .order .r{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.88rem}
+  .order small{color:var(--muted);font-size:.78rem}
+  .pill{font-size:.7rem;padding:.3em .8em;border-radius:999px;background:#efe6d6;font-weight:500;white-space:nowrap}
+  .pill.go{background:#e3efe7;color:#1f6b43}
+  .pill.ok{background:var(--ink);color:#fff}
+  .p-row{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:15px 2px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+  .p-row small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+  .p-row::after{content:"›";color:var(--muted);font-size:1.3rem}
+  .req-intro{color:var(--muted);margin:16px 0 18px;font-size:.95rem}
+  .zones{margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.88rem;max-width:40em}
+  .zones div{display:grid;grid-template-columns:1.2fr 2fr .9fr;gap:12px;padding:10px 14px;background:var(--paper)}
+  .zones div + div{border-top:1px solid var(--line)}
+  .zones b{font-weight:600}
+  .zones span{color:var(--muted)}
+  .zones em{font-style:normal;text-align:right;font-weight:500}
+  .zones em small{color:var(--muted);font-weight:400}
+  @media (min-width:901px){
+    .w-slides{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+    .w-slides img{position:static;opacity:1;transform:none;height:100%;min-height:0}
+    .w-dots{display:none}
+    .w-panel{margin-top:-120px;text-align:center}
+    .w-go{max-width:340px;margin:0 auto}
+  }
+  @media (max-width:560px){
+    .acct-btn span{display:none}
+    .nav-right{gap:16px}
+    .zones div{grid-template-columns:1fr auto}
+    .zones span{grid-column:1/-1;grid-row:2;font-size:.8rem}
+    .two{grid-template-columns:1fr;gap:0}
+  }
+
+  /* WELCOME COLLAGE (phone) */
+  @media (max-width:900px){
+    .w-slides{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:minmax(0,1.1fr) minmax(0,.9fr) minmax(0,1fr);gap:3px}
+    .w-slides img{position:static;opacity:1;transform:none;min-height:0;width:100%;height:100%;object-fit:cover}
+    .w-slides img:nth-of-type(1){grid-row:1/3;grid-column:1}
+    .w-slides img:nth-of-type(2){grid-row:1/2;grid-column:2}
+    .w-slides img:nth-of-type(3){grid-row:2/4;grid-column:2}
+    .w-slides img:nth-of-type(4){grid-row:3/4;grid-column:1}
+    .w-dots{display:none}
+    .w-slides::after{background:linear-gradient(180deg,rgba(20,14,10,.45) 0%,rgba(20,14,10,0) 18%,rgba(20,14,10,0) 78%,rgba(27,23,20,1) 100%)}
+    .w-panel{margin-top:-28px}
+    .w-panel h2{font-size:clamp(2.1rem,8.5vw,3rem)}
+    .toast{bottom:calc(max(14px,env(safe-area-inset-bottom)) + 70px)}
+  }
+  @media (max-width:560px){
+    .bag-btn > span:last-child{display:none}
+    .bag-count{left:14px;top:-8px}
+  }
+
+  /* LOGO */
+  .logo{font-family:"Playfair Display",var(--serif);font-style:italic;font-weight:700;font-size:2.2rem;letter-spacing:-.03em;line-height:1}
+  .logo em{color:var(--gold);font-style:normal}
+  .w-logo{position:absolute;top:max(18px,env(safe-area-inset-top));left:0;right:0;text-align:center;z-index:2;font-family:"Playfair Display",var(--serif);font-style:italic;font-weight:700;font-size:clamp(3.2rem,12vw,4.6rem);letter-spacing:-.03em;line-height:1;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.35)}
+  .w-logo em,.a-logo em{color:var(--gold-2);font-style:normal}
+  .a-logo{text-align:center;font-family:"Playfair Display",var(--serif);font-style:italic;font-weight:700;font-size:3.4rem;letter-spacing:-.03em;line-height:1;margin-bottom:28px}
+
+  /* AUTH STEPS */
+  .a-step[hidden]{display:none}
+  .a-step{animation:fadeup .35s}
+  .a-sub b{color:var(--ink);font-weight:600;word-break:break-all}
+  .a-link{font-size:.82rem;color:var(--muted);text-decoration:underline;display:block;margin:-6px 0 10px auto}
+  .a-switch button:disabled{color:var(--muted);text-decoration:none;cursor:default;font-weight:400}
+  .pw{position:relative;display:block}
+  .pw input{padding-right:64px}
+  .eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:.75rem;letter-spacing:.06em;color:var(--muted);padding:.4em .6em;border-radius:8px;text-transform:none}
+  .field .pw{margin:0;letter-spacing:normal;text-transform:none;color:inherit;font-size:inherit}
+  .code-in{font-size:1.7rem!important;letter-spacing:.55em;text-align:center;font-weight:600;padding-left:1.4em!important}
+  .rules{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 14px}
+  .rules li{font-size:.74rem;padding:.3em .8em;border-radius:999px;background:var(--sand);color:var(--muted);transition:.2s}
+  .rules li.ok{background:#e3efe7;color:#1f6b43}
+  .rules li.ok::before{content:"✓ "}
+
+  /* EMAIL NOTIFICATION + VIEWER */
+  .notif{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));z-index:130;width:min(400px,calc(100% - 24px));transform:translate(-50%,-140%);transition:transform .45s cubic-bezier(.2,.8,.2,1);background:rgba(255,250,243,.96);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 18px 40px -12px rgba(0,0,0,.35);padding:12px 14px;display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;color:var(--ink)}
+  .notif.on{transform:translate(-50%,0)}
+  .notif .ic{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:1.3rem}
+  .notif small{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+  .notif b{display:block;font-size:.9rem;line-height:1.25}
+  .notif span{display:block;font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mailview{position:fixed;inset:0;z-index:125;background:rgba(20,14,10,.55);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:.3s}
+  .mailview.on{opacity:1;visibility:visible}
+  .mv-card{background:var(--paper);width:min(560px,100%);max-height:100%;overflow:auto;border-radius:20px;transform:translateY(20px);transition:transform .3s}
+  .mailview.on .mv-card{transform:none}
+  .mv-meta{padding:16px 20px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.82rem;color:var(--muted)}
+  .mv-meta h4{grid-column:1/-1;font-family:var(--sans);font-size:1.05rem;color:var(--ink);font-weight:600}
+  .mv-meta .x{position:static;box-shadow:none;background:var(--cream);grid-row:1;grid-column:2;width:34px;height:34px}
+  .em{padding:0 0 24px}
+  .em-head{background:var(--ink);color:#fff;text-align:center;padding:22px;font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:2.2rem;letter-spacing:-.03em}
+  .em-head em{color:var(--gold-2);font-style:normal}
+  .em-body{padding:24px 24px 0;font-size:.95rem;line-height:1.65}
+  .em-body h3{font-size:1.8rem;font-weight:500;margin-bottom:.5rem}
+  .em-body p{margin-bottom:.9rem;color:#4b433c}
+  .em-code{font-size:2.2rem;letter-spacing:.35em;font-weight:600;text-align:center;background:var(--cream);border-radius:14px;padding:16px 0 16px .35em;margin:8px 0 16px;color:var(--ink)}
+  .em-btn{display:inline-block;background:var(--ink);color:#fff!important;padding:.8em 1.6em;border-radius:999px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;margin:4px 0 14px}
+  .em-table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:.88rem}
+  .em-table td{padding:7px 0;border-bottom:1px solid var(--line)}
+  .em-table td:last-child{text-align:right;white-space:nowrap}
+  .em-table tr.t td{font-weight:600;border-bottom:0;padding-top:10px}
+  .em-box{background:var(--cream);border-radius:12px;padding:12px 14px;font-size:.88rem;margin-bottom:14px}
+  .em-foot{padding:16px 24px 0;font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);margin-top:10px}
+  .mail-row{display:grid;grid-template-columns:10px 1fr auto;gap:10px;width:100%;text-align:left;padding:14px 2px;border-bottom:1px solid var(--line);align-items:start}
+  .mail-row i{width:8px;height:8px;border-radius:50%;margin-top:7px}
+  .mail-row.unread i{background:var(--wine)}
+  .mail-row b{display:block;font-size:.92rem;font-weight:500}
+  .mail-row.unread b{font-weight:700}
+  .mail-row span{display:block;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+  .mail-row small{font-size:.74rem;color:var(--muted)}
+  .badge-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--wine);color:#fff;font-size:.7rem;margin-left:6px}
+  @media (max-width:560px){ .logo{font-size:1.95rem} .a-logo{font-size:3rem} }
+
+  /* APP-STYLE HOME */
+  .app{padding:24px 0 8px}
+  .greet small{display:block;color:var(--muted);font-size:.85rem}
+  .greet h2{font-size:clamp(2rem,5vw,2.8rem);margin-top:2px}
+  .search{display:flex;align-items:center;gap:10px;margin:18px 0 26px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 18px;max-width:640px}
+  .search svg{width:18px;height:18px;flex:none;color:var(--muted)}
+  .search input{flex:1;border:0;background:none;font:inherit;font-size:.95rem;color:var(--ink);outline:none;min-width:0;padding:.55em 0}
+  .search button{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;flex:none}
+  .cats{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:28px}
+  .cats::-webkit-scrollbar,.trend::-webkit-scrollbar,.filters::-webkit-scrollbar,.groups::-webkit-scrollbar{display:none}
+  .cat{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.8rem;flex:none}
+  .cat span{width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid var(--paper);box-shadow:0 0 0 1px var(--line);transition:box-shadow .2s}
+  .cat:hover span{box-shadow:0 0 0 2px var(--gold)}
+  .cat img{width:100%;height:100%;object-fit:cover}
+  .banner{display:grid;grid-template-columns:1fr 1.4fr;border-radius:20px;overflow:hidden;background:var(--ink);color:#fff;margin-bottom:34px;min-height:300px}
+  .b-text{padding:32px 30px;display:flex;flex-direction:column;justify-content:center}
+  .b-text small{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-2)}
+  .b-text h3{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;margin:.2em 0 .3em}
+  .b-text p{color:#c9bfb3;font-size:.9rem;font-weight:300;margin-bottom:1.2rem;max-width:22em}
+  .b-text b{align-self:flex-start;background:var(--paper);color:var(--ink);padding:.65em 1.3em;border-radius:999px;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+  .b-imgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;min-height:0;overflow:hidden}
+  .b-imgs img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+  .banner:hover .b-imgs img{transform:scale(1.04)}
+  .row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .row-head h3{font-size:1.6rem;font-weight:500}
+  .row-head a{font-size:.8rem;color:var(--muted);text-decoration:underline}
+  .trend{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:6px;scroll-snap-type:x mandatory}
+  .t-card{flex:none;width:clamp(150px,22vw,220px);cursor:pointer;scroll-snap-align:start;text-align:left}
+  .t-card div{position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--sand)}
+  .t-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .t-card:hover img{transform:scale(1.05)}
+  .t-card i{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-style:normal;font-size:.8rem}
+  .t-card h4{font-family:var(--serif);font-size:1.05rem;font-weight:600;margin-top:8px;line-height:1.2}
+  .t-card small{font-size:.82rem;font-weight:500}
+  .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+  @media (max-width:560px){
+    .banner{grid-template-columns:1fr;min-height:0}
+    .b-imgs{height:250px;order:-1;overflow:hidden;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:repeat(2,minmax(0,1fr))}
+    .b-imgs img{min-height:0;min-width:0}
+    .b-imgs img:first-child{grid-row:1/3}
+    .b-text{padding:22px}
+  }
+
+  /* MOBILE TAB BAR */
+  .tabbar{display:none}
+  @media (max-width:900px){
+    main#top{display:flex;flex-direction:column}
+    main#top > .app{order:-1}
+    .hero{padding:6px 0 46px}
+    .hero .wrap{display:block}
+    .hero-art{display:none}
+    .hero h1{font-size:clamp(2.6rem,11vw,3.4rem);margin:.3em 0 .35em}
+    .hero p.lead{font-size:1rem}
+    .hero-ctas{margin-top:1.5rem}
+    .hero-ctas .btn{flex:1;padding:.95em 1em}
+    .hero-stats{gap:1.4rem;justify-content:space-between}
+    .tabbar{display:flex;position:fixed;left:12px;right:12px;margin:0 auto;max-width:330px;bottom:max(14px,env(safe-area-inset-bottom));z-index:55;justify-content:space-between;background:rgba(255,250,243,.9);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(221,208,191,.9);border-radius:999px;padding:6px;box-shadow:0 14px 34px -12px rgba(40,25,10,.45)}
+    .tabbar a,.tabbar button{-webkit-appearance:none;appearance:none;border:0;background:none;padding:0;margin:0;font:inherit;color:var(--muted);width:52px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+    .tabbar a.on{background:var(--ink);color:var(--paper)}
+    .tabbar .ic{position:relative;display:block;width:22px;height:22px}
+    .tabbar svg{display:block;width:22px;height:22px}
+    .tabbar .tb-count{position:absolute;top:-7px;left:13px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--wine);color:#fff;font-size:10px;font-weight:600;line-height:18px;text-align:center;box-shadow:0 0 0 2px #fffaf3;white-space:nowrap}
+    .tabbar .tb-count[hidden]{display:none}
+    .wa-float{display:none}
+    footer{padding-bottom:100px}
+  }
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (max-width:900px){
+    .nav-links{display:none}
+    .hero{padding:24px 0 56px}
+    .hero .wrap,.story .wrap,.faq .wrap,.cta{grid-template-columns:1fr}
+    .hero-art{max-width:520px;width:100%;margin-inline:auto}
+    .story .wrap{gap:40px}
+    .steps{grid-template-columns:1fr}
+    .modal{grid-template-columns:1fr;top:auto;bottom:0;left:0;width:100%;max-height:92%;border-radius:20px 20px 0 0;transform:translateY(100%)}
+    .modal.open{transform:none}
+    .m-body{padding:24px 20px 28px}
+    .m-gallery{flex-direction:row;padding:10px}
+    .m-main{flex:1;aspect-ratio:auto;height:min(42vh,340px)}
+    .m-thumbs{flex-direction:column;margin-top:52px}
+    .m-thumbs button{width:52px;height:52px}
+    .m-body h3{font-size:1.9rem}
+    .m-desc{margin:.6rem 0 1rem}
+    .cta{padding:48px 24px}
+    .faq .wrap{gap:16px}
+    .filter-stack{align-items:flex-start;width:100%}
+    .filters{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:4px;scrollbar-width:none}
+    .chip{white-space:nowrap}
+    .groups{max-width:100%;overflow-x:auto;scrollbar-width:none}
+    .tab{white-space:nowrap;padding:.5em 1em;letter-spacing:.1em}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr 1fr;gap:24px 12px}
+    .card-info{flex-direction:column;gap:2px}
+    .card-info h3{font-size:1.1rem}
+    .quick{display:none}
+    .hero-stats{gap:1.4rem}
+    .hero-art .tag{left:0}
+    .perks{grid-template-columns:1fr}
+    .shop,.how{padding:64px 0}
+    .story{padding:64px 0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .card,.reveal{opacity:1;transform:none}
+  }
+  /* ===== Blush welcome: light pink, arch photo, floating product stickers ===== */
+  #welcome{background:radial-gradient(130% 75% at 50% 0%,#fff3f4 0%,#fbdde2 50%,#f4c3cc 100%);color:var(--ink)}
+  #welcome .w-intro{align-items:center;padding:max(22px,env(safe-area-inset-top)) 20px max(26px,env(safe-area-inset-bottom));overflow:hidden}
+  #welcome .w-logo{position:static;font-size:clamp(2.6rem,10vw,3.4rem);color:var(--ink);text-shadow:none;letter-spacing:-.02em}
+  #welcome .w-logo em{color:var(--wine)}
+  #welcome .w-stage{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;margin:14px 0 18px}
+  #welcome .w-slides{display:block;flex:none;position:relative;height:min(100%,460px);aspect-ratio:3/4;max-width:78vw;border-radius:999px 999px 26px 26px;overflow:hidden;border:6px solid #fff;box-shadow:0 34px 60px -24px rgba(140,29,63,.5);background:var(--sand)}
+  #welcome .w-slides::after{display:none}
+  #welcome .w-slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity 1.2s,transform 6s linear}
+  #welcome .w-slides img.on{opacity:1;transform:scale(1)}
+  #welcome .w-float{position:absolute;width:clamp(70px,20vw,96px);aspect-ratio:1;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 14px 30px -12px rgba(140,29,63,.45);animation:bob 5s ease-in-out infinite;z-index:2}
+  #welcome .f1{left:calc(50% - min(39vw,170px) - 26px);top:20%}
+  #welcome .f2{right:calc(50% - min(39vw,170px) - 26px);bottom:14%;animation-delay:-2.5s}
+  #welcome .w-chip{position:absolute;top:7%;right:calc(50% - min(39vw,170px) - 18px);z-index:3;background:#fff;color:var(--wine);font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:.6em 1.05em;border-radius:999px;box-shadow:0 10px 24px -12px rgba(140,29,63,.5);transform:rotate(6deg)}
+  #welcome .w-spark{position:absolute;color:var(--wine);opacity:.55;font-size:1.1rem;animation:twinkle 2.6s ease-in-out infinite}
+  #welcome .s1{left:calc(50% - min(39vw,170px) + 4px);bottom:6%}
+  #welcome .s2{right:calc(50% - min(39vw,170px) + 30px);top:2%;font-size:.8rem;animation-delay:-1.3s}
+  #welcome .w-panel{margin:0;padding:0;text-align:center;width:min(440px,100%)}
+  #welcome .w-panel h2{font-size:clamp(2.1rem,8vw,2.9rem);color:var(--ink)}
+  #welcome .w-panel h2 em{color:var(--wine)}
+  #welcome .w-panel p{color:var(--muted);font-weight:400;margin:.5rem auto 1.3rem;max-width:34ch}
+  #welcome .w-go{max-width:none;background:var(--ink);color:#fff;box-shadow:0 14px 30px -14px rgba(42,22,25,.7)}
+  #welcome .w-go:hover{background:var(--wine)}
+  #welcome .w-dots{display:flex;margin-top:16px}
+  #welcome .w-dots i{background:rgba(42,22,25,.18)}
+  #welcome .w-dots i.on{background:var(--wine)}
+  @keyframes bob{50%{transform:translateY(-10px)}}
+  @keyframes twinkle{50%{opacity:.15;transform:scale(.7)}}
+  @media (prefers-reduced-motion:reduce){ #welcome .w-float,#welcome .w-spark{animation:none} }
+  /* ===== Blush page layout (its own sections, not Strut's) ===== */
+  .kicker{display:inline-block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--wine);background:#fbe3e7;padding:.45em .9em;border-radius:999px}
+  .bh{position:relative;text-align:center;padding:56px 0 0;background:radial-gradient(120% 90% at 50% 0%,#fff6f7 0%,#fbe1e5 55%,var(--cream) 100%);overflow:hidden}
+  .bh-hi{font-size:.9rem;color:var(--muted);margin-bottom:10px}
+  .bh-pill{display:inline-block;background:#fff;color:var(--wine);font-size:.78rem;font-weight:500;padding:.55em 1.1em;border-radius:999px;box-shadow:0 8px 20px -12px rgba(140,29,63,.45)}
+  .bh h1{font-size:clamp(2.6rem,7vw,5rem);margin:.45em 0 .35em;line-height:1.02}
+  .bh h1 em{font-style:italic;color:var(--wine)}
+  .bh-sub{color:var(--muted);max-width:36em;margin:0 auto;font-size:1.05rem}
+  .bh-search{max-width:560px;margin:26px auto 30px;box-shadow:0 18px 40px -24px rgba(140,29,63,.5);border-color:#f1cfd4}
+  .bh-search button{background:var(--wine)}
+  .bh-cats{justify-content:center;gap:12px;margin-bottom:34px}
+  .bh-cats .cat{width:96px;gap:6px;font-weight:500}
+  .bh-cats .cat span{width:96px;height:112px;border-radius:22px;border:3px solid #fff;box-shadow:0 10px 22px -14px rgba(140,29,63,.6)}
+  .bh-cats .cat:hover span{box-shadow:0 0 0 2px var(--wine)}
+  .bh-shades{height:14px;display:flex}
+  .bh-shades span{flex:1;display:block}
+  .bh-shades-label{font-size:.82rem;color:var(--muted);padding:12px 16px 0}
+  .bh-shades-label button,.shop-ask button{color:var(--wine);font-weight:600;text-decoration:underline}
+  .sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:22px}
+  .sec-head h2{font-size:clamp(1.9rem,4vw,2.7rem);margin:.25em 0 .15em}
+  .sec-head p{color:var(--muted);font-size:.95rem}
+  .sec-head a{font-size:.85rem;font-weight:600;color:var(--wine);white-space:nowrap}
+  .sec-head.center{justify-content:center;text-align:center}
+  .favs{padding:64px 0 24px}
+  .favs .t-card div{border-radius:22px;border:3px solid #fff;box-shadow:0 12px 26px -18px rgba(140,29,63,.6)}
+  .favs .t-card i{background:var(--wine);color:#fff}
+  .looks{padding:64px 0}
+  .look-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+  .look{background:var(--paper);border-radius:26px;overflow:hidden;box-shadow:0 22px 44px -32px rgba(140,29,63,.7);display:flex;flex-direction:column}
+  .look-pic{position:relative;aspect-ratio:4/5;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:#fff}
+  .look-pic img{width:100%;height:100%;object-fit:cover}
+  .look-pic.one{display:block}
+  .look-pic span{position:absolute;left:14px;top:14px;background:#fff;color:var(--wine);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.5em .9em;border-radius:999px}
+  .look-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .look-body h3{font-size:1.7rem}
+  .look-body p{color:var(--muted);font-size:.92rem}
+  .look-items{display:flex;flex-wrap:wrap;gap:8px}
+  .look-items button{display:flex;align-items:center;gap:8px;background:var(--cream);border-radius:999px;padding:4px 12px 4px 4px;font-size:.78rem;text-align:left;transition:background .2s}
+  .look-items button:hover{background:#fbe3e7}
+  .look-items img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+  .look-total{margin-top:auto;font-size:.85rem;color:var(--muted)}
+  .look-total b{color:var(--ink)}
+  .shop-head{flex-direction:column;align-items:center;text-align:center}
+  .shop-head h2{font-size:clamp(2.2rem,5vw,3.4rem);margin:.2em 0 .1em}
+  .shop-head .filter-stack{align-items:center;width:100%}
+  .shop-ask{text-align:center;margin-top:34px;color:var(--muted)}
+  .shade{padding:40px 0 72px}
+  .shade .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
+  .shade-card{background:var(--wine);color:#fff;border-radius:30px;padding:44px 40px}
+  .shade-card .kicker{background:rgba(255,255,255,.16);color:#fff}
+  .shade-card h2{font-size:clamp(2rem,4vw,3rem);margin:.4em 0 .8em}
+  .shade-steps{list-style:none;display:grid;gap:16px;margin-bottom:28px;counter-reset:n}
+  .shade-steps li{display:grid;grid-template-columns:40px 1fr;column-gap:14px;align-items:center}
+  .shade-steps li::before{counter-increment:n;content:counter(n);grid-row:1/3;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--wine);display:grid;place-items:center;font-weight:600}
+  .shade-steps b{font-weight:600}
+  .shade-steps span{font-size:.9rem;color:#f5d3da}
+  .shade-btn{background:#fff;color:var(--wine)}
+  .shade-btn:hover{background:#fbe3e7}
+  .shade-img{width:100%;height:100%;min-height:320px;object-fit:cover;border-radius:30px}
+  .trust{padding:0 0 72px}
+  .trust .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .trust .wrap>div{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:20px;text-align:center}
+  .trust b{display:block;font-family:var(--serif);font-size:1.3rem;font-weight:600}
+  .trust b::before{content:"✦ ";color:var(--wine);font-size:.8em}
+  .trust span{font-size:.85rem;color:var(--muted)}
+  .faq-more{margin-top:14px;color:var(--muted)}
+  .faq-more a{color:var(--wine);font-weight:600;text-decoration:underline}
+  .card-info>div{min-width:0}
+  .card-info h3{overflow-wrap:anywhere}
+  @media (max-width:560px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+  .bfoot{text-align:center;background:var(--ink);color:#e9d5d8;border:0;padding:48px 0 44px}
+  .bfoot .wrap{flex-direction:column;justify-content:center;gap:12px}
+  .bfoot .logo{color:#fff}
+  .bfoot .logo em{color:var(--gold-2)}
+  .bfoot a:hover{color:#fff}
+  .bfoot .links{justify-content:center}
+  @media (max-width:900px){
+    .bh{padding-top:22px}
+    .bh-cats{justify-content:flex-start;padding-inline:2px}
+    .bh-cats .cat{width:78px}
+    .bh-cats .cat span{width:78px;height:92px;border-radius:18px}
+    .look-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:8px}
+    .look{scroll-snap-align:start}
+    .shade .wrap{grid-template-columns:1fr}
+    .shade-card{padding:32px 24px}
+    .shade-img{min-height:0;aspect-ratio:4/3}
+    .trust .wrap{grid-template-columns:1fr 1fr}
+    .bfoot{padding-bottom:110px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo">Blush<em>.</em></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#shop">Shop</a>
+      <a href="#looks">Looks</a>
+      <a href="#shade">Shade help</a>
+      <a href="#faq">Help</a>
+    </nav>
+    <div class="nav-right">
+    <button class="bag-btn acct-btn" id="acctBtn" aria-label="Account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      <span id="acctName">Sign in</span>
+    </button>
+    <button class="bag-btn" id="bagBtn" aria-label="Open bag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="bag-count" id="bagCount">0</span>
+      <span>Bag</span>
+    </button>
+    </div>
+  </div>
+</header>
+
+<div class="welcome" id="welcome" role="dialog" aria-label="Welcome to Blush">
+  <section class="w-screen w-intro" id="wIntro">
+    <div class="w-logo">Blush<em>.</em></div>
+    <div class="w-stage">
+      <div class="w-slides">
+        <img src="img/look-soft-glam.jpg" alt="Model wearing a soft glam look with a glossy nude lip" class="on">
+        <img src="img/look-night-out.jpg" alt="Model wearing a bold smoky eye and deep red lip">
+      </div>
+      <img class="w-float f1" src="img/rare-soft-pinch.jpg" alt="">
+      <img class="w-float f2" src="img/ct-heart-blush.jpg" alt="">
+      <span class="w-chip">100% authentic</span>
+      <span class="w-spark s1" aria-hidden="true">✦</span><span class="w-spark s2" aria-hidden="true">✦</span>
+    </div>
+    <div class="w-panel">
+      <h2>Your glow, <em>delivered.</em></h2>
+      <p>Glosses, blushes, lashes &amp; more from the brands you love, delivered across Nigeria.</p>
+      <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
+      <div class="w-dots" id="wDots"><i class="on"></i><i></i></div>
+    </div>
+  </section>
+  <section class="w-screen w-auth" id="wAuth" hidden>
+    <div class="a-box">
+      <div class="a-logo">Blush<em>.</em></div>
+
+      <!-- sign in -->
+      <form class="a-step" data-step="in" novalidate>
+        <h2>Welcome back<em>.</em></h2>
+        <p class="a-sub">Sign in with your email and password.</p>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <label class="field"><span>Password</span><span class="pw"><input name="pass" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" class="eye" aria-label="Show password">Show</button></span></label>
+        <button type="button" class="a-link a-forgot" data-go="forgot">Forgot password?</button>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Sign in</button>
+        <div class="a-or"><span>or</span></div>
+        <button class="btn btn-line a-btn a-guest" type="button">Continue as guest</button>
+        <p class="a-switch">New to Blush? <button type="button" data-go="up">Create account</button></p>
+      </form>
+
+      <!-- create account: name + email -->
+      <form class="a-step" data-step="up" novalidate hidden>
+        <h2>Create account<em>.</em></h2>
+        <p class="a-sub">We'll email you a code to confirm it's you.</p>
+        <label class="field"><span>Full name</span><input name="name" autocomplete="name" placeholder="Amara Okafor"></label>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Send code</button>
+        <div class="a-or"><span>or</span></div>
+        <button class="btn btn-line a-btn a-guest" type="button">Continue as guest</button>
+        <p class="a-switch">Already have an account? <button type="button" data-go="in">Sign in</button></p>
+      </form>
+
+      <!-- forgot password: email -->
+      <form class="a-step" data-step="forgot" novalidate hidden>
+        <h2>Reset password<em>.</em></h2>
+        <p class="a-sub">Enter your account email and we'll send you a code.</p>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Send code</button>
+        <p class="a-switch">Remembered it? <button type="button" data-go="in">Sign in</button></p>
+      </form>
+
+      <!-- verify code -->
+      <form class="a-step" data-step="code" novalidate hidden>
+        <h2>Check your email<em>.</em></h2>
+        <p class="a-sub">We sent a 6-digit code to <b class="a-to"></b></p>
+        <label class="field"><span>Verification code</span><input name="code" class="code-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn" type="submit">Verify</button>
+        <p class="a-switch"><button type="button" class="a-resend" disabled>Resend code</button> · <button type="button" class="a-back">Change email</button></p>
+      </form>
+
+      <!-- set password -->
+      <form class="a-step" data-step="pass" novalidate hidden>
+        <h2 class="a-pass-title">Create a password<em>.</em></h2>
+        <p class="a-sub">You'll use it with your email to sign in next time.</p>
+        <label class="field"><span>Password</span><span class="pw"><input name="pass" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="eye" aria-label="Show password">Show</button></span></label>
+        <ul class="rules"><li data-r="len">8+ characters</li><li data-r="num">A number</li><li data-r="let">A letter</li></ul>
+        <label class="field"><span>Confirm password</span><input name="pass2" type="password" autocomplete="new-password" placeholder="Type it again"></label>
+        <p class="a-err" role="alert"></p>
+        <button class="btn btn-dark a-btn a-pass-btn" type="submit">Create account</button>
+      </form>
+
+    </div>
+  </section>
+</div>
+
+<main id="top">
+  <section class="bh" id="home">
+    <div class="wrap">
+      <p class="bh-hi" id="greet" hidden></p>
+      <span class="bh-pill">✦ New in: lashes, brows &amp; foundation for every shade</span>
+      <h1>All the glam.<br><em>None of the guesswork.</em></h1>
+      <p class="bh-sub">Authentic makeup from Dior to Vee Beauty, matched to your skin tone and delivered across Nigeria.</p>
+      <label class="search bh-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Try “lip gloss”, “Fenty” or “lashes”" autocomplete="off" aria-label="Search makeup">
+        <button type="button" id="searchGo" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </label>
+      <div class="cats bh-cats" id="cats"></div>
+    </div>
+    <div class="bh-shades" aria-hidden="true"><span id="shadeBar"></span></div>
+    <p class="bh-shades-label">Foundation from Snow to Maroon. <button type="button" class="js-shade">Find your shade →</button></p>
+  </section>
+
+  <section class="favs">
+    <div class="wrap">
+      <div class="sec-head"><div><h2>Blush favourites</h2><p>What everyone's adding to bag right now</p></div><a href="#shop">View all</a></div>
+      <div class="trend" id="trend"></div>
+    </div>
+  </section>
+
+  <section class="looks" id="looks">
+    <div class="wrap">
+      <div class="sec-head center"><div><span class="kicker">Get the look</span><h2>Three looks, every product linked</h2><p>Tap any product to pick your shade and add it to your bag.</p></div></div>
+      <div class="look-grid" id="lookGrid"></div>
+    </div>
+  </section>
+
+  <section class="shop" id="shop">
+    <div class="wrap">
+      <div class="head shop-head">
+        <span class="kicker"><span id="statCount">58</span> products · <span id="statBrands">25</span> brands</span>
+        <h2>Browse it all</h2>
+        <div class="filter-stack">
+          <div class="groups" id="groups" role="tablist" aria-label="Category"></div>
+          <div class="filters" id="filters" role="group" aria-label="Filter by brand"></div>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="shop-ask">Can't find what you want? <button type="button" class="js-req">Request a product</button></p>
+    </div>
+  </section>
+
+  <section class="shade" id="shade">
+    <div class="wrap">
+      <div class="shade-card reveal">
+        <span class="kicker">Shade help</span>
+        <h2>Your perfect shade in three messages.</h2>
+        <ol class="shade-steps">
+          <li><b>Snap a selfie</b><span>In daylight, with no makeup on.</span></li>
+          <li><b>Send it on WhatsApp</b><span>Add any shade you already wear.</span></li>
+          <li><b>We match you</b><span>Then order with confidence.</span></li>
+        </ol>
+        <button type="button" class="btn shade-btn js-shade">Get matched on WhatsApp</button>
+      </div>
+      <img class="shade-img reveal" src="img/vee-foundation.jpg" alt="Foundation shades swatched on an arm" loading="lazy">
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="wrap">
+      <div><b>Only authentic</b><span>From trusted suppliers</span></div>
+      <div><b>Sealed &amp; fresh</b><span>Checked before it ships</span></div>
+      <div><b>Pay on delivery</b><span>Available in Lagos</span></div>
+      <div><b>All 36 states</b><span>Plus FCT, tracked</span></div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="kicker">Help</span>
+        <h2>Questions, answered</h2>
+        <p class="faq-more">Still stuck? <a href="#" class="js-wa">Message us on WhatsApp</a></p>
+      </div>
+      <div class="reveal">
+        <details open><summary>How do I order?</summary><p>Tap a product, choose your shade and add it to your bag. At checkout, pay by card or bank transfer, pay on delivery in Lagos, or send the order on WhatsApp.</p></details>
+        <details><summary>Are your products authentic?</summary><p>Yes. Everything we sell is 100% authentic, sourced from trusted suppliers and checked before it ships.</p></details>
+        <details><summary>How do I find my foundation shade?</summary><p>Send us a selfie in natural daylight with no makeup on, plus any shade you already wear, and we'll match you before you order.</p></details>
+        <details><summary>How much is delivery?</summary><p>We deliver to all 36 states and FCT. The fee depends on your state and is shown at checkout before you pay:</p><div class="zones" id="zoneTable"></div></details>
+        <details><summary>Can I return makeup?</summary><p>For hygiene reasons we can only accept unopened, sealed items. Message us within 48 hours of delivery and we'll exchange them, subject to stock.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bfoot">
+  <div class="wrap">
+    <a href="#top" class="logo">Blush<em>.</em></a>
+    <p>Authentic makeup, matched to you.</p>
+    <div class="links">
+      <a href="#shop">Shop</a><a href="#looks">Looks</a><a href="#shade">Shade help</a><a href="#faq">Help</a>
+      <a href="#" class="js-ig">Instagram</a><a href="#" class="js-tt">TikTok</a><a href="#" class="js-wa">WhatsApp</a>
+    </div>
+    <span id="copy"></span>
+  </div>
+</footer>
+
+<a href="#" class="wa-float js-wa" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg></a>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <button class="x" data-close aria-label="Close">×</button>
+  <div class="m-gallery">
+    <div class="m-main"><img id="mImg" src="" alt=""></div>
+    <div class="m-thumbs" id="mThumbs"></div>
+  </div>
+  <div class="m-body">
+    <p class="eyebrow" id="mCat"></p>
+    <h3 id="mTitle"></h3>
+    <div class="m-price" id="mPrice"></div>
+    <p class="m-desc" id="mDesc"></p>
+    <div id="mColorsWrap">
+      <div class="opt-label"><span id="mColorLabel">Colour</span> <span id="mColorName"></span></div>
+      <div class="opts" id="mColors"></div>
+    </div>
+    <div id="mSizesWrap">
+      <div class="opt-label">Size (EU) <span>Need help? Ask us</span></div>
+      <div class="opts" id="mSizes"></div>
+    </div>
+    <div class="m-actions">
+      <button class="btn btn-dark" id="mAdd">Add to bag</button>
+      <button class="btn btn-line" id="mBuy">Buy now</button>
+      <p class="m-note" id="mNote"></p>
+    </div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" aria-label="Your bag">
+  <div class="d-head">
+    <h3>Your bag</h3>
+    <button class="x" data-close aria-label="Close bag">×</button>
+  </div>
+  <div class="d-items" id="dItems"></div>
+  <div class="d-foot" id="dFoot">
+    <div class="total"><span>Subtotal</span><b id="dTotal"></b></div>
+    <small>Delivery is calculated at checkout based on your state.</small>
+    <button class="btn btn-dark" id="checkout">Checkout <span aria-hidden="true">→</span></button>
+    <button class="link-wa" id="bagWa" type="button">Prefer to chat? Order on WhatsApp</button>
+  </div>
+</aside>
+
+<aside class="drawer wide" id="checkoutPanel" aria-label="Checkout">
+  <div class="d-head">
+    <button class="back" id="coBack" type="button" aria-label="Back to bag">←</button>
+    <h3>Checkout</h3>
+    <button class="x" data-close aria-label="Close checkout">×</button>
+  </div>
+  <div class="d-items co-body">
+    <h4 class="co-h">Delivery details</h4>
+    <label class="field" data-f="name"><span>Full name</span><input id="coName" autocomplete="name"></label>
+    <div class="two">
+      <label class="field" data-f="phone"><span>Phone</span><input id="coPhone" type="tel" autocomplete="tel" placeholder="0801 234 5678"></label>
+      <label class="field" data-f="email"><span>Email (for your receipt)</span><input id="coEmail" type="email" autocomplete="email"></label>
+    </div>
+    <div class="two">
+      <label class="field" data-f="state"><span>State</span><select id="coState"></select></label>
+      <label class="field"><span>City / area</span><input id="coCity" autocomplete="address-level2" placeholder="e.g. Lekki"></label>
+    </div>
+    <label class="field" data-f="address" id="coAddrWrap"><span>Street address</span><input id="coAddr" autocomplete="street-address" placeholder="House number, street, landmark"></label>
+    <h4 class="co-h">Delivery</h4>
+    <div class="optcs" id="coShip"></div>
+    <h4 class="co-h">Payment</h4>
+    <div class="optcs" id="coPay"></div>
+    <p class="co-note" id="coPayNote"></p>
+    <h4 class="co-h">Gift note <span class="opt-tag">optional</span></h4>
+    <label class="gift-tg"><input type="checkbox" id="coGift"><span class="box" aria-hidden="true"></span><span>This order is a gift<small>We'll add a handwritten card with your message</small></span></label>
+    <label class="field" id="coNoteWrap" hidden><span>Your message</span><textarea id="coNote" rows="3" maxlength="200" placeholder="e.g. Happy birthday Tolu! Glow into your new year. Love, Amara"></textarea><small class="count" id="coNoteCount">0 / 200</small></label>
+    <h4 class="co-h">Order summary</h4>
+    <div id="coItems"></div>
+    <div class="sum">
+      <div><span>Subtotal</span><b id="coSub"></b></div>
+      <div><span>Delivery</span><b id="coFee"></b></div>
+      <div class="grand"><span>Total</span><b id="coTotal"></b></div>
+    </div>
+    <button class="link-wa" id="coWa" type="button">Prefer to chat? Send this order on WhatsApp</button>
+  </div>
+  <div class="d-foot">
+    <p class="co-err" id="coErr" role="alert"></p>
+    <button class="btn btn-dark" id="coPlace" type="button">Place order</button>
+  </div>
+</aside>
+
+<aside class="drawer wide" id="donePanel" aria-label="Order confirmed">
+  <div class="d-head"><h3>Order confirmed</h3><button class="x" data-close aria-label="Close">×</button></div>
+  <div class="d-items done-body" id="doneBody"></div>
+  <div class="d-foot">
+    <button class="btn btn-dark" id="doneTrack" type="button">View my orders</button>
+    <button class="btn btn-line" data-close data-go="#shop" type="button">Continue shopping</button>
+  </div>
+</aside>
+
+<aside class="drawer" id="profilePanel" aria-label="Your account">
+  <div class="d-head"><h3>Account</h3><button class="x" data-close aria-label="Close account">×</button></div>
+  <div class="d-items" id="profBody"></div>
+</aside>
+
+<aside class="drawer" id="requestPanel" aria-label="Request a product">
+  <div class="d-head"><h3>Request a product</h3><button class="x" data-close aria-label="Close">×</button></div>
+  <div class="d-items co-body">
+    <p class="req-intro">Seen a product you love somewhere else? Describe it and we'll find it for you.</p>
+    <label class="field" data-f="req"><span>What are you looking for?</span><textarea id="reqWhat" rows="4" placeholder="e.g. Fenty Gloss Bomb in Fenty Glow, or a matte foundation for oily skin"></textarea></label>
+    <div class="two">
+      <label class="field"><span>Shade or skin tone</span><input id="reqSize" placeholder="e.g. Deep, warm undertone"></label>
+      <label class="field"><span>Budget</span><select id="reqBudget"><option>Flexible</option><option>Under ₦20,000</option><option>₦20,000 – ₦50,000</option><option>₦50,000 – ₦100,000</option><option>Above ₦100,000</option></select></label>
+    </div>
+    <label class="field"><span>Needed by (optional)</span><input id="reqWhen" placeholder="e.g. 14 December"></label>
+  </div>
+  <div class="d-foot">
+    <button class="btn btn-wa" id="reqSend" type="button">Send request on WhatsApp</button>
+    <small>Have a photo? Send it in the chat once WhatsApp opens.</small>
+  </div>
+</aside>
+
+<aside class="drawer" id="inboxPanel" aria-label="Inbox">
+  <div class="d-head"><button class="back" id="inboxBack" type="button" aria-label="Back to account">←</button><h3>Inbox</h3><button class="x" data-close aria-label="Close inbox">×</button></div>
+  <div class="d-items" id="inboxBody"></div>
+</aside>
+
+<button class="notif" id="notif" type="button" aria-live="polite"></button>
+<div class="mailview" id="mailview" role="dialog" aria-modal="true" aria-label="Email"><div class="mv-card" id="mvBody"></div></div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<nav class="tabbar" aria-label="Quick menu">
+  <a href="#home" class="on" aria-label="Home"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg></span></a>
+  <a href="#shop" aria-label="Shop"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></span></a>
+  <button id="tbBag" aria-label="Bag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="tb-count" id="tbCount" hidden></span></span></button>
+  <button id="tbMe" aria-label="Account"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span></button>
+  <a href="#" class="js-wa" aria-label="WhatsApp"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span></a>
+</nav>
+
+<script src="products.js"></script>
+<script>
+/* ===== Shop settings: edit these ===== */
+const SHOP = {
+  name: "Blush",
+  whatsapp: "2349125837823",            // country code + number, no + or spaces
+  instagram: "https://www.instagram.com/shop_camorra",
+  tiktok: "https://www.tiktok.com/@shop_camorra",
+  currency: "₦",
+};
+
+/* ===== Email: paste the Google Apps Script web app URL to send real emails (see email/SETUP.md).
+   Leave blank and emails only appear in the on-site inbox. ===== */
+const EMAIL = {
+  scriptUrl: "",
+};
+
+/* ===== Delivery: fees by zone (shop is in Lagos) ===== */
+const DELIVERY = {
+  zones: {
+    lagos: {label:"Lagos",               fee:3500, days:[1,2]},
+    sw:    {label:"South-West",          fee:5000, days:[2,3]},
+    se:    {label:"South & East",        fee:6500, days:[3,4]},
+    nc:    {label:"North-Central & FCT", fee:7000, days:[3,5]},
+    n:     {label:"North",               fee:8500, days:[4,6]},
+  },
+  express: 6000,                         // Lagos same-day
+  states: {
+    lagos:["Lagos"],
+    sw:["Ogun","Oyo","Osun","Ondo","Ekiti"],
+    se:["Edo","Delta","Rivers","Anambra","Enugu","Imo","Abia","Cross River","Akwa Ibom","Bayelsa","Ebonyi"],
+    nc:["FCT (Abuja)","Kwara","Kogi","Niger","Benue","Plateau","Nasarawa"],
+    n:["Kano","Kaduna","Katsina","Sokoto","Kebbi","Zamfara","Jigawa","Bauchi","Gombe","Adamawa","Taraba","Borno","Yobe"],
+  },
+  bank: {name:"Blush Beauty Ltd", number:"0123456789", bank:"Demo Bank"},
+};
+
+/* ===== Products: edit names, prices, sizes and colours here ===== */
+const SIZES = [36,37,38,39,40,41,42];
+const PRODUCTS = [
+
+];
+// Products come from products.js.
+// The category (Lips, Cheeks…) becomes the tab and the brand becomes the filter chip.
+const BRANDS = ["Charlotte Tilbury","Huda Beauty","Rare Beauty","Too Faced","Secret of Pharaoh","Love Rain","Dior","YSL","KIKO","TIRTIR","Laneige","Joocyee","MAANGE","Morphe","SHEGLAM","Benefit","Maybelline","Gucci","Tillnana","Ablfeler","Juju Dream","Fenty Beauty","Anastasia Beverly Hills","Vee Beauty"];
+const brandOf = p => p.brand || BRANDS.find(b => p.name.startsWith(b)) || p.name.split(" ")[0];
+PRODUCTS.length = 0;
+BEAUTY.forEach(p => PRODUCTS.push(Object.assign({}, p, {group: p.cat, cat: brandOf(p)})));
+const noSize = p => true;                         // makeup: shade only, never a size
+
+/* ===== App ===== */
+const $ = s => document.querySelector(s);
+const money = n => SHOP.currency + n.toLocaleString("en-NG");
+const waLink = text => `https://wa.me/${SHOP.whatsapp}?text=${encodeURIComponent(text)}`;
+// Open WhatsApp in a way that also works inside TikTok / Instagram in-app browsers
+function openWA(text){
+  const url = waLink(text);
+  const inApp = /Instagram|FBAN|FBAV|TikTok|musical_ly|Bytedance|Snapchat|Line\//i.test(navigator.userAgent);
+  if (inApp){ location.href = url; return; }
+  // note: the store's own open() panel function shadows window.open, so use a real link click
+  const link = document.createElement("a");
+  link.href = url; link.target = "_blank"; link.rel = "noopener";
+  document.body.appendChild(link); link.click(); link.remove();
+}
+const byId = id => PRODUCTS.find(p => p.id === id);
+const optLine = l => `${l.color}${l.size ? ` · EU ${l.size}` : ""}`;
+
+document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.name}! I'd like to ask about your makeup.`); a.addEventListener("click", e => { e.preventDefault(); openWA(`Hi ${SHOP.name}! I'd like to ask about your makeup.`); }); });
+document.querySelectorAll(".js-ig").forEach(a => { a.href = SHOP.instagram; a.target = "_blank"; a.rel = "noopener"; });
+document.querySelectorAll(".js-tt").forEach(a => { a.href = SHOP.tiktok; a.target = "_blank"; a.rel = "noopener"; });
+$("#copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name}`;
+$("#statCount").textContent = PRODUCTS.length;
+$("#statBrands").textContent = new Set(PRODUCTS.map(p => p.cat)).size;
+
+
+// filters + grid
+const ORDER = ["Lips","Cheeks","Eyes","Lashes","Brows","Face","Glow","Sets","Tools"];
+const groups = ["All", ...new Set(PRODUCTS.map(p => p.group))].sort((a,b) => (a==="All"?-1:ORDER.indexOf(a)) - (b==="All"?-1:ORDER.indexOf(b)));
+let group = "All", current = "All", query = "";
+function renderGroups(){
+  $("#groups").innerHTML = groups.map(g => `<button class="tab" role="tab" aria-selected="${g===group}" data-g="${g}">${g==="All"?"All":g}</button>`).join("");
+  const cats = ["All", ...new Set(PRODUCTS.filter(p => group==="All" || p.group===group).map(p => p.cat))];
+  $("#filters").innerHTML = cats.map(c => `<button class="chip" aria-pressed="${c===current}" data-cat="${c}">${c==="All"?"All brands":c}</button>`).join("");
+}
+renderGroups();
+$("#groups").addEventListener("click", e => {
+  const b = e.target.closest(".tab"); if (!b) return;
+  group = b.dataset.g; current = "All"; renderGroups(); renderGrid();
+});
+$("#filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  current = b.dataset.cat;
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+  renderGrid();
+});
+
+function renderGrid(){
+  const q = query.trim().toLowerCase();
+  const list = PRODUCTS.filter(p => (group === "All" || p.group === group) && (current === "All" || p.cat === current)
+    && (!q || (p.name+" "+p.cat+" "+p.group+" "+p.colors.map(c=>c[0]).join(" ")).toLowerCase().includes(q)));
+  if (!list.length){ $("#grid").innerHTML = `<p class="empty">Nothing matches "${q.replace(/[<>&"]/g,"")}". Try another word, or <button class="js-req" style="text-decoration:underline">request a product</button> and we'll find it.</p>`; return; }
+  $("#grid").innerHTML = list.map((p,i) => `
+    <article class="card" tabindex="0" data-id="${p.id}" style="animation-delay:${i*60}ms" aria-label="${p.name}, ${money(p.price)}">
+      <div class="card-img">
+        <img src="img/${p.imgs[0]}" alt="${p.name}" loading="lazy">
+        ${p.imgs[1] ? `<img class="alt" src="img/${p.imgs[1]}" alt="" loading="lazy">` : ""}
+        ${p.badge ? `<span class="badge ${p.badgeWine?"wine":""}">${p.badge}</span>` : ""}
+        <span class="quick">Quick view</span>
+      </div>
+      <div class="card-info">
+        <div><h3>${p.name}</h3><small>${p.cat}</small>
+          <div class="swatches">${p.colors.map(c=>`<i style="background:${c[1]}" title="${c[0]}"></i>`).join("")}</div>
+        </div>
+        <span class="price">${money(p.price)}</span>
+      </div>
+    </article>`).join("");
+}
+renderGrid();
+$("#grid").addEventListener("click", e => { const c = e.target.closest(".card"); if (c) openModal(c.dataset.id); });
+$("#grid").addEventListener("keydown", e => { const c = e.target.closest(".card"); if (c && (e.key==="Enter"||e.key===" ")) { e.preventDefault(); openModal(c.dataset.id); }});
+
+// modal
+let sel = {};
+function openModal(id){
+  const p = byId(id);
+  sel = { id, color: p.colors.length === 1 ? p.colors[0][0] : null, size: null };
+  $("#mCat").textContent = p.cat;
+  $("#mTitle").textContent = p.name;
+  $("#mPrice").textContent = money(p.price);
+  $("#mDesc").textContent = p.desc;
+  setMain(p, 0);
+  $("#mThumbs").innerHTML = p.imgs.length > 1 ? p.imgs.map((src,i)=>`<button aria-pressed="${i===0}" data-i="${i}" aria-label="Photo ${i+1}"><img src="img/${src}" alt=""></button>`).join("") : "";
+  $("#mColorsWrap").style.display = "";
+  $("#mColors").innerHTML = p.colors.map(c=>`<button class="opt color" aria-pressed="${sel.color===c[0]}" data-color="${c[0]}"><i style="background:${c[1]}"></i>${c[0]}</button>`).join("");
+  $("#mColorName").textContent = sel.color || "Choose one";
+  $("#mColorLabel").textContent = noSize(p) ? "Shade" : "Colour";
+  $("#mSizesWrap").style.display = noSize(p) ? "none" : "";
+  $("#mSizes").innerHTML = SIZES.map(s=>`<button class="opt" aria-pressed="false" data-size="${s}">${s}</button>`).join("");
+  note("");
+  open("#modal");
+}
+function setMain(p,i){ $("#mImg").src = "img/" + p.imgs[i]; $("#mImg").alt = p.name; }
+$("#mThumbs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  setMain(byId(sel.id), +b.dataset.i);
+  document.querySelectorAll("#mThumbs button").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
+$("#mColors").addEventListener("click", e => {
+  const b = e.target.closest(".opt"); if (!b) return;
+  sel.color = b.dataset.color; $("#mColorName").textContent = sel.color;
+  const p = byId(sel.id), c = p.colors.find(c => c[0] === sel.color);
+  if (c && c[2] !== undefined){ setMain(p, c[2]); document.querySelectorAll("#mThumbs button").forEach(x => x.setAttribute("aria-pressed", +x.dataset.i === c[2])); }
+  document.querySelectorAll("#mColors .opt").forEach(x => x.setAttribute("aria-pressed", x === b)); note("");
+});
+$("#mSizes").addEventListener("click", e => {
+  const b = e.target.closest(".opt"); if (!b) return;
+  sel.size = +b.dataset.size;
+  document.querySelectorAll("#mSizes .opt").forEach(x => x.setAttribute("aria-pressed", x === b)); note("");
+});
+function note(t, warn){ const n = $("#mNote"); n.textContent = t; n.classList.toggle("warn", !!warn); }
+function ready(){
+  const beauty = noSize(byId(sel.id));
+  if (!sel.color){ note(beauty ? "Please choose a shade." : "Please choose a colour.", true); return false; }
+  if (!sel.size && !beauty){ note("Please choose your size.", true); return false; }
+  return true;
+}
+$("#mAdd").addEventListener("click", () => {
+  if (!ready()) return;
+  addToBag(sel.id, sel.color, sel.size);
+  close(); toast("Added to your bag");
+});
+$("#mBuy").addEventListener("click", () => {
+  if (!ready()) return;
+  const p = byId(sel.id);
+  addToBag(sel.id, sel.color, sel.size); openCheckout();
+});
+
+// bag
+let bag = [];
+try { bag = JSON.parse(localStorage.getItem("blushBag") || "[]").filter(l => byId(l.id)); } catch(e) {}
+function save(){ try { localStorage.setItem("blushBag", JSON.stringify(bag)); } catch(e) {} }
+function addToBag(id,color,size){
+  const ex = bag.find(l => l.id===id && l.color===color && l.size===size);
+  ex ? ex.qty++ : bag.push({id,color,size,qty:1});
+  save(); renderBag(true);
+}
+function renderBag(bump){
+  const count = bag.reduce((a,l)=>a+l.qty,0);
+  const c = $("#bagCount"); c.textContent = count; c.classList.toggle("on", count>0);
+  if (bump){ c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop"); }
+  $("#dFoot").style.display = count ? "" : "none";
+  if (!count){
+    $("#dItems").innerHTML = `<div class="d-empty"><b>Your bag is empty</b>Find something you love and add it here.<br><br><button class="btn btn-line" data-close data-go="#shop">Browse makeup</button></div>`;
+    return;
+  }
+  $("#dItems").innerHTML = bag.map((l,i) => { const p = byId(l.id); return `
+    <div class="line">
+      <img src="img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}" alt="">
+      <div><h4>${p.name}</h4><small>${optLine(l)}</small>
+        <div class="qty"><button data-q="-1" data-i="${i}" aria-label="Decrease">−</button><span>${l.qty}</span><button data-q="1" data-i="${i}" aria-label="Increase">+</button></div>
+      </div>
+      <div style="text-align:right"><b>${money(p.price*l.qty)}</b><button class="rm" data-rm="${i}">Remove</button></div>
+    </div>`; }).join("");
+  $("#dTotal").textContent = money(bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0));
+}
+$("#dItems").addEventListener("click", e => {
+  const q = e.target.closest("[data-q]"), rm = e.target.closest("[data-rm]");
+  if (q){ const l = bag[+q.dataset.i]; l.qty += +q.dataset.q; if (l.qty<1) bag.splice(+q.dataset.i,1); }
+  else if (rm){ bag.splice(+rm.dataset.rm,1); }
+  else return;
+  save(); renderBag();
+});
+$("#checkout").addEventListener("click", () => openCheckout());
+$("#bagWa").addEventListener("click", () => {
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${optLine(l)} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const total = money(bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0));
+  openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nState:\nDelivery address:`);
+});
+$("#bagBtn").addEventListener("click", () => open("#drawer"));
+renderBag();
+
+// open / close
+let openEl = null, lastFocus = null;
+function open(sel){
+  close(true);
+  openEl = $(sel); lastFocus = document.activeElement;
+  openEl.classList.add("open"); $("#overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  setTimeout(() => openEl && openEl.querySelector("[data-close]").focus(), 50);
+}
+function close(silent){
+  if (!openEl) return;
+  openEl.classList.remove("open"); $("#overlay").classList.remove("open");
+  document.body.style.overflow = ""; openEl = null;
+  if (!silent && lastFocus) lastFocus.focus({preventScroll:true});
+}
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-close]");
+  if (c){ close(); if (c.dataset.go) document.querySelector(c.dataset.go).scrollIntoView(); }
+});
+$("#overlay").addEventListener("click", () => close());
+document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(()=>el.classList.remove("on"), 2200); }
+
+// app-style home
+const h = new Date().getHours();
+const greetWord = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+const CATS = [["Lips","Lips","All","dior-maximizer-rose.jpg"],["Cheeks","Cheeks","All","ysl-blush-box.jpg"],["Eyes","Eyes","All","huda-new-nude.jpg"],["Lashes","Lashes","All","tillnana-lash-book.jpg"],
+  ["Brows","Brows","All","benefit-brows.jpg"],["Face","Face","All","ct-flawless-foundation.jpg"],["Glow","Glow","All","dior-luminizer.jpg"],["Sets","Sets","All","dior-addict-gift.jpg"],["Brushes","Tools","All","maange-brushes-2.jpg"]];
+$("#cats").innerHTML = CATS.map(([l,g,c,img]) => `<button class="cat" data-g="${g}" data-c="${c}"><span><img src="img/${img}" alt="" loading="lazy"></span>${l}</button>`).join("");
+function goShop(g, c){
+  group = g; current = c; query = ""; $("#search").value = "";
+  renderGroups(); renderGrid(); $("#shop").scrollIntoView({behavior:"smooth"});
+}
+$("#cats").addEventListener("click", e => { const b = e.target.closest(".cat"); if (b) goShop(b.dataset.g, b.dataset.c); });
+const trending = PRODUCTS.filter(p => /Bestseller|Statement|New|Limited/.test(p.badge||"")).slice(0,12);
+$("#trend").innerHTML = trending.map(p => `<button class="t-card" data-id="${p.id}"><div><img src="img/${p.imgs[0]}" alt="" loading="lazy"><i aria-hidden="true">♡</i></div><h4>${p.name}</h4><small>${money(p.price)}</small></button>`).join("");
+// shade bar under the hero, from the Vee Beauty foundation shades
+$("#shadeBar").outerHTML = (byId("vee-foundation") ? byId("vee-foundation").colors : []).map(c => `<span style="background:${c[1]}"></span>`).join("");
+document.querySelectorAll(".js-shade").forEach(b => b.addEventListener("click", () => openWA(`Hi ${SHOP.name}! Please help me find my foundation shade. I'll send a selfie in daylight.`)));
+
+// Get the look. To use a model photo, add photo:"file.jpg" (in img/) to a look.
+const LOOKS = [
+  {name:"Soft glam", tag:"Day to night", photo:"look-soft-glam.jpg", text:"Glowy skin, a rosy flush, fluffy lashes and a glossy nude lip.",
+   items:["vee-foundation","huda-easy-bake","rare-soft-pinch","tillnana-lash-book","huda-lip-stain","dior-lip-maximizer"]},
+  {name:"Night out", tag:"Bold", photo:"look-night-out.jpg", text:"Full-coverage base, dramatic volume lashes, sharp brows and a deep berry lip.",
+   items:["fenty-foundation","morphe-powder","ysl-lash-clash","loverain-lash-kit","benefit-brows","huda-lip-stain"]},
+  {name:"Everyday glow", tag:"Natural", text:"Laminated brows, lifted lashes, warm bronze and a juicy lip.",
+   items:["sheglam-brow-gel","maybelline-mascara","rare-bronzer-stick","dior-luminizer","laneige-lip-mask","ysl-loveshine"]},
+];
+$("#lookGrid").innerHTML = LOOKS.map(l => {
+  const ps = l.items.map(byId).filter(Boolean), total = ps.reduce((a,p) => a + p.price, 0);
+  const pic = l.photo ? `<div class="look-pic one"><img src="img/${l.photo}" alt="${l.name} look" loading="lazy">`
+    : `<div class="look-pic">${ps.slice(0,4).map(p => `<img src="img/${p.imgs[0]}" alt="" loading="lazy">`).join("")}`;
+  return `<article class="look reveal">${pic}<span>${l.tag}</span></div><div class="look-body"><h3>${l.name}</h3><p>${l.text}</p>
+    <div class="look-items">${ps.map(p => `<button type="button" data-id="${p.id}"><img src="img/thumb/${p.imgs[0]}" alt="">${p.name.replace(p.cat+" ","")}</button>`).join("")}</div>
+    <p class="look-total">Full look: <b>${money(total)}</b></p></div></article>`;
+}).join("");
+$("#lookGrid").addEventListener("click", e => { const b = e.target.closest("[data-id]"); if (b) openModal(b.dataset.id); });
+$("#trend").addEventListener("click", e => { const c = e.target.closest(".t-card"); if (c) openModal(c.dataset.id); });
+let searchT;
+function runSearch(jump){
+  query = $("#search").value; group = "All"; current = "All"; renderGroups(); renderGrid();
+  if (jump) $("#shop").scrollIntoView({behavior:"smooth"});
+}
+$("#search").addEventListener("input", () => { clearTimeout(searchT); searchT = setTimeout(() => runSearch(false), 200); });
+$("#search").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); runSearch(true); $("#search").blur(); }});
+$("#searchGo").addEventListener("click", () => runSearch(true));
+
+// mobile tab bar
+$("#tbBag").addEventListener("click", () => open("#drawer"));
+const tbLinks = document.querySelectorAll('.tabbar a[href^="#"]:not(.js-wa)');
+addEventListener("scroll", () => {
+  const inShop = scrollY + 200 > $("#shop").offsetTop && scrollY < $("#shade").offsetTop;
+  tbLinks.forEach(a => a.classList.toggle("on", (a.getAttribute("href") === "#shop") === inShop));
+}, {passive:true});
+function syncTabCount(){ const n = bag.reduce((a,l)=>a+l.qty,0), c = $("#tbCount"); c.textContent = n > 9 ? "9+" : n; c.hidden = n < 1; }
+syncTabCount();
+const _renderBag = renderBag; renderBag = function(b){ _renderBag(b); syncTabCount(); };
+
+// ===== storage =====
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} },
+};
+store.del("blushUser");                                   // old demo format
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const normEmail = e => e.trim().toLowerCase();
+const validEmail = e => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(e);
+
+// ===== accounts (passwords are salted + hashed with PBKDF2, never stored as text) =====
+const accounts = () => store.get("blushAccounts", {});
+const getUser = () => { const s = store.get("blushSession", null), a = s && accounts()[s]; return a ? {name:a.name, email:s} : null; };
+const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+async function hashPassword(pass, saltHex){
+  const salt = saltHex ? new Uint8Array(saltHex.match(/../g).map(h => parseInt(h,16))) : crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt, iterations:150000, hash:"SHA-256"}, key, 256);
+  return {salt:hex(salt), hash:hex(bits)};
+}
+function refreshUser(){
+  const u = getUser();
+  $("#greet").textContent = u ? `Hi ${firstName(u)}, welcome back ✦` : ""; $("#greet").hidden = !u;
+  $("#acctName").textContent = u ? firstName(u) : "Sign in";
+}
+refreshUser();
+
+// ===== email (on-site inbox + real sending through Google Apps Script when EMAIL.scriptUrl is set) =====
+const inbox = () => store.get("blushInbox", []);
+const liveMail = () => /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(EMAIL.scriptUrl || "");
+async function callMail(action, data){
+  if (!liveMail()) return null;
+  try {
+    const r = await fetch(EMAIL.scriptUrl, {method:"POST", body: JSON.stringify(Object.assign({action}, data))});
+    return await r.json();
+  } catch(e){ console.warn("Email service unreachable", e); return null; }
+}
+const mailHTML = (inner) => `<div class="em"><div class="em-head">Blush<em>.</em></div><div class="em-body">${inner}</div>
+  <div class="em-foot">You're receiving this because you used ${esc(SHOP.name)}. Questions? Reply to this email or message us on WhatsApp.</div></div>`;
+async function sendEmail({to, subject, preview, inner}){
+  const mail = {id: Date.now() + "" + Math.random().toString(36).slice(2,6), to: normEmail(to), subject, preview, html: mailHTML(inner), at: Date.now(), read: false};
+  const box = inbox(); box.unshift(mail); store.set("blushInbox", box.slice(0, 60));
+  notify(mail); refreshMailBadge();
+  return mail;
+}
+let notifT;
+function notify(mail){
+  const n = $("#notif");
+  n.innerHTML = `<span class="ic">S</span><span><small><span>Blush · Mail</span><span>now</span></small><b>${esc(mail.subject)}</b><span>${esc(mail.preview)}</span></span>`;
+  n.dataset.id = mail.id; n.classList.add("on");
+  clearTimeout(notifT); notifT = setTimeout(() => n.classList.remove("on"), 7000);
+}
+$("#notif").addEventListener("click", () => { $("#notif").classList.remove("on"); openMail($("#notif").dataset.id); });
+function openMail(id){
+  const box = inbox(), m = box.find(x => x.id === id); if (!m) return;
+  m.read = true; store.set("blushInbox", box); refreshMailBadge();
+  $("#mvBody").innerHTML = `<div class="mv-meta"><h4>${esc(m.subject)}</h4><span>From: ${esc(SHOP.name)} &lt;hello@blush.ng&gt;<br>To: ${esc(m.to)}</span><button class="x" id="mvClose" aria-label="Close email">×</button><span>${new Date(m.at).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</span></div>${m.html}`;
+  $("#mailview").classList.add("on");
+  if ($("#inboxPanel").classList.contains("open")) renderInbox();
+}
+function closeMail(){ $("#mailview").classList.remove("on"); }
+$("#mailview").addEventListener("click", e => { if (e.target.id === "mailview" || e.target.closest("#mvClose")) closeMail(); if (e.target.closest("[data-shop]")){ e.preventDefault(); closeMail(); close(true); $("#shop").scrollIntoView({behavior:"smooth"}); }});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#mailview").classList.contains("on")){ e.stopImmediatePropagation(); closeMail(); } }, true);
+const myMail = () => { const u = getUser(); return u ? inbox().filter(m => m.to === u.email) : []; };
+function refreshMailBadge(){ /* profile badge is re-rendered on open */ if ($("#profilePanel").classList.contains("open")) renderProfile(); }
+function renderInbox(){
+  const list = myMail();
+  $("#inboxBody").innerHTML = list.length ? list.map(m => `<button class="mail-row ${m.read ? "" : "unread"}" data-mail="${m.id}"><i></i><span><b>${esc(m.subject)}</b><span>${esc(m.preview)}</span></span><small>${new Date(m.at).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</small></button>`).join("")
+    : `<p class="co-note" style="margin-top:20px">No emails yet.</p>`;
+}
+$("#inboxBody").addEventListener("click", e => { const r = e.target.closest("[data-mail]"); if (r) openMail(r.dataset.mail); });
+
+// email templates
+const mailCode = (to, code, purpose) => sendEmail({to, subject:`Your Blush code: ${code}`, preview:`Use ${code} to ${purpose}. It expires in 10 minutes.`,
+  inner:`<h3>Your code</h3><p>Use this code to ${purpose}:</p><div class="em-code">${code}</div><p>It expires in 10 minutes. If you didn't ask for this, you can ignore this email.</p>`});
+const mailWelcome = (u) => (callMail("welcome", {email:u.email, name:u.name}), sendEmail({to:u.email, subject:`Welcome to Blush, ${firstName(u)}`, preview:"Your account is ready. Here's what you can do next.",
+  inner:`<img src="img/huda-new-nude.jpg" alt="" style="display:block;width:100%;border-radius:12px;margin:0 0 18px"><h3>Welcome, ${esc(firstName(u))}.</h3><p>Your Blush account is ready. Every product we stock is 100% authentic, and we're always happy to help you find your shade.</p>
+  <div class="em-box"><b>With your account you can:</b><br>· Check out faster with your saved address<br>· Track your orders in one place<br>· Request a product you've seen elsewhere</div>
+  <a class="em-btn" href="#shop" data-shop>Start shopping</a><p>See you soon,<br>The Blush team</p>`}));
+const mailSignIn = (u) => (callMail("signin", {email:u.email, name:u.name}), sendEmail({to:u.email, subject:`Welcome back, ${firstName(u)}`, preview:"You just signed in to your Blush account.",
+  inner:`<h3>Welcome back, ${esc(firstName(u))}.</h3><p>You signed in to Blush on ${new Date().toLocaleString("en-GB",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}.</p>
+  <a class="em-btn" href="#shop" data-shop>See what's new</a><p>Wasn't you? Reset your password from the sign-in page straight away.</p>`}));
+function mailOrder(o, to){
+  callMail("order", {email: to, order: {
+    no: o.no, name: o.name, ship: o.ship, note: o.note || "",
+    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, img: thumbOf(l).replace(/^img\//,""), detail: `${optLine(l)} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
+    sub: money(o.sub), fee: o.fee ? money(o.fee) : "Free", total: money(o.total),
+    payText: o.pay === "transfer" ? `Complete your transfer: send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with ${o.no} as the reference.`
+      : o.pay === "pod" ? `Pay the rider ${money(o.total)} by cash or transfer when your order arrives.` : `Paid by card · ${money(o.total)}`,
+    whereLabel: o.ship === "Pickup" ? "Pickup" : "Delivery",
+    where: o.ship === "Pickup" ? "Lekki studio" : [o.address, o.city, o.state].filter(Boolean).join(", "),
+    eta: etaText(o.days, o.at)
+  }});
+  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(optLine(l))} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
+  const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
+    : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your order arrives.</div>`
+    : `<div class="em-box">Paid by card · ${money(o.total)}</div>`;
+  return sendEmail({to, subject:`Order confirmed #${o.no}`, preview:`Thanks, ${o.name.split(" ")[0]}! ${money(o.total)} · ${o.ship === "Pickup" ? "ready for pickup" : "arriving " + etaText(o.days, o.at)}`,
+    inner:`<h3>Thank you, ${esc(o.name.split(" ")[0])}.</h3><p>Your order <b>#${o.no}</b> is confirmed and being packed with love.</p>
+    <table class="em-table">${rows}<tr><td></td><td>Subtotal</td><td>${money(o.sub)}</td></tr><tr><td></td><td>Delivery (${o.ship})</td><td>${o.fee ? money(o.fee) : "Free"}</td></tr><tr class="t"><td></td><td>Total</td><td>${money(o.total)}</td></tr></table>
+    ${o.note ? `<div class="em-box"><b>Gift note</b><br><i>“${esc(o.note)}”</i><br>We'll write this on a card in your parcel.</div>` : ""}${pay}<p><b>${o.ship === "Pickup" ? "Pickup" : "Delivery"}:</b> ${o.ship === "Pickup" ? "Lekki studio, " + etaText(o.days, o.at) : esc([o.address, o.city, o.state].filter(Boolean).join(", ")) + "<br>Estimated: " + etaText(o.days, o.at)}</p>`});
+}
+
+// ===== welcome → auth =====
+const W = $("#welcome");
+let wTimer;
+function finishWelcome(){
+  clearInterval(wTimer); W.classList.add("gone"); document.body.style.overflow = "";
+  try { sessionStorage.setItem("blushWelcome","1"); } catch(e) {}
+  setTimeout(() => { W.hidden = true; }, 650);
+}
+const steps = [...document.querySelectorAll(".a-step")];
+const stepEl = n => steps.find(s => s.dataset.step === n);
+const flow = {mode:null, name:"", email:"", code:null, exp:0, tries:0, verified:false};
+function showStep(n){
+  steps.forEach(s => s.hidden = s.dataset.step !== n);
+  const s = stepEl(n); s.querySelector(".a-err").textContent = "";
+  setTimeout(() => { const f = s.querySelector("input"); if (f) f.focus(); }, 60);
+}
+function showAuth(step){
+  W.hidden = false; W.classList.remove("gone"); document.body.style.overflow = "hidden";
+  $("#wIntro").hidden = true; $("#wAuth").hidden = false; showStep(step || "in");
+}
+const err = (n, t) => { stepEl(n).querySelector(".a-err").textContent = t; return false; };
+function busy(form, on, label){ const b = form.querySelector('button[type="submit"]'); b.disabled = on; if (on){ b.dataset.l = b.textContent; b.innerHTML = `<span class="spin"></span> ${label}`; } else b.textContent = b.dataset.l || b.textContent; }
+document.querySelectorAll("#wAuth [data-go]").forEach(b => b.addEventListener("click", () => {
+  const cur = b.closest(".a-step"), email = cur.querySelector('[name="email"]');
+  showStep(b.dataset.go);
+  const next = stepEl(b.dataset.go).querySelector('[name="email"]');
+  if (email && next && email.value && !next.value) next.value = email.value;
+}));
+document.querySelectorAll("#wAuth .a-guest").forEach(b => b.addEventListener("click", finishWelcome));
+document.querySelectorAll("#wAuth .eye").forEach(b => b.addEventListener("click", () => {
+  const i = b.previousElementSibling, show = i.type === "password"; i.type = show ? "text" : "password"; b.textContent = show ? "Hide" : "Show";
+}));
+let resendT;
+async function sendCode(){
+  flow.exp = Date.now() + 10*60*1000; flow.tries = 0; flow.verified = false; flow.server = false; flow.code = null;
+  if (liveMail()){
+    const form = stepEl(flow.mode === "reset" ? "forgot" : "up");
+    busy(form, true, "Sending code…");
+    const r = await callMail("code", {email: flow.email, name: flow.name, purpose: flow.mode === "reset" ? "reset" : "signup"});
+    busy(form, false);
+    if (r && r.ok){ flow.server = true; toast("Code sent to " + flow.email); }
+    else if (r && r.error === "too_many") return err(flow.mode === "reset" ? "forgot" : "up", "Too many codes requested. Please wait a minute and try again.");
+    else if (r && r.error === "bad_email") return err(flow.mode === "reset" ? "forgot" : "up", "Please check the email address.");
+  }
+  if (!flow.server){
+    flow.code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+    mailCode(flow.email, flow.code, flow.mode === "reset" ? "reset your password" : "confirm your email");
+  }
+  const s = stepEl("code"), r = s.querySelector(".a-resend");
+  s.querySelector(".a-to").textContent = flow.email; s.querySelector('[name="code"]').value = "";
+  let left = 30; r.disabled = true; r.textContent = `Resend in ${left}s`;
+  clearInterval(resendT); resendT = setInterval(() => { left--; if (left <= 0){ clearInterval(resendT); r.disabled = false; r.textContent = "Resend code"; } else r.textContent = `Resend in ${left}s`; }, 1000);
+  showStep("code");
+}
+stepEl("code").querySelector(".a-resend").addEventListener("click", () => { sendCode(); });
+stepEl("code").querySelector(".a-back").addEventListener("click", () => showStep(flow.mode === "reset" ? "forgot" : "up"));
+stepEl("code").querySelector('[name="code"]').addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g,"").slice(0,6); if (e.target.value.length === 6) stepEl("code").requestSubmit(); });
+
+stepEl("in").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target;
+  const email = normEmail(f.email.value), pass = f.pass.value, acct = accounts()[email];
+  if (!validEmail(email)) return err("in", "Please enter a valid email.");
+  if (!pass) return err("in", "Please enter your password.");
+  if (!acct) return err("in", "No account with this email. Create one below.");
+  busy(f, true, "Signing in…");
+  const {hash} = await hashPassword(pass, acct.salt);
+  busy(f, false);
+  if (hash !== acct.hash) return err("in", "Incorrect password. Try again or reset it.");
+  store.set("blushSession", email); f.pass.value = "";
+  const u = getUser(); refreshUser(); finishWelcome(); mailSignIn(u);
+});
+stepEl("up").addEventListener("submit", e => {
+  e.preventDefault(); const f = e.target;
+  const name = f.name.value.trim().replace(/\s+/g," "), email = normEmail(f.email.value);
+  if (name.length < 2) return err("up", "Please enter your name.");
+  if (!validEmail(email)) return err("up", "Please enter a valid email.");
+  if (accounts()[email]) return err("up", "An account already uses this email. Sign in instead.");
+  Object.assign(flow, {mode:"up", name, email}); sendCode();
+});
+stepEl("forgot").addEventListener("submit", e => {
+  e.preventDefault(); const email = normEmail(e.target.email.value);
+  if (!validEmail(email)) return err("forgot", "Please enter a valid email.");
+  if (!accounts()[email]) return err("forgot", "No account with this email.");
+  Object.assign(flow, {mode:"reset", name:accounts()[email].name, email}); sendCode();
+});
+let verifying = false;
+stepEl("code").addEventListener("submit", async e => {
+  e.preventDefault(); const v = e.target.code.value.trim();
+  if (verifying) return;
+  if (Date.now() > flow.exp) return err("code", "This code has expired. Tap Resend code.");
+  if (++flow.tries > 5) return err("code", "Too many attempts. Tap Resend code for a new one.");
+  if (flow.server){
+    verifying = true; busy(e.target, true, "Checking…");
+    const r = await callMail("verify", {email: flow.email, code: v});
+    busy(e.target, false); verifying = false;
+    if (!r) return err("code", "Couldn't check the code. Check your connection and try again.");
+    if (!r.ok) return err("code", r.error === "expired" ? "This code has expired. Tap Resend code." : r.error === "too_many" ? "Too many attempts. Tap Resend code for a new one." : "That code isn't right. Check your email and try again.");
+  } else if (v !== flow.code) return err("code", "That code isn't right. Check your email and try again.");
+  flow.verified = true; flow.code = null;
+  const s = stepEl("pass");
+  s.querySelector(".a-pass-title").innerHTML = flow.mode === "reset" ? "New password<em>.</em>" : "Create a password<em>.</em>";
+  s.querySelector(".a-pass-btn").textContent = flow.mode === "reset" ? "Save password" : "Create account";
+  s.pass.value = s.pass2.value = ""; checkRules(); showStep("pass");
+});
+const RULES = {len: p => p.length >= 8, num: p => /\d/.test(p), let: p => /[a-z]/i.test(p)};
+function checkRules(){ const p = stepEl("pass").pass.value; stepEl("pass").querySelectorAll(".rules li").forEach(li => li.classList.toggle("ok", RULES[li.dataset.r](p))); }
+stepEl("pass").pass.addEventListener("input", checkRules);
+stepEl("pass").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target;
+  if (!flow.verified) return showStep(flow.mode === "reset" ? "forgot" : "up");
+  if (!Object.values(RULES).every(r => r(f.pass.value))) return err("pass", "Use at least 8 characters with a letter and a number.");
+  if (f.pass.value !== f.pass2.value) return err("pass", "The passwords don't match.");
+  busy(f, true, "Saving…");
+  const {salt, hash} = await hashPassword(f.pass.value);
+  const all = accounts(), isNew = flow.mode === "up";
+  all[flow.email] = {...(all[flow.email] || {created: Date.now()}), name: flow.name, salt, hash};
+  store.set("blushAccounts", all); store.set("blushSession", flow.email);
+  busy(f, false); f.pass.value = f.pass2.value = ""; flow.verified = false;
+  const u = getUser(); refreshUser(); finishWelcome();
+  if (isNew) mailWelcome(u); else toast("Password updated. You're signed in.");
+});
+
+(function(){
+  let seen = false; try { seen = sessionStorage.getItem("blushWelcome") === "1"; } catch(e) {}
+  if (seen || location.hash){ W.hidden = true; W.classList.add("gone"); return; }
+  document.body.style.overflow = "hidden";
+  const imgs = W.querySelectorAll(".w-slides img"), dots = W.querySelectorAll(".w-dots i");
+  let i = 0;
+  wTimer = setInterval(() => { imgs[i].classList.remove("on"); dots[i].classList.remove("on"); i = (i+1) % imgs.length; imgs[i].classList.add("on"); dots[i].classList.add("on"); }, 3000);
+  $("#wGo").addEventListener("click", () => { clearInterval(wTimer); finishWelcome(); });
+  setTimeout(() => $("#wGo").focus(), 100);
+})();
+
+// ===== delivery helpers =====
+const STATE_ZONE = {};
+Object.entries(DELIVERY.states).forEach(([z, list]) => list.forEach(st => STATE_ZONE[st] = z));
+const ALL_STATES = Object.keys(STATE_ZONE).sort((a,b) => a.localeCompare(b));
+$("#zoneTable").innerHTML = Object.entries(DELIVERY.zones).map(([k,z]) =>
+  `<div><b>${z.label}</b><span>${k==="lagos" ? "Same-day express "+money(DELIVERY.express)+" · free pickup in Lekki" : DELIVERY.states[k].join(", ")}</span><em>${money(z.fee)}<br><small>${z.days[0]}–${z.days[1]} days</small></em></div>`).join("");
+$("#coState").innerHTML = `<option value="">Choose state</option>` + ALL_STATES.map(st => `<option>${st}</option>`).join("");
+function shipOptions(state){
+  const zk = STATE_ZONE[state]; if (!zk) return [];
+  const z = DELIVERY.zones[zk];
+  const std = {id:"std", name:"Standard", fee:z.fee, eta:`${z.days[0]}–${z.days[1]} days`, days:z.days};
+  if (zk !== "lagos") return [std];
+  return [std, {id:"exp", name:"Express", fee:DELIVERY.express, eta:"Same day", days:[0,0]}, {id:"pick", name:"Pickup", fee:0, eta:"Lekki · ready in 24h", days:[1,1]}];
+}
+const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"transfer", name:"Bank transfer", sub:"Pay to our account"},{id:"pod", name:"Pay on delivery", sub:"Lagos only"}];
+const fmtDay = d => d.toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"});
+const addDays = (n, from) => { const d = new Date(from || Date.now()); d.setDate(d.getDate()+n); return d; };
+const etaText = (days, from) => days[1] === 0 ? "Today" : days[0] === days[1] ? fmtDay(addDays(days[0], from)) : `${fmtDay(addDays(days[0], from))} – ${fmtDay(addDays(days[1], from))}`;
+const thumbOf = l => { const p = byId(l.id); return p ? `img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}` : ""; };
+
+// ===== checkout =====
+const co = {ship:"std", pay:"card"};
+const subtotal = () => bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0);
+function openCheckout(){
+  if (!bag.length) return;
+  const u = getUser(), a = store.get("blushAddr", {});
+  if (!$("#coName").value) $("#coName").value = a.name || (u ? u.name : "");
+  if (u) $("#coEmail").value = u.email; else if (!$("#coEmail").value) $("#coEmail").value = a.email || "";
+  if (!$("#coPhone").value) $("#coPhone").value = a.phone || "";
+  if (!$("#coState").value && a.state) $("#coState").value = a.state;
+  if (!$("#coCity").value) $("#coCity").value = a.city || "";
+  if (!$("#coAddr").value) $("#coAddr").value = a.address || "";
+  $("#coErr").textContent = "";
+  document.querySelectorAll("#checkoutPanel .field.err").forEach(f => f.classList.remove("err"));
+  renderCheckout(); open("#checkoutPanel");
+}
+function renderCheckout(){
+  const state = $("#coState").value, opts = shipOptions(state), lagos = STATE_ZONE[state] === "lagos";
+  if (!opts.find(o => o.id === co.ship)) co.ship = "std";
+  if (co.pay === "pod" && !lagos) co.pay = "card";
+  $("#coShip").innerHTML = opts.length
+    ? opts.map(o => `<button type="button" class="optc" aria-pressed="${o.id===co.ship}" data-ship="${o.id}"><b>${o.name}</b><small>${o.eta}</small><em>${o.fee ? money(o.fee) : "Free"}</em></button>`).join("")
+    : `<p class="co-hint">Choose your state to see delivery options and fees.</p>`;
+  $("#coPay").innerHTML = PAYS.map(p => `<button type="button" class="optc" aria-pressed="${p.id===co.pay}" data-pay="${p.id}" ${p.id==="pod" && !lagos ? "disabled" : ""}><b>${p.name}</b><small>${p.sub}</small></button>`).join("");
+  $("#coPayNote").textContent = co.pay === "transfer" ? "You'll get our account details after you place the order."
+    : co.pay === "pod" ? "Pay the rider by cash or transfer when your order arrives."
+    : state && !lagos ? "Pay on delivery is available in Lagos only." : "";
+  $("#coAddrWrap").hidden = co.ship === "pick";
+  $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${optLine(l)} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
+  const ship = opts.find(o => o.id === co.ship), fee = ship ? ship.fee : 0, total = subtotal() + fee;
+  $("#coSub").textContent = money(subtotal());
+  $("#coFee").textContent = ship ? (fee ? money(fee) : "Free") : "Choose state";
+  $("#coTotal").textContent = money(total);
+  $("#coPlace").textContent = co.pay === "pod" ? `Place order · ${money(total)}` : `Pay ${money(total)}`;
+}
+$("#coState").addEventListener("change", renderCheckout);
+$("#coGift").addEventListener("change", () => { $("#coNoteWrap").hidden = !$("#coGift").checked; if ($("#coGift").checked) setTimeout(() => $("#coNote").focus(), 50); });
+$("#coNote").addEventListener("input", () => { $("#coNoteCount").textContent = $("#coNote").value.length + " / 200"; });
+$("#coShip").addEventListener("click", e => { const b = e.target.closest("[data-ship]"); if (b){ co.ship = b.dataset.ship; renderCheckout(); }});
+$("#coPay").addEventListener("click", e => { const b = e.target.closest("[data-pay]"); if (b && !b.disabled){ co.pay = b.dataset.pay; renderCheckout(); }});
+$("#coBack").addEventListener("click", () => open("#drawer"));
+document.querySelectorAll("#checkoutPanel input, #checkoutPanel select").forEach(el => el.addEventListener("input", () => {
+  const fd = el.closest(".field"); if (fd) fd.classList.remove("err");
+  if (!document.querySelector("#checkoutPanel .field.err")) $("#coErr").textContent = "";
+}));
+function coDetails(){
+  const state = $("#coState").value, ship = shipOptions(state).find(o => o.id === co.ship);
+  return {note: $("#coGift").checked ? $("#coNote").value.trim() : "", name:$("#coName").value.trim(), phone:$("#coPhone").value.trim(), email:$("#coEmail").value.trim(), state, city:$("#coCity").value.trim(), address:$("#coAddr").value.trim(), ship};
+}
+function coValidate(d){
+  const bad = [];
+  if (d.name.length < 2) bad.push("name");
+  if (d.phone.replace(/\D/g,"").length < 10) bad.push("phone");
+  if (!d.state) bad.push("state");
+  if (co.ship !== "pick" && d.address.length < 5) bad.push("address");
+  if (d.email && !validEmail(normEmail(d.email))) bad.push("email");
+  document.querySelectorAll("#checkoutPanel .field[data-f]").forEach(f => f.classList.toggle("err", bad.includes(f.dataset.f)));
+  $("#coErr").textContent = bad.length ? "Please fill in the highlighted details." : "";
+  if (bad.length) document.querySelector(`#checkoutPanel .field[data-f="${bad[0]}"]`).querySelector("input,select").focus();
+  return !bad.length;
+}
+$("#coPlace").addEventListener("click", () => {
+  const d = coDetails(); if (!coValidate(d)) return;
+  const btn = $("#coPlace"); btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Processing…`;
+  setTimeout(() => {
+    const sub = subtotal(), fee = d.ship.fee;
+    const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
+      name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, note:d.note, owner:(getUser()||{}).email || null};
+    const orders = store.get("blushOrders", []); orders.unshift(order); store.set("blushOrders", orders);
+    store.set("blushAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
+    bag = []; save(); renderBag();
+    $("#coGift").checked = false; $("#coNote").value = ""; $("#coNoteWrap").hidden = true; $("#coNoteCount").textContent = "0 / 200";
+    btn.disabled = false; renderDone(order); renderProfile(); open("#donePanel");
+    const to = (getUser() || {}).email || d.email;
+    if (to) setTimeout(() => mailOrder(order, to), 900);
+  }, 1400);
+});
+$("#coWa").addEventListener("click", () => {
+  const d = coDetails();
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${optLine(l)} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const fee = d.ship ? d.ship.fee : 0;
+  openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}${d.note ? "\n\nGift note: " + d.note : ""}`);
+});
+function renderDone(o){
+  const pairs = o.items.reduce((a,l)=>a+l.qty,0);
+  const payBox = o.pay === "transfer"
+    ? `<div class="pay-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to <b>${DELIVERY.bank.name}</b> · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with <b>${o.no}</b> as the reference. We ship as soon as it lands.</div>`
+    : o.pay === "pod" ? `<div class="pay-box">Pay the rider ${money(o.total)} by cash or transfer when your order arrives.</div>`
+    : `<div class="pay-box">Payment received. A receipt is on its way to your email.</div>`;
+  $("#doneBody").innerHTML = `
+    <div class="done-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5 9-10"/></svg></div>
+    <h4>Thank you, ${esc(o.name.split(" ")[0])}</h4>
+    <p>Your order is confirmed and being packed with love.</p>
+    <div class="receipt">
+      <div class="r"><span>Order number</span><b>#${o.no}</b></div>
+      <div class="r"><span>${o.ship === "Pickup" ? "Ready for pickup" : "Estimated delivery"}</span><b>${etaText(o.days, o.at)}</b></div>
+      <div class="r"><span>Deliver to</span><b>${o.ship === "Pickup" ? "Lekki studio" : esc([o.city, o.state].filter(Boolean).join(", "))}</b></div>
+      <div class="r"><span>Total (${pairs} ${pairs>1?"items":"item"})</span><b>${money(o.total)}</b></div>
+      <div class="thumbs">${o.items.map(l => `<img src="${thumbOf(l)}" alt="">`).join("")}</div>
+    </div>${o.note ? `<div class="note-card"><small>Gift note</small><p>“${esc(o.note)}”</p></div>` : ""}${payBox}`;
+}
+$("#doneTrack").addEventListener("click", () => { renderProfile(); open("#profilePanel"); });
+
+// ===== profile =====
+function orderStatus(o){
+  const age = (Date.now() - o.at) / 864e5;
+  if (age >= Math.max(o.days[1], 0.5)) return `<span class="pill ok">Delivered</span>`;
+  if (age >= 0.25) return `<span class="pill go">On the way</span>`;
+  return `<span class="pill">Processing</span>`;
+}
+function renderProfile(){
+  const u = getUser(), orders = store.get("blushOrders", []).filter(o => (o.owner || null) === (u ? u.email : null)), a = store.get("blushAddr", null);
+  const unread = myMail().filter(m => !m.read).length;
+  const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
+  $("#profBody").innerHTML = `
+    <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "S"}</div>
+      <h4>${u ? esc(u.name) : "Guest"}</h4><small>${u ? esc(u.email) : "Sign in to save your details"}</small></div>
+    <div class="stats"><div><b>${orders.length}</b><span>Orders</span></div><div><b>${pairs}</b><span>Items</span></div><div><b>${Math.floor(spent/1000)}</b><span>Points</span></div></div>
+    <h4 class="co-h">My orders</h4>
+    ${orders.length ? orders.map(o => `<div class="order"><div class="r"><b>#${o.no}</b>${orderStatus(o)}</div>
+      <div class="r"><small>${new Date(o.at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})} · ${o.ship} · ${esc(o.state)}</small><b>${money(o.total)}</b></div>
+      <div class="thumbs">${o.items.map(l => `<img src="${thumbOf(l)}" alt="">`).join("")}</div></div>`).join("")
+      : `<p class="co-note">No orders yet. Your orders will show here.</p>`}
+    <h4 class="co-h">Settings</h4>
+    ${u ? `<button class="p-row" data-act="inbox"><span>Inbox${unread ? `<span class="badge-n">${unread}</span>` : ""}<small>Codes, welcome and order emails</small></span></button>` : ""}
+    <button class="p-row" data-act="addr"><span>Saved address<small>${a ? esc([a.address, a.city, a.state].filter(Boolean).join(", ")) : "None yet, added at checkout"}</small></span></button>
+    <button class="p-row js-req"><span>Request a product<small>We'll find the makeup you're looking for</small></span></button>
+    <a class="p-row" href="${waLink(`Hi ${SHOP.name}! I need help with my order.`)}" data-wa="Hi ${SHOP.name}! I need help with my order."><span>Help &amp; support<small>Chat with us on WhatsApp</small></span></a>
+    ${u ? `<button class="p-row" data-act="out"><span>Sign out</span></button>`
+        : `<button class="p-row" data-act="in"><span>Sign in<small>Or create an account</small></span></button>`}`;
+}
+$("#profBody").addEventListener("click", e => {
+  const w = e.target.closest("[data-wa]"); if (w){ e.preventDefault(); openWA(w.dataset.wa); return; }
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  if (b.dataset.act === "out"){ store.del("blushSession"); refreshUser(); renderProfile(); toast("Signed out"); }
+  if (b.dataset.act === "inbox"){ renderInbox(); open("#inboxPanel"); }
+  if (b.dataset.act === "in"){ close(true); showAuth("in"); }
+  if (b.dataset.act === "addr"){ if (bag.length) openCheckout(); else toast("Your address is saved when you check out"); }
+});
+const openProfile = () => { renderProfile(); open("#profilePanel"); };
+// guests can still create an account from here; checkout never requires one
+$("#inboxBack").addEventListener("click", openProfile);
+$("#acctBtn").addEventListener("click", openProfile);
+$("#tbMe").addEventListener("click", openProfile);
+
+// ===== request a pair =====
+document.addEventListener("click", e => { if (e.target.closest(".js-req")){ e.preventDefault(); open("#requestPanel"); setTimeout(() => $("#reqWhat").focus(), 80); }});
+$("#reqSend").addEventListener("click", () => {
+  const what = $("#reqWhat").value.trim();
+  if (what.length < 4){ $("#reqWhat").closest(".field").classList.add("err"); $("#reqWhat").focus(); return; }
+  const u = getUser(), when = $("#reqWhen").value.trim();
+  openWA(`Hi ${SHOP.name}! I'd like to request a product:\n\n${what}\n\nShade: ${$("#reqSize").value || "Not sure"}\nBudget: ${$("#reqBudget").value}${when ? "\nNeeded by: "+when : ""}${u ? "\n\nName: "+u.name : ""}`);
+  close(); toast("Request ready in WhatsApp");
+});
+$("#reqWhat").addEventListener("input", () => $("#reqWhat").closest(".field").classList.remove("err"));
+
+// nav border + reveal on scroll
+addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 10), {passive:true});
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold:.12});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+<script>
+// Let Blush open offline
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
