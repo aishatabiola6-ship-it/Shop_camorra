@@ -1701,7 +1701,7 @@ function renderProfile(){
   const unread = myMail().filter(m => !m.read).length;
   const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
   $("#profBody").innerHTML = `
-    <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "S"}</div>
+    <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "B"}</div>
       <h4>${u ? esc(u.name) : "Guest"}</h4><small>${u ? esc(u.email) : "Sign in to save your details"}</small></div>
     <div class="stats"><div><b>${orders.length}</b><span>Orders</span></div><div><b>${pairs}</b><span>Items</span></div><div><b>${Math.floor(spent/1000)}</b><span>Points</span></div></div>
     <h4 class="co-h">My orders</h4>
