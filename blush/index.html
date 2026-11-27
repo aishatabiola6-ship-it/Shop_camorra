@@ -1009,7 +1009,7 @@ const PRODUCTS = [
 ];
 // Products come from products.js.
 // The category (Lips, Cheeks…) becomes the tab and the brand becomes the filter chip.
-const BRANDS = ["Charlotte Tilbury","Huda Beauty","Rare Beauty","Too Faced","Secret of Pharaoh","Love Rain","Dior","YSL","KIKO","TIRTIR","Laneige","Joocyee","MAANGE","Morphe","SHEGLAM","Benefit","Maybelline","Gucci","Tillnana","Ablfeler","Juju Dream"];
+const BRANDS = ["Charlotte Tilbury","Huda Beauty","Rare Beauty","Too Faced","Secret of Pharaoh","Love Rain","Dior","YSL","KIKO","TIRTIR","Laneige","Joocyee","MAANGE","Morphe","SHEGLAM","Benefit","Maybelline","Gucci","Tillnana","Ablfeler","Juju Dream","Fenty Beauty","Anastasia Beverly Hills","Vee Beauty"];
 const brandOf = p => p.brand || BRANDS.find(b => p.name.startsWith(b)) || p.name.split(" ")[0];
 PRODUCTS.length = 0;
 BEAUTY.forEach(p => PRODUCTS.push(Object.assign({}, p, {group: p.cat, cat: brandOf(p)})));
