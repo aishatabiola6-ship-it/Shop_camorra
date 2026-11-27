@@ -397,6 +397,7 @@
   /* EMAIL NOTIFICATION + VIEWER */
   .notif{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));z-index:130;width:min(400px,calc(100% - 24px));transform:translate(-50%,-140%);transition:transform .45s cubic-bezier(.2,.8,.2,1);background:rgba(255,250,243,.96);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 18px 40px -12px rgba(0,0,0,.35);padding:12px 14px;display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;color:var(--ink)}
   .notif.on{transform:translate(-50%,0)}
+  .notif:not(.on){visibility:hidden;transition:transform .45s,visibility 0s .45s}
   .notif .ic{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:1.3rem}
   .notif small{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
   .notif b{display:block;font-size:.9rem;line-height:1.25}
@@ -603,7 +604,7 @@
   .look-pic{position:relative;aspect-ratio:4/5;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:#fff}
   .look-pic img{width:100%;height:100%;object-fit:cover}
   .look-pic.one{display:block}
-  .look-pic span{position:absolute;left:14px;top:14px;background:#fff;color:var(--wine);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.5em .9em;border-radius:999px}
+  .look-pic span{position:absolute;left:14px;top:14px;background:#fff;color:var(--wine);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.5em .9em;border-radius:999px;box-shadow:0 4px 14px -4px rgba(140,29,63,.45)}
   .look-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
   .look-body h3{font-size:1.7rem}
   .look-body p{color:var(--muted);font-size:.92rem}
@@ -611,6 +612,12 @@
   .look-items button{display:flex;align-items:center;gap:8px;background:var(--cream);border-radius:999px;padding:4px 12px 4px 4px;font-size:.78rem;text-align:left;transition:background .2s}
   .look-items button:hover{background:#fbe3e7}
   .look-items img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+  .look-ask{background:var(--wine);color:#fff;padding:36px 30px;justify-content:center;gap:16px}
+  .look-ask .kicker{background:rgba(255,255,255,.16);color:#fff;align-self:flex-start}
+  .look-ask h3{font-size:2.3rem;line-height:1.05}
+  .look-ask p{color:#f5d3da}
+  .look-ask .btn{background:#fff;color:var(--wine);align-self:flex-start}
+  .look-ask .btn:hover{background:#fbe3e7}
   .look-total{margin-top:auto;font-size:.85rem;color:var(--muted)}
   .look-total b{color:var(--ink)}
   .shop-head{flex-direction:column;align-items:center;text-align:center}
@@ -694,6 +701,9 @@
       <div class="w-slides">
         <img src="img/look-soft-glam.jpg" alt="Model wearing a soft glam look with a glossy nude lip" class="on">
         <img src="img/look-night-out.jpg" alt="Model wearing a bold smoky eye and deep red lip">
+        <img src="img/look-bronze-sculpt.jpg" alt="Model wearing warm bronze eyes, a berry blush and a glossy brown lip">
+        <img src="img/look-copper-glam.jpg" alt="Model wearing copper shimmer eyes and a glossy pink lip">
+        <img src="img/look-everyday-glow.jpg" alt="Model wearing soft bronze eyes, a winged liner and a nude lip">
       </div>
       <img class="w-float f1" src="img/rare-soft-pinch.jpg" alt="">
       <img class="w-float f2" src="img/ct-heart-blush.jpg" alt="">
@@ -704,7 +714,7 @@
       <h2>Your glow, <em>delivered.</em></h2>
       <p>Glosses, blushes, lashes &amp; more from the brands you love, delivered across Nigeria.</p>
       <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
-      <div class="w-dots" id="wDots"><i class="on"></i><i></i></div>
+      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
     </div>
   </section>
   <section class="w-screen w-auth" id="wAuth" hidden>
@@ -800,7 +810,7 @@
 
   <section class="looks" id="looks">
     <div class="wrap">
-      <div class="sec-head center"><div><span class="kicker">Get the look</span><h2>Three looks, every product linked</h2><p>Tap any product to pick your shade and add it to your bag.</p></div></div>
+      <div class="sec-head center"><div><span class="kicker">Get the look</span><h2>Five looks, every product linked</h2><p>Tap any product to pick your shade and add it to your bag.</p></div></div>
       <div class="look-grid" id="lookGrid"></div>
     </div>
   </section>
@@ -808,7 +818,6 @@
   <section class="shop" id="shop">
     <div class="wrap">
       <div class="head shop-head">
-        <span class="kicker"><span id="statCount">58</span> products · <span id="statBrands">25</span> brands</span>
         <h2>Browse it all</h2>
         <div class="filter-stack">
           <div class="groups" id="groups" role="tablist" aria-label="Category"></div>
@@ -840,7 +849,7 @@
     <div class="wrap">
       <div><b>Only authentic</b><span>From trusted suppliers</span></div>
       <div><b>Sealed &amp; fresh</b><span>Checked before it ships</span></div>
-      <div><b>Pay on delivery</b><span>Available in Lagos</span></div>
+      <div><b>Secure checkout</b><span>Card or bank transfer</span></div>
       <div><b>All 36 states</b><span>Plus FCT, tracked</span></div>
     </div>
   </section>
@@ -853,7 +862,7 @@
         <p class="faq-more">Still stuck? <a href="#" class="js-wa">Message us on WhatsApp</a></p>
       </div>
       <div class="reveal">
-        <details open><summary>How do I order?</summary><p>Tap a product, choose your shade and add it to your bag. At checkout, pay by card or bank transfer, pay on delivery in Lagos, or send the order on WhatsApp.</p></details>
+        <details open><summary>How do I order?</summary><p>Tap a product, choose your shade and add it to your bag. At checkout, pay by card or bank transfer, or send the order on WhatsApp.</p></details>
         <details><summary>Are your products authentic?</summary><p>Yes. Everything we sell is 100% authentic, sourced from trusted suppliers and checked before it ships.</p></details>
         <details><summary>How do I find my foundation shade?</summary><p>Send us a selfie in natural daylight with no makeup on, plus any shade you already wear, and we'll match you before you order.</p></details>
         <details><summary>How much is delivery?</summary><p>We deliver to all 36 states and FCT. The fee depends on your state and is shown at checkout before you pay:</p><div class="zones" id="zoneTable"></div></details>
@@ -1081,8 +1090,6 @@ document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.na
 document.querySelectorAll(".js-ig").forEach(a => { a.href = SHOP.instagram; a.target = "_blank"; a.rel = "noopener"; });
 document.querySelectorAll(".js-tt").forEach(a => { a.href = SHOP.tiktok; a.target = "_blank"; a.rel = "noopener"; });
 $("#copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name}`;
-$("#statCount").textContent = PRODUCTS.length;
-$("#statBrands").textContent = new Set(PRODUCTS.map(p => p.cat)).size;
 
 
 // filters + grid
@@ -1278,8 +1285,12 @@ const LOOKS = [
    items:["vee-foundation","huda-easy-bake","rare-soft-pinch","tillnana-lash-book","huda-lip-stain","dior-lip-maximizer"]},
   {name:"Night out", tag:"Bold", photo:"look-night-out.jpg", text:"Full-coverage base, dramatic volume lashes, sharp brows and a deep berry lip.",
    items:["fenty-foundation","morphe-powder","ysl-lash-clash","loverain-lash-kit","benefit-brows","huda-lip-stain"]},
-  {name:"Everyday glow", tag:"Natural", text:"Laminated brows, lifted lashes, warm bronze and a juicy lip.",
-   items:["sheglam-brow-gel","maybelline-mascara","rare-bronzer-stick","dior-luminizer","laneige-lip-mask","ysl-loveshine"]},
+  {name:"Bronze sculpt", tag:"Sculpted", photo:"look-bronze-sculpt.jpg", text:"Warm bronze eyes, sharp contour, a berry flush and a glossy brown lip.",
+   items:["vee-foundation","rare-liquid-contour","huda-new-nude","huda-blush-filter","cluster-lash-kit","huda-lip-stain"]},
+  {name:"Copper glam", tag:"Shimmer", photo:"look-copper-glam.jpg", text:"Copper shimmer lids, fluttery lashes, a rosy cheek and a juicy pink gloss.",
+   items:["fenty-foundation","huda-easy-bake","dior-rosy-glow","tillnana-lash-book","pharaoh-brow-duo","joocyee-gloss"]},
+  {name:"Everyday glow", tag:"Natural", photo:"look-everyday-glow.jpg", text:"Soft bronze eyes, a sleek wing, warm glowing skin and a nude lip.",
+   items:["huda-new-nude","maybelline-mascara","sheglam-brow-gel","rare-bronzer-stick","dior-luminizer","ysl-loveshine"]},
 ];
 $("#lookGrid").innerHTML = LOOKS.map(l => {
   const ps = l.items.map(byId).filter(Boolean), total = ps.reduce((a,p) => a + p.price, 0);
@@ -1288,7 +1299,10 @@ $("#lookGrid").innerHTML = LOOKS.map(l => {
   return `<article class="look reveal">${pic}<span>${l.tag}</span></div><div class="look-body"><h3>${l.name}</h3><p>${l.text}</p>
     <div class="look-items">${ps.map(p => `<button type="button" data-id="${p.id}"><img src="img/thumb/${p.imgs[0]}" alt="">${p.name.replace(p.cat+" ","")}</button>`).join("")}</div>
     <p class="look-total">Full look: <b>${money(total)}</b></p></div></article>`;
-}).join("");
+}).join("") + `<article class="look look-ask reveal"><span class="kicker">Your look</span><h3>Want a look made for you?</h3>
+  <p>Send us a photo of a look you love, or tell us the occasion, and we'll put together the products for your skin tone.</p>
+  <button type="button" class="btn js-look-ask">Plan my look on WhatsApp</button></article>`;
+document.querySelector(".js-look-ask").addEventListener("click", () => openWA(`Hi ${SHOP.name}! Please help me put together a makeup look. Here's a photo / the occasion:`));
 $("#lookGrid").addEventListener("click", e => { const b = e.target.closest("[data-id]"); if (b) openModal(b.dataset.id); });
 $("#trend").addEventListener("click", e => { const c = e.target.closest(".t-card"); if (c) openModal(c.dataset.id); });
 let searchT;
@@ -1563,7 +1577,7 @@ function shipOptions(state){
   if (zk !== "lagos") return [std];
   return [std, {id:"exp", name:"Express", fee:DELIVERY.express, eta:"Same day", days:[0,0]}, {id:"pick", name:"Pickup", fee:0, eta:"Lekki · ready in 24h", days:[1,1]}];
 }
-const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"transfer", name:"Bank transfer", sub:"Pay to our account"},{id:"pod", name:"Pay on delivery", sub:"Lagos only"}];
+const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"transfer", name:"Bank transfer", sub:"Pay to our account"}];
 const fmtDay = d => d.toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"});
 const addDays = (n, from) => { const d = new Date(from || Date.now()); d.setDate(d.getDate()+n); return d; };
 const etaText = (days, from) => days[1] === 0 ? "Today" : days[0] === days[1] ? fmtDay(addDays(days[0], from)) : `${fmtDay(addDays(days[0], from))} – ${fmtDay(addDays(days[1], from))}`;
@@ -1595,7 +1609,7 @@ function renderCheckout(){
   $("#coPay").innerHTML = PAYS.map(p => `<button type="button" class="optc" aria-pressed="${p.id===co.pay}" data-pay="${p.id}" ${p.id==="pod" && !lagos ? "disabled" : ""}><b>${p.name}</b><small>${p.sub}</small></button>`).join("");
   $("#coPayNote").textContent = co.pay === "transfer" ? "You'll get our account details after you place the order."
     : co.pay === "pod" ? "Pay the rider by cash or transfer when your order arrives."
-    : state && !lagos ? "Pay on delivery is available in Lagos only." : "";
+    : "";
   $("#coAddrWrap").hidden = co.ship === "pick";
   $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${optLine(l)} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
   const ship = opts.find(o => o.id === co.ship), fee = ship ? ship.fee : 0, total = subtotal() + fee;
@@ -1635,7 +1649,7 @@ $("#coPlace").addEventListener("click", () => {
   const btn = $("#coPlace"); btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Processing…`;
   setTimeout(() => {
     const sub = subtotal(), fee = d.ship.fee;
-    const order = {no:"STR-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
+    const order = {no:"BLS-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
       name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, note:d.note, owner:(getUser()||{}).email || null};
     const orders = store.get("blushOrders", []); orders.unshift(order); store.set("blushOrders", orders);
     store.set("blushAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
@@ -1684,7 +1698,7 @@ function renderProfile(){
   const unread = myMail().filter(m => !m.read).length;
   const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
   $("#profBody").innerHTML = `
-    <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "S"}</div>
+    <div class="p-top"><div class="avatar">${u ? esc(u.name[0].toUpperCase()) : "B"}</div>
       <h4>${u ? esc(u.name) : "Guest"}</h4><small>${u ? esc(u.email) : "Sign in to save your details"}</small></div>
     <div class="stats"><div><b>${orders.length}</b><span>Orders</span></div><div><b>${pairs}</b><span>Items</span></div><div><b>${Math.floor(spent/1000)}</b><span>Points</span></div></div>
     <h4 class="co-h">My orders</h4>
