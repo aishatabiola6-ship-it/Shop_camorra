@@ -21,7 +21,7 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   const fonts = /fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if (url.origin !== location.origin && !fonts) return;    // leave other sites (WhatsApp, Apps Script) alone
-  if (url.pathname.includes("/makeup/")) return;           // the makeup site has its own offline support
+  if (url.pathname.includes("/blush/")) return;           // Blush (blush/) has its own offline support
 
   if (req.mode === "navigate") {                           // the page itself: fresh first, saved copy offline
     e.respondWith(fetch(req)

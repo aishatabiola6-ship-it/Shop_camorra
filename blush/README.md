@@ -1,8 +1,8 @@
-# Blush (working name)
+# Blush
 
 A makeup store, separate from Strut: lips, cheeks, eyes, face, sets and brushes from Dior, YSL, Huda Beauty, Charlotte Tilbury, Rare Beauty and more. Customers browse as a guest or sign in, pick a shade, and check out with delivery fees by state. Payment is simulated (no money is charged), and every order can also be sent on WhatsApp.
 
-Everything for this site lives in this `makeup/` folder, so it can move to its own repository or domain as it is.
+Everything for this site lives in this `blush/` folder, so it can move to its own repository or domain as it is.
 
 Plain HTML, no build step. Open `index.html` in a browser to preview.
 

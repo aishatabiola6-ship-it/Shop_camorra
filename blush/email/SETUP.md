@@ -21,7 +21,7 @@ It works the same way as Preshy Emporium: a small Google Apps Script runs under 
    - Execute as: **Me (aishatabiola6@gmail.com)**
    - Who has access: **Anyone**
    - Click **Deploy**, then copy the **Web app URL**. It looks like `https://script.google.com/macros/s/AKfy.../exec`.
-6. Send that URL to Claude, or paste it into `makeup/index.html` at the top of the script:
+6. Send that URL to Claude, or paste it into `blush/index.html` at the top of the script:
 
    ```js
    const EMAIL = {
