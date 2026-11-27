@@ -659,7 +659,7 @@
       <div>
         <p class="eyebrow">New season · Just landed</p>
         <h1>Step in like you <em>own the room.</em></h1>
-        <p class="lead">Statement heels, mesh ballet flats, cosy boots and fresh sneakers, picked one pair at a time. Choose your size, check out in a few taps, and we'll deliver anywhere in Nigeria.</p>
+        <p class="lead">Statement heels, mesh ballet flats, cosy boots, fresh sneakers and beauty favourites, picked one at a time. Choose your size, check out in a few taps, and we'll deliver anywhere in Nigeria.</p>
         <div class="hero-ctas">
           <a href="#shop" class="btn btn-dark">Shop the edit</a>
           <a href="#" class="btn btn-line js-wa">Chat with us</a>
@@ -812,11 +812,13 @@
     <div class="m-price" id="mPrice"></div>
     <p class="m-desc" id="mDesc"></p>
     <div id="mColorsWrap">
-      <div class="opt-label">Colour <span id="mColorName"></span></div>
+      <div class="opt-label"><span id="mColorLabel">Colour</span> <span id="mColorName"></span></div>
       <div class="opts" id="mColors"></div>
     </div>
-    <div class="opt-label">Size (EU) <span>Need help? Ask us</span></div>
-    <div class="opts" id="mSizes"></div>
+    <div id="mSizesWrap">
+      <div class="opt-label">Size (EU) <span>Need help? Ask us</span></div>
+      <div class="opts" id="mSizes"></div>
+    </div>
     <div class="m-actions">
       <button class="btn btn-dark" id="mAdd">Add to bag</button>
       <button class="btn btn-line" id="mBuy">Buy now</button>
@@ -1208,8 +1210,47 @@ const PRODUCTS = [
   {id:"plum-runner", group:"Sneakers", name:"Blush & Plum Runner", cat:"Runners", price:78000,
    imgs:["plum-runner.jpg"], colors:[["Blush / plum","#f2b2c6"]],
    desc:"Retro mesh runner in blush with plum overlays on a cushioned, chunky sole."},
+
+  /* ---- Beauty (no size: shoppers pick a shade) ---- */
+  {id:"dior-lip-maximizer", group:"Beauty", name:"Dior Addict Lip Maximizer", cat:"Lips", price:65000, badge:"Bestseller",
+   imgs:["dior-maximizer-red.jpg","dior-maximizer-rose.jpg"], colors:[["Cherry red","#b0303a",0],["Rosewood shimmer","#c98a7e",1]],
+   desc:"The cult plumping gloss: instant volume, deep hydration and a glassy shine. 6 ml."},
+  {id:"dior-addict-lipstick", group:"Beauty", name:"Dior Addict Refillable Lipstick", cat:"Lips", price:70000, badge:"5 cases",
+   imgs:["dior-addict-set.jpg"], colors:[["Burgundy oblique","#7a1f30"],["White oblique","#e9e7e4"],["Blush pink","#e6b6ae"],["Red cannage","#a01e33"],["Black","#121212"]],
+   desc:"Shine lipstick in a refillable couture case. Choose your case; tell us your lip shade at checkout or on WhatsApp."},
+  {id:"huda-lip-stain", group:"Beauty", name:"Huda Beauty Lip Contour Stain", cat:"Lips", price:28000, badge:"8 shades",
+   imgs:["huda-lip-stain.jpg"], colors:[["Pink","#d97a98"],["Berry","#7a2236"],["Rose","#c8687e"],["Cocoa","#6b3d2a"],["Chestnut","#5a2e22"],["Red","#9b1626"],["Caramel","#9a6038"],["Espresso","#3a2018"]],
+   desc:"A long-wear lip liner stain that sharpens and defines without feathering."},
+  {id:"ysl-make-me-blush", group:"Beauty", name:"YSL Make Me Blush", cat:"Cheeks", price:72000, badge:"New",
+   imgs:["ysl-blush-box.jpg","ysl-blush-lipstick.jpg","ysl-blush-shimmer.jpg"], colors:[["Nude rose","#d08f8a",0],["Dusty mauve","#b0707f",1],["Shimmer rose","#b8505a",2]],
+   desc:"Silky blurring blush in the quilted gold compact. Buildable from soft flush to bold. 6 g."},
+  {id:"ct-heart-blush", group:"Beauty", name:"Charlotte Tilbury Heart Blush Duo", cat:"Cheeks", price:85000, badge:"Limited", badgeWine:true,
+   imgs:["ct-heart-blush.jpg"], colors:[["Airbrush & Love Blush","#de6f8f"]],
+   desc:"Two blushes in a jewelled heart compact: a soft pink base and a deeper rose to build a lit-from-within flush."},
+  {id:"kiko-blush", group:"Beauty", name:"KIKO Unlimited Blush", cat:"Cheeks", price:18000,
+   imgs:["kiko-blush.jpg"], colors:[["Rose","#c46f6f"]],
+   desc:"Long-lasting powder blush with a soft matte finish and a mirror compact. 6 g."},
+  {id:"ysl-bronzer", group:"Beauty", name:"YSL Quilted Bronzer", cat:"Cheeks", price:75000,
+   imgs:["ysl-bronzer.jpg"], colors:[["Warm bronze","#9a6542"]],
+   desc:"A warm, natural bronze in the quilted leather-look compact with a gold YSL emblem."},
+  {id:"huda-new-nude", group:"Beauty", name:"Huda Beauty New Nude Palette", cat:"Eyes", price:75000, badge:"Bestseller",
+   imgs:["huda-new-nude.jpg","huda-nude-flatlay.jpg"], colors:[["New Nude","#d9a7a0"]],
+   desc:"18 nude, rose and plum shades in mattes, shimmers and chunky glitters. Day to night in one palette."},
+  {id:"huda-easy-blur", group:"Beauty", name:"Huda Beauty Easy Blur Foundation", cat:"Face", price:55000,
+   imgs:["huda-easy-blur.jpg"], colors:[["Tell us your shade","#d9b488"]],
+   desc:"Natural airbrush foundation with a soft-focus finish. 30 ml. Send us your shade or a selfie and we'll match you."},
+  {id:"huda-fauxfilter", group:"Beauty", name:"Huda Beauty #FauxFilter Foundation", cat:"Face", price:60000,
+   imgs:["huda-fauxfilter.jpg"], colors:[["Tell us your shade","#c99a74"]],
+   desc:"Luminous matte, full-coverage liquid foundation that lasts all day. 35 ml. We'll help you find your shade."},
+  {id:"tirtir-trio", group:"Beauty", name:"TIRTIR Mask Fit Red Trio", cat:"Face", price:78000, badge:"Set",
+   imgs:["tirtir-trio.jpg"], colors:[["21N Ivory","#ead2b4"],["Tell us your shade","#d3ab84"]],
+   desc:"The Korean favourite: Mask Fit Red Cushion, Red Foundation and Glide & Hide Blurring Concealer."},
+  {id:"huda-glam-bundle", group:"Beauty", name:"Huda Beauty Full Glam Bundle", cat:"Sets", price:280000, badge:"Statement",
+   imgs:["huda-haul.jpg"], colors:[["Tell us your shade","#c99a74"]],
+   desc:"Everything for a full face: Easy Blur foundation, #FauxFilter concealer and colour corrector, Easy Bake powder, Easy Bake and Snatch, Easy Bake setting spray, Blush Filter and Lip Blush."},
 ];
 PRODUCTS.forEach(p => p.group = p.group || "Heels");
+const noSize = p => p && p.group === "Beauty";   // makeup: shade only, no shoe size
 
 /* ===== App ===== */
 const $ = s => document.querySelector(s);
@@ -1226,6 +1267,7 @@ function openWA(text){
   document.body.appendChild(link); link.click(); link.remove();
 }
 const byId = id => PRODUCTS.find(p => p.id === id);
+const optLine = l => `${l.color}${l.size ? ` · EU ${l.size}` : ""}`;
 
 document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); a.addEventListener("click", e => { e.preventDefault(); openWA(`Hi ${SHOP.name}! I'd like to ask about your shoes.`); }); });
 document.querySelectorAll(".js-ig").forEach(a => { a.href = SHOP.instagram; a.target = "_blank"; a.rel = "noopener"; });
@@ -1234,11 +1276,11 @@ $("#copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name}`;
 $("#statCount").textContent = PRODUCTS.length;
 
 // marquee
-const words = ["Crystal slingbacks","Mesh ballet flats","Bridal heels","Everyday slides","Velvet Mary Janes","Fur-lined boots","Fresh sneakers","Delivered to your door"];
+const words = ["Crystal slingbacks","Mesh ballet flats","Bridal heels","Everyday slides","Velvet Mary Janes","Fur-lined boots","Fresh sneakers","Glosses & blushes","Delivered to your door"];
 $("#marquee").innerHTML = [...words,...words,...words,...words].map(w=>`<span>${w}</span>`).join("");
 
 // filters + grid
-const ORDER = ["Heels","Flats","Boots","Sneakers"];
+const ORDER = ["Heels","Flats","Boots","Sneakers","Beauty"];
 const groups = ["All", ...new Set(PRODUCTS.map(p => p.group))].sort((a,b) => (a==="All"?-1:ORDER.indexOf(a)) - (b==="All"?-1:ORDER.indexOf(b)));
 let group = "All", current = "All", query = "";
 function renderGroups(){
@@ -1262,7 +1304,7 @@ function renderGrid(){
   const q = query.trim().toLowerCase();
   const list = PRODUCTS.filter(p => (group === "All" || p.group === group) && (current === "All" || p.cat === current)
     && (!q || (p.name+" "+p.cat+" "+p.group+" "+p.colors.map(c=>c[0]).join(" ")).toLowerCase().includes(q)));
-  if (!list.length){ $("#grid").innerHTML = `<p class="empty">No shoes match "${q.replace(/[<>&"]/g,"")}". Try another word, or <button class="js-req" style="text-decoration:underline">request a pair</button> and we'll find it.</p>`; return; }
+  if (!list.length){ $("#grid").innerHTML = `<p class="empty">Nothing matches "${q.replace(/[<>&"]/g,"")}". Try another word, or <button class="js-req" style="text-decoration:underline">request a pair</button> and we'll find it.</p>`; return; }
   $("#grid").innerHTML = list.map((p,i) => `
     <article class="card" tabindex="0" data-id="${p.id}" style="animation-delay:${i*60}ms" aria-label="${p.name}, ${money(p.price)}">
       <div class="card-img">
@@ -1297,6 +1339,8 @@ function openModal(id){
   $("#mColorsWrap").style.display = "";
   $("#mColors").innerHTML = p.colors.map(c=>`<button class="opt color" aria-pressed="${sel.color===c[0]}" data-color="${c[0]}"><i style="background:${c[1]}"></i>${c[0]}</button>`).join("");
   $("#mColorName").textContent = sel.color || "Choose one";
+  $("#mColorLabel").textContent = noSize(p) ? "Shade" : "Colour";
+  $("#mSizesWrap").style.display = noSize(p) ? "none" : "";
   $("#mSizes").innerHTML = SIZES.map(s=>`<button class="opt" aria-pressed="false" data-size="${s}">${s}</button>`).join("");
   note("");
   open("#modal");
@@ -1321,8 +1365,9 @@ $("#mSizes").addEventListener("click", e => {
 });
 function note(t, warn){ const n = $("#mNote"); n.textContent = t; n.classList.toggle("warn", !!warn); }
 function ready(){
-  if (!sel.color){ note("Please choose a colour.", true); return false; }
-  if (!sel.size){ note("Please choose your size.", true); return false; }
+  const beauty = noSize(byId(sel.id));
+  if (!sel.color){ note(beauty ? "Please choose a shade." : "Please choose a colour.", true); return false; }
+  if (!sel.size && !beauty){ note("Please choose your size.", true); return false; }
   return true;
 }
 $("#mAdd").addEventListener("click", () => {
@@ -1357,7 +1402,7 @@ function renderBag(bump){
   $("#dItems").innerHTML = bag.map((l,i) => { const p = byId(l.id); return `
     <div class="line">
       <img src="img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}" alt="">
-      <div><h4>${p.name}</h4><small>${l.color} · EU ${l.size}</small>
+      <div><h4>${p.name}</h4><small>${optLine(l)}</small>
         <div class="qty"><button data-q="-1" data-i="${i}" aria-label="Decrease">−</button><span>${l.qty}</span><button data-q="1" data-i="${i}" aria-label="Increase">+</button></div>
       </div>
       <div style="text-align:right"><b>${money(p.price*l.qty)}</b><button class="rm" data-rm="${i}">Remove</button></div>
@@ -1373,7 +1418,7 @@ $("#dItems").addEventListener("click", e => {
 });
 $("#checkout").addEventListener("click", () => openCheckout());
 $("#bagWa").addEventListener("click", () => {
-  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${optLine(l)} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const total = money(bag.reduce((a,l)=>a+byId(l.id).price*l.qty,0));
   openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${total}\n\nName:\nState:\nDelivery address:`);
 });
@@ -1408,7 +1453,7 @@ function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add(
 const h = new Date().getHours();
 const greetWord = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
 const CATS = [["Heels","Heels","All","rose-crystal.jpg"],["Flats","Flats","Ballet flats","cap-toe-mj.jpg"],["Boots","Boots","All","cocoa-fur-boot.jpg"],
-  ["Sneakers","Sneakers","All","racer-pink.jpg"],["Slides","Flats","Slides","lock-slide.jpg"],["Bridal","Heels","Bridal","pearl-bow-pump.jpg"],["Sandals","Heels","Sandals","crystal-coil.jpg"]];
+  ["Sneakers","Sneakers","All","racer-pink.jpg"],["Slides","Flats","Slides","lock-slide.jpg"],["Bridal","Heels","Bridal","pearl-bow-pump.jpg"],["Sandals","Heels","Sandals","crystal-coil.jpg"],["Beauty","Beauty","All","ysl-blush-box.jpg"]];
 $("#cats").innerHTML = CATS.map(([l,g,c,img]) => `<button class="cat" data-g="${g}" data-c="${c}"><span><img src="img/${img}" alt="" loading="lazy"></span>${l}</button>`).join("");
 function goShop(g, c){
   group = g; current = c; query = ""; $("#search").value = "";
@@ -1526,7 +1571,7 @@ const mailSignIn = (u) => (callMail("signin", {email:u.email, name:u.name}), sen
 function mailOrder(o, to){
   callMail("order", {email: to, order: {
     no: o.no, name: o.name, ship: o.ship, note: o.note || "",
-    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, img: thumbOf(l).replace(/^img\//,""), detail: `${l.color} · EU ${l.size} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
+    items: o.items.map(l => { const p = byId(l.id); return {name: p ? p.name : l.id, img: thumbOf(l).replace(/^img\//,""), detail: `${optLine(l)} · Qty ${l.qty}`, price: money((p ? p.price : 0)*l.qty)}; }),
     sub: money(o.sub), fee: o.fee ? money(o.fee) : "Free", total: money(o.total),
     payText: o.pay === "transfer" ? `Complete your transfer: send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}, with ${o.no} as the reference.`
       : o.pay === "pod" ? `Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.` : `Paid by card · ${money(o.total)}`,
@@ -1534,7 +1579,7 @@ function mailOrder(o, to){
     where: o.ship === "Pickup" ? "Lekki studio" : [o.address, o.city, o.state].filter(Boolean).join(", "),
     eta: etaText(o.days, o.at)
   }});
-  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(l.color)} · EU ${l.size} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
+  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(optLine(l))} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
   const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
     : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your pair arrives.</div>`
     : `<div class="em-box">Paid by card · ${money(o.total)}</div>`;
@@ -1725,7 +1770,7 @@ function renderCheckout(){
     : co.pay === "pod" ? "Pay the rider by cash or transfer when your pair arrives."
     : state && !lagos ? "Pay on delivery is available in Lagos only." : "";
   $("#coAddrWrap").hidden = co.ship === "pick";
-  $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${l.color} · EU ${l.size} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
+  $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${optLine(l)} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
   const ship = opts.find(o => o.id === co.ship), fee = ship ? ship.fee : 0, total = subtotal() + fee;
   $("#coSub").textContent = money(subtotal());
   $("#coFee").textContent = ship ? (fee ? money(fee) : "Free") : "Choose state";
@@ -1776,7 +1821,7 @@ $("#coPlace").addEventListener("click", () => {
 });
 $("#coWa").addEventListener("click", () => {
   const d = coDetails();
-  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${l.color} · EU ${l.size} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
+  const lines = bag.map(l => { const p = byId(l.id); return `• ${p.name}\n  ${optLine(l)} · Qty ${l.qty} · ${money(p.price*l.qty)}`; });
   const fee = d.ship ? d.ship.fee : 0;
   openWA(`Hi ${SHOP.name}! I'd like to place an order:\n\n${lines.join("\n")}\n\nSubtotal: ${money(subtotal())}\nDelivery (${d.ship ? d.ship.name : "TBC"}): ${d.ship ? money(fee) : "TBC"}\nTotal: ${money(subtotal()+fee)}\n\nName: ${d.name}\nPhone: ${d.phone}\nState: ${d.state}\nAddress: ${[d.address, d.city].filter(Boolean).join(", ")}${d.note ? "\n\nGift note: " + d.note : ""}`);
 });
