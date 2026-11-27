@@ -974,7 +974,7 @@ const PRODUCTS = [
 ];
 // Products come from products.js.
 // The category (Lips, Cheeks…) becomes the tab and the brand becomes the filter chip.
-const BRANDS = ["Charlotte Tilbury","Huda Beauty","Rare Beauty","Too Faced","Secret of Pharaoh","Love Rain","Dior","YSL","KIKO","TIRTIR","Laneige","Joocyee","MAANGE","Morphe","SHEGLAM","Benefit","Maybelline","Gucci","Tillnana","Ablfeler"];
+const BRANDS = ["Charlotte Tilbury","Huda Beauty","Rare Beauty","Too Faced","Secret of Pharaoh","Love Rain","Dior","YSL","KIKO","TIRTIR","Laneige","Joocyee","MAANGE","Morphe","SHEGLAM","Benefit","Maybelline","Gucci","Tillnana","Ablfeler","Juju Dream"];
 const brandOf = p => p.brand || BRANDS.find(b => p.name.startsWith(b)) || p.name.split(" ")[0];
 PRODUCTS.length = 0;
 BEAUTY.forEach(p => PRODUCTS.push(Object.assign({}, p, {group: p.cat, cat: brandOf(p)})));
@@ -1005,11 +1005,11 @@ $("#statCount").textContent = PRODUCTS.length;
 $("#statBrands").textContent = new Set(PRODUCTS.map(p => p.cat)).size;
 
 // marquee
-const words = ["Plumping glosses","Liquid blush","Cluster lashes","Fluffy brows","Volume mascara","Shade matching","Dior","Huda Beauty","100% authentic","Delivered to your door"];
+const words = ["Plumping glosses","Liquid blush","Cluster lashes","Fluffy brows","Volume mascara","Highlight & contour","Shade matching","Dior","Huda Beauty","100% authentic","Delivered to your door"];
 $("#marquee").innerHTML = [...words,...words,...words,...words].map(w=>`<span>${w}</span>`).join("");
 
 // filters + grid
-const ORDER = ["Lips","Cheeks","Eyes","Lashes","Brows","Face","Sets","Tools"];
+const ORDER = ["Lips","Cheeks","Eyes","Lashes","Brows","Face","Glow","Sets","Tools"];
 const groups = ["All", ...new Set(PRODUCTS.map(p => p.group))].sort((a,b) => (a==="All"?-1:ORDER.indexOf(a)) - (b==="All"?-1:ORDER.indexOf(b)));
 let group = "All", current = "All", query = "";
 function renderGroups(){
@@ -1182,7 +1182,7 @@ function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add(
 const h = new Date().getHours();
 const greetWord = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
 const CATS = [["Lips","Lips","All","dior-maximizer-rose.jpg"],["Cheeks","Cheeks","All","ysl-blush-box.jpg"],["Eyes","Eyes","All","huda-new-nude.jpg"],["Lashes","Lashes","All","tillnana-lash-book.jpg"],
-  ["Brows","Brows","All","benefit-brows.jpg"],["Face","Face","All","ct-flawless-foundation.jpg"],["Sets","Sets","All","dior-addict-gift.jpg"],["Brushes","Tools","All","maange-brushes-2.jpg"]];
+  ["Brows","Brows","All","benefit-brows.jpg"],["Face","Face","All","ct-flawless-foundation.jpg"],["Glow","Glow","All","dior-luminizer.jpg"],["Sets","Sets","All","dior-addict-gift.jpg"],["Brushes","Tools","All","maange-brushes-2.jpg"]];
 $("#cats").innerHTML = CATS.map(([l,g,c,img]) => `<button class="cat" data-g="${g}" data-c="${c}"><span><img src="img/${img}" alt="" loading="lazy"></span>${l}</button>`).join("");
 function goShop(g, c){
   group = g; current = c; query = ""; $("#search").value = "";

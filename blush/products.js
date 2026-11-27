@@ -139,4 +139,35 @@ const BEAUTY = [
   {id:"sheglam-concealer", group:"Beauty", name:"SHEGLAM Like Magic Concealer", cat:"Face", price:9000,
    imgs:["sheglam-concealer.jpg"], colors:[["Tell us your shade","#d9b896"]],
    desc:"Full-coverage, 12-hour concealer that doesn't crease. Send us your shade and we'll match you."},
+
+  /* ---- Setting powder ---- */
+  {id:"huda-easy-bake", group:"Beauty", name:"Huda Beauty Easy Bake Loose Powder", cat:"Face", price:35000, badge:"Bestseller",
+   imgs:["huda-easy-bake.jpg","huda-easy-bake-shades.jpg","huda-easy-bake-duo.jpg","huda-easy-bake-jar.jpg"],
+   colors:[["Banana Bread","#f0dca8",1],["Peach Pie","#f4cdb4",1],["Cherry Blossom Cake","#f6d4dc",1],["Ube Birthday Cake","#eab4dc",1],["Cupcake","#f3dccb",1],["Cinnamon Bun","#c98a52",1]],
+   desc:"The cult baking and setting powder: blurs, sets and keeps your base crease-free all day. 20 g."},
+  {id:"maybelline-fitme-powder", group:"Beauty", name:"Maybelline Fit Me Loose Finishing Powder", cat:"Face", price:12000,
+   imgs:["maybelline-fitme-powder.jpg","maybelline-fitme-powder-2.jpg"], colors:[["15 Light","#e2b98a"],["Tell us your shade","#c7966a"]],
+   desc:"A lightweight loose powder that sets makeup with a natural, non-cakey finish. 20 g."},
+
+  /* ---- Glow: highlighter, bronzer, contour ---- */
+  {id:"dior-luminizer", group:"Beauty", name:"Dior Forever Glow Luminizer", cat:"Glow", price:55000, badge:"New",
+   imgs:["dior-luminizer.jpg"], colors:[["Pearly white","#eceaf0"]],
+   desc:"A pressed highlighter embossed with Dior's cannage pattern, for an icy, light-catching glow. Mirrored compact."},
+  {id:"rare-bronzer-stick", group:"Beauty", name:"Rare Beauty Warm Wishes Bronzer Stick", cat:"Glow", price:35000, badge:"4 shades",
+   imgs:["rare-bronzer-stick.jpg"], colors:[["Bright Side","#b88660"],["Always Sunny","#a4704c"],["Happy Sol","#8e5c3c"],["Power Boost","#9c6a44"]],
+   desc:"A creamy bronzer stick that melts into skin for a soft, sun-warmed glow. Blend with fingers or a brush."},
+  {id:"rare-liquid-contour", group:"Beauty", name:"Rare Beauty Liquid Contour", cat:"Glow", price:32000, badge:"7 shades",
+   imgs:["rare-liquid-contour.jpg","rare-liquid-contour-2.jpg"], colors:[["Light","#c9a493"],["Light medium","#b98a72"],["Medium","#a87c64"],["Tan","#9a6a4c"],["Deep","#7e4e38"],["Rich","#4e2e24"],["Deepest","#3a241e"]],
+   desc:"Weightless liquid contour that blends out softly for natural sculpting, in shades for every skin tone."},
+  {id:"dior-contour-stick", group:"Beauty", name:"Dior Contour Stick", cat:"Glow", price:55000,
+   imgs:["dior-contour-stick.jpg"], colors:[["Tell us your shade","#8a5e48"]],
+   desc:"A creamy contour stick in Dior's sleek black case for quick, blendable sculpting."},
+  {id:"juju-contour-stick", group:"Beauty", name:"Juju Dream Contour & Concealer Stick", cat:"Glow", price:6000,
+   imgs:["juju-contour-stick.jpg"], colors:[["Light","#e8c4a4"],["Medium","#b47a50"],["Deep","#9a5e3a"]],
+   desc:"Double-ended stick: a brightening concealer on one end and a contour shade on the other."},
+
+  /* ---- Tools ---- */
+  {id:"sponge-puff-set", group:"Beauty", brand:"Blush Edit", name:"Makeup Sponge & Powder Puff Set", cat:"Tools", price:15000, badge:"Set",
+   imgs:["sponge-puff-set.jpg"], colors:[["Mocha","#8a5e4a"]],
+   desc:"Beauty sponges for blending foundation, plus velvet triangle puffs for baking and setting powder."},
 ];
