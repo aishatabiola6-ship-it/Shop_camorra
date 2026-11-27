@@ -818,7 +818,6 @@
   <section class="shop" id="shop">
     <div class="wrap">
       <div class="head shop-head">
-        <span class="kicker"><span id="statCount">58</span> products · <span id="statBrands">25</span> brands</span>
         <h2>Browse it all</h2>
         <div class="filter-stack">
           <div class="groups" id="groups" role="tablist" aria-label="Category"></div>
@@ -1091,8 +1090,6 @@ document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.na
 document.querySelectorAll(".js-ig").forEach(a => { a.href = SHOP.instagram; a.target = "_blank"; a.rel = "noopener"; });
 document.querySelectorAll(".js-tt").forEach(a => { a.href = SHOP.tiktok; a.target = "_blank"; a.rel = "noopener"; });
 $("#copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name}`;
-$("#statCount").textContent = PRODUCTS.length;
-$("#statBrands").textContent = new Set(PRODUCTS.map(p => p.cat)).size;
 
 
 // filters + grid
