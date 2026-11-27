@@ -1290,6 +1290,12 @@ const PRODUCTS = [
   {id:"morphe-brushes", group:"Beauty", name:"Morphe Wine Brush Set", cat:"Tools", price:45000, badge:"New",
    imgs:["morphe-brushes.jpg"], colors:[["Wine","#6a1426"]],
    desc:"Five face and eye brushes and a triangle puff in deep wine, with a matching zip makeup bag."},
+  {id:"ct-flawless-foundation", group:"Beauty", name:"Charlotte Tilbury Airbrush Flawless Foundation", cat:"Face", price:65000,
+   imgs:["ct-flawless-foundation.jpg"], colors:[["Tell us your shade","#d2b088"]],
+   desc:"Full-coverage, soft-matte foundation that stays all day and night. 30 ml. Send us your shade or a selfie and we'll match you."},
+  {id:"laneige-lip-mask", group:"Beauty", name:"Laneige Lip Sleeping Mask", cat:"Lips", price:22000, badge:"Bestseller",
+   imgs:["laneige-lip-mask.jpg"], colors:[["Berry","#d8455e"]],
+   desc:"The overnight lip mask for soft, smooth lips by morning. Comes with a little applicator. 20 g."},
 ];
 PRODUCTS.forEach(p => p.group = p.group || "Heels");
 const noSize = p => p && p.group === "Beauty";   // makeup: shade only, no shoe size
