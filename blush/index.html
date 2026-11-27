@@ -16,7 +16,7 @@
 <meta property="og:image" content="img/ysl-blush-box.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=Bodoni+Moda:ital,opsz,wght@1,6..96,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
 <style>
   :root{
     --cream:#fbf2f0; --sand:#f4e1df; --paper:#fffafa;
@@ -372,11 +372,11 @@
   }
 
   /* LOGO */
-  .logo{font-family:"Bodoni Moda",var(--serif);font-style:italic;font-weight:800;font-size:2.2rem;letter-spacing:-.03em;line-height:1}
+  .logo{font-family:"Playfair Display",var(--serif);font-style:italic;font-weight:700;font-size:2.2rem;letter-spacing:-.03em;line-height:1}
   .logo em{color:var(--gold);font-style:normal}
-  .w-logo{position:absolute;top:max(18px,env(safe-area-inset-top));left:0;right:0;text-align:center;z-index:2;font-family:"Bodoni Moda",var(--serif);font-style:italic;font-weight:800;font-size:clamp(3.2rem,12vw,4.6rem);letter-spacing:-.03em;line-height:1;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.35)}
+  .w-logo{position:absolute;top:max(18px,env(safe-area-inset-top));left:0;right:0;text-align:center;z-index:2;font-family:"Playfair Display",var(--serif);font-style:italic;font-weight:700;font-size:clamp(3.2rem,12vw,4.6rem);letter-spacing:-.03em;line-height:1;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.35)}
   .w-logo em,.a-logo em{color:var(--gold-2);font-style:normal}
-  .a-logo{text-align:center;font-family:"Bodoni Moda",var(--serif);font-style:italic;font-weight:800;font-size:3.4rem;letter-spacing:-.03em;line-height:1;margin-bottom:28px}
+  .a-logo{text-align:center;font-family:"Playfair Display",var(--serif);font-style:italic;font-weight:700;font-size:3.4rem;letter-spacing:-.03em;line-height:1;margin-bottom:28px}
 
   /* AUTH STEPS */
   .a-step[hidden]{display:none}
@@ -397,7 +397,7 @@
   /* EMAIL NOTIFICATION + VIEWER */
   .notif{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));z-index:130;width:min(400px,calc(100% - 24px));transform:translate(-50%,-140%);transition:transform .45s cubic-bezier(.2,.8,.2,1);background:rgba(255,250,243,.96);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 18px 40px -12px rgba(0,0,0,.35);padding:12px 14px;display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;color:var(--ink)}
   .notif.on{transform:translate(-50%,0)}
-  .notif .ic{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:800;font-size:1.3rem}
+  .notif .ic{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:1.3rem}
   .notif small{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
   .notif b{display:block;font-size:.9rem;line-height:1.25}
   .notif span{display:block;font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -409,7 +409,7 @@
   .mv-meta h4{grid-column:1/-1;font-family:var(--sans);font-size:1.05rem;color:var(--ink);font-weight:600}
   .mv-meta .x{position:static;box-shadow:none;background:var(--cream);grid-row:1;grid-column:2;width:34px;height:34px}
   .em{padding:0 0 24px}
-  .em-head{background:var(--ink);color:#fff;text-align:center;padding:22px;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:800;font-size:2.2rem;letter-spacing:-.03em}
+  .em-head{background:var(--ink);color:#fff;text-align:center;padding:22px;font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:2.2rem;letter-spacing:-.03em}
   .em-head em{color:var(--gold-2);font-style:normal}
   .em-body{padding:24px 24px 0;font-size:.95rem;line-height:1.65}
   .em-body h3{font-size:1.8rem;font-weight:500;margin-bottom:.5rem}
@@ -542,6 +542,35 @@
     *{animation:none!important;transition:none!important}
     .card,.reveal{opacity:1;transform:none}
   }
+  /* ===== Blush welcome: light pink, arch photo, floating product stickers ===== */
+  #welcome{background:radial-gradient(130% 75% at 50% 0%,#fff3f4 0%,#fbdde2 50%,#f4c3cc 100%);color:var(--ink)}
+  #welcome .w-intro{align-items:center;padding:max(22px,env(safe-area-inset-top)) 20px max(26px,env(safe-area-inset-bottom));overflow:hidden}
+  #welcome .w-logo{position:static;font-size:clamp(2.6rem,10vw,3.4rem);color:var(--ink);text-shadow:none;letter-spacing:-.02em}
+  #welcome .w-logo em{color:var(--wine)}
+  #welcome .w-stage{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;margin:14px 0 18px}
+  #welcome .w-slides{display:block;flex:none;position:relative;height:min(100%,460px);aspect-ratio:3/4;max-width:78vw;border-radius:999px 999px 26px 26px;overflow:hidden;border:6px solid #fff;box-shadow:0 34px 60px -24px rgba(140,29,63,.5);background:var(--sand)}
+  #welcome .w-slides::after{display:none}
+  #welcome .w-slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity 1.2s,transform 6s linear}
+  #welcome .w-slides img.on{opacity:1;transform:scale(1)}
+  #welcome .w-float{position:absolute;width:clamp(70px,20vw,96px);aspect-ratio:1;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 14px 30px -12px rgba(140,29,63,.45);animation:bob 5s ease-in-out infinite;z-index:2}
+  #welcome .f1{left:calc(50% - min(39vw,170px) - 26px);top:20%}
+  #welcome .f2{right:calc(50% - min(39vw,170px) - 26px);bottom:14%;animation-delay:-2.5s}
+  #welcome .w-chip{position:absolute;top:7%;right:calc(50% - min(39vw,170px) - 18px);z-index:3;background:#fff;color:var(--wine);font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:.6em 1.05em;border-radius:999px;box-shadow:0 10px 24px -12px rgba(140,29,63,.5);transform:rotate(6deg)}
+  #welcome .w-spark{position:absolute;color:var(--wine);opacity:.55;font-size:1.1rem;animation:twinkle 2.6s ease-in-out infinite}
+  #welcome .s1{left:calc(50% - min(39vw,170px) + 4px);bottom:6%}
+  #welcome .s2{right:calc(50% - min(39vw,170px) + 30px);top:2%;font-size:.8rem;animation-delay:-1.3s}
+  #welcome .w-panel{margin:0;padding:0;text-align:center;width:min(440px,100%)}
+  #welcome .w-panel h2{font-size:clamp(2.1rem,8vw,2.9rem);color:var(--ink)}
+  #welcome .w-panel h2 em{color:var(--wine)}
+  #welcome .w-panel p{color:var(--muted);font-weight:400;margin:.5rem auto 1.3rem;max-width:34ch}
+  #welcome .w-go{max-width:none;background:var(--ink);color:#fff;box-shadow:0 14px 30px -14px rgba(42,22,25,.7)}
+  #welcome .w-go:hover{background:var(--wine)}
+  #welcome .w-dots{display:flex;margin-top:16px}
+  #welcome .w-dots i{background:rgba(42,22,25,.18)}
+  #welcome .w-dots i.on{background:var(--wine)}
+  @keyframes bob{50%{transform:translateY(-10px)}}
+  @keyframes twinkle{50%{opacity:.15;transform:scale(.7)}}
+  @media (prefers-reduced-motion:reduce){ #welcome .w-float,#welcome .w-spark{animation:none} }
 </style>
 </head>
 <body>
@@ -571,16 +600,22 @@
 
 <div class="welcome" id="welcome" role="dialog" aria-label="Welcome to Blush">
   <section class="w-screen w-intro" id="wIntro">
-    <div class="w-slides">
-      <div class="w-logo">Blush<em>.</em></div>
-      <img src="img/ysl-blush-box.jpg" alt="YSL quilted blush compact" class="on">
-      <img src="img/huda-new-nude.jpg" alt="Huda Beauty New Nude eyeshadow palette">
-      <img src="img/dior-maximizer-red.jpg" alt="Dior Addict Lip Maximizer gloss">
-      <img src="img/rare-soft-pinch.jpg" alt="Rare Beauty liquid blush">
+    <div class="w-logo">Blush<em>.</em></div>
+    <div class="w-stage">
+      <div class="w-slides">
+        <img src="img/ysl-blush-box.jpg" alt="YSL quilted blush compact" class="on">
+        <img src="img/huda-new-nude.jpg" alt="Huda Beauty New Nude eyeshadow palette">
+        <img src="img/dior-maximizer-red.jpg" alt="Dior Addict Lip Maximizer gloss">
+        <img src="img/tillnana-lash-book.jpg" alt="Cluster lash book">
+      </div>
+      <img class="w-float f1" src="img/rare-soft-pinch.jpg" alt="">
+      <img class="w-float f2" src="img/ct-heart-blush.jpg" alt="">
+      <span class="w-chip">100% authentic</span>
+      <span class="w-spark s1" aria-hidden="true">✦</span><span class="w-spark s2" aria-hidden="true">✦</span>
     </div>
     <div class="w-panel">
       <h2>Your glow, <em>delivered.</em></h2>
-      <p>Lipsticks, blushes, palettes &amp; complexion from the brands you love, 100% authentic and delivered across Nigeria.</p>
+      <p>Glosses, blushes, lashes &amp; more from the brands you love, delivered across Nigeria.</p>
       <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
       <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i><i></i></div>
     </div>
