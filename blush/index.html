@@ -604,7 +604,7 @@
   .look-pic{position:relative;aspect-ratio:4/5;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:#fff}
   .look-pic img{width:100%;height:100%;object-fit:cover}
   .look-pic.one{display:block}
-  .look-pic span{position:absolute;left:14px;top:14px;background:#fff;color:var(--wine);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.5em .9em;border-radius:999px}
+  .look-pic span{position:absolute;left:14px;top:14px;background:#fff;color:var(--wine);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.5em .9em;border-radius:999px;box-shadow:0 4px 14px -4px rgba(140,29,63,.45)}
   .look-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
   .look-body h3{font-size:1.7rem}
   .look-body p{color:var(--muted);font-size:.92rem}
@@ -703,6 +703,7 @@
         <img src="img/look-night-out.jpg" alt="Model wearing a bold smoky eye and deep red lip">
         <img src="img/look-bronze-sculpt.jpg" alt="Model wearing warm bronze eyes, a berry blush and a glossy brown lip">
         <img src="img/look-copper-glam.jpg" alt="Model wearing copper shimmer eyes and a glossy pink lip">
+        <img src="img/look-everyday-glow.jpg" alt="Model wearing soft bronze eyes, a winged liner and a nude lip">
       </div>
       <img class="w-float f1" src="img/rare-soft-pinch.jpg" alt="">
       <img class="w-float f2" src="img/ct-heart-blush.jpg" alt="">
@@ -713,7 +714,7 @@
       <h2>Your glow, <em>delivered.</em></h2>
       <p>Glosses, blushes, lashes &amp; more from the brands you love, delivered across Nigeria.</p>
       <button class="w-go" id="wGo">Get started <span aria-hidden="true">→</span></button>
-      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="w-dots" id="wDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
     </div>
   </section>
   <section class="w-screen w-auth" id="wAuth" hidden>
@@ -1291,8 +1292,8 @@ const LOOKS = [
    items:["vee-foundation","rare-liquid-contour","huda-new-nude","huda-blush-filter","cluster-lash-kit","huda-lip-stain"]},
   {name:"Copper glam", tag:"Shimmer", photo:"look-copper-glam.jpg", text:"Copper shimmer lids, fluttery lashes, a rosy cheek and a juicy pink gloss.",
    items:["fenty-foundation","huda-easy-bake","dior-rosy-glow","tillnana-lash-book","pharaoh-brow-duo","joocyee-gloss"]},
-  {name:"Everyday glow", tag:"Natural", text:"Laminated brows, lifted lashes, warm bronze and a juicy lip.",
-   items:["sheglam-brow-gel","maybelline-mascara","rare-bronzer-stick","dior-luminizer","laneige-lip-mask","ysl-loveshine"]},
+  {name:"Everyday glow", tag:"Natural", photo:"look-everyday-glow.jpg", text:"Soft bronze eyes, a sleek wing, warm glowing skin and a nude lip.",
+   items:["huda-new-nude","maybelline-mascara","sheglam-brow-gel","rare-bronzer-stick","dior-luminizer","ysl-loveshine"]},
 ];
 $("#lookGrid").innerHTML = LOOKS.map(l => {
   const ps = l.items.map(byId).filter(Boolean), total = ps.reduce((a,p) => a + p.price, 0);
