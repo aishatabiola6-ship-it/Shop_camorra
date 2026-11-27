@@ -397,6 +397,7 @@
   /* EMAIL NOTIFICATION + VIEWER */
   .notif{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));z-index:130;width:min(400px,calc(100% - 24px));transform:translate(-50%,-140%);transition:transform .45s cubic-bezier(.2,.8,.2,1);background:rgba(255,250,243,.96);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 18px 40px -12px rgba(0,0,0,.35);padding:12px 14px;display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;color:var(--ink)}
   .notif.on{transform:translate(-50%,0)}
+  .notif:not(.on){visibility:hidden;transition:transform .45s,visibility 0s .45s}
   .notif .ic{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:1.3rem}
   .notif small{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
   .notif b{display:block;font-size:.9rem;line-height:1.25}
@@ -840,7 +841,7 @@
     <div class="wrap">
       <div><b>Only authentic</b><span>From trusted suppliers</span></div>
       <div><b>Sealed &amp; fresh</b><span>Checked before it ships</span></div>
-      <div><b>Pay on delivery</b><span>Available in Lagos</span></div>
+      <div><b>Secure checkout</b><span>Card or bank transfer</span></div>
       <div><b>All 36 states</b><span>Plus FCT, tracked</span></div>
     </div>
   </section>
@@ -853,7 +854,7 @@
         <p class="faq-more">Still stuck? <a href="#" class="js-wa">Message us on WhatsApp</a></p>
       </div>
       <div class="reveal">
-        <details open><summary>How do I order?</summary><p>Tap a product, choose your shade and add it to your bag. At checkout, pay by card or bank transfer, pay on delivery in Lagos, or send the order on WhatsApp.</p></details>
+        <details open><summary>How do I order?</summary><p>Tap a product, choose your shade and add it to your bag. At checkout, pay by card or bank transfer, or send the order on WhatsApp.</p></details>
         <details><summary>Are your products authentic?</summary><p>Yes. Everything we sell is 100% authentic, sourced from trusted suppliers and checked before it ships.</p></details>
         <details><summary>How do I find my foundation shade?</summary><p>Send us a selfie in natural daylight with no makeup on, plus any shade you already wear, and we'll match you before you order.</p></details>
         <details><summary>How much is delivery?</summary><p>We deliver to all 36 states and FCT. The fee depends on your state and is shown at checkout before you pay:</p><div class="zones" id="zoneTable"></div></details>
@@ -1563,7 +1564,7 @@ function shipOptions(state){
   if (zk !== "lagos") return [std];
   return [std, {id:"exp", name:"Express", fee:DELIVERY.express, eta:"Same day", days:[0,0]}, {id:"pick", name:"Pickup", fee:0, eta:"Lekki · ready in 24h", days:[1,1]}];
 }
-const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"transfer", name:"Bank transfer", sub:"Pay to our account"},{id:"pod", name:"Pay on delivery", sub:"Lagos only"}];
+const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"transfer", name:"Bank transfer", sub:"Pay to our account"}];
 const fmtDay = d => d.toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"});
 const addDays = (n, from) => { const d = new Date(from || Date.now()); d.setDate(d.getDate()+n); return d; };
 const etaText = (days, from) => days[1] === 0 ? "Today" : days[0] === days[1] ? fmtDay(addDays(days[0], from)) : `${fmtDay(addDays(days[0], from))} – ${fmtDay(addDays(days[1], from))}`;
@@ -1595,7 +1596,7 @@ function renderCheckout(){
   $("#coPay").innerHTML = PAYS.map(p => `<button type="button" class="optc" aria-pressed="${p.id===co.pay}" data-pay="${p.id}" ${p.id==="pod" && !lagos ? "disabled" : ""}><b>${p.name}</b><small>${p.sub}</small></button>`).join("");
   $("#coPayNote").textContent = co.pay === "transfer" ? "You'll get our account details after you place the order."
     : co.pay === "pod" ? "Pay the rider by cash or transfer when your order arrives."
-    : state && !lagos ? "Pay on delivery is available in Lagos only." : "";
+    : "";
   $("#coAddrWrap").hidden = co.ship === "pick";
   $("#coItems").innerHTML = bag.map(l => { const p = byId(l.id); return `<div class="co-line"><img src="${thumbOf(l)}" alt=""><div><h5>${p.name}</h5><small>${optLine(l)} · Qty ${l.qty}</small></div><b>${money(p.price*l.qty)}</b></div>`; }).join("");
   const ship = opts.find(o => o.id === co.ship), fee = ship ? ship.fee : 0, total = subtotal() + fee;
