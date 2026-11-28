@@ -19,7 +19,7 @@
 const B = { name: "Blush", page: "", img: "huda-new-nude.jpg", alt: "Makeup at Blush",
   intro: "Your Blush account is ready. Every product we stock is 100% authentic, and we're always happy to help you find your shade.",
   request: "Request a product you've seen elsewhere", head: "#2a1619", dot: "#dba3ad" };   // shop name and email look
-const SITE_URL = "https://aishatabiola6-ship-it.github.io/Shop_camorra/blush/";
+const SITE_URL = "https://blush-site.pages.dev/";
 const WHATSAPP = "2349125837823";
 const DAILY_LIMIT = 90;           // Gmail allows ~100/day on a normal account
 
