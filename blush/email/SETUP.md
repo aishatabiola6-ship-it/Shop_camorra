@@ -2,7 +2,7 @@
 
 This makes Blush send real emails from **aishatabiola6@gmail.com**:
 
-- the 6-digit code when someone creates an account or resets a password
+- the 6-digit code when someone creates an account, signs in, or resets a password
 - "Welcome to Blush" after the account is created
 - "Welcome back" after each sign-in
 - "Order confirmed" after checkout

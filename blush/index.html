@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  /* Blush lives on Cloudflare. Anyone opening the GitHub Pages copy is sent there.
+     To show Blush on GitHub Pages again, delete this script. */
+  if (/\.github\.io$/.test(location.hostname)) location.replace("https://blush-site.pages.dev/" + location.hash);
+</script>
 <title>Blush | Makeup &amp; Beauty</title>
 <meta name="description" content="Authentic makeup from Dior, YSL, Huda Beauty, Charlotte Tilbury, Rare Beauty and more. Pay online or order on WhatsApp, with delivery across Nigeria.">
 <meta name="theme-color" content="#2a1619">
@@ -1430,7 +1435,7 @@ async function sendEmail({to, subject, preview, inner}){
 let notifT;
 function notify(mail){
   const n = $("#notif");
-  n.innerHTML = `<span class="ic">S</span><span><small><span>Blush · Mail</span><span>now</span></small><b>${esc(mail.subject)}</b><span>${esc(mail.preview)}</span></span>`;
+  n.innerHTML = `<span class="ic">B</span><span><small><span>Blush · Mail</span><span>now</span></small><b>${esc(mail.subject)}</b><span>${esc(mail.preview)}</span></span>`;
   n.dataset.id = mail.id; n.classList.add("on");
   clearTimeout(notifT); notifT = setTimeout(() => n.classList.remove("on"), 7000);
 }
@@ -1518,20 +1523,21 @@ document.querySelectorAll("#wAuth .eye").forEach(b => b.addEventListener("click"
   const i = b.previousElementSibling, show = i.type === "password"; i.type = show ? "text" : "password"; b.textContent = show ? "Hide" : "Show";
 }));
 let resendT;
+const codeForm = () => flow.mode === "reset" ? "forgot" : flow.mode === "in" ? "in" : "up";
 async function sendCode(){
   flow.exp = Date.now() + 10*60*1000; flow.tries = 0; flow.verified = false; flow.server = false; flow.code = null;
   if (liveMail()){
-    const form = stepEl(flow.mode === "reset" ? "forgot" : "up");
+    const form = stepEl(codeForm());
     busy(form, true, "Sending code…");
-    const r = await callMail("code", {email: flow.email, name: flow.name, purpose: flow.mode === "reset" ? "reset" : "signup"});
+    const r = await callMail("code", {email: flow.email, name: flow.name, purpose: flow.mode === "reset" ? "reset" : flow.mode === "in" ? "signin" : "signup"});
     busy(form, false);
     if (r && r.ok){ flow.server = true; toast("Code sent to " + flow.email); }
-    else if (r && r.error === "too_many") return err(flow.mode === "reset" ? "forgot" : "up", "Too many codes requested. Please wait a minute and try again.");
-    else if (r && r.error === "bad_email") return err(flow.mode === "reset" ? "forgot" : "up", "Please check the email address.");
+    else if (r && r.error === "too_many") return err(codeForm(), "Too many codes requested. Please wait a minute and try again.");
+    else if (r && r.error === "bad_email") return err(codeForm(), "Please check the email address.");
   }
   if (!flow.server){
     flow.code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
-    mailCode(flow.email, flow.code, flow.mode === "reset" ? "reset your password" : "confirm your email");
+    mailCode(flow.email, flow.code, flow.mode === "reset" ? "reset your password" : flow.mode === "in" ? "sign in" : "confirm your email");
   }
   const s = stepEl("code"), r = s.querySelector(".a-resend");
   s.querySelector(".a-to").textContent = flow.email; s.querySelector('[name="code"]').value = "";
@@ -1540,7 +1546,7 @@ async function sendCode(){
   showStep("code");
 }
 stepEl("code").querySelector(".a-resend").addEventListener("click", () => { sendCode(); });
-stepEl("code").querySelector(".a-back").addEventListener("click", () => showStep(flow.mode === "reset" ? "forgot" : "up"));
+stepEl("code").querySelector(".a-back").addEventListener("click", () => showStep(codeForm()));
 stepEl("code").querySelector('[name="code"]').addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g,"").slice(0,6); if (e.target.value.length === 6) stepEl("code").requestSubmit(); });
 
 stepEl("in").addEventListener("submit", async e => {
@@ -1553,8 +1559,8 @@ stepEl("in").addEventListener("submit", async e => {
   const {hash} = await hashPassword(pass, acct.salt);
   busy(f, false);
   if (hash !== acct.hash) return err("in", "Incorrect password. Try again or reset it.");
-  store.set("blushSession", email); f.pass.value = "";
-  const u = getUser(); refreshUser(); finishWelcome(); mailSignIn(u);
+  f.pass.value = "";
+  Object.assign(flow, {mode:"in", name:acct.name, email}); sendCode();   // second step: a code sent to their email
 });
 stepEl("up").addEventListener("submit", e => {
   e.preventDefault(); const f = e.target;
@@ -1584,6 +1590,11 @@ stepEl("code").addEventListener("submit", async e => {
     if (!r.ok) return err("code", r.error === "expired" ? "This code has expired. Tap Resend code." : r.error === "too_many" ? "Too many attempts. Tap Resend code for a new one." : "That code isn't right. Check your email and try again.");
   } else if (v !== flow.code) return err("code", "That code isn't right. Check your email and try again.");
   flow.verified = true; flow.code = null;
+  if (flow.mode === "in"){
+    flow.verified = false; store.set("blushSession", flow.email);
+    const u = getUser(); refreshUser(); finishWelcome(); mailSignIn(u); toast(`Welcome back, ${firstName(u)}`);
+    return;
+  }
   const s = stepEl("pass");
   s.querySelector(".a-pass-title").innerHTML = flow.mode === "reset" ? "New password<em>.</em>" : "Create a password<em>.</em>";
   s.querySelector(".a-pass-btn").textContent = flow.mode === "reset" ? "Save password" : "Create account";

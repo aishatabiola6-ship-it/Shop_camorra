@@ -41,7 +41,7 @@ function doPost(e) {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email) || email.length > 120) return json({ ok: false, error: "bad_email" });
 
   try {
-    if (action === "code")    return sendCode(email, clean(body.name, 60), body.purpose === "reset" ? "reset" : "signup");
+    if (action === "code")    return sendCode(email, clean(body.name, 60), body.purpose === "reset" ? "reset" : body.purpose === "signin" ? "signin" : "signup");
     if (action === "verify")  return verifyCode(email, String(body.code || ""));
     if (action === "welcome") return sendWelcome(email, clean(body.name, 60));
     if (action === "signin")  return sendSignIn(email, clean(body.name, 60));
@@ -58,7 +58,7 @@ function sendCode(email, name, purpose) {
   if (!allow("code:" + email, 1, 30) || !allow("codeh:" + email, 6, 3600)) return json({ ok: false, error: "too_many" });
   const code = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
   CacheService.getScriptCache().put("c:" + email, JSON.stringify({ code: code, tries: 0 }), 600);
-  const what = purpose === "reset" ? "reset your password" : "confirm your email";
+  const what = purpose === "reset" ? "reset your password" : purpose === "signin" ? "sign in" : "confirm your email";
   send(email, "Your " + B.name + " code: " + code,
     h("Your code") +
     p((name ? "Hi " + esc(firstName(name)) + ", use" : "Use") + " this code to " + what + ":") +
