@@ -15,8 +15,10 @@ Plain HTML, no build step. Open `index.html` in a browser to preview.
   - `DELIVERY`: delivery zones, fees, days and states
 - Photos live in `img/` (small copies for emails and order lists in `img/thumb/`).
 
-## Accounts and emails
+## Accounts, orders and admin (Supabase)
 
-Accounts, bag, orders and inbox are saved in the visitor's browser and are separate from Strut's.
+Accounts, orders, saved addresses, prices and sold-out status live in Supabase, so they work on any device and every order reaches the shop. The bag and the on-site inbox stay in the visitor's browser. Shop owners manage orders and products at `admin.html`. See [supabase/README.md](supabase/README.md).
+
+## Emails
 
 Until `EMAIL.scriptUrl` is filled in, emails (sign-up and sign-in codes, welcome, order confirmation) only appear in the on-site inbox (Account → Inbox). To send real emails from Gmail, follow [email/SETUP.md](email/SETUP.md) with `email/blush-email.gs`.

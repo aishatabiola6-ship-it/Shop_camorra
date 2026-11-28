@@ -1,7 +1,7 @@
 // Offline support: the shop opens even with a weak or no connection.
 // The page and product list load fresh when online (falling back to the saved copy offline);
 // photos and fonts are saved after the first view so they load instantly.
-const VERSION = "blush-v1";
+const VERSION = "blush-v2";
 const CORE = ["./", "./index.html", "./products.js"];
 
 self.addEventListener("install", (e) => {
