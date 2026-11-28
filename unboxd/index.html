@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Unboxd: phones, laptops, audio, watches and cameras, delivered boxed with warranty.">
+<meta name="theme-color" content="#f3f4f6">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Unboxd</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a phone-width app column (centred on wide screens) with stacked screens — splash, welcome, log in, home, categories, spotlight, bag, account — and a floating pill tab bar. */
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --ink: #0f1115;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --soft: #eceef1;
+  --accent: #1f5eff;
+  --accent-ink: #ffffff;
+  --ok: #16a34a;
+  --danger: #dc2626;
+  --outside: #dfe2e7;
+  --sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --shadow: 0 1px 2px rgba(15,17,21,.04), 0 6px 20px rgba(15,17,21,.06);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d0f12; --surface: #171a1f; --ink: #f1f3f5; --muted: #9aa1ac; --line: #262a31; --soft: #1e2228;
+  --accent: #6b93ff; --accent-ink: #0a0f1f; --ok: #4ade80; --danger: #f87171; --outside: #060709; --shadow: none; color-scheme: dark;
+}}
+:root[data-theme="dark"] {
+  --bg: #0d0f12; --surface: #171a1f; --ink: #f1f3f5; --muted: #9aa1ac; --line: #262a31; --soft: #1e2228;
+  --accent: #6b93ff; --accent-ink: #0a0f1f; --ok: #4ade80; --danger: #f87171; --outside: #060709; --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--outside); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app { position: relative; max-width: 430px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
+@media (min-width: 600px) { .app { box-shadow: 0 0 0 1px var(--line), 0 20px 60px rgba(0,0,0,.08); } }
+.scr { padding: 18px max(20px, env(safe-area-inset-right, 0px)) 120px max(20px, env(safe-area-inset-left, 0px)); display: grid; gap: 22px; align-content: start; grid-template-columns: minmax(0, 1fr); min-width: 0; }
+h1, h2, h3 { margin: 0; letter-spacing: -0.03em; font-weight: 700; text-wrap: balance; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.big { font-size: 2rem; line-height: 1.05; letter-spacing: -0.04em; margin-top: 4px; }
+.muted { color: var(--muted); margin: 0; font-size: 14px; }
+.hs { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; margin-inline: calc(-1 * max(20px, env(safe-area-inset-left, 0px))); padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
+.hs::-webkit-scrollbar { display: none; }
+.hs > * { scroll-snap-align: start; flex: none; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 52px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 600; font-size: 15px; transition: transform .12s ease, opacity .12s ease; }
+.btn:active { transform: scale(.98); }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.blue { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--muted); }
+.btn.full { width: 100%; }
+.btn.busy { opacity: .7; pointer-events: none; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.link { border: 0; background: none; padding: 0; color: var(--ink); font-weight: 600; font-size: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.ic { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--surface); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow); flex: none; }
+.ic.dark { background: var(--ink); color: var(--bg); }
+.ic svg { width: 20px; height: 20px; }
+.badge { position: absolute; top: -2px; right: -2px; min-width: 18px; height: 18px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 10.5px; font-weight: 700; display: grid; place-items: center; padding: 0 5px; border: 2px solid var(--bg); font-variant-numeric: tabular-nums; }
+
+/* Top bar */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.top-ic { display: flex; gap: 10px; }
+.hello { font-size: 13.5px; color: var(--muted); }
+.name { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; }
+.head { display: flex; align-items: center; gap: 12px; }
+.head h1 { font-size: 1.4rem; flex: 1; min-width: 0; }
+.head .count { font-size: 13px; color: var(--muted); }
+
+/* Search */
+.search { display: flex; gap: 10px; }
+.search label { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 16px; border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); }
+.search label svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.search input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; font-size: 14.5px; }
+.search input::placeholder { color: var(--muted); }
+.filt { width: 52px; height: 52px; border-radius: 16px; border: 0; background: var(--ink); color: var(--bg); display: grid; place-items: center; flex: none; }
+.filt svg { width: 20px; height: 20px; }
+
+/* Brand circles */
+.bc { display: grid; justify-items: center; gap: 6px; border: 0; background: none; padding: 0; font-size: 12px; font-weight: 500; color: var(--ink); width: 64px; }
+.bc span { width: 62px; height: 62px; border-radius: 50%; overflow: hidden; background: var(--soft); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--line); }
+.bc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Promo carousel */
+.promos { gap: 12px; }
+.promo { position: relative; width: calc(100% - 28px); max-width: 360px; aspect-ratio: 16 / 10; border: 0; padding: 0; border-radius: 24px; overflow: hidden; text-align: left; color: #fff; background: #111; }
+.promo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.promo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(10,14,40,.82) 0%, rgba(10,14,40,.45) 50%, rgba(10,14,40,0) 80%); }
+.promo .pc-copy { position: absolute; z-index: 1; left: 20px; top: 20px; bottom: 18px; right: 40%; display: flex; flex-direction: column; gap: 4px; }
+.promo .pc-copy small { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+.promo .pc-copy strong { font-size: 1.35rem; line-height: 1.1; letter-spacing: -0.03em; }
+.promo .pc-copy em { font-style: normal; font-size: 12.5px; opacity: .85; }
+.promo .pc-copy b { margin-top: auto; align-self: flex-start; background: #fff; color: #0f1115; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 999px; }
+
+/* Section heads */
+.sh { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: -8px; }
+.sh h2 { font-size: 1.2rem; }
+.see { border: 0; background: none; padding: 0; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+
+/* Product cards */
+.pc { display: grid; gap: 8px; min-width: 0; }
+.cards .pc { width: 160px; }
+.pc-media { position: relative; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: var(--soft); }
+.pc-media > button:first-child { all: unset; display: block; width: 100%; height: 100%; cursor: pointer; }
+.pc-media > button:first-child:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.pc-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.heart { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.92); color: #0f1115; display: grid; place-items: center; }
+.heart svg { width: 17px; height: 17px; }
+.heart[aria-pressed="true"] { color: #e11d48; }
+.heart[aria-pressed="true"] svg { fill: currentColor; }
+.tag { position: absolute; top: 10px; left: 10px; font-size: 10.5px; font-weight: 700; background: rgba(255,255,255,.94); color: #0f1115; border-radius: 999px; padding: 3px 9px; }
+.tag.new { background: var(--accent); color: #fff; }
+.pc-name { border: 0; background: none; padding: 0; text-align: left; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; }
+.pc-sub { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-top: -4px; }
+.pc-price { font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pc-price s { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+.dots { display: flex; gap: 3px; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,.14); }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
+.empty-state { display: grid; justify-items: center; gap: 10px; text-align: center; padding: 48px 12px; color: var(--muted); }
+.empty-state .ei { width: 64px; height: 64px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; box-shadow: var(--shadow); color: var(--ink); }
+.empty-state .ei svg { width: 26px; height: 26px; }
+.empty-state strong { color: var(--ink); font-size: 1.05rem; }
+
+/* Chips */
+.chips { gap: 8px; }
+.chip { height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13.5px; font-weight: 500; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Categories */
+.catgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ct { position: relative; aspect-ratio: 4 / 5; border: 0; padding: 0; border-radius: 22px; overflow: hidden; background: var(--soft); text-align: left; color: #fff; }
+.ct img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ct::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,10,20,.72), rgba(8,10,20,0) 55%); }
+.ct-txt { position: absolute; z-index: 1; left: 14px; bottom: 14px; right: 52px; display: grid; }
+.ct-txt strong { font-size: 1.1rem; letter-spacing: -0.02em; line-height: 1.15; }
+.ct-txt small { font-size: 12px; opacity: .8; }
+.ct-go { position: absolute; z-index: 1; right: 12px; bottom: 12px; width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #0f1115; display: grid; place-items: center; }
+.ct-go svg { width: 15px; height: 15px; }
+
+/* Spotlight */
+.story { position: relative; width: 100%; aspect-ratio: 4 / 5; border: 0; padding: 0; border-radius: 26px; overflow: hidden; text-align: left; color: #fff; background: #111; }
+.story img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.story::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,8,20,.82), rgba(6,8,20,0) 58%); }
+.st-copy { position: absolute; z-index: 1; left: 20px; right: 20px; bottom: 20px; display: grid; gap: 6px; }
+.st-copy small { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+.st-copy strong { font-size: 1.6rem; line-height: 1.08; letter-spacing: -0.035em; }
+.st-copy span { font-size: 13.5px; opacity: .85; }
+.st-copy b { margin-top: 6px; justify-self: start; background: #fff; color: #0f1115; font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 999px; }
+
+/* Product screen */
+.pd-media { position: relative; aspect-ratio: 1 / 1; background: var(--soft); border-radius: 0 0 32px 32px; overflow: hidden; }
+.pd-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fab { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 16px); width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,.94); color: #0f1115; display: grid; place-items: center; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+.fab svg { width: 20px; height: 20px; }
+.fab.l { left: max(16px, env(safe-area-inset-left, 0px)); }
+.fab.r { right: max(16px, env(safe-area-inset-right, 0px)); }
+.fab[aria-pressed="true"] { color: #e11d48; }
+.fab[aria-pressed="true"] svg { fill: currentColor; }
+.pd h1 { font-size: 1.75rem; line-height: 1.08; letter-spacing: -0.04em; margin-top: 6px; }
+.pd-price { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; margin-top: -10px; }
+.pd-price s { font-size: .95rem; font-weight: 400; color: var(--muted); margin-left: 8px; }
+.og { display: grid; gap: 10px; }
+.og-h { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.og-h span:last-child { color: var(--muted); letter-spacing: 0; text-transform: none; font-weight: 500; font-size: 13px; }
+.cc { display: flex; flex-wrap: wrap; gap: 8px; }
+.cchip { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-size: 13.5px; font-weight: 500; }
+.cchip i { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); }
+.cchip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ochip { height: 42px; min-width: 64px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ochip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.specs { list-style: none; margin: 0; padding: 0; background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); }
+.specs li { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.specs li:last-child { border-bottom: 0; }
+.specs li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+.perks { display: grid; gap: 12px; }
+.perk { display: flex; gap: 12px; align-items: center; font-size: 13.5px; color: var(--muted); }
+.perk svg { width: 20px; height: 20px; color: var(--ink); flex: none; }
+.perk strong { color: var(--ink); font-weight: 600; }
+.buybar { position: fixed; z-index: 20; bottom: 0; left: 50%; transform: translateX(-50%); width: min(430px, 100%); display: flex; align-items: center; gap: 16px; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--line);
+  padding: 12px max(20px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 12px) max(20px, env(safe-area-inset-left, 0px)); }
+.buybar > div { display: grid; line-height: 1.2; }
+.buybar small { font-size: 12px; color: var(--muted); }
+.buybar strong { font-size: 1.1rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.buybar .btn { flex: 1; }
+
+/* Tab bar */
+.tabbar { position: fixed; z-index: 30; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); width: min(398px, calc(100% - 32px)); height: 66px; padding: 0 8px; border-radius: 999px; display: flex; justify-content: space-between; align-items: center;
+  background: color-mix(in srgb, var(--surface) 90%, transparent); backdrop-filter: saturate(1.6) blur(16px); -webkit-backdrop-filter: saturate(1.6) blur(16px); box-shadow: 0 0 0 1px var(--line), 0 12px 30px rgba(0,0,0,.12); }
+.tb { position: relative; width: 50px; height: 50px; border-radius: 50%; border: 0; background: transparent; color: var(--muted); display: grid; place-items: center; }
+.tb svg { width: 22px; height: 22px; }
+.tb[aria-current="page"] { background: var(--ink); color: var(--bg); }
+.tb .badge { top: 4px; right: 4px; }
+
+/* Forms */
+.form { display: grid; gap: 12px; }
+.field { display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.field:focus-within { border-color: var(--ink); }
+.field:has(input[aria-invalid="true"]) { border-color: var(--danger); }
+.field svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.field input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; outline: none; font-size: 15px; }
+.field input::placeholder { color: var(--muted); }
+.eye { border: 0; background: none; padding: 4px; color: var(--muted); display: grid; }
+.form-err { font-size: 13px; color: var(--danger); margin: 0; }
+.form-err:empty { display: none; }
+.right { justify-self: end; font-size: 13px; text-decoration: none; }
+.check { display: flex; gap: 10px; align-items: center; font-size: 13.5px; color: var(--muted); }
+.check input { accent-color: var(--accent); width: 18px; height: 18px; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.flabel { display: grid; gap: 6px; min-width: 0; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.flabel .field { height: 50px; }
+
+/* Auth */
+.auth { padding-top: 40px; gap: 18px; }
+.mark { font-weight: 700; font-size: 14px; letter-spacing: .6em; padding-left: .6em; text-align: center; }
+.auth h1 { font-size: 2.3rem; line-height: 1.02; letter-spacing: -0.045em; margin-top: 24px; }
+.auth h1 span { color: var(--accent); }
+.or { display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--muted); }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.switch { text-align: center; font-size: 14px; color: var(--muted); margin: 0; }
+
+/* Cards and bag */
+.card { background: var(--surface); border-radius: 20px; padding: 16px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+.card h3 { font-size: 15px; letter-spacing: -0.01em; display: flex; justify-content: space-between; }
+.card h3 span { color: var(--muted); font-weight: 500; }
+.line { display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+.line img { width: 72px; height: 72px; border-radius: 14px; object-fit: cover; background: var(--soft); }
+.line .ln { font-weight: 600; font-size: 14px; line-height: 1.3; }
+.line .lm { font-size: 12.5px; color: var(--muted); }
+.line .lr { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.line .lp { font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+.qty { display: inline-flex; align-items: center; background: var(--soft); border-radius: 999px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.qty button { width: 30px; height: 30px; border: 0; background: transparent; border-radius: 50%; display: grid; place-items: center; }
+.qty button svg { width: 14px; height: 14px; }
+.qty span { min-width: 18px; text-align: center; }
+.mini { display: grid; gap: 8px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.mini div { display: flex; justify-content: space-between; gap: 12px; }
+.mini div span:first-child { color: var(--muted); }
+.mini div span:last-child { white-space: nowrap; }
+.mini .t { font-weight: 700; font-size: 16px; padding-top: 8px; border-top: 1px solid var(--line); }
+.mini .t span:first-child { color: var(--ink); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 12px; color: var(--muted); }
+.steps li { border-top: 3px solid var(--line); padding-top: 6px; }
+.steps li.on { border-color: var(--accent); color: var(--ink); font-weight: 600; }
+.payopt { display: grid; gap: 10px; border: 0; margin: 0; padding: 0; min-width: 0; }
+.payopt legend { font-size: 13px; color: var(--muted); margin-bottom: 8px; padding: 0; }
+.payopt label { display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); cursor: pointer; }
+.payopt label:has(input:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.payopt input { margin-top: 3px; accent-color: var(--accent); }
+.payopt strong { display: block; font-size: 14.5px; }
+.payopt span { font-size: 13px; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); background: var(--soft); border-radius: 14px; padding: 12px 14px; margin: 0; }
+.note strong { color: var(--ink); }
+.bank { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; margin: 0; font-size: 13.5px; padding: 14px; border: 1px dashed var(--line); border-radius: 14px; background: var(--surface); }
+.bank dt { color: var(--muted); }
+.bank dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.done { display: grid; justify-items: center; text-align: center; gap: 10px; padding-top: 10px; }
+.tick { width: 72px; height: 72px; border-radius: 50%; background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); display: grid; place-items: center; }
+.tick svg { width: 32px; height: 32px; }
+.done h2 { font-size: 1.5rem; }
+.done p { margin: 0; color: var(--muted); font-size: 14px; max-width: 32ch; }
+.pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, #e0a100 24%, transparent); color: var(--ink); }
+.pill.paid, .pill.delivered { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
+.order { display: grid; gap: 4px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.order:last-child { border-bottom: 0; padding-bottom: 0; }
+.order .ot { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+.order .oi { color: var(--muted); }
+.prof { display: flex; align-items: center; gap: 14px; }
+.avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; font-size: 1.1rem; flex: none; }
+.prof > div { min-width: 0; }
+.prof strong { display: block; font-size: 1.05rem; }
+.prof span { color: var(--muted); font-size: 13.5px; overflow-wrap: anywhere; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stats div { background: var(--surface); border-radius: 18px; padding: 14px; box-shadow: var(--shadow); display: grid; }
+.stats strong { font-size: 1.3rem; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 12px; color: var(--muted); }
+.demo-note { font-size: 12.5px; color: var(--muted); background: var(--soft); border-radius: 14px; padding: 10px 14px; margin: 0; }
+.danger { border: 0; background: none; color: var(--danger); font-weight: 600; font-size: 14px; justify-self: center; padding: 6px; }
+.confirm { border: 1px solid var(--danger); border-radius: 18px; padding: 14px; display: grid; gap: 10px; font-size: 14px; }
+.confirm .row { display: flex; gap: 8px; }
+.confirm .btn { height: 44px; flex: 1; }
+.btn.red { background: var(--danger); border-color: var(--danger); color: #fff; }
+.saved { font-size: 12.5px; color: var(--ok); }
+
+/* Splash + welcome */
+.fullh { height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+.splash { background: #0b0c0f; color: #fff; display: grid; place-items: center; }
+.splash .mark { font-size: 20px; animation: splashIn 1s ease both; }
+@keyframes splashIn { from { opacity: 0; letter-spacing: .3em; } to { opacity: 1; letter-spacing: .6em; } }
+.ob-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior: contain; }
+.ob-track::-webkit-scrollbar { display: none; }
+.ob-slide { flex: 0 0 100%; height: 100%; scroll-snap-align: start; display: flex; flex-direction: column; gap: 16px; position: relative; background: #fff; color: #0f1115;
+  padding: 22px max(24px, env(safe-area-inset-right, 0px)) 18px max(24px, env(safe-area-inset-left, 0px)); }
+.ob-slide.dark { background: #0b0c0f; color: #f3f4f6; padding-top: 0; }
+.ob-photo { position: relative; flex: 1; min-height: 0; margin-inline: calc(-1 * max(24px, env(safe-area-inset-left, 0px))); }
+.ob-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 35% center; display: block; }
+.ob-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11,12,15,.45), transparent 28%, transparent 55%, #0b0c0f); }
+.ob-photo .mark { position: absolute; z-index: 1; left: 0; right: 0; top: 30px; color: #fff; }
+.ob-slide h2 { font-size: 2rem; line-height: 1.06; letter-spacing: -0.04em; }
+.ob-slide h2 em { font-style: normal; color: #1f5eff; }
+.ob-slide.dark h2 em { color: #7ea2ff; }
+.ob-slide p { margin: 0; font-size: 14.5px; color: #6b7280; }
+.ob-slide.dark p { color: #a3a9b4; }
+.ob-btn { width: 100%; height: 54px; border: 0; border-radius: 999px; background: #0f1115; color: #fff; font-weight: 600; font-size: 15px; flex: none; }
+.ob-slide.dark .ob-btn { background: #fff; color: #0f1115; }
+.ob-dots { display: flex; justify-content: center; gap: 6px; flex: none; }
+.ob-dots span { width: 6px; height: 6px; border-radius: 999px; background: currentColor; opacity: .22; }
+.ob-dots span.on { width: 22px; opacity: 1; }
+.ob-skip { position: absolute; z-index: 2; top: 18px; right: max(18px, env(safe-area-inset-right, 0px)); border: 0; background: rgba(128,128,128,.2); color: inherit; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 999px; }
+.ob-grid { flex: 1; min-height: 0; overflow: hidden; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; }
+.ob-grid img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 14px; display: block; }
+.ob-grid img:nth-child(3n+2) { transform: translateY(28px); }
+.ob-center { text-align: center; display: grid; gap: 8px; flex: none; }
+
+.toast { position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 92px); width: max-content; max-width: min(380px, calc(100% - 40px)); background: var(--ink); color: var(--bg); padding: 11px 16px; border-radius: 14px; font-size: 13.5px; font-weight: 500; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+
+/* Computers and tablets: same app, wider layout */
+.stories { display: grid; gap: 22px; }
+@media (min-width: 900px) {
+  body { background: var(--bg); }
+  .app { max-width: 1200px; box-shadow: none; }
+  .scr { padding: 32px 40px 150px; gap: 28px; }
+  .hs { margin-inline: -40px; padding-inline: 40px; }
+  .grid2 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 32px 18px; }
+  .cards .pc { width: 210px; }
+  .catgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .promo { width: calc((100% - 24px) / 3); max-width: none; }
+  .stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bc { width: 84px; } .bc span { width: 78px; height: 78px; }
+  .big { font-size: 2.6rem; }
+  .name { font-size: 2rem; }
+  .search label, .filt { height: 56px; }
+  [data-view="bag"] .scr, [data-view="account"] .scr { max-width: 760px; margin: 0 auto; }
+  [data-view="login"] .scr, [data-view="account"] .auth { max-width: 460px; margin: 0 auto; }
+  [data-view="product"] .pd { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 40px; padding: 32px 40px 0; align-items: start; }
+  [data-view="product"] .pd-media { border-radius: 32px; position: sticky; top: 24px; }
+  [data-view="product"] .pd .scr { padding: 8px 0 150px; }
+  [data-view="product"] .fab { top: 16px; }
+  .buybar { width: min(1200px, 100%); padding-inline: 40px; }
+  .buybar .btn { flex: 0 1 380px; margin-left: auto; }
+  [data-view="welcome"] { min-height: 100vh; display: grid; place-items: center; background: var(--outside); padding: 24px; }
+  [data-view="welcome"] .ob-track { width: 430px; height: min(860px, calc(100vh - 48px)); border-radius: 32px; box-shadow: 0 30px 80px rgba(0,0,0,.25); }
+  .tabbar { width: 420px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <main id="screen"></main>
+  <nav class="tabbar" id="tabbar" aria-label="Main" hidden></nav>
+  <div class="toast" id="toast" role="status" hidden></div>
+</div>
+
+<script>
+const COLOURS = {
+  Pink: "#e9a8c4", Purple: "#a99bc9", Blue: "#a9c3de", White: "#ecebe8", Black: "#2a2a2e",
+  Burgundy: "#6e1f33", Green: "#b9dcc6", Gold: "#e2c29c", Navy: "#2c3a63",
+};
+const CATS = ["All", "Phones", "Laptops", "Tablets", "Audio", "Watches", "Cameras", "Sets"];
+const BRAND = { Apple: "Apple", Google: "Google Pixel", Samsung: "Samsung", Canon: "Canon", DJI: "DJI" };
+
+// finishes: [name, colour family, photo (optional, else p.img)]. opts: [label, price].
+const PRODUCTS = [
+  { id: "sky-set", cat: "Sets", brand: "Apple", name: "Sky Blue Apple Set", img: "sky-blue-set", tag: "Set",
+    finishes: [["Sky Blue", "Blue"]], spec: "iPad Air · Apple Watch · AirPods Max · AirPods", opts: [["Full set", 3410000]] },
+  { id: "fold8", cat: "Phones", brand: "Samsung", name: "Galaxy Z Fold8", img: "galaxy-z-fold8-white", tag: "New",
+    finishes: [["White", "White"]], spec: "Foldable · 8″ inner screen · 200 MP", opts: [["256 GB", 3100000], ["512 GB", 3285000], ["1 TB", 3750000]] },
+  { id: "apmax", cat: "Audio", brand: "Apple", name: "AirPods Max", img: "airpods-max-midnight",
+    finishes: [["Midnight", "Black", "airpods-max-midnight"], ["Silver", "White", "airpods-max-silver"], ["Purple", "Purple", "airpods-max-purple"]],
+    spec: "Active noise cancelling · 20 h battery · USB-C", opts: [["One size", 850000]] },
+  { id: "ip17p-burg", cat: "Phones", brand: "Apple", name: "iPhone 17 Pro", img: "iphone-17-pro-burgundy", tag: "New",
+    finishes: [["Burgundy", "Burgundy"]], spec: "6.3″ 120 Hz · A19 Pro · 48 MP triple", opts: [["256 GB", 1705000], ["512 GB", 2015000], ["1 TB", 2325000]] },
+  { id: "mba-midnight", cat: "Laptops", brand: "Apple", name: "MacBook Air 13″", img: "macbook-air-midnight",
+    finishes: [["Midnight", "Navy"]], spec: "13.6″ Liquid Retina · M3 · 18 h battery", opts: [["256 GB", 1550000], ["512 GB", 1860000]] },
+  { id: "s25u", cat: "Phones", brand: "Samsung", name: "Galaxy S25 Ultra", img: "galaxy-s25-ultra-silverblue",
+    finishes: [["Titanium Silverblue", "White"]], spec: "6.9″ QHD+ · S Pen · 200 MP", opts: [["256 GB", 2015000], ["512 GB", 2200000], ["1 TB", 2570000]] },
+  { id: "watch-s10", cat: "Watches", brand: "Apple", name: "Apple Watch Series 10", img: "watch-s10-rose-gold",
+    finishes: [["Rose Gold", "Pink"]], spec: "Wide-angle OLED · Sleep apnoea alerts · 18 h", opts: [["42 mm", 620000], ["46 mm", 665000]] },
+  { id: "g7x", cat: "Cameras", brand: "Canon", name: "PowerShot G7 X Mark III", img: "canon-g7x-black", tag: "Creator pick",
+    finishes: [["Black", "Black", "canon-g7x-black"], ["Black with pink case", "Pink", "canon-g7x-pink"]], spec: "20.1 MP 1″ sensor · 4K video · Flip-up screen", opts: [["Camera", 1160000]] },
+  { id: "ip-air", cat: "Phones", brand: "Apple", name: "iPhone Air", img: "iphone-air-white", tag: "New",
+    finishes: [["Cloud White", "White"]], spec: "6.5″ ProMotion · A19 Pro · 5.6 mm thin", opts: [["256 GB", 1550000], ["512 GB", 1860000]] },
+  { id: "pixel9", cat: "Phones", brand: "Google", name: "Pixel 9", img: "pixel-9-colours",
+    finishes: [["Wintergreen", "Green"], ["Porcelain", "White"], ["Obsidian", "Black"], ["Peony", "Pink"]], spec: "6.3″ 120 Hz · Tensor G4 · 7 years of updates", opts: [["128 GB", 930000], ["256 GB", 1085000]] },
+  { id: "flip7", cat: "Phones", brand: "Samsung", name: "Galaxy Z Flip7", img: "galaxy-z-flip7-navy",
+    finishes: [["Blue Shadow", "Navy"]], spec: "Flip foldable · 4.1″ cover screen · 50 MP", opts: [["256 GB", 1705000], ["512 GB", 1890000]] },
+  { id: "osmo4", cat: "Cameras", brand: "DJI", name: "Osmo Pocket 4", img: "dji-osmo-pocket-4", tag: "New",
+    finishes: [["Black", "Black"]], spec: "3-axis gimbal · 1″ sensor · Rotating screen", opts: [["Standard Combo", 850000]] },
+  { id: "lav-set", cat: "Sets", brand: "Apple", name: "Lavender Apple Set", img: "lavender-set", tag: "Set",
+    finishes: [["Lavender", "Purple"]], spec: "iPhone · iPad Air · Apple Pencil · AirPods", opts: [["Full set", 2710000]] },
+  { id: "app2", cat: "Audio", brand: "Apple", name: "AirPods Pro 2", img: "airpods-pro-2", was: 385000,
+    finishes: [["White", "White"]], spec: "Active noise cancelling · Hearing aid mode · USB-C", opts: [["One size", 310000]] },
+  { id: "ip17p-silver", cat: "Phones", brand: "Apple", name: "iPhone 17 Pro", img: "iphone-17-pro-silver",
+    finishes: [["Silver", "White"]], spec: "6.3″ 120 Hz · A19 Pro · 48 MP triple", opts: [["256 GB", 1705000], ["512 GB", 2015000], ["1 TB", 2325000]] },
+  { id: "mba-gold", cat: "Laptops", brand: "Apple", name: "MacBook Air 13″ M1", img: "macbook-air-m1-gold", was: 1240000,
+    finishes: [["Gold", "Gold"]], spec: "13.3″ Retina · M1 · 18 h battery", opts: [["256 GB", 1085000], ["512 GB", 1315000]] },
+  { id: "s24u", cat: "Phones", brand: "Samsung", name: "Galaxy S24 Ultra + Buds3 Pro", img: "galaxy-s24-ultra", tag: "Bundle",
+    finishes: [["Titanium Black", "Black"]], spec: "6.8″ QHD+ · S Pen · 200 MP", opts: [["256 GB", 1625000], ["512 GB", 1810000]] },
+  { id: "watch-s9", cat: "Watches", brand: "Apple", name: "Apple Watch Series 9", img: "watch-s9-pink",
+    finishes: [["Pink", "Pink"]], spec: "Always-on Retina · Double tap · 18 h", opts: [["41 mm", 510000], ["45 mm", 555000]] },
+  { id: "p9pxl", cat: "Phones", brand: "Google", name: "Pixel 9 Pro XL", img: "pixel-9-pro-xl-pink",
+    finishes: [["Rose Quartz", "Pink"]], spec: "6.8″ 120 Hz · Tensor G4 · 5× telephoto", opts: [["128 GB", 1395000], ["256 GB", 1550000]] },
+  { id: "ipadpro-burg", cat: "Tablets", brand: "Apple", name: "iPad Pro 11″", img: "ipad-pro-burgundy",
+    finishes: [["Burgundy", "Burgundy"]], spec: "11″ OLED · M4 · Apple Pencil Pro", opts: [["256 GB", 1550000], ["512 GB", 1860000]] },
+  { id: "a37", cat: "Phones", brand: "Samsung", name: "Galaxy A37 5G", img: "galaxy-a37-lavender",
+    finishes: [["Lavender", "Purple"]], spec: "6.7″ 120 Hz · 8 GB RAM · 50 MP", opts: [["128 GB", 540000], ["256 GB", 620000]] },
+  { id: "ip16-pink", cat: "Phones", brand: "Apple", name: "iPhone 16", img: "iphone-16-pink",
+    finishes: [["Pink", "Pink"]], spec: "6.1″ · A18 · Camera Control", opts: [["128 GB", 1130000], ["256 GB", 1285000]] },
+  { id: "ap4", cat: "Audio", brand: "Apple", name: "AirPods 4", img: "airpods-4",
+    finishes: [["White", "White"]], spec: "Open-ear fit · USB-C · Up to 30 h with case", opts: [["Standard", 200000], ["With ANC", 275000]] },
+  { id: "mba-rose", cat: "Laptops", brand: "Apple", name: "MacBook Air 13″", img: "macbook-air-rose",
+    finishes: [["Rose Gold", "Pink"]], spec: "13.3″ Retina · Touch ID · All-day battery", opts: [["256 GB", 1160000]] },
+  { id: "ip15pm", cat: "Phones", brand: "Apple", name: "iPhone 15 Pro Max", img: "iphone-15-pro-max-white", was: 1625000,
+    finishes: [["White Titanium", "White"]], spec: "6.7″ 120 Hz · A17 Pro · 5× telephoto", opts: [["256 GB", 1395000], ["512 GB", 1625000]] },
+  { id: "p9p", cat: "Phones", brand: "Google", name: "Pixel 9 Pro", img: "pixel-9-pro-blue",
+    finishes: [["Blue", "Blue"]], spec: "6.3″ 120 Hz · Tensor G4 · 5× telephoto", opts: [["128 GB", 1240000], ["256 GB", 1395000]] },
+  { id: "watch-se", cat: "Watches", brand: "Apple", name: "Apple Watch SE", img: "watch-se-starlight-2",
+    finishes: [["Starlight", "Gold"]], spec: "Retina display · Crash detection · 18 h", opts: [["40 mm", 385000], ["44 mm", 430000]] },
+  { id: "mb12", cat: "Laptops", brand: "Apple", name: "MacBook 12″", img: "macbook-12-rose-gold", tag: "Classic",
+    finishes: [["Rose Gold", "Pink"]], spec: "12″ Retina · Fanless · 920 g", opts: [["256 GB", 695000]] },
+  { id: "ip14pm", cat: "Phones", brand: "Apple", name: "iPhone 14 Pro Max", img: "iphone-14-pro-max-purple", was: 1240000,
+    finishes: [["Deep Purple", "Purple"]], spec: "6.7″ 120 Hz · A16 Bionic · Dynamic Island", opts: [["128 GB", 1005000], ["256 GB", 1130000]] },
+  { id: "ip15-pink", cat: "Phones", brand: "Apple", name: "iPhone 15", img: "iphone-15-pink",
+    finishes: [["Pink", "Pink"]], spec: "6.1″ · A16 Bionic · USB-C · 48 MP", opts: [["128 GB", 975000], ["256 GB", 1130000]] },
+  { id: "pixel8", cat: "Phones", brand: "Google", name: "Pixel 8", img: "pixel-8-colours", was: 775000,
+    finishes: [["Rose", "Gold"], ["Mint", "Green"], ["Hazel", "Green"], ["Obsidian", "Black"]], spec: "6.2″ 120 Hz · Tensor G3 · 7 years of updates", opts: [["128 GB", 620000], ["256 GB", 710000]] },
+];
+
+// Order for "Featured" sort; anything not listed goes last.
+const FEATURED = ["fold8", "s25u", "mba-midnight", "ip17p-silver", "osmo4", "apmax", "g7x", "pixel9", "ip-air", "flip7", "app2", "s24u",
+  "ip15pm", "mba-gold", "watch-se", "p9p", "ap4", "ip17p-burg", "ipadpro-burg", "a37", "watch-s10", "ip14pm", "p9pxl",
+  "ip16-pink", "ip15-pink", "pixel8", "watch-s9", "mba-rose", "mb12", "sky-set", "lav-set"];
+const rank = p => { const i = FEATURED.indexOf(p.id); return i < 0 ? 999 : i; };
+
+
+const $ = s => document.querySelector(s);
+const money = n => "₦" + Math.round(n).toLocaleString("en-NG");
+const byId = id => PRODUCTS.find(p => p.id === id);
+const photo = (p, f) => `images/${p.finishes[f][2] || p.img}.jpg`;
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fromPrice = p => Math.min(...p.opts.map(o => o[1]));
+const byRank = list => [...list].sort((a, b) => rank(a) - rank(b));
+const pick = Object.fromEntries(PRODUCTS.map(p => [p.id, { s: 0, f: 0 }]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+
+// ---- Icons ----
+const sv = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const I = {
+  home: sv('<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/>'),
+  grid: sv('<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>'),
+  star: sv('<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/>'),
+  bag: sv('<path d="M5 8h14l-1.2 12.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/>'),
+  user: sv('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+  bell: sv('<path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+  search: sv('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'),
+  sliders: sv('<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>'),
+  heart: sv('<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'),
+  back: sv('<path d="M15 5l-7 7 7 7"/>'),
+  arrow: sv('<path d="M7 17 17 7M9 7h8v8"/>'),
+  mail: sv('<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>'),
+  lock: sv('<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+  phone: sv('<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>'),
+  eye: sv('<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>'),
+  logout: sv('<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5M5 12h11"/>'),
+  plus: sv('<path d="M12 5v14M5 12h14"/>'),
+  minus: sv('<path d="M5 12h14"/>'),
+  truck: sv('<path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>'),
+  shield: sv('<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
+  refresh: sv('<path d="M20 11a8 8 0 0 0-14.6-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.6 4.5L20 16"/><path d="M20 20v-4h-4"/>'),
+  check: sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+};
+
+// ---- Collections ----
+const isPhone = p => p.cat === "Phones";
+const LISTS = {
+  all: { title: "All products", f: () => true },
+  deals: { title: "Best deals", f: p => p.was },
+  iphone: { title: "iPhone", f: p => p.brand === "Apple" && isPhone(p) },
+  galaxy: { title: "Galaxy", f: p => p.brand === "Samsung" },
+  pixel: { title: "Google Pixel", f: p => p.brand === "Google" },
+  mac: { title: "MacBook", f: p => p.cat === "Laptops" },
+  ipad: { title: "iPad and sets", f: p => p.cat === "Tablets" || p.cat === "Sets" },
+  audio: { title: "Audio", f: p => p.cat === "Audio" },
+  watch: { title: "Watches", f: p => p.cat === "Watches" },
+  camera: { title: "Cameras", f: p => p.cat === "Cameras" },
+  fold: { title: "Fold it, flip it", f: p => p.id === "fold8" || p.id === "flip7" },
+  midnight: { title: "Midnight everything", f: p => p.finishes.some(f => f[1] === "Black" || f[1] === "Navy") },
+  pink: { title: "Think pink", f: p => p.finishes.some(f => f[1] === "Pink") },
+  sets: { title: "Matching sets", f: p => p.cat === "Sets" || p.id === "s24u" },
+};
+const CIRCLES = [["iphone", "iPhone", "iphone-17-pro-silver"], ["galaxy", "Galaxy", "galaxy-s25-ultra-silverblue"], ["pixel", "Pixel", "pixel-9-colours"], ["mac", "Mac", "macbook-air-midnight"], ["audio", "Audio", "airpods-max-purple"], ["watch", "Watch", "watch-s10-rose-gold"], ["camera", "Camera", "canon-g7x-black"], ["ipad", "iPad", "ipad-pro-burgundy"]];
+const TILES = [["iphone", "iPhone", "iphone-17-pro-silver"], ["galaxy", "Galaxy", "galaxy-z-fold8-white"], ["pixel", "Google Pixel", "pixel-9-pro-blue"], ["mac", "MacBook", "macbook-air-midnight"], ["audio", "Headphones", "airpods-max-purple"], ["watch", "Watches", "watch-se-starlight-2"], ["camera", "Cameras", "canon-g7x-black"], ["ipad", "iPad and sets", "sky-blue-set"]];
+const PROMOS = [
+  { eyebrow: "Just landed", title: "Galaxy Z Fold8", sub: "From ₦3,100,000", img: "galaxy-z-fold8-white", go: ["product", "fold8"] },
+  { eyebrow: "Creator season", title: "PowerShot G7 X Mark III", sub: "Vlog-ready, 4K video", img: "canon-g7x-black", go: ["product", "g7x"] },
+  { eyebrow: "This week", title: "Best deals", sub: "Save on iPhone, Pixel and MacBook", img: "iphone-15-pro-max-white", go: ["list", "deals"] },
+];
+const STORIES = [
+  { k: "fold", eyebrow: "Foldables", title: "Fold it, flip it", sub: "Galaxy Z Fold8 and Z Flip7", img: "galaxy-z-fold8-white" },
+  { k: "camera", eyebrow: "The creator kit", title: "Shoot, vlog, post", sub: "Canon G7 X Mark III and DJI Osmo Pocket 4", img: "dji-osmo-pocket-4" },
+  { k: "midnight", eyebrow: "Colour edit", title: "Midnight everything", sub: "Black and navy, from phones to headphones", img: "airpods-max-midnight" },
+  { k: "pink", eyebrow: "Colour edit", title: "Think pink", sub: "iPhone, Pixel, MacBook and Apple Watch", img: "iphone-16-pink" },
+  { k: "sets", eyebrow: "Matching sets", title: "The full set", sub: "iPad, Watch, AirPods and more in one colour", img: "sky-blue-set" },
+];
+
+// ---- State ----
+let cart = store.get("unboxd-app-cart", {});
+Object.keys(cart).forEach(k => { if (!byId(k.split("|")[0])) delete cart[k]; });
+let saved = store.get("unboxd-saved", []).filter(byId);
+let view = { name: "home", params: {} }, stack = [];
+let listSort = "featured", authMode = "signin", confirmDelete = false;
+let bagStep = "cart", draft = { delivery: null, pay: "online", no: null }, lastOrder = null;
+const saveCart = () => store.set("unboxd-app-cart", cart);
+const cartCount = () => Object.values(cart).reduce((n, q) => n + q, 0);
+
+// ---- Accounts (kept in this browser until the app has a server) ----
+const USERS_KEY = "unboxd-users", SESSION_KEY = "unboxd-session";
+let memUsers = {}, memSession = null;
+function loadUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY) || "{}") || {}; } catch (e) { return memUsers; } }
+function saveUsers(u) { memUsers = u; try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch (e) {} }
+function getSession() { try { return localStorage.getItem(SESSION_KEY) || memSession; } catch (e) { return memSession; } }
+function setSession(email) { memSession = email; try { email ? localStorage.setItem(SESSION_KEY, email) : localStorage.removeItem(SESSION_KEY); } catch (e) {} }
+function currentUser() { const e = getSession(); const u = e && loadUsers()[e]; return u ? { email: e, ...u } : null; }
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+async function hashPw(pw, salt) { return hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(salt + ":" + pw))); }
+const newSalt = () => hex(crypto.getRandomValues(new Uint8Array(16)));
+const initials = n => n.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "?";
+const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const fmtDate = t => new Date(t).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const canHash = () => !!(window.crypto && crypto.subtle);
+async function startDemo() {
+  if (!canHash()) return toast("The demo needs a secure (https) connection.");
+  const day = 864e5, now = Date.now(), salt = newSalt(), users = loadUsers();
+  users["demo@unboxd.example"] = {
+    demo: true, name: "Sam Taylor", phone: "0800 000 0142", salt, hash: await hashPw("demo1234", salt), news: true,
+    address: { line: "15 Harbour Road", city: "Lagos", state: "Lagos" }, created: now - 120 * day,
+    orders: [
+      { no: "UBX-31877", date: now - 74 * day, total: 1160000, status: "Delivered", items: [{ name: "PowerShot G7 X Mark III", finish: "Black", opt: "", qty: 1, price: 1160000 }] },
+      { no: "UBX-45120", date: now - 33 * day, total: 1395000, status: "Delivered", items: [{ name: "MacBook Air 13″ M1", finish: "Gold", opt: "256 GB", qty: 1, price: 1085000 }, { name: "AirPods Pro 2", finish: "White", opt: "", qty: 1, price: 310000 }] },
+      { no: "UBX-58263", date: now - 6 * day, total: 2015000, status: "Delivered", items: [{ name: "Galaxy S25 Ultra", finish: "Titanium Silverblue", opt: "256 GB", qty: 1, price: 2015000 }] },
+    ],
+  };
+  saveUsers(users); setSession("demo@unboxd.example");
+  toast("You're in the demo account. Everything here is sample data.");
+}
+
+// ---- Rendering ----
+const greet = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening"; };
+const tagHTML = p => p.tag ? `<span class="tag ${p.tag.startsWith("New") ? "new" : ""}">${esc(p.tag)}</span>` : (p.was ? `<span class="tag">Save ${money(p.was - p.opts[0][1])}</span>` : "");
+const priceHTML = p => `${p.opts.length > 1 ? "From " : ""}${money(fromPrice(p))}${p.was ? `<s>${money(p.was)}</s>` : ""}`;
+const dotsHTML = p => p.finishes.length > 1 ? `<span class="dots" aria-label="${p.finishes.length} colours">${p.finishes.map(f => `<i style="background:${COLOURS[f[1]]}"></i>`).join("")}</span>` : "";
+function cardHTML(p) {
+  const st = pick[p.id], on = saved.includes(p.id);
+  return `<article class="pc">
+    <div class="pc-media"><button type="button" data-a="product" data-id="${p.id}" aria-label="${esc(p.name)}"><img src="${photo(p, st.f)}" alt="" loading="lazy"></button>${tagHTML(p)}
+      <button class="heart" type="button" data-a="save" data-id="${p.id}" aria-pressed="${on}" aria-label="${on ? "Remove from saved" : "Save"} ${esc(p.name)}">${I.heart}</button></div>
+    <button class="pc-name" type="button" data-a="product" data-id="${p.id}">${esc(p.name)}</button>
+    <div class="pc-sub"><span class="pc-price">${priceHTML(p)}</span>${dotsHTML(p)}</div>
+  </article>`;
+}
+const badge = () => cartCount() ? `<span class="badge">${cartCount()}</span>` : "";
+const headHTML = (title, extra = "") => `<div class="head"><button class="ic" type="button" data-a="back" aria-label="Back">${I.back}</button><h1>${title}</h1>${extra}</div>`;
+
+const SCREENS = {
+  splash: () => `<div class="splash fullh"><div class="mark">UNBOXD</div></div>`,
+
+  welcome: () => `<div class="ob-track fullh" id="obTrack">
+    <section class="ob-slide dark" aria-label="Welcome, 1 of 3">
+      <button class="ob-skip" type="button" data-a="obskip">Skip</button>
+      <div class="ob-photo"><div class="mark">UNBOXD</div><img src="images/pixel-8-colours.jpg" alt="A hand holding four Pixel phones"></div>
+      <h2>New tech,<br><em>straight out of the box.</em></h2>
+      <p>Phones, laptops, audio and cameras, delivered boxed with warranty.</p>
+      <button class="ob-btn" type="button" data-a="obnext" data-i="1">Get started →</button>
+      <div class="ob-dots" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+    </section>
+    <section class="ob-slide" aria-label="Welcome, 2 of 3">
+      <button class="ob-skip" type="button" data-a="obskip">Skip</button>
+      <div class="mark">UNBOXD</div>
+      <div class="ob-grid">${["galaxy-z-fold8-white", "iphone-17-pro-silver", "macbook-air-midnight", "airpods-max-purple", "iphone-17-pro-burgundy", "dji-osmo-pocket-4"].map(i => `<img src="images/${i}.jpg" alt="">`).join("")}</div>
+      <div class="ob-center"><h2>Every gadget,<br><em>one app.</em></h2><p>iPhone, Galaxy, Pixel, MacBook, AirPods and more, in the colour you want.</p></div>
+      <button class="ob-btn" type="button" data-a="obnext" data-i="2">Continue</button>
+      <div class="ob-dots" aria-hidden="true"><span></span><span class="on"></span><span></span></div>
+    </section>
+    <section class="ob-slide" aria-label="Welcome, 3 of 3">
+      <div class="mark">UNBOXD</div>
+      <h2 style="margin-top:20px">Pay your way,<br><em>delivered in 2–4 days.</em></h2>
+      <div class="perks" style="margin-top:8px">
+        <div class="perk">${I.bag}<div><strong>Pay online, by transfer or on delivery</strong><br>All prices in naira</div></div>
+        <div class="perk">${I.truck}<div><strong>Free delivery over ₦150,000</strong><br>Boxed with its cable</div></div>
+        <div class="perk">${I.shield}<div><strong>Warranty on every device</strong><br>7-day returns</div></div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="ob-btn" type="button" data-a="obnext" data-i="3">Create an account or log in</button>
+      <div class="ob-dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
+    </section></div>`,
+
+  login: () => authHTML(true),
+
+  home: () => {
+    const u = currentUser();
+    return `<div class="scr">
+      <div class="top"><div><div class="hello">${greet()},</div><div class="name">${esc(u ? u.name.split(" ")[0] : "there")}</div></div>
+        <div class="top-ic"><button class="ic" type="button" data-a="bell" aria-label="Notifications">${I.bell}</button><button class="ic dark" type="button" data-a="tab" data-t="bag" aria-label="Bag">${I.bag}${badge()}</button></div></div>
+      <form class="search" id="homeSearch" role="search"><label>${I.search}<input id="hq" type="search" placeholder="Search iPhone, Galaxy, MacBook" aria-label="Search products" autocomplete="off"></label>
+        <button class="filt" type="button" data-a="tab" data-t="cats" aria-label="Browse categories">${I.sliders}</button></form>
+      <div class="hs" aria-label="Shop by brand">${CIRCLES.map(([k, l, img]) => `<button class="bc" type="button" data-a="list" data-k="${k}"><span><img src="images/${img}.jpg" alt=""></span>${l}</button>`).join("")}</div>
+      <div class="hs promos">${PROMOS.map((p, i) => `<button class="promo" type="button" data-a="promo" data-i="${i}"><img src="images/${p.img}.jpg" alt=""><span class="pc-copy"><small>${p.eyebrow}</small><strong>${p.title}</strong><em>${p.sub}</em><b>Shop now →</b></span></button>`).join("")}</div>
+      <div class="sh"><h2>Trending now</h2><button class="see" type="button" data-a="list" data-k="all">See all</button></div>
+      <div class="hs cards">${byRank(PRODUCTS).slice(0, 8).map(cardHTML).join("")}</div>
+      <div class="sh"><h2>Best deals</h2><button class="see" type="button" data-a="list" data-k="deals">See all</button></div>
+      <div class="grid2">${byRank(PRODUCTS.filter(p => p.was)).map(cardHTML).join("")}</div>
+    </div>`;
+  },
+
+  cats: () => `<div class="scr">
+    <div class="top"><div><div class="eyebrow">Browse</div><h1 class="big">Categories</h1></div><button class="ic" type="button" data-a="go" data-s="search" aria-label="Search">${I.search}</button></div>
+    <div class="catgrid">${TILES.map(([k, l, img]) => { const n = PRODUCTS.filter(LISTS[k].f).length;
+      return `<button class="ct" type="button" data-a="list" data-k="${k}"><img src="images/${img}.jpg" alt="" loading="lazy"><span class="ct-txt"><strong>${l}</strong><small>${n} ${n === 1 ? "device" : "devices"}</small></span><span class="ct-go">${I.arrow}</span></button>`; }).join("")}</div>
+  </div>`,
+
+  list: ({ k }) => {
+    let items = PRODUCTS.filter(LISTS[k].f);
+    items = listSort === "low" ? items.sort((a, b) => fromPrice(a) - fromPrice(b)) : listSort === "high" ? items.sort((a, b) => fromPrice(b) - fromPrice(a)) : byRank(items);
+    return `<div class="scr">${headHTML(esc(LISTS[k].title), `<span class="count">${items.length}</span>`)}
+      <div class="hs chips">${[["featured", "Featured"], ["low", "Price: low to high"], ["high", "Price: high to low"]].map(([v, l]) => `<button class="chip" type="button" data-a="sort" data-v="${v}" aria-pressed="${listSort === v}">${l}</button>`).join("")}</div>
+      <div class="grid2">${items.map(cardHTML).join("")}</div></div>`;
+  },
+
+  search: ({ q = "" }) => {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = words.length ? byRank(PRODUCTS.filter(p => { const hay = [p.name, BRAND[p.brand], p.cat, p.spec, ...p.finishes.map(f => f[0])].join(" ").toLowerCase(); return words.every(w => hay.includes(w)); })) : [];
+    return `<div class="scr">
+      <div class="head"><button class="ic" type="button" data-a="back" aria-label="Back">${I.back}</button>
+        <form class="search" id="searchForm" role="search" style="flex:1"><label>${I.search}<input id="sq" type="search" value="${esc(q)}" placeholder="Search products" aria-label="Search products" autocomplete="off"></label></form></div>
+      ${!words.length ? `<div class="hs chips">${["iPhone", "Galaxy", "AirPods", "MacBook", "Canon", "Pink"].map(s => `<button class="chip" type="button" data-a="suggest" data-q="${s}">${s}</button>`).join("")}</div>`
+        : hits.length ? `<p class="muted">${hits.length} ${hits.length === 1 ? "result" : "results"} for “${esc(q)}”</p><div class="grid2">${hits.map(cardHTML).join("")}</div>`
+        : `<div class="empty-state"><span class="ei">${I.search}</span><strong>No results for “${esc(q)}”</strong>Try a brand like Galaxy or a product like AirPods.</div>`}
+    </div>`;
+  },
+
+  spot: () => `<div class="scr"><div><div class="eyebrow">The Unboxd edit</div><h1 class="big">Spotlight</h1></div>
+    <div class="stories">${STORIES.map(s => `<button class="story" type="button" data-a="list" data-k="${s.k}"><img src="images/${s.img}.jpg" alt="" loading="lazy"><span class="st-copy"><small>${s.eyebrow}</small><strong>${s.title}</strong><span>${s.sub}</span><b>Shop the edit →</b></span></button>`).join("")}</div></div>`,
+
+  product: ({ id }) => {
+    const p = byId(id), st = pick[id], fin = p.finishes[st.f], price = p.opts[st.s][1], on = saved.includes(id);
+    const optName = /GB|TB/.test(p.opts[0][0]) ? "Storage" : /mm/.test(p.opts[0][0]) ? "Case size" : "Option";
+    return `<div class="pd">
+      <div class="pd-media"><img src="${photo(p, st.f)}" alt="${esc(p.name)} in ${esc(fin[0])}">
+        <button class="fab l" type="button" data-a="back" aria-label="Back">${I.back}</button>
+        <button class="fab r" type="button" data-a="save" data-id="${id}" aria-pressed="${on}" aria-label="${on ? "Remove from saved" : "Save"}">${I.heart}</button></div>
+      <div class="scr" style="padding-bottom:130px">
+        <div><div class="eyebrow">${BRAND[p.brand]} · ${p.cat}</div><h1>${esc(p.name)}</h1></div>
+        <div class="pd-price">${money(price)}${p.was && st.s === 0 ? `<s>${money(p.was)}</s>` : ""}</div>
+        <div class="og"><div class="og-h"><span>Colour</span><span>${esc(fin[0])}</span></div>
+          <div class="cc">${p.finishes.map((f, i) => `<button class="cchip" type="button" data-a="pf" data-i="${i}" aria-pressed="${i === st.f}"><i style="background:${COLOURS[f[1]]}"></i>${esc(f[0])}</button>`).join("")}</div></div>
+        ${p.opts.length > 1 ? `<div class="og"><div class="og-h"><span>${optName}</span><span>${esc(p.opts[st.s][0])}</span></div>
+          <div class="cc">${p.opts.map((o, i) => `<button class="ochip" type="button" data-a="ps" data-i="${i}" aria-pressed="${i === st.s}">${esc(o[0])}</button>`).join("")}</div></div>` : ""}
+        <div class="og"><div class="og-h"><span>Highlights</span><span></span></div><ul class="specs">${p.spec.split(" · ").map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+        <div class="perks">
+          <div class="perk">${I.truck}<span><strong>Free delivery over ₦150,000.</strong> Arrives in 2–4 days.</span></div>
+          <div class="perk">${I.shield}<span><strong>Warranty included.</strong> Boxed with its cable.</span></div>
+          <div class="perk">${I.refresh}<span><strong>7-day returns.</strong> Change your mind, send it back.</span></div>
+        </div>
+      </div>
+      <div class="buybar"><div><small>Price</small><strong>${money(price)}</strong></div><button class="btn primary" type="button" data-a="add" data-id="${id}">Add to bag</button></div>
+    </div>`;
+  },
+
+  bag: () => bagHTML(),
+  account: () => currentUser() ? accountHTML() : authHTML(false),
+};
+
+function authHTML(standalone) {
+  const up = authMode === "signup";
+  const f = (id, icon, type, ph, ac) => `<label class="field">${icon}<input id="${id}" type="${type}" placeholder="${ph}" aria-label="${ph}" autocomplete="${ac}"></label>`;
+  return `<div class="scr auth">
+    <div class="mark">UNBOXD</div>
+    <h1>${up ? "Create account" : "Welcome back"}<span>.</span></h1>
+    <p class="muted">${up ? "Save your details, track orders and check out faster." : "Log in to track orders and grab new drops."}</p>
+    <form class="form" id="authForm" novalidate>
+      ${up ? f("auName", I.user, "text", "Full name", "name") : ""}
+      ${f("auEmail", I.mail, "email", "Email", "email")}
+      ${up ? f("auPhone", I.phone, "tel", "Phone (optional)", "tel") : ""}
+      <label class="field">${I.lock}<input id="auPw" type="password" placeholder="Password${up ? " (8+ characters)" : ""}" aria-label="Password" autocomplete="${up ? "new-password" : "current-password"}"><button class="eye" type="button" data-a="eye" aria-label="Show password" aria-pressed="false">${I.eye}</button></label>
+      ${up ? "" : `<button class="link right" type="button" data-a="forgot">Forgot password?</button><p class="muted" id="forgotMsg" hidden>Password reset by email comes with the live app. Until then, contact us and we'll reset it for you.</p>`}
+      <p class="form-err" id="auErr" role="alert"></p>
+      <button class="btn primary full" type="submit">${up ? "Create account" : "Log in"}</button>
+    </form>
+    <div class="or">or</div>
+    <button class="btn full" type="button" data-a="demo">Try the demo account</button>
+    ${standalone ? `<button class="btn ghost full" type="button" data-a="guest">Continue as guest</button>` : ""}
+    <button class="btn ghost full" type="button" data-a="tour">See the welcome tour</button>
+    <p class="switch">${up ? `Already have an account? <button class="link" type="button" data-a="mode" data-m="signin">Log in</button>` : `New to Unboxd? <button class="link" type="button" data-a="mode" data-m="signup">Create account</button>`}</p>
+  </div>`;
+}
+
+function accountHTML() {
+  const u = currentUser(), orders = (u.orders || []).slice().reverse(), a = u.address || {};
+  const statusClass = s => ({ Paid: "paid", Delivered: "delivered" }[s] || "wait");
+  return `<div class="scr">
+    <div class="top"><div><div class="hello">Your account</div><div class="name">${esc(u.name.split(" ")[0])}</div></div><button class="ic" type="button" data-a="logout" aria-label="Log out">${I.logout}</button></div>
+    ${u.demo ? `<p class="demo-note">This is the demo account. Orders and address are sample data and reset each time you open the demo.</p>` : ""}
+    <div class="card"><div class="prof"><span class="avatar">${esc(initials(u.name))}</span><div><strong>${esc(u.name)}</strong><span>${esc(u.email)}</span></div></div></div>
+    <div class="stats"><div><strong>${orders.length}</strong><span>Orders</span></div><div><strong>${saved.length}</strong><span>Saved</span></div><div><strong>${cartCount()}</strong><span>In bag</span></div></div>
+    <section class="card"><h3>Orders <span>${orders.length}</span></h3>
+      ${orders.length ? orders.map(o => `<div class="order"><div class="ot"><span>${esc(o.no)}</span><span>${money(o.total)}</span></div>
+        <div><span class="pill ${statusClass(o.status || "Delivered")}">${esc(o.status || "Delivered")}</span> <span class="oi">${fmtDate(o.date)}</span></div>
+        <span class="oi">${o.items.map(i => `${esc(i.name)} (${esc(i.finish)}${i.opt ? ", " + esc(i.opt) : ""})${i.qty > 1 ? " ×" + i.qty : ""}`).join(", ")}</span></div>`).join("")
+        : `<p class="muted">No orders yet. Orders you place while logged in show here.</p>`}</section>
+    <section class="card"><h3>Saved <span>${saved.length}</span></h3>
+      ${saved.length ? `<div class="hs cards">${saved.map(id => cardHTML(byId(id))).join("")}</div>` : `<p class="muted">Tap the heart on any product to save it here.</p>`}</section>
+    <section class="card"><h3>Delivery address</h3>
+      <form class="form" id="addrForm" novalidate>
+        <label class="flabel">Street address<span class="field"><input id="adLine" autocomplete="street-address" value="${esc(a.line)}"></span></label>
+        <div class="two"><label class="flabel">City<span class="field"><input id="adCity" autocomplete="address-level2" value="${esc(a.city)}"></span></label><label class="flabel">State<span class="field"><input id="adState" autocomplete="address-level1" value="${esc(a.state)}"></span></label></div>
+        <p class="form-err" id="adErr" role="alert"></p>
+        <div style="display:flex;align-items:center;gap:12px"><button class="btn" type="submit" style="height:44px">Save address</button><span class="saved" id="adSaved" hidden>Saved</span></div>
+      </form></section>
+    <button class="btn full" type="button" data-a="tour">See the welcome tour</button>
+    <button class="btn full" type="button" data-a="logout">Log out</button>
+    ${confirmDelete ? `<div class="confirm" role="alert">Delete your account and order history from this device? This can't be undone.<div class="row"><button class="btn red" type="button" data-a="delyes">Delete</button><button class="btn" type="button" data-a="delno">Keep it</button></div></div>`
+      : `<button class="danger" type="button" data-a="del">Delete account</button>`}
+  </div>`;
+}
+
+// ---- Bag and checkout ----
+function cartItems() {
+  return Object.keys(cart).filter(k => cart[k] > 0).map(k => { const [id, s, f] = k.split("|"); const p = byId(id);
+    return { key: k, p, s: +s, f: +f, name: p.name, finish: p.finishes[f][0], opt: p.opts.length > 1 ? p.opts[s][0] : "", qty: cart[k], price: p.opts[s][1] }; });
+}
+function sums(items) { const sub = items.reduce((t, i) => t + i.price * i.qty, 0); const ship = sub === 0 || sub >= 150000 ? 0 : 5000; return { sub, ship, total: sub + ship, n: items.reduce((n, i) => n + i.qty, 0) }; }
+const miniHTML = t => `<div class="card mini"><div><span>Subtotal (${t.n} ${t.n === 1 ? "item" : "items"})</span><span>${money(t.sub)}</span></div><div><span>Delivery</span><span>${t.ship ? money(t.ship) : "Free"}</span></div><div class="t"><span>Total</span><span>${money(t.total)}</span></div></div>`;
+const stepsHTML = i => `<ol class="steps" aria-label="Checkout steps">${["Delivery", "Payment", "Done"].map((s, j) => `<li class="${j <= i ? "on" : ""}"${j === i ? ' aria-current="step"' : ""}>${s}</li>`).join("")}</ol>`;
+const PAY = {
+  online: { label: "Pay online", sub: "Card, bank transfer or USSD on a secure payment page", btn: t => `Pay ${money(t)}` },
+  transfer: { label: "Bank transfer", sub: "Send the total to our account. We confirm when it arrives.", btn: () => "I've made the transfer" },
+  pod: { label: "Pay on delivery", sub: "Pay by card or transfer when your order arrives", btn: () => "Place order" },
+};
+function payDetail(kind, t) {
+  if (kind === "online") return `<p class="note">You'll pay on a secure payment page by card, bank transfer or USSD. <strong>Demo:</strong> online payment isn't connected yet, so tapping Pay simulates a successful payment. No money is taken.</p>`;
+  if (kind === "transfer") return `<dl class="bank"><dt>Bank</dt><dd>Your bank</dd><dt>Account name</dt><dd>Unboxd</dd><dt>Account number</dt><dd>0000000000</dd><dt>Amount</dt><dd>${money(t.total)}</dd><dt>Narration</dt><dd>${esc(draft.no)}</dd></dl><p class="note">These are placeholder bank details. Use your order number as the narration so the payment can be matched to your order.</p>`;
+  return `<p class="note">Pay by card or bank transfer when the rider arrives. Your order is confirmed as soon as you place it.</p>`;
+}
+function bagHTML() {
+  const u = currentUser();
+  if (bagStep === "done" && lastOrder) {
+    const o = lastOrder;
+    const msg = o.status === "Paid" ? `We've received your payment. Your order will be delivered to ${esc(o.delivery.city)} in 2–4 days.`
+      : o.status === "Awaiting transfer" ? `Transfer ${money(o.total)} with ${esc(o.no)} as the narration. We'll confirm your order as soon as the money arrives.`
+      : `Pay ${money(o.total)} when your order arrives in ${esc(o.delivery.city)}, in 2–4 days.`;
+    return `<div class="scr">${stepsHTML(2)}
+      <div class="done"><span class="tick">${I.check}</span><h2>${o.status === "Paid" ? "Payment successful" : "Order placed"}</h2>
+        <p>Order <strong>${esc(o.no)}</strong> · <span class="pill ${o.status === "Paid" ? "paid" : ""}">${esc(o.status)}</span></p><p>${msg}</p></div>
+      <div class="card mini">${o.items.map(i => `<div><span>${esc(i.name)} · ${esc(i.finish)}${i.opt ? ", " + esc(i.opt) : ""}${i.qty > 1 ? " ×" + i.qty : ""}</span><span>${money(i.price * i.qty)}</span></div>`).join("")}<div class="t"><span>Total</span><span>${money(o.total)}</span></div></div>
+      ${u ? `<button class="btn full" type="button" data-a="tab" data-t="account">View my orders</button>` : `<p class="muted" style="text-align:center">Create an account next time to keep track of your orders.</p>`}
+      <button class="btn primary full" type="button" data-a="shopmore">Continue shopping</button></div>`;
+  }
+  const items = cartItems();
+  if (!items.length) { bagStep = "cart"; return `<div class="scr"><div><div class="eyebrow">Your bag</div><h1 class="big">Bag</h1></div>
+    <div class="empty-state"><span class="ei">${I.bag}</span><strong>Your bag is empty</strong>Find something you love and it'll show up here.<button class="btn primary" type="button" data-a="tab" data-t="home" style="margin-top:8px">Start shopping</button></div></div>`; }
+  const t = sums(items);
+  if (bagStep === "delivery") {
+    const d = draft.delivery || { name: u ? u.name : "", phone: u ? u.phone : "", ...(u && u.address ? u.address : {}) };
+    const fl = (id, label, ac, val, type = "text", ph = "") => `<label class="flabel">${label}<span class="field"><input id="${id}" type="${type}" autocomplete="${ac}" placeholder="${ph}" value="${esc(val)}"></span></label>`;
+    return `<div class="scr">${headHTML("Delivery")}${stepsHTML(0)}
+      ${u ? "" : `<p class="muted">Have an account? <button class="link" type="button" data-a="tab" data-t="account">Log in</button> to fill this in and keep a record of your order.</p>`}
+      <form class="form" id="delForm" novalidate>
+        ${fl("coName", "Full name", "name", d.name)}
+        ${fl("coPhone", "Phone number", "tel", d.phone, "tel", "0801 234 5678")}
+        ${fl("coLine", "Street address", "street-address", d.line)}
+        <div class="two">${fl("coCity", "City", "address-level2", d.city)}${fl("coState", "State", "address-level1", d.state)}</div>
+        ${u ? `<label class="check"><input type="checkbox" id="coSave" checked> Save this address to my account</label>` : ""}
+        ${miniHTML(t)}
+        <p class="form-err" id="coErr" role="alert"></p>
+        <button class="btn primary full" type="submit">Continue to payment</button>
+      </form></div>`;
+  }
+  if (bagStep === "payment") {
+    if (!draft.no) draft.no = "UBX-" + Math.floor(10000 + Math.random() * 90000);
+    const d = draft.delivery;
+    return `<div class="scr">${headHTML("Payment")}${stepsHTML(1)}
+      <p class="muted">Delivering to <strong>${esc(d.name)}</strong>, ${esc(d.line)}, ${esc(d.city)}. <button class="link" type="button" data-a="step" data-s="delivery">Change</button></p>
+      <fieldset class="payopt"><legend>How would you like to pay?</legend>
+        ${Object.entries(PAY).map(([k, o]) => `<label><input type="radio" name="pay" value="${k}" ${k === draft.pay ? "checked" : ""}><div><strong>${o.label}</strong><span>${o.sub}</span></div></label>`).join("")}</fieldset>
+      ${payDetail(draft.pay, t)}
+      ${miniHTML(t)}
+      <button class="btn blue full" type="button" data-a="pay" id="payBtn">${PAY[draft.pay].btn(t.total)}</button></div>`;
+  }
+  return `<div class="scr"><div><div class="eyebrow">Your bag</div><h1 class="big">Bag</h1></div>
+    <div class="card">${items.map(i => `<div class="line"><img src="${photo(i.p, i.f)}" alt="">
+      <div><div class="ln">${esc(i.name)}</div><div class="lm">${esc(i.finish)}${i.opt ? " · " + esc(i.opt) : ""}</div>
+      <div class="lr"><span class="qty"><button type="button" data-a="qty" data-k="${i.key}" data-d="-1" aria-label="Remove one">${I.minus}</button><span>${i.qty}</span><button type="button" data-a="qty" data-k="${i.key}" data-d="1" aria-label="Add one">${I.plus}</button></span><span class="lp">${money(i.price * i.qty)}</span></div></div></div>`).join("")}</div>
+    ${miniHTML(t)}
+    <p class="muted">${u ? `Logged in as ${esc(u.name)}. This order will be saved to your account.` : `<button class="link" type="button" data-a="tab" data-t="account">Log in</button> to save this order to your account, or check out as a guest.`}</p>
+    <button class="btn primary full" type="button" data-a="step" data-s="delivery">Checkout · ${money(t.total)}</button></div>`;
+}
+function placeOrder(items, t) {
+  const status = { online: "Paid", transfer: "Awaiting transfer", pod: "Pay on delivery" }[draft.pay];
+  const order = { no: draft.no, date: Date.now(), items: items.map(({ name, finish, opt, qty, price }) => ({ name, finish, opt, qty, price })), total: t.total, status, method: PAY[draft.pay].label, delivery: draft.delivery };
+  const u = currentUser();
+  if (u) { const users = loadUsers(); users[u.email].orders = [...(users[u.email].orders || []), order]; saveUsers(users); }
+  lastOrder = order; cart = {}; saveCart();
+  draft = { delivery: null, pay: "online", no: null };
+  bagStep = "done"; render();
+}
+
+// ---- Navigation ----
+const TABS = [["home", "Home", I.home], ["cats", "Categories", I.grid], ["spot", "Spotlight", I.star], ["bag", "Bag", I.bag], ["account", "Account", I.user]];
+const TAB_OF = { home: "home", search: "home", cats: "cats", list: "cats", spot: "spot", bag: "bag", account: "account" };
+let curTab = "home";
+function render(keepScroll = false) {
+  const y = scrollY;
+  $("#screen").dataset.view = view.name;
+  $("#screen").innerHTML = SCREENS[view.name](view.params);
+  const bar = !["splash", "welcome", "login", "product"].includes(view.name);
+  $("#tabbar").hidden = !bar;
+  if (TAB_OF[view.name]) curTab = TAB_OF[view.name];
+  $("#tabbar").innerHTML = TABS.map(([k, l, ic]) => `<button class="tb" type="button" data-a="tab" data-t="${k}" aria-label="${l}"${k === curTab ? ' aria-current="page"' : ""}>${ic}${k === "bag" && cartCount() ? `<span class="badge">${cartCount()}</span>` : ""}</button>`).join("");
+  window.scrollTo(0, keepScroll ? y : 0);
+}
+function go(name, params = {}) { stack.push({ ...view, y: scrollY }); view = { name, params }; render(); }
+function back() { const prev = stack.pop() || { name: "home", params: {} }; view = prev; render(); if (prev.y) window.scrollTo(0, prev.y); }
+function tab(t) { stack = []; if (t === "bag" && bagStep === "done") { bagStep = "cart"; lastOrder = null; } view = { name: t, params: {} }; render(); }
+
+let tt;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => t.hidden = true, 2400); }
+function fail(errSel, msg, inputId) { $(errSel).textContent = msg; if (inputId) { const i = $("#" + inputId); i.setAttribute("aria-invalid", "true"); i.focus(); } }
+function finishWelcome() { store.set("unboxd-welcome-v2", 1); }
+function afterAuth(msg) {
+  toast(msg);
+  if (view.name === "login") { stack = []; view = { name: "home", params: {} }; }
+  render();
+}
+
+// ---- Actions ----
+const A = {
+  tab: el => tab(el.dataset.t),
+  go: el => go(el.dataset.s),
+  back: () => back(),
+  list: el => { listSort = "featured"; go("list", { k: el.dataset.k }); },
+  product: el => go("product", { id: el.dataset.id }),
+  promo: el => { const [s, v] = PROMOS[+el.dataset.i].go; s === "product" ? go("product", { id: v }) : go("list", { k: v }); },
+  sort: el => { listSort = el.dataset.v; render(true); },
+  suggest: el => { view.params = { q: el.dataset.q }; render(); },
+  bell: () => toast("You're all caught up. No new notifications."),
+  save: el => {
+    const id = el.dataset.id, p = byId(id);
+    saved = saved.includes(id) ? saved.filter(x => x !== id) : [...saved, id];
+    store.set("unboxd-saved", saved);
+    const on = saved.includes(id);
+    document.querySelectorAll(`[data-a="save"][data-id="${id}"]`).forEach(b => b.setAttribute("aria-pressed", on));
+    toast(on ? `${p.name} saved` : `${p.name} removed from saved`);
+  },
+  pf: el => { pick[view.params.id].f = +el.dataset.i; render(true); },
+  ps: el => { pick[view.params.id].s = +el.dataset.i; render(true); },
+  add: el => {
+    const p = byId(el.dataset.id), st = pick[p.id], key = `${p.id}|${st.s}|${st.f}`;
+    cart[key] = (cart[key] || 0) + 1; saveCart(); if (bagStep === "done") { bagStep = "cart"; lastOrder = null; }
+    el.textContent = "Added ✓"; toast(`${p.name} · ${p.finishes[st.f][0]} added to your bag`);
+    setTimeout(() => back(), 650);
+  },
+  qty: el => { const k = el.dataset.k; cart[k] += +el.dataset.d; if (cart[k] <= 0) delete cart[k]; saveCart(); render(true); },
+  step: el => { bagStep = el.dataset.s; render(); },
+  pay: el => {
+    const items = cartItems(); if (!items.length) return;
+    const t = sums(items);
+    if (draft.pay === "online") { el.classList.add("busy"); el.textContent = "Processing payment…"; setTimeout(() => placeOrder(items, t), 1500); }
+    else placeOrder(items, t);
+  },
+  shopmore: () => { bagStep = "cart"; lastOrder = null; tab("home"); },
+  obnext: el => {
+    const i = +el.dataset.i;
+    if (i >= 3) { finishWelcome(); if (currentUser()) { stack = []; view = { name: "home", params: {} }; } else { authMode = "signup"; view = { name: "login", params: {} }; } render(); return; }
+    const tr = $("#obTrack"); tr.scrollTo({ left: i * tr.clientWidth, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  },
+  obskip: () => { finishWelcome(); if (currentUser()) { stack = []; view = { name: "home", params: {} }; } else { authMode = "signin"; view = { name: "login", params: {} }; } render(); },
+  tour: () => { stack = []; view = { name: "welcome", params: {} }; render(); },
+  guest: () => { stack = []; view = { name: "home", params: {} }; render(); },
+  mode: el => { authMode = el.dataset.m; render(); },
+  eye: el => { const i = $("#auPw"), show = i.type === "password"; i.type = show ? "text" : "password"; el.setAttribute("aria-pressed", show); el.setAttribute("aria-label", show ? "Hide password" : "Show password"); },
+  forgot: () => { $("#forgotMsg").hidden = false; },
+  demo: async () => { await startDemo(); if (currentUser()) afterAuth("You're in the demo account. Everything here is sample data."); },
+  logout: () => { setSession(null); confirmDelete = false; authMode = "signin"; toast("You're logged out."); tab("account"); },
+  del: () => { confirmDelete = true; render(true); },
+  delno: () => { confirmDelete = false; render(true); },
+  delyes: () => { const users = loadUsers(); delete users[getSession()]; saveUsers(users); setSession(null); confirmDelete = false; authMode = "signup"; toast("Account deleted."); tab("account"); },
+};
+document.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (el && A[el.dataset.a]) { e.preventDefault(); A[el.dataset.a](el, e); } });
+document.addEventListener("change", e => { if (e.target.name === "pay") { draft.pay = e.target.value; render(true); } });
+document.addEventListener("input", e => { if (e.target.matches("input")) e.target.removeAttribute("aria-invalid"); });
+document.addEventListener("submit", async e => {
+  e.preventDefault();
+  const id = e.target.id;
+  if (id === "homeSearch") { const q = $("#hq").value.trim(); go("search", { q }); setTimeout(() => { const s = $("#sq"); if (s && !q) s.focus(); }, 30); }
+  if (id === "searchForm") { view.params = { q: $("#sq").value.trim() }; render(); }
+  if (id === "authForm") {
+    $("#auErr").textContent = "";
+    const email = $("#auEmail").value.trim().toLowerCase(), pw = $("#auPw").value;
+    if (authMode === "signup") {
+      const name = $("#auName").value.trim(), phone = $("#auPhone").value.trim();
+      if (!name) return fail("#auErr", "Enter your full name.", "auName");
+      if (!emailOk(email)) return fail("#auErr", "Enter a full email address, like name@example.com.", "auEmail");
+      if (pw.length < 8) return fail("#auErr", "Use a password with at least 8 characters.", "auPw");
+      const users = loadUsers();
+      if (users[email]) return fail("#auErr", "There's already an account with this email. Log in instead.", "auEmail");
+      if (!canHash()) return fail("#auErr", "Accounts need a secure (https) connection.");
+      const salt = newSalt();
+      users[email] = { name, phone, salt, hash: await hashPw(pw, salt), address: null, orders: [], created: Date.now() };
+      saveUsers(users); setSession(email); afterAuth(`Account created. Welcome to Unboxd, ${name.split(" ")[0]}.`);
+    } else {
+      if (!emailOk(email)) return fail("#auErr", "Enter the email you signed up with.", "auEmail");
+      if (!pw) return fail("#auErr", "Enter your password.", "auPw");
+      const u = loadUsers()[email];
+      if (!u || !canHash() || await hashPw(pw, u.salt) !== u.hash) return fail("#auErr", "That email and password don't match an account.", "auPw");
+      setSession(email); afterAuth(`Welcome back, ${u.name.split(" ")[0]}.`);
+    }
+  }
+  if (id === "delForm") {
+    $("#coErr").textContent = "";
+    const d = { name: $("#coName").value.trim(), phone: $("#coPhone").value.trim(), line: $("#coLine").value.trim(), city: $("#coCity").value.trim(), state: $("#coState").value.trim() };
+    if (!d.name) return fail("#coErr", "Enter the name of the person receiving the order.", "coName");
+    if (d.phone.replace(/\D/g, "").length < 10) return fail("#coErr", "Enter a phone number the rider can call, like 0801 234 5678.", "coPhone");
+    if (!d.line) return fail("#coErr", "Enter the street address for delivery.", "coLine");
+    if (!d.city) return fail("#coErr", "Enter your city.", "coCity");
+    if (!d.state) return fail("#coErr", "Enter your state.", "coState");
+    draft.delivery = d;
+    const u = currentUser();
+    if (u && $("#coSave") && $("#coSave").checked) { const users = loadUsers(); users[u.email].address = { line: d.line, city: d.city, state: d.state }; if (!users[u.email].phone) users[u.email].phone = d.phone; saveUsers(users); }
+    bagStep = "payment"; render();
+  }
+  if (id === "addrForm") {
+    $("#adErr").textContent = "";
+    const line = $("#adLine").value.trim(), city = $("#adCity").value.trim(), state = $("#adState").value.trim();
+    if (!line) return fail("#adErr", "Enter your street address.", "adLine");
+    if (!city) return fail("#adErr", "Enter your city.", "adCity");
+    const users = loadUsers(); users[getSession()].address = { line, city, state }; saveUsers(users);
+    const s = $("#adSaved"); s.hidden = false; setTimeout(() => { if (document.body.contains(s)) s.hidden = true; }, 1800);
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && stack.length) back(); });
+
+// ---- Start ----
+{
+  const first = !store.get("unboxd-welcome-v2", 0);
+  view = { name: "splash", params: {} }; render();
+  setTimeout(() => { if (view.name === "splash") { view = { name: first ? "welcome" : "home", params: {} }; render(); } }, first ? 1500 : 1100);
+}
+</script>
+</body>
+</html>
