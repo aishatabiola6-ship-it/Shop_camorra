@@ -1063,6 +1063,7 @@
   <a href="#" class="js-wa" aria-label="WhatsApp"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span></a>
 </nav>
 
+<script src="vendor/supabase.js"></script>
 <script src="products.js"></script>
 <script>
 /* ===== Shop settings: edit these ===== */
@@ -1076,6 +1077,13 @@ const SHOP = {
 
 /* ===== Email: paste the Google Apps Script web app URL to send real emails (see email/SETUP.md).
    Leave blank and emails only appear in the on-site inbox. ===== */
+/* ===== Supabase: accounts, orders and products (see supabase/README.md). The anon key is public by design. ===== */
+const SUPA = {
+  url: "https://cebqjhroazymavpaxbzp.supabase.co",
+  key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYnFqaHJvYXp5bWF2cGF4YnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU4NzI1MTUsImV4cCI6MjExMTQ0ODUxNX0.Hq7e9f7LAB6wFoCEvsGtwDTxzpm81JEKQb5q65K2PUM",
+};
+const sb = window.supabase ? window.supabase.createClient(SUPA.url, SUPA.key, {auth:{storageKey:"blushAuth", persistSession:true, autoRefreshToken:true}}) : null;
+
 const EMAIL = {
   scriptUrl: "https://script.google.com/macros/s/AKfycbxpVXCfOyEansZkx_SV5rZzim54_HSqs2vmhBuvfE8_okSFlcGvyEUXfJQ8jQfRcCvB/exec",
 };
@@ -1167,7 +1175,7 @@ function renderGrid(){
       <div class="card-img">
         <img src="img/${p.imgs[0]}" alt="${p.name}" loading="lazy">
         ${p.imgs[1] ? `<img class="alt" src="img/${p.imgs[1]}" alt="" loading="lazy">` : ""}
-        ${p.badge ? `<span class="badge ${p.badgeWine?"wine":""}">${p.badge}</span>` : ""}
+        ${p.soldOut ? `<span class="badge wine">Sold out</span>` : p.badge ? `<span class="badge ${p.badgeWine?"wine":""}">${p.badge}</span>` : ""}
         <span class="quick">Quick view</span>
       </div>
       <div class="card-info">
@@ -1222,6 +1230,7 @@ $("#mSizes").addEventListener("click", e => {
 });
 function note(t, warn){ const n = $("#mNote"); n.textContent = t; n.classList.toggle("warn", !!warn); }
 function ready(){
+  if (byId(sel.id) && byId(sel.id).soldOut){ note("Sorry, this is sold out right now. Message us and we'll tell you when it's back.", true); return false; }
   const beauty = noSize(byId(sel.id));
   if (!sel.color){ note(beauty ? "Please choose a shade." : "Please choose a colour.", true); return false; }
   if (!sel.size && !beauty){ note("Please choose your size.", true); return false; }
@@ -1317,8 +1326,11 @@ function goShop(g, c){
   renderGroups(); renderGrid(); $("#shop").scrollIntoView({behavior:"smooth"});
 }
 $("#cats").addEventListener("click", e => { const b = e.target.closest(".cat"); if (b) goShop(b.dataset.g, b.dataset.c); });
-const trending = PRODUCTS.filter(p => /Bestseller|Statement|New|Limited/.test(p.badge||"")).slice(0,12);
-$("#trend").innerHTML = trending.map(p => `<button class="t-card" data-id="${p.id}"><div><img src="img/${p.imgs[0]}" alt="" loading="lazy"><i aria-hidden="true">♡</i></div><h4>${p.name}</h4><small>${money(p.price)}</small></button>`).join("");
+function renderTrend(){
+  const trending = PRODUCTS.filter(p => /Bestseller|Statement|New|Limited/.test(p.badge||"")).slice(0,12);
+  $("#trend").innerHTML = trending.map(p => `<button class="t-card" data-id="${p.id}"><div><img src="img/${p.imgs[0]}" alt="" loading="lazy"><i aria-hidden="true">♡</i></div><h4>${p.name}</h4><small>${money(p.price)}</small></button>`).join("");
+}
+renderTrend();
 // shade bar under the hero, from the Vee Beauty foundation shades
 $("#shadeBar").outerHTML = (byId("vee-foundation") ? byId("vee-foundation").colors : []).map(c => `<span style="background:${c[1]}"></span>`).join("");
 document.querySelectorAll(".js-shade").forEach(b => b.addEventListener("click", () => openWA(`Hi ${SHOP.name}! Please help me find my foundation shade. I'll send a selfie in daylight.`)));
@@ -1374,6 +1386,21 @@ $("#search").addEventListener("input", () => { clearTimeout(searchT); searchT = 
 $("#search").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); runSearch(true); $("#search").blur(); }});
 $("#searchGo").addEventListener("click", () => runSearch(true));
 
+// live products from Supabase: prices, sold out and new items (products.js is the fallback)
+async function syncProducts(){
+  if (!sb) return;
+  const {data, error} = await sb.from("products").select("id,data,price,sold_out,sort").order("sort");
+  if (error || !data || !data.length) return;
+  data.forEach(row => {
+    const fields = Object.assign({}, row.data, {id: row.id, price: row.price});
+    const live = Object.assign(fields, {group: fields.cat, cat: brandOf(fields), soldOut: row.sold_out});
+    const i = PRODUCTS.findIndex(p => p.id === row.id);
+    if (i >= 0) PRODUCTS[i] = Object.assign(PRODUCTS[i], live); else PRODUCTS.push(live);
+  });
+  renderGroups(); renderGrid(); renderTrend(); if (typeof renderBag === "function") renderBag();
+}
+syncProducts();
+
 // mobile tab bar
 $("#tbBag").addEventListener("click", () => open("#drawer"));
 const tbLinks = document.querySelectorAll('.tabbar a[href^="#"]:not(.js-wa)');
@@ -1391,28 +1418,34 @@ const store = {
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
   del(k){ try { localStorage.removeItem(k); } catch(e){} },
 };
-store.del("blushUser");                                   // old demo format
+store.del("blushUser"); store.del("blushAccounts");       // old browser-only accounts (now in Supabase)
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const normEmail = e => e.trim().toLowerCase();
 const validEmail = e => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(e);
 
 // ===== accounts (passwords are salted + hashed with PBKDF2, never stored as text) =====
-const accounts = () => store.get("blushAccounts", {});
-const getUser = () => { const s = store.get("blushSession", null), a = s && accounts()[s]; return a ? {name:a.name, email:s} : null; };
-const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
-const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
-async function hashPassword(pass, saltHex){
-  const salt = saltHex ? new Uint8Array(saltHex.match(/../g).map(h => parseInt(h,16))) : crypto.getRandomValues(new Uint8Array(16));
-  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt, iterations:150000, hash:"SHA-256"}, key, 256);
-  return {salt:hex(salt), hash:hex(bits)};
+const getUser = () => { const s = store.get("blushSession", null); return s && typeof s === "object" && s.email ? s : null; };
+const cacheUser = user => user ? store.set("blushSession", {email: user.email, name: (user.user_metadata && user.user_metadata.name) || user.email.split("@")[0], id: user.id}) : store.del("blushSession");
+const noCloud = (step) => { err(step, "Can't reach Blush right now. Check your connection and try again."); };
+async function loadProfile(){            // saved delivery details follow the customer to any device
+  if (!sb || !getUser()) return;
+  const {data} = await sb.from("profiles").select("name,phone,state,city,address").maybeSingle();
+  if (data && (data.phone || data.address)) store.set("blushAddr", {name:data.name || getUser().name, phone:data.phone || "", email:getUser().email, state:data.state || "", city:data.city || "", address:data.address || ""});
 }
+const firstName = u => (u && u.name ? u.name.split(" ")[0] : "");
 function refreshUser(){
   const u = getUser();
   $("#greet").textContent = u ? `Hi ${firstName(u)}, welcome back ✦` : ""; $("#greet").hidden = !u;
   $("#acctName").textContent = u ? firstName(u) : "Sign in";
 }
 refreshUser();
+if (sb){                                    // keep the cached sign-in in step with Supabase
+  sb.auth.getSession().then(({data}) => {
+    const user = data.session && data.session.user;
+    if (user){ cacheUser(user); loadProfile(); } else store.del("blushSession");
+    refreshUser();
+  }).catch(() => {});
+}
 
 // ===== email (on-site inbox + real sending through Google Apps Script when EMAIL.scriptUrl is set) =====
 const inbox = () => store.get("blushInbox", []);
@@ -1551,30 +1584,29 @@ stepEl("code").querySelector('[name="code"]').addEventListener("input", e => { e
 
 stepEl("in").addEventListener("submit", async e => {
   e.preventDefault(); const f = e.target;
-  const email = normEmail(f.email.value), pass = f.pass.value, acct = accounts()[email];
+  const email = normEmail(f.email.value), pass = f.pass.value;
   if (!validEmail(email)) return err("in", "Please enter a valid email.");
   if (!pass) return err("in", "Please enter your password.");
-  if (!acct) return err("in", "No account with this email. Create one below.");
+  if (!sb) return noCloud("in");
   busy(f, true, "Signing in…");
-  const {hash} = await hashPassword(pass, acct.salt);
-  busy(f, false);
-  if (hash !== acct.hash) return err("in", "Incorrect password. Try again or reset it.");
-  f.pass.value = "";
-  Object.assign(flow, {mode:"in", name:acct.name, email}); sendCode();   // second step: a code sent to their email
+  const {data, error} = await sb.auth.signInWithPassword({email, password: pass});
+  if (error){ busy(f, false); return err("in", /invalid/i.test(error.message) ? "Incorrect email or password. Try again or reset it." : "Couldn't sign in. Check your connection and try again."); }
+  const name = (data.user.user_metadata && data.user.user_metadata.name) || email.split("@")[0];
+  await sb.auth.signOut({scope:"local"});           // not signed in until the emailed code is entered
+  busy(f, false); f.pass.value = "";
+  Object.assign(flow, {mode:"in", name, email, pass}); sendCode();   // second step: a code sent to their email
 });
 stepEl("up").addEventListener("submit", e => {
   e.preventDefault(); const f = e.target;
   const name = f.name.value.trim().replace(/\s+/g," "), email = normEmail(f.email.value);
   if (name.length < 2) return err("up", "Please enter your name.");
   if (!validEmail(email)) return err("up", "Please enter a valid email.");
-  if (accounts()[email]) return err("up", "An account already uses this email. Sign in instead.");
   Object.assign(flow, {mode:"up", name, email}); sendCode();
 });
 stepEl("forgot").addEventListener("submit", e => {
   e.preventDefault(); const email = normEmail(e.target.email.value);
   if (!validEmail(email)) return err("forgot", "Please enter a valid email.");
-  if (!accounts()[email]) return err("forgot", "No account with this email.");
-  Object.assign(flow, {mode:"reset", name:accounts()[email].name, email}); sendCode();
+  Object.assign(flow, {mode:"reset", name:"", email}); sendCode();   // the server checks the account exists when the new password is saved
 });
 let verifying = false;
 stepEl("code").addEventListener("submit", async e => {
@@ -1582,7 +1614,10 @@ stepEl("code").addEventListener("submit", async e => {
   if (verifying) return;
   if (Date.now() > flow.exp) return err("code", "This code has expired. Tap Resend code.");
   if (++flow.tries > 5) return err("code", "Too many attempts. Tap Resend code for a new one.");
-  if (flow.server){
+  if (flow.mode === "reset" && flow.server){
+    if (!/^\d{6}$/.test(v)) return err("code", "Enter the 6-digit code from your email.");
+    flow.resetCode = v; flow.verified = true;        // the server checks it with the new password
+  } else if (flow.server){
     verifying = true; busy(e.target, true, "Checking…");
     const r = await callMail("verify", {email: flow.email, code: v});
     busy(e.target, false); verifying = false;
@@ -1591,7 +1626,12 @@ stepEl("code").addEventListener("submit", async e => {
   } else if (v !== flow.code) return err("code", "That code isn't right. Check your email and try again.");
   flow.verified = true; flow.code = null;
   if (flow.mode === "in"){
-    flow.verified = false; store.set("blushSession", flow.email);
+    flow.verified = false;
+    busy(e.target, true, "Signing in…");
+    const {data, error} = await sb.auth.signInWithPassword({email: flow.email, password: flow.pass});
+    busy(e.target, false); flow.pass = null;
+    if (error) return err("code", "Couldn't sign in. Please go back and try again.");
+    cacheUser(data.user); loadProfile();
     const u = getUser(); refreshUser(); finishWelcome(); mailSignIn(u); toast(`Welcome back, ${firstName(u)}`);
     return;
   }
@@ -1608,12 +1648,34 @@ stepEl("pass").addEventListener("submit", async e => {
   if (!flow.verified) return showStep(flow.mode === "reset" ? "forgot" : "up");
   if (!Object.values(RULES).every(r => r(f.pass.value))) return err("pass", "Use at least 8 characters with a letter and a number.");
   if (f.pass.value !== f.pass2.value) return err("pass", "The passwords don't match.");
+  if (!sb) return noCloud("pass");
   busy(f, true, "Saving…");
-  const {salt, hash} = await hashPassword(f.pass.value);
-  const all = accounts(), isNew = flow.mode === "up";
-  all[flow.email] = {...(all[flow.email] || {created: Date.now()}), name: flow.name, salt, hash};
-  store.set("blushAccounts", all); store.set("blushSession", flow.email);
-  busy(f, false); f.pass.value = f.pass2.value = ""; flow.verified = false;
+  const isNew = flow.mode === "up", password = f.pass.value;
+  if (isNew){
+    const {data, error} = await sb.auth.signUp({email: flow.email, password, options:{data:{name: flow.name}}});
+    busy(f, false);
+    if (error) return err("pass", /registered|exists/i.test(error.message) ? "An account already uses this email. Go back and sign in instead." : "Couldn't create your account. Please try again.");
+    if (!data.session){ const s2 = await sb.auth.signInWithPassword({email: flow.email, password}); if (s2.error) return err("pass", "Account created. Please sign in."); data.user = s2.data.user; }
+    cacheUser(data.user);
+  } else {
+    let res = null;
+    try {
+      const r = await fetch(SUPA.url + "/functions/v1/reset-password", {method:"POST", headers:{"Content-Type":"application/json", apikey: SUPA.key},
+        body: JSON.stringify({email: flow.email, code: flow.resetCode, password})});
+      res = await r.json();
+    } catch(e){}
+    if (!res || !res.ok){
+      busy(f, false);
+      if (res && /code|expired|too_many/.test(res.error || "")){ flow.verified = false; showStep("code"); return err("code", res.error === "expired" ? "This code has expired. Tap Resend code." : "That code isn't right. Check your email and try again."); }
+      return err("pass", res && res.error === "no_account" ? "No account uses this email. Create one instead." : "Couldn't save your password. Please try again.");
+    }
+    const {data, error} = await sb.auth.signInWithPassword({email: flow.email, password});
+    busy(f, false);
+    if (error) return err("pass", "Password saved. Please sign in.");
+    cacheUser(data.user);
+  }
+  f.pass.value = f.pass2.value = ""; flow.verified = false; flow.resetCode = null;
+  loadProfile();
   const u = getUser(); refreshUser(); finishWelcome();
   if (isNew) mailWelcome(u); else toast("Password updated. You're signed in.");
 });
@@ -1713,10 +1775,21 @@ function coValidate(d){
 $("#coPlace").addEventListener("click", () => {
   const d = coDetails(); if (!coValidate(d)) return;
   const btn = $("#coPlace"); btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Processing…`;
-  setTimeout(() => {
+  const t0 = Date.now();
+  (async () => {
     const sub = subtotal(), fee = d.ship.fee;
     const order = {no:"BLS-" + Math.floor(10000 + Math.random()*90000), at:Date.now(), items:bag.map(l => ({...l})), sub, fee, total:sub+fee,
       name:d.name, state:d.state, city:d.city, address:d.address, ship:d.ship.name, days:d.ship.days, pay:co.pay, note:d.note, owner:(getUser()||{}).email || null};
+    if (sb){                                   // every order reaches the shop's database
+      const {data: s} = await sb.auth.getSession(), uid = s.session ? s.session.user.id : null;
+      const {error} = await sb.from("orders").insert({no: order.no, user_id: uid, name: d.name, email: d.email || (getUser()||{}).email || null, phone: d.phone,
+        state: d.state, city: d.city, address: d.address, ship: d.ship.name, days: JSON.stringify(d.ship.days), pay: co.pay, note: d.note || null,
+        items: order.items.map(l => { const p = byId(l.id); return {...l, name: p ? p.name : l.id, price: p ? p.price : 0}; }), sub, fee, total: sub + fee});
+      if (error){ btn.disabled = false; renderCheckout(); $("#coErr").textContent = "We couldn't place your order. Check your connection and try again."; return; }
+      if (uid) sb.from("profiles").upsert({id: uid, name: d.name, phone: d.phone, state: d.state, city: d.city, address: d.address}).then(() => {});
+      myOrders = null;
+    }
+    await new Promise(r => setTimeout(r, Math.max(0, 1200 - (Date.now() - t0))));
     const orders = store.get("blushOrders", []); orders.unshift(order); store.set("blushOrders", orders);
     store.set("blushAddr", {name:d.name, phone:d.phone, email:d.email, state:d.state, city:d.city, address:d.address});
     bag = []; save(); renderBag();
@@ -1724,7 +1797,7 @@ $("#coPlace").addEventListener("click", () => {
     btn.disabled = false; renderDone(order); renderProfile(); open("#donePanel");
     const to = (getUser() || {}).email || d.email;
     if (to) setTimeout(() => mailOrder(order, to), 900);
-  }, 1400);
+  })();
 });
 $("#coWa").addEventListener("click", () => {
   const d = coDetails();
@@ -1753,14 +1826,28 @@ function renderDone(o){
 $("#doneTrack").addEventListener("click", () => { renderProfile(); open("#profilePanel"); });
 
 // ===== profile =====
+let myOrders = null, myOrdersLoading = false;
+async function fetchMyOrders(){
+  if (!sb || !getUser() || myOrdersLoading) return;
+  myOrdersLoading = true;
+  const {data, error} = await sb.from("orders").select("no,created_at,items,total,ship,state,days,status").order("created_at", {ascending:false});
+  myOrdersLoading = false;
+  if (error) return;
+  myOrders = data.map(o => ({no:o.no, at:Date.parse(o.created_at), items:o.items, total:o.total, ship:o.ship, state:o.state, days:(() => { try { return JSON.parse(o.days); } catch(e){ return [1,2]; } })(), status:o.status}));
+  if ($("#profilePanel").classList.contains("open")) renderProfile();
+}
+const STATUS_PILL = {"Processing":"", "Packed":"go", "Out for delivery":"go", "Delivered":"ok", "Cancelled":""};
 function orderStatus(o){
+  if (o.status) return `<span class="pill ${STATUS_PILL[o.status] || ""}">${esc(o.status)}</span>`;
   const age = (Date.now() - o.at) / 864e5;
   if (age >= Math.max(o.days[1], 0.5)) return `<span class="pill ok">Delivered</span>`;
   if (age >= 0.25) return `<span class="pill go">On the way</span>`;
   return `<span class="pill">Processing</span>`;
 }
 function renderProfile(){
-  const u = getUser(), orders = store.get("blushOrders", []).filter(o => (o.owner || null) === (u ? u.email : null)), a = store.get("blushAddr", null);
+  const u = getUser(), a = store.get("blushAddr", null);
+  if (u && sb && !myOrders) fetchMyOrders();
+  const orders = u && sb ? (myOrders || []) : store.get("blushOrders", []).filter(o => !o.owner);
   const unread = myMail().filter(m => !m.read).length;
   const spent = orders.reduce((x,o)=>x+o.total,0), pairs = orders.reduce((x,o)=>x+o.items.reduce((y,l)=>y+l.qty,0),0);
   $("#profBody").innerHTML = `
@@ -1783,7 +1870,7 @@ function renderProfile(){
 $("#profBody").addEventListener("click", e => {
   const w = e.target.closest("[data-wa]"); if (w){ e.preventDefault(); openWA(w.dataset.wa); return; }
   const b = e.target.closest("[data-act]"); if (!b) return;
-  if (b.dataset.act === "out"){ store.del("blushSession"); refreshUser(); renderProfile(); toast("Signed out"); }
+  if (b.dataset.act === "out"){ if (sb) sb.auth.signOut(); store.del("blushSession"); store.del("blushAddr"); myOrders = null; refreshUser(); renderProfile(); toast("Signed out"); }
   if (b.dataset.act === "inbox"){ renderInbox(); open("#inboxPanel"); }
   if (b.dataset.act === "in"){ close(true); showAuth("in"); }
   if (b.dataset.act === "addr"){ if (bag.length) openCheckout(); else toast("Your address is saved when you check out"); }

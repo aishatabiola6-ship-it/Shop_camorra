@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Blush Admin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232a1619%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%227%22 fill=%22%23dba3ad%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#fbf2f0;--sand:#f4e1df;--paper:#fffafa;--ink:#2a1619;--muted:#7a5f63;--line:#ecd2d0;--wine:#8c1d3f;--ok:#1f7a4d;--r:14px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);color:var(--ink);font-family:"Jost",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  button,input,select{font:inherit;color:inherit}
+  button{cursor:pointer;border:0;background:none}
+  .wrap{width:min(1100px,100% - 32px);margin-inline:auto}
+  .logo{font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:2rem;letter-spacing:-.02em}
+  .logo em{color:var(--wine);font-style:normal}
+  h1,h2,h3{font-family:"Cormorant Garamond",serif;font-weight:600;line-height:1.1}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;padding:.8em 1.4em;border-radius:999px;background:var(--ink);color:#fff;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .btn:hover{background:var(--wine)}
+  .btn-line{background:none;color:var(--ink);border:1px solid var(--line)}
+  .btn-line:hover{background:var(--sand);color:var(--ink)}
+  .field{display:block;margin-bottom:14px}
+  .field span{display:block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;padding:.8em 1em;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+  .err{color:#a0182c;font-size:.88rem;min-height:1.3em;margin:4px 0 10px}
+
+  /* sign in */
+  .signin{min-height:100vh;display:grid;place-items:center;padding:24px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:34px 28px;width:min(400px,100%);box-shadow:0 30px 60px -40px rgba(140,29,63,.5)}
+  .card h1{font-size:2.2rem;margin:14px 0 4px}
+  .card p.sub{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+  .card .btn{width:100%}
+
+  /* dashboard */
+  header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--cream) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+  header small{color:var(--muted)}
+  .tabs{display:flex;gap:4px;background:var(--sand);padding:4px;border-radius:999px;margin:24px 0 18px;width:max-content}
+  .tabs button{padding:.55em 1.3em;border-radius:999px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+  .tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  .stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:2rem;line-height:1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .bar input,.bar select{padding:.6em 1em;border:1px solid var(--line);border-radius:999px;background:var(--paper)}
+  .bar input{flex:1;min-width:180px}
+  .order{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+  .order .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+  .order h3{font-size:1.35rem}
+  .order .meta{font-size:.85rem;color:var(--muted)}
+  .order .who{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px 18px;font-size:.88rem;margin:10px 0}
+  .order .who b{font-weight:500}
+  .items{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .item{display:flex;gap:8px;align-items:center;background:var(--cream);border-radius:999px;padding:4px 12px 4px 4px;font-size:.8rem}
+  .item img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+  .status{padding:.45em .9em;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:500;font-size:.85rem}
+  .status.s-Delivered{background:#e6f4ec;border-color:#bfe3cd;color:var(--ok)}
+  .status.s-Cancelled{background:#f5e6e8;color:#a0182c}
+  .status.s-Packed,.status.s-Out{background:#fff4e0;border-color:#f1d9a8}
+  .total{font-weight:600;font-size:1.05rem}
+  .empty{color:var(--muted);text-align:center;padding:40px 0}
+  table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:middle}
+  th{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);background:var(--sand)}
+  td img{width:44px;height:44px;border-radius:10px;object-fit:cover;display:block}
+  td input[type=number]{width:120px;padding:.5em .7em;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .tog{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.85rem}
+  .tog input{width:18px;height:18px;accent-color:var(--wine)}
+  .saved{color:var(--ok);font-size:.8rem;opacity:0;transition:opacity .3s}
+  .saved.on{opacity:1}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:.8em 1.4em;border-radius:999px;font-size:.88rem;transition:transform .35s;z-index:20}
+  .toast.on{transform:translateX(-50%) translateY(0)}
+  [hidden]{display:none!important}
+  @media (max-width:700px){
+    .stats{grid-template-columns:1fr 1fr}
+    .hide-sm{display:none}
+    td input[type=number]{width:96px}
+  }
+</style>
+</head>
+<body>
+
+<section class="signin" id="signin">
+  <form class="card" id="signinForm" novalidate>
+    <div class="logo">Blush<em>.</em></div>
+    <h1>Shop admin</h1>
+    <p class="sub">Sign in with the account you made on the Blush website.</p>
+    <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+    <label class="field"><span>Password</span><input name="pass" type="password" autocomplete="current-password" required></label>
+    <p class="err" id="signinErr" role="alert"></p>
+    <button class="btn" type="submit" id="signinBtn">Sign in</button>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header>
+    <div class="wrap">
+      <div class="logo">Blush<em>.</em> <small style="font-family:Jost;font-style:normal;font-weight:400;font-size:.85rem">Admin</small></div>
+      <div style="display:flex;gap:10px;align-items:center"><small id="who"></small><a class="btn btn-line" href="./" target="_blank" rel="noopener">View shop</a><button class="btn" id="signout">Sign out</button></div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="orders">Orders</button>
+      <button role="tab" aria-selected="false" data-tab="products">Products</button>
+    </div>
+
+    <section id="tab-orders">
+      <div class="stats" id="stats"></div>
+      <div class="bar">
+        <input id="q" type="search" placeholder="Search name, phone, order number…">
+        <select id="filter"><option value="">All orders</option><option>Processing</option><option>Packed</option><option>Out for delivery</option><option>Delivered</option><option>Cancelled</option></select>
+        <button class="btn btn-line" id="refresh">Refresh</button>
+      </div>
+      <div id="orders"></div>
+    </section>
+
+    <section id="tab-products" hidden>
+      <div class="bar"><input id="pq" type="search" placeholder="Search products…"><small style="color:var(--muted)">Changes save automatically and show on the shop at once.</small></div>
+      <table>
+        <thead><tr><th></th><th>Product</th><th class="hide-sm">Category</th><th>Price (₦)</th><th>Sold out</th><th></th></tr></thead>
+        <tbody id="products"></tbody>
+      </table>
+    </section>
+    <div style="height:48px"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="vendor/supabase.js"></script>
+<script>
+const SUPA = {url: "https://cebqjhroazymavpaxbzp.supabase.co", key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYnFqaHJvYXp5bWF2cGF4YnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU4NzI1MTUsImV4cCI6MjExMTQ0ODUxNX0.Hq7e9f7LAB6wFoCEvsGtwDTxzpm81JEKQb5q65K2PUM"};
+const sb = window.supabase.createClient(SUPA.url, SUPA.key, {auth:{storageKey:"blushAdminAuth"}});
+const $ = s => document.querySelector(s);
+const esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = n => "₦" + Number(n || 0).toLocaleString("en-NG");
+const STATUSES = ["Processing","Packed","Out for delivery","Delivered","Cancelled"];
+let ORDERS = [], PRODUCTS = [];
+function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); }
+
+// ---- sign in: only accounts listed as admins get in
+async function enter(){
+  const {data: ok} = await sb.rpc("is_admin");
+  if (!ok){ await sb.auth.signOut(); $("#signinErr").textContent = "This account isn't a Blush admin."; return false; }
+  const {data} = await sb.auth.getUser();
+  $("#who").textContent = data.user ? data.user.email : "";
+  $("#signin").hidden = true; $("#app").hidden = false;
+  loadOrders(); loadProducts();
+  return true;
+}
+$("#signinForm").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target; $("#signinErr").textContent = "";
+  const btn = $("#signinBtn"); btn.disabled = true; btn.textContent = "Signing in…";
+  const {error} = await sb.auth.signInWithPassword({email: f.email.value.trim().toLowerCase(), password: f.pass.value});
+  btn.disabled = false; btn.textContent = "Sign in";
+  if (error){ $("#signinErr").textContent = "Incorrect email or password."; return; }
+  f.pass.value = ""; enter();
+});
+$("#signout").addEventListener("click", async () => { await sb.auth.signOut(); location.reload(); });
+sb.auth.getSession().then(({data}) => { if (data.session) enter(); });
+
+// ---- tabs
+document.querySelectorAll("[data-tab]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-tab]").forEach(x => x.setAttribute("aria-selected", x === b));
+  $("#tab-orders").hidden = b.dataset.tab !== "orders"; $("#tab-products").hidden = b.dataset.tab !== "products";
+}));
+
+// ---- orders
+async function loadOrders(){
+  const {data, error} = await sb.from("orders").select("*").order("created_at", {ascending:false});
+  if (error){ $("#orders").innerHTML = `<p class="empty">Couldn't load orders: ${esc(error.message)}</p>`; return; }
+  ORDERS = data; renderOrders();
+}
+function renderOrders(){
+  const q = $("#q").value.trim().toLowerCase(), f = $("#filter").value;
+  const today = new Date().toDateString();
+  const live = ORDERS.filter(o => o.status !== "Cancelled");
+  $("#stats").innerHTML = [
+    [ORDERS.filter(o => new Date(o.created_at).toDateString() === today).length, "Orders today"],
+    [ORDERS.filter(o => o.status === "Processing").length, "To pack"],
+    [ORDERS.filter(o => o.status === "Packed" || o.status === "Out for delivery").length, "On the way"],
+    [money(live.reduce((a, o) => a + o.total, 0)), "Total sales"],
+  ].map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
+  const list = ORDERS.filter(o => (!f || o.status === f) && (!q || [o.no, o.name, o.phone, o.email, o.state, o.city].join(" ").toLowerCase().includes(q)));
+  $("#orders").innerHTML = list.length ? list.map(o => `
+    <article class="order">
+      <div class="top">
+        <div><h3>#${esc(o.no)} · ${esc(o.name)}</h3><div class="meta">${new Date(o.created_at).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})} · ${o.user_id ? "Account" : "Guest"} · ${esc(o.pay === "transfer" ? "Bank transfer" : "Card")}</div></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="total">${money(o.total)}</span>
+          <select class="status s-${esc(o.status.split(" ")[0])}" data-no="${esc(o.no)}">${STATUSES.map(s => `<option ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+      </div>
+      <div class="who">
+        <div><b>Phone:</b> <a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> · <a href="https://wa.me/${esc(String(o.phone).replace(/\D/g,"").replace(/^0/,"234"))}" target="_blank" rel="noopener">WhatsApp</a></div>
+        <div><b>Email:</b> ${esc(o.email || "–")}</div>
+        <div><b>Deliver to:</b> ${esc([o.address, o.city, o.state].filter(Boolean).join(", "))}</div>
+        <div><b>Delivery:</b> ${esc(o.ship || "–")} · ${money(o.fee)}</div>
+        ${o.note ? `<div><b>Gift note:</b> <i>${esc(o.note)}</i></div>` : ""}
+      </div>
+      <div class="items">${(o.items || []).map(l => `<span class="item"><img src="img/thumb/${esc((PRODUCTS.find(p => p.id === l.id) || {data:{imgs:[""]}}).data.imgs[0])}" alt="">${esc(l.name || l.id)} · ${esc(l.color)} × ${l.qty}</span>`).join("")}</div>
+    </article>`).join("") : `<p class="empty">${ORDERS.length ? "No orders match." : "No orders yet. New orders appear here."}</p>`;
+}
+$("#q").addEventListener("input", renderOrders);
+$("#filter").addEventListener("change", renderOrders);
+$("#refresh").addEventListener("click", () => { loadOrders(); toast("Orders refreshed"); });
+$("#orders").addEventListener("change", async e => {
+  const s = e.target.closest("select.status"); if (!s) return;
+  const {error} = await sb.from("orders").update({status: s.value}).eq("no", s.dataset.no);
+  if (error){ toast("Couldn't update. Try again."); return loadOrders(); }
+  const o = ORDERS.find(x => x.no === s.dataset.no); if (o) o.status = s.value;
+  renderOrders(); toast(`#${s.dataset.no} marked ${s.value}`);
+});
+
+// ---- products
+async function loadProducts(){
+  const {data, error} = await sb.from("products").select("*").order("sort");
+  if (error){ $("#products").innerHTML = `<tr><td colspan="6">Couldn't load products.</td></tr>`; return; }
+  PRODUCTS = data; renderProducts(); renderOrders();
+}
+function renderProducts(){
+  const q = $("#pq").value.trim().toLowerCase();
+  $("#products").innerHTML = PRODUCTS.filter(p => !q || (p.data.name + " " + p.data.cat).toLowerCase().includes(q)).map(p => `
+    <tr data-id="${esc(p.id)}">
+      <td><img src="img/thumb/${esc(p.data.imgs[0])}" alt=""></td>
+      <td>${esc(p.data.name)}</td>
+      <td class="hide-sm">${esc(p.data.cat)}</td>
+      <td><input type="number" min="0" step="500" value="${p.price}" data-f="price"></td>
+      <td><label class="tog"><input type="checkbox" data-f="sold_out" ${p.sold_out ? "checked" : ""}> <span class="hide-sm">Sold out</span></label></td>
+      <td><span class="saved">Saved ✓</span></td>
+    </tr>`).join("");
+}
+$("#pq").addEventListener("input", renderProducts);
+$("#products").addEventListener("change", async e => {
+  const el = e.target.closest("[data-f]"); if (!el) return;
+  const tr = el.closest("tr"), id = tr.dataset.id;
+  const patch = el.dataset.f === "price" ? {price: Math.max(0, Math.round(+el.value || 0))} : {sold_out: el.checked};
+  patch.updated_at = new Date().toISOString();
+  const {error} = await sb.from("products").update(patch).eq("id", id);
+  if (error){ toast("Couldn't save. Try again."); return loadProducts(); }
+  Object.assign(PRODUCTS.find(p => p.id === id), patch);
+  const s = tr.querySelector(".saved"); s.classList.add("on"); setTimeout(() => s.classList.remove("on"), 1500);
+});
+</script>
+</body>
+</html>
