@@ -81,3 +81,20 @@ grant insert on public.orders to anon, authenticated;
 grant select, update on public.orders to authenticated;
 grant select, insert, update on public.profiles to authenticated;
 grant insert, update, delete on public.products to authenticated;
+
+-- Product photos uploaded from admin.html: public to view, only admins can add or remove
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('product-photos', 'product-photos', true, 5242880, array['image/jpeg','image/png','image/webp'])
+on conflict (id) do update set public = true, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
+drop policy if exists "admins upload product photos" on storage.objects;
+create policy "admins upload product photos" on storage.objects for insert to authenticated
+  with check (bucket_id = 'product-photos' and public.is_admin());
+drop policy if exists "admins change product photos" on storage.objects;
+create policy "admins change product photos" on storage.objects for update to authenticated
+  using (bucket_id = 'product-photos' and public.is_admin());
+drop policy if exists "admins list product photos" on storage.objects;
+create policy "admins list product photos" on storage.objects for select to authenticated
+  using (bucket_id = 'product-photos' and public.is_admin());
+drop policy if exists "admins delete product photos" on storage.objects;
+create policy "admins delete product photos" on storage.objects for delete to authenticated
+  using (bucket_id = 'product-photos' and public.is_admin());
