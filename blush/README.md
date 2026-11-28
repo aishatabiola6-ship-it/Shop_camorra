@@ -19,4 +19,4 @@ Plain HTML, no build step. Open `index.html` in a browser to preview.
 
 Accounts, bag, orders and inbox are saved in the visitor's browser and are separate from Strut's.
 
-Until `EMAIL.scriptUrl` is filled in, emails (sign-up codes, welcome, order confirmation) only appear in the on-site inbox (Account → Inbox). To send real emails from Gmail, follow [email/SETUP.md](email/SETUP.md) with `email/blush-email.gs`.
+Until `EMAIL.scriptUrl` is filled in, emails (sign-up and sign-in codes, welcome, order confirmation) only appear in the on-site inbox (Account → Inbox). To send real emails from Gmail, follow [email/SETUP.md](email/SETUP.md) with `email/blush-email.gs`.
