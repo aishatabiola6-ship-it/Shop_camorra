@@ -27,8 +27,9 @@ Signing in needs the password and then the emailed code.
 
 ## Admin
 
-`admin.html` (e.g. https://blush-site.pages.dev/admin.html): orders with status updates, and product
-prices and sold-out. To add an admin, create an account on the shop, then run in the SQL editor:
+`admin.html` (e.g. https://blush-site.pages.dev/admin): orders with status updates; products with
+prices, sold-out, **Add product** (photos, name, brand, category, price, label, shades, description) and Remove.
+Photos added there are stored in the public `product-photos` storage bucket (admins upload; everyone views). To add an admin, create an account on the shop, then run in the SQL editor:
 
     insert into public.admins (user_id) select id from auth.users where email = 'owner@example.com';
 

@@ -1136,6 +1136,8 @@ function openWA(text){
   document.body.appendChild(link); link.click(); link.remove();
 }
 const byId = id => PRODUCTS.find(p => p.id === id);
+const pic = f => /^https?:/.test(f || "") ? f : "img/" + f;             // product photo: img/ file or uploaded URL
+const picThumb = f => /^https?:/.test(f || "") ? f : "img/thumb/" + f;
 const optLine = l => `${l.color}${l.size ? ` · EU ${l.size}` : ""}`;
 
 document.querySelectorAll(".js-wa").forEach(a => { a.href = waLink(`Hi ${SHOP.name}! I'd like to ask about your makeup.`); a.addEventListener("click", e => { e.preventDefault(); openWA(`Hi ${SHOP.name}! I'd like to ask about your makeup.`); }); });
@@ -1173,8 +1175,8 @@ function renderGrid(){
   $("#grid").innerHTML = list.map((p,i) => `
     <article class="card" tabindex="0" data-id="${p.id}" style="animation-delay:${i*60}ms" aria-label="${p.name}, ${money(p.price)}">
       <div class="card-img">
-        <img src="img/${p.imgs[0]}" alt="${p.name}" loading="lazy">
-        ${p.imgs[1] ? `<img class="alt" src="img/${p.imgs[1]}" alt="" loading="lazy">` : ""}
+        <img src="${pic(p.imgs[0])}" alt="${p.name}" loading="lazy">
+        ${p.imgs[1] ? `<img class="alt" src="${pic(p.imgs[1])}" alt="" loading="lazy">` : ""}
         ${p.soldOut ? `<span class="badge wine">Sold out</span>` : p.badge ? `<span class="badge ${p.badgeWine?"wine":""}">${p.badge}</span>` : ""}
         <span class="quick">Quick view</span>
       </div>
@@ -1200,7 +1202,7 @@ function openModal(id){
   $("#mPrice").textContent = money(p.price);
   $("#mDesc").textContent = p.desc;
   setMain(p, 0);
-  $("#mThumbs").innerHTML = p.imgs.length > 1 ? p.imgs.map((src,i)=>`<button aria-pressed="${i===0}" data-i="${i}" aria-label="Photo ${i+1}"><img src="img/${src}" alt=""></button>`).join("") : "";
+  $("#mThumbs").innerHTML = p.imgs.length > 1 ? p.imgs.map((src,i)=>`<button aria-pressed="${i===0}" data-i="${i}" aria-label="Photo ${i+1}"><img src="${pic(src)}" alt=""></button>`).join("") : "";
   $("#mColorsWrap").style.display = "";
   $("#mColors").innerHTML = p.colors.map(c=>`<button class="opt color" aria-pressed="${sel.color===c[0]}" data-color="${c[0]}"><i style="background:${c[1]}"></i>${c[0]}</button>`).join("");
   $("#mColorName").textContent = sel.color || "Choose one";
@@ -1210,7 +1212,7 @@ function openModal(id){
   note("");
   open("#modal");
 }
-function setMain(p,i){ $("#mImg").src = "img/" + p.imgs[i]; $("#mImg").alt = p.name; }
+function setMain(p,i){ $("#mImg").src = pic(p.imgs[i]); $("#mImg").alt = p.name; }
 $("#mThumbs").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   setMain(byId(sel.id), +b.dataset.i);
@@ -1267,7 +1269,7 @@ function renderBag(bump){
   }
   $("#dItems").innerHTML = bag.map((l,i) => { const p = byId(l.id); return `
     <div class="line">
-      <img src="img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}" alt="">
+      <img src="${pic(p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0])}" alt="">
       <div><h4>${p.name}</h4><small>${optLine(l)}</small>
         <div class="qty"><button data-q="-1" data-i="${i}" aria-label="Decrease">−</button><span>${l.qty}</span><button data-q="1" data-i="${i}" aria-label="Increase">+</button></div>
       </div>
@@ -1328,7 +1330,7 @@ function goShop(g, c){
 $("#cats").addEventListener("click", e => { const b = e.target.closest(".cat"); if (b) goShop(b.dataset.g, b.dataset.c); });
 function renderTrend(){
   const trending = PRODUCTS.filter(p => /Bestseller|Statement|New|Limited/.test(p.badge||"")).slice(0,12);
-  $("#trend").innerHTML = trending.map(p => `<button class="t-card" data-id="${p.id}"><div><img src="img/${p.imgs[0]}" alt="" loading="lazy"><i aria-hidden="true">♡</i></div><h4>${p.name}</h4><small>${money(p.price)}</small></button>`).join("");
+  $("#trend").innerHTML = trending.map(p => `<button class="t-card" data-id="${p.id}"><div><img src="${pic(p.imgs[0])}" alt="" loading="lazy"><i aria-hidden="true">♡</i></div><h4>${p.name}</h4><small>${money(p.price)}</small></button>`).join("");
 }
 renderTrend();
 // shade bar under the hero, from the Vee Beauty foundation shades
@@ -1351,9 +1353,9 @@ const LOOKS = [
 $("#lookGrid").innerHTML = LOOKS.map(l => {
   const ps = l.items.map(byId).filter(Boolean), total = ps.reduce((a,p) => a + p.price, 0);
   const pic = l.photo ? `<div class="look-pic one"><img src="img/${l.photo}" alt="${l.name} look" loading="lazy">`
-    : `<div class="look-pic">${ps.slice(0,4).map(p => `<img src="img/${p.imgs[0]}" alt="" loading="lazy">`).join("")}`;
+    : `<div class="look-pic">${ps.slice(0,4).map(p => `<img src="${pic(p.imgs[0])}" alt="" loading="lazy">`).join("")}`;
   return `<article class="look reveal">${pic}<span>${l.tag}</span></div><div class="look-body"><h3>${l.name}</h3><p>${l.text}</p>
-    <div class="look-items">${ps.map(p => `<button type="button" data-id="${p.id}"><img src="img/thumb/${p.imgs[0]}" alt="">${p.name.replace(p.cat+" ","")}</button>`).join("")}</div>
+    <div class="look-items">${ps.map(p => `<button type="button" data-id="${p.id}"><img src="${picThumb(p.imgs[0])}" alt="">${p.name.replace(p.cat+" ","")}</button>`).join("")}</div>
     <p class="look-total">Full look: <b>${money(total)}</b></p></div></article>`;
 }).join("") + `<article class="look look-ask reveal"><span class="kicker">Your look</span><h3>Want a look made for you?</h3>
   <p>Send us a photo of a look you love, or tell us the occasion, and we'll put together the products for your skin tone.</p>
@@ -1397,6 +1399,10 @@ async function syncProducts(){
     const i = PRODUCTS.findIndex(p => p.id === row.id);
     if (i >= 0) PRODUCTS[i] = Object.assign(PRODUCTS[i], live); else PRODUCTS.push(live);
   });
+  const ids = new Set(data.map(r => r.id)), order = new Map(data.map(r => [r.id, r.sort]));
+  for (let i = PRODUCTS.length - 1; i >= 0; i--) if (!ids.has(PRODUCTS[i].id)) PRODUCTS.splice(i, 1);   // removed in admin
+  PRODUCTS.sort((a, b) => order.get(a.id) - order.get(b.id));
+  if (typeof bag !== "undefined"){ bag = bag.filter(l => byId(l.id)); save(); }
   renderGroups(); renderGrid(); renderTrend(); if (typeof renderBag === "function") renderBag();
 }
 syncProducts();
@@ -1513,7 +1519,7 @@ function mailOrder(o, to){
     where: o.ship === "Pickup" ? "Lekki studio" : [o.address, o.city, o.state].filter(Boolean).join(", "),
     eta: etaText(o.days, o.at)
   }});
-  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(optLine(l))} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
+  const rows = o.items.map(l => { const p = byId(l.id); return `<tr><td style="width:60px;padding-right:10px"><img src="${/^https?:/.test(thumbOf(l)) ? thumbOf(l) : thumbOf(l).replace("img/","img/thumb/")}" alt="" style="display:block;width:56px;height:56px;border-radius:10px"></td><td>${esc(p ? p.name : l.id)}<br><small>${esc(optLine(l))} · Qty ${l.qty}</small></td><td>${money((p ? p.price : 0)*l.qty)}</td></tr>`; }).join("");
   const pay = o.pay === "transfer" ? `<div class="em-box"><b>Complete your transfer</b><br>Send ${money(o.total)} to ${DELIVERY.bank.name} · ${DELIVERY.bank.number} · ${DELIVERY.bank.bank}. Use <b>${o.no}</b> as the reference.</div>`
     : o.pay === "pod" ? `<div class="em-box">Pay the rider ${money(o.total)} by cash or transfer when your order arrives.</div>`
     : `<div class="em-box">Paid by card · ${money(o.total)}</div>`;
@@ -1709,7 +1715,7 @@ const PAYS = [{id:"card", name:"Card", sub:"Visa, Mastercard, Verve"},{id:"trans
 const fmtDay = d => d.toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"});
 const addDays = (n, from) => { const d = new Date(from || Date.now()); d.setDate(d.getDate()+n); return d; };
 const etaText = (days, from) => days[1] === 0 ? "Today" : days[0] === days[1] ? fmtDay(addDays(days[0], from)) : `${fmtDay(addDays(days[0], from))} – ${fmtDay(addDays(days[1], from))}`;
-const thumbOf = l => { const p = byId(l.id); return p ? `img/${p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]}` : ""; };
+const thumbOf = l => { const p = byId(l.id); return p ? pic(p.imgs[(p.colors.find(c=>c[0]===l.color)||[])[2] ?? 0]) : ""; };
 
 // ===== checkout =====
 const co = {ship:"std", pay:"card"};
